@@ -30,3 +30,15 @@
     color: var(--color-ink);
   }
 }
+
+.tt-grid {
+  --tt-row: 58px;
+  grid-template-columns: 40px repeat(7, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) {
+  .tt-grid {
+    --tt-row: 66px;
+    grid-template-columns: 48px repeat(7, minmax(0, 1fr));
+  }
+}
