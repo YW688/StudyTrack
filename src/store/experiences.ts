@@ -16,7 +16,7 @@ const evidenceSchema = z.object({
   url: z.string().max(500).optional(),
 });
 
-const experienceSchema = z.object({
+export const experienceSchema = z.object({
   id: z.string().min(1),
   kind: z.enum([
     "course",

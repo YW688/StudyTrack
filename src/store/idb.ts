@@ -3,6 +3,7 @@ import { z } from "zod";
 import type { TimetableData } from "../types";
 import { ASSIGNMENTS_KEY } from "./assignments";
 import { EXPERIENCES_KEY } from "./experiences";
+import { RESUME_KEY, RESUME_SNAPSHOTS_KEY } from "./resume";
 
 const KEY = "studytrack:v1:timetable";
 
@@ -54,4 +55,6 @@ export async function clearLocalData(): Promise<void> {
   await del(KEY);
   await del(ASSIGNMENTS_KEY);
   await del(EXPERIENCES_KEY);
+  await del(RESUME_KEY);
+  await del(RESUME_SNAPSHOTS_KEY);
 }

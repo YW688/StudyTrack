@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type {
   AssignmentData,
   ExperienceData,
+  ResumeData,
   TimetableData,
 } from "./types";
 import AppShell from "./components/AppShell";
@@ -10,22 +11,32 @@ import TodayPage from "./pages/today/TodayPage";
 import TimetablePage from "./pages/timetable/TimetablePage";
 import AssignmentsPage from "./pages/assignments/AssignmentsPage";
 import ExperiencesPage from "./pages/experiences/ExperiencesPage";
+import ResumePage from "./pages/resume/ResumePage";
+import PortfolioPage from "./pages/portfolio/PortfolioPage";
 import { clearLocalData, loadTimetable, saveTimetable } from "./store/idb";
 import {
   loadAssignments,
   saveAssignments,
 } from "./store/assignments";
 import { loadExperiences, saveExperiences } from "./store/experiences";
+import {
+  createEmptyResume,
+  loadResume,
+  saveResume,
+} from "./store/resume";
 import { createSampleTimetable } from "./store/fixtures/timetable";
 import { createSampleAssignments } from "./store/fixtures/assignments";
 import { createSampleExperiences } from "./store/fixtures/experiences";
+import { resumeHasContent } from "./lib/resume";
 
 type Route =
   | "landing"
   | "today"
   | "timetable"
   | "assignments"
-  | "experiences";
+  | "experiences"
+  | "resume"
+  | "portfolio";
 
 function readRoute(): Route {
   const hash = window.location.hash.replace(/^#\/?/, "");
@@ -33,15 +44,20 @@ function readRoute(): Route {
   if (hash === "timetable") return "timetable";
   if (hash === "assignments") return "assignments";
   if (hash === "experiences") return "experiences";
+  if (hash === "resume") return "resume";
+  if (hash.startsWith("p/")) return "portfolio";
   return "landing";
 }
 
 export default function App() {
   const [route, setRoute] = useState<Route>(readRoute);
+  const [hash, setHash] = useState(() => window.location.hash);
   const [timetable, setTimetable] = useState<TimetableData | null>(null);
   const [assignments, setAssignments] = useState<AssignmentData | null>(null);
   const [experiences, setExperiences] = useState<ExperienceData | null>(null);
+  const [resume, setResume] = useState<ResumeData>(() => createEmptyResume());
   const [loading, setLoading] = useState(true);
+  const resumeWriteRef = useRef<Promise<void>>(Promise.resolve());
 
   useEffect(() => {
     let alive = true;
@@ -49,20 +65,27 @@ export default function App() {
       loadTimetable(),
       loadAssignments(),
       loadExperiences(),
-    ]).then(([storedTimetable, storedAssignments, storedExperiences]) => {
-      if (!alive) return;
-      setTimetable(storedTimetable);
-      setAssignments(storedAssignments);
-      setExperiences(storedExperiences);
-      setLoading(false);
-    });
+      loadResume(),
+    ]).then(
+      ([storedTimetable, storedAssignments, storedExperiences, storedResume]) => {
+        if (!alive) return;
+        setTimetable(storedTimetable);
+        setAssignments(storedAssignments);
+        setExperiences(storedExperiences);
+        setResume(storedResume ?? createEmptyResume());
+        setLoading(false);
+      },
+    );
     return () => {
       alive = false;
     };
   }, []);
 
   useEffect(() => {
-    const sync = () => setRoute(readRoute());
+    const sync = () => {
+      setRoute(readRoute());
+      setHash(window.location.hash);
+    };
     window.addEventListener("hashchange", sync);
     window.addEventListener("popstate", sync);
     return () => {
@@ -72,12 +95,20 @@ export default function App() {
   }, []);
 
   const navigate = useCallback((next: Route) => {
-    const hash = next === "landing" ? "#/" : `#/${next}`;
-    if (window.location.hash !== hash) {
-      window.history.pushState(null, "", hash);
+    const nextHash = next === "landing" ? "#/" : `#/${next}`;
+    if (window.location.hash !== nextHash) {
+      window.history.pushState(null, "", nextHash);
     }
     setRoute(next);
+    setHash(nextHash);
     window.scrollTo({ top: 0 });
+  }, []);
+
+  const handleSaveResume = useCallback((next: ResumeData) => {
+    setResume(next);
+    resumeWriteRef.current = resumeWriteRef.current
+      .then(() => saveResume(next))
+      .catch(() => undefined);
   }, []);
 
   async function handleStart() {
@@ -159,10 +190,17 @@ export default function App() {
   }
 
   async function handleClear() {
+    await resumeWriteRef.current.catch(() => undefined);
     await clearLocalData();
     setTimetable(null);
     setAssignments(null);
     setExperiences(null);
+    setResume(createEmptyResume());
+    navigate("landing");
+  }
+
+  if (route === "portfolio") {
+    return <PortfolioPage key={hash} hash={hash} />;
   }
 
   if (route === "landing") {
@@ -170,13 +208,15 @@ export default function App() {
   }
 
   const active =
-    route === "today"
-      ? "today"
-      : route === "assignments"
-        ? "assignments"
-        : route === "experiences"
-          ? "experiences"
-          : "timetable";
+    route === "resume"
+      ? "resume"
+      : route === "today"
+        ? "today"
+        : route === "assignments"
+          ? "assignments"
+          : route === "experiences"
+            ? "experiences"
+            : "timetable";
   const assignmentCount =
     assignments?.items.filter((item) => item.status !== "done").length ?? 0;
 
@@ -184,7 +224,10 @@ export default function App() {
     <AppShell
       active={active}
       hasData={
-        timetable !== null || assignments !== null || experiences !== null
+        timetable !== null ||
+        assignments !== null ||
+        experiences !== null ||
+        resumeHasContent(resume)
       }
       assignmentCount={assignmentCount}
       onClear={handleClear}
@@ -194,7 +237,8 @@ export default function App() {
           id === "today" ||
           id === "timetable" ||
           id === "assignments" ||
-          id === "experiences"
+          id === "experiences" ||
+          id === "resume"
         ) {
           navigate(id);
         }
@@ -215,6 +259,13 @@ export default function App() {
         <AssignmentsPage data={assignments} onSave={handleSaveAssignments} />
       ) : route === "experiences" ? (
         <ExperiencesPage data={experiences} onSave={handleSaveExperiences} />
+      ) : route === "resume" ? (
+        <ResumePage
+          experiences={experiences}
+          resume={resume}
+          onSaveResume={handleSaveResume}
+          onNavigateExperiences={() => navigate("experiences")}
+        />
       ) : (
         <TimetablePage
           data={timetable}
@@ -229,13 +280,14 @@ export default function App() {
 function LoadingState({
   module,
 }: {
-  module: "today" | "timetable" | "assignments" | "experiences";
+  module: "today" | "timetable" | "assignments" | "experiences" | "resume";
 }) {
   const meta = {
     today: { code: "M1 · 今日 / 01", title: "今天" },
     timetable: { code: "M1 · 课表 / 02", title: "课表" },
     assignments: { code: "M1 · 作业 / 03", title: "作业与待办" },
     experiences: { code: "M2 · 经历 / 04", title: "经历库" },
+    resume: { code: "M3 · 简历 / 05", title: "简历工作台" },
   }[module];
   return (
     <div className="px-4 py-8 sm:px-6 lg:px-8 lg:py-12">

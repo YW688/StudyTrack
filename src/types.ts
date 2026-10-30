@@ -122,6 +122,64 @@ export interface ExperienceData {
   sourceLabel?: string;
 }
 
+export const RESUME_GRADES = [
+  "大一",
+  "大二",
+  "大三",
+  "大四",
+  "研究生",
+  "其他",
+] as const;
+
+export interface ResumeBasics {
+  name: string;
+  grade: string;
+  major: string;
+  school: string;
+  city: string;
+  phone: string;
+  email: string;
+  target: string;
+}
+
+export type ResumeBulletSource = "ai" | "local";
+
+export interface ResumeBullet {
+  id: string;
+  text: string;
+  evidence: string[];
+  source: ResumeBulletSource;
+}
+
+export interface ResumeBulletCache {
+  experienceId: string;
+  bullets: ResumeBullet[];
+  source: ResumeBulletSource;
+  status: "ready" | "fallback";
+  generatedAt: string;
+  hiddenCount?: number;
+  note?: string;
+}
+
+export interface ResumeData {
+  basics: ResumeBasics;
+  selectedExperienceIds: string[];
+  conciseIds: string[];
+  bullets: Record<string, ResumeBulletCache>;
+  updatedAt: string;
+}
+
+export interface ResumeSnapshot {
+  id: string;
+  version: number;
+  createdAt: string;
+  basics: ResumeBasics;
+  selectedExperienceIds: string[];
+  conciseIds: string[];
+  bulletsSnapshot: Record<string, ResumeBullet[]>;
+  experiences: Experience[];
+}
+
 export interface GridMerge {
   s: { r: number; c: number };
   e: { r: number; c: number };

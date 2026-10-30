@@ -5,7 +5,7 @@ const NAV = [
   { id: "timetable", no: "02", label: "课表", ready: true },
   { id: "assignments", no: "03", label: "作业", ready: true },
   { id: "experiences", no: "04", label: "经历", ready: true },
-  { id: "resume", no: "05", label: "简历", ready: false },
+  { id: "resume", no: "05", label: "简历", ready: true },
   { id: "opportunities", no: "06", label: "机会", ready: false },
 ] as const;
 
@@ -48,8 +48,8 @@ export default function AppShell({
   }
 
   return (
-    <div className="min-h-dvh lg:grid lg:grid-cols-[224px_minmax(0,1fr)]">
-      <aside className="border-rule lg:sticky lg:top-0 lg:flex lg:h-dvh lg:flex-col lg:border-r">
+    <div className="app-shell min-h-dvh lg:grid lg:grid-cols-[224px_minmax(0,1fr)]">
+      <aside className="app-sidebar border-rule lg:sticky lg:top-0 lg:flex lg:h-dvh lg:flex-col lg:border-r">
         <div className="flex h-16 items-center justify-between px-5 lg:px-6">
           <button
             type="button"
@@ -160,7 +160,7 @@ export default function AppShell({
         </div>
       </aside>
 
-      <main className="min-w-0">{children}</main>
+      <main className="app-main min-w-0">{children}</main>
     </div>
   );
 }

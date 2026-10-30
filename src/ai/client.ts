@@ -163,3 +163,140 @@ export async function extractAssignmentsFromImage(
 
   return { items, warnings };
 }
+
+export type TextTaskErrorCode =
+  | "unconfigured"
+  | "network"
+  | "invalid"
+  | "server";
+
+export class TextTaskError extends Error {
+  readonly code: TextTaskErrorCode;
+  retryable = false;
+
+  constructor(code: TextTaskErrorCode, message: string) {
+    super(message);
+    this.name = "TextTaskError";
+    this.code = code;
+  }
+}
+
+export function isTextTaskConfigured(): boolean {
+  return Boolean(PROXY_URL);
+}
+
+export function isAiMockMode(): boolean {
+  const flag = (
+    (import.meta.env.VITE_AI_MOCK as string | undefined) ?? ""
+  )
+    .trim()
+    .toLowerCase();
+  return !PROXY_URL || flag === "1" || flag === "true";
+}
+
+export interface TextTaskRequest {
+  task: string;
+  system: string;
+  input: unknown;
+  model?: string;
+}
+
+function parseJsonContent(value: string): unknown {
+  const trimmed = value
+    .trim()
+    .replace(/^```(?:json)?\s*/i, "")
+    .replace(/\s*```$/, "");
+  return JSON.parse(trimmed) as unknown;
+}
+
+function extractJsonPayload(raw: unknown): unknown {
+  if (!raw || typeof raw !== "object") return raw;
+  const record = raw as Record<string, unknown>;
+
+  if (Array.isArray(record.bullets)) return raw;
+  if (typeof record.content === "string") {
+    return parseJsonContent(record.content);
+  }
+  if (Array.isArray(record.choices)) {
+    const first = record.choices[0] as
+      | { message?: { content?: unknown } }
+      | undefined;
+    if (typeof first?.message?.content === "string") {
+      return parseJsonContent(first.message.content);
+    }
+  }
+  if (record.data && typeof record.data === "object") {
+    return record.data;
+  }
+  if (typeof record.result === "string") {
+    return parseJsonContent(record.result);
+  }
+  return raw;
+}
+
+async function postTextTask(body: string): Promise<unknown> {
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), 45_000);
+
+  try {
+    const response = await fetch(PROXY_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body,
+      signal: controller.signal,
+    });
+    if (!response.ok) {
+      const error = new TextTaskError(
+        response.status >= 500 ? "server" : "invalid",
+        `模型服务返回 ${response.status}。`,
+      );
+      error.retryable = response.status >= 500;
+      throw error;
+    }
+
+    let raw: unknown;
+    try {
+      raw = (await response.json()) as unknown;
+    } catch {
+      throw new TextTaskError("invalid", "模型返回的不是合法 JSON。");
+    }
+
+    try {
+      return extractJsonPayload(raw);
+    } catch {
+      throw new TextTaskError("invalid", "模型返回内容无法解析为 JSON。");
+    }
+  } catch (error) {
+    if (error instanceof TextTaskError) throw error;
+    throw new TextTaskError("network", "网络中断或模型超时（45 秒）。");
+  } finally {
+    window.clearTimeout(timer);
+  }
+}
+
+export async function requestTextJson(
+  request: TextTaskRequest,
+): Promise<unknown> {
+  if (!PROXY_URL) {
+    throw new TextTaskError("unconfigured", "尚未配置模型代理。");
+  }
+
+  const body = JSON.stringify({
+    task: request.task,
+    model: request.model ?? "qwen-plus",
+    system: request.system,
+    input: request.input,
+    responseFormat: "json",
+  });
+
+  try {
+    return await postTextTask(body);
+  } catch (error) {
+    const retryable =
+      error instanceof TextTaskError &&
+      (error.code === "network" || error.retryable);
+    if (!retryable) throw error;
+    await new Promise((resolve) => window.setTimeout(resolve, 800));
+    return postTextTask(body);
+  }
+}
