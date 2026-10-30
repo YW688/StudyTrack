@@ -33,6 +33,46 @@ export interface TimetableData {
   sourceLabel?: string;
 }
 
+export type AssignmentStatus = "todo" | "doing" | "done";
+
+export type AssignmentKind = "homework" | "contest" | "internship" | "other";
+
+export type AssignmentSource = "ocr" | "paste" | "manual" | "sample";
+
+export interface Assignment {
+  id: string;
+  courseId?: string;
+  courseName?: string;
+  title: string;
+  detail?: string;
+  due: string | null;
+  status: AssignmentStatus;
+  kind: AssignmentKind;
+  source: AssignmentSource;
+  confidence: Confidence;
+  createdAt: string;
+}
+
+export interface AssignmentData {
+  items: Assignment[];
+  updatedAt: string;
+  sourceLabel?: string;
+}
+
+export const ASSIGNMENT_KIND_LABELS: Record<AssignmentKind, string> = {
+  homework: "作业",
+  contest: "竞赛",
+  internship: "实习",
+  other: "待办",
+};
+
+export const ASSIGNMENT_SOURCE_LABELS: Record<AssignmentSource, string> = {
+  ocr: "截图",
+  paste: "粘贴",
+  manual: "手动",
+  sample: "示例",
+};
+
 export interface GridMerge {
   s: { r: number; c: number };
   e: { r: number; c: number };

@@ -3,25 +3,31 @@ import { useState, type ReactNode } from "react";
 const NAV = [
   { id: "today", no: "01", label: "今日", ready: false },
   { id: "timetable", no: "02", label: "课表", ready: true },
-  { id: "assignments", no: "03", label: "作业", ready: false },
+  { id: "assignments", no: "03", label: "作业", ready: true },
   { id: "experiences", no: "04", label: "经历", ready: false },
   { id: "resume", no: "05", label: "简历", ready: false },
   { id: "opportunities", no: "06", label: "机会", ready: false },
 ] as const;
 
+type NavId = (typeof NAV)[number]["id"];
+
 interface AppShellProps {
-  active: (typeof NAV)[number]["id"];
+  active: NavId;
   hasData: boolean;
+  assignmentCount: number;
   onClear: () => Promise<void>;
   onHome: () => void;
+  onNavigate: (id: NavId) => void;
   children: ReactNode;
 }
 
 export default function AppShell({
   active,
   hasData,
+  assignmentCount,
   onClear,
   onHome,
+  onNavigate,
   children,
 }: AppShellProps) {
   const [confirming, setConfirming] = useState(false);
@@ -68,6 +74,9 @@ export default function AppShell({
                 key={item.id}
                 type="button"
                 disabled={!item.ready}
+                onClick={() => {
+                  if (item.ready) onNavigate(item.id);
+                }}
                 aria-current={isActive ? "page" : undefined}
                 className={[
                   "flex min-h-11 shrink-0 items-center gap-3 rounded-lg px-3 text-sm whitespace-nowrap transition-colors lg:w-full",
@@ -87,6 +96,14 @@ export default function AppShell({
                   {item.no}
                 </span>
                 <span>{item.label}</span>
+                {item.id === "assignments" && assignmentCount > 0 && (
+                  <span
+                    aria-label={`未完成 ${assignmentCount} 项`}
+                    className="bg-amber/15 ml-auto rounded-full px-1.5 py-0.5 font-mono text-[9px] tabular-nums text-ink/70"
+                  >
+                    {assignmentCount}
+                  </span>
+                )}
                 {!item.ready && (
                   <span className="ml-auto hidden font-mono text-[9px] tracking-[0.12em] text-ink/25 lg:inline">
                     待建
