@@ -44,29 +44,297 @@
   }
 }
 
-.landing-hero {
-  background-color: var(--color-ink);
-  background-image: linear-gradient(
-    90deg,
-    rgba(250, 250, 248, 0.045) 1px,
-    transparent 1px
+/* ---------- Landing themes ---------- */
+
+.landing-theme {
+  --lp-ink: #332a23;
+  --lp-ink-soft: #6f6257;
+  --lp-ink-faint: #74665a;
+  --lp-bg: #edece6;
+  --lp-bg-top: #f7f2ea;
+  --lp-bg-bottom: #e7e4dc;
+  --lp-surface: #f5ebe1;
+  --lp-surface-2: #e9e3d9;
+  --lp-line: rgba(51, 42, 35, 0.14);
+  --lp-line-soft: rgba(51, 42, 35, 0.08);
+  --lp-accent: #a5765d;
+  --lp-alert: #a05741;
+  --lp-cta: #2e2721;
+  --lp-cta-ink: #f7efe4;
+  --lp-shadow: rgba(85, 64, 50, 0.22);
+  --lp-tone-1: #d7bdb0;
+  --lp-tone-2: #e3d5ca;
+  --lp-tone-3: #f5ebe1;
+  --lp-tone-4: #edeee9;
+  --lp-tone-5: #d6ccc2;
+  --lp-tone-6: #eadfd3;
+  background-color: var(--lp-bg);
+  color: var(--lp-ink);
+}
+
+.landing-theme[data-theme="cool"] {
+  --lp-ink: #1c1c1c;
+  --lp-ink-soft: #5d615c;
+  --lp-ink-faint: #666a65;
+  --lp-bg: #eef0f2;
+  --lp-bg-top: #fafaff;
+  --lp-bg-bottom: #e6e9eb;
+  --lp-surface: #fafaff;
+  --lp-surface-2: #ecebe4;
+  --lp-line: rgba(28, 28, 28, 0.12);
+  --lp-line-soft: rgba(28, 28, 28, 0.07);
+  --lp-accent: #4f5a50;
+  --lp-alert: #8a4f42;
+  --lp-cta: #1c1c1c;
+  --lp-cta-ink: #fafaff;
+  --lp-shadow: rgba(40, 44, 40, 0.18);
+  --lp-tone-1: #daddd8;
+  --lp-tone-2: #ecebe4;
+  --lp-tone-3: #eef0f2;
+  --lp-tone-4: #fafaff;
+  --lp-tone-5: #d5d8d3;
+  --lp-tone-6: #e6e7e9;
+}
+
+.landing-theme[data-theme="dawn"] {
+  --lp-ink: #2a3036;
+  --lp-ink-soft: #5f6870;
+  --lp-ink-faint: #646d75;
+  --lp-bg: #f4f6f7;
+  --lp-bg-top: #fbfcfd;
+  --lp-bg-bottom: #edf1f3;
+  --lp-surface: #fbfcfd;
+  --lp-surface-2: #eef2f4;
+  --lp-line: rgba(42, 48, 54, 0.12);
+  --lp-line-soft: rgba(42, 48, 54, 0.07);
+  --lp-accent: #c96f9f;
+  --lp-alert: #a34f69;
+  --lp-cta: #2a3036;
+  --lp-cta-ink: #f7fbfd;
+  --lp-shadow: rgba(52, 72, 86, 0.18);
+  --lp-tone-1: #ccfbff;
+  --lp-tone-2: #e2eefb;
+  --lp-tone-3: #f7fafc;
+  --lp-tone-4: #eadff6;
+  --lp-tone-5: #fad9ea;
+  --lp-tone-6: #ef96c5;
+}
+
+.landing-theme[data-theme="dawn"] .landing-hero {
+  background-image:
+    radial-gradient(58% 48% at 8% 4%, rgba(204, 251, 255, 0.62), transparent 70%),
+    radial-gradient(55% 46% at 96% 10%, rgba(239, 150, 197, 0.4), transparent 72%),
+    radial-gradient(
+      120% 72% at 50% -8%,
+      var(--lp-bg-top) 0%,
+      var(--lp-bg) 55%,
+      var(--lp-bg-bottom) 100%
+    );
+}
+
+.landing-theme[data-theme="dawn"] .landing-hero::before {
+  background-image: radial-gradient(
+    closest-side,
+    rgba(239, 150, 197, 0.24),
+    transparent 76%
   );
-  background-size: 104px 100%;
 }
 
-.landing-couplet {
-  writing-mode: vertical-rl;
-  text-orientation: upright;
+.landing-theme[data-theme="dawn"] .start-button {
+  background-color: transparent;
+  background-image: linear-gradient(
+    115deg,
+    #ccfbff 0%,
+    #c3e4fb 42%,
+    #eab7d9 78%,
+    #ef96c5 100%
+  );
+  color: #2a3036;
+  box-shadow:
+    0 18px 34px -22px rgba(180, 110, 150, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
-.landing-path {
-  animation: landing-path-drift 24s linear infinite;
+.landing-theme[data-theme="dawn"] .start-button:hover:not(:disabled) {
+  filter: brightness(1.03) saturate(1.05);
+  box-shadow:
+    0 24px 44px -24px rgba(160, 100, 140, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-@keyframes landing-path-drift {
-  to {
-    stroke-dashoffset: -110;
-  }
+.landing-hero {
+  position: relative;
+  isolation: isolate;
+  background-image: radial-gradient(
+    120% 72% at 50% -8%,
+    var(--lp-bg-top) 0%,
+    var(--lp-bg) 52%,
+    var(--lp-bg-bottom) 100%
+  );
+}
+
+.landing-hero::before {
+  content: "";
+  position: absolute;
+  inset: auto 8% -20% 8%;
+  z-index: 0;
+  height: 48%;
+  pointer-events: none;
+  background-image: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--lp-tone-3), transparent 18%),
+    transparent 76%
+  );
+  filter: blur(28px);
+  opacity: 0.85;
+}
+
+.landing-noise {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+.landing-glass-nav {
+  border: 1px solid var(--lp-line);
+  background: rgba(255, 255, 255, 0.58);
+  box-shadow:
+    0 24px 42px -34px var(--lp-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  backdrop-filter: blur(20px) saturate(120%);
+}
+
+.landing-chip {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.875rem;
+  border: 1px solid var(--lp-line);
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.46);
+  color: var(--lp-ink-soft);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.landing-band {
+  background-color: var(--lp-surface);
+}
+
+.landing-panel {
+  border: 1px solid var(--lp-line);
+  background: color-mix(in srgb, var(--lp-surface), #fff 34%);
+  box-shadow:
+    0 50px 80px -70px var(--lp-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.landing-artifact {
+  border: 1px solid var(--lp-line);
+  background: color-mix(in srgb, var(--lp-surface), #fff 48%);
+  box-shadow: 0 24px 44px -40px var(--lp-shadow);
+}
+
+.start-button {
+  background-color: var(--lp-cta);
+  color: var(--lp-cta-ink);
+  box-shadow:
+    0 16px 30px -18px var(--lp-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  transition:
+    transform 200ms ease,
+    filter 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.start-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.12);
+  box-shadow:
+    0 22px 38px -20px var(--lp-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.start-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.start-button:disabled {
+  filter: saturate(0.6) brightness(0.9);
+}
+
+.lp-theme-toggle {
+  border: 1px solid var(--lp-line);
+  background: rgba(255, 255, 255, 0.42);
+  color: var(--lp-ink-soft);
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease;
+}
+
+.lp-theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--lp-ink);
+}
+
+.tone-1 {
+  background-color: var(--lp-tone-1);
+}
+.tone-2 {
+  background-color: var(--lp-tone-2);
+}
+.tone-3 {
+  background-color: var(--lp-tone-3);
+}
+.tone-4 {
+  background-color: var(--lp-tone-4);
+}
+.tone-5 {
+  background-color: var(--lp-tone-5);
+}
+.tone-6 {
+  background-color: var(--lp-tone-6);
+}
+
+.lp-soft {
+  color: var(--lp-ink-soft);
+}
+
+.fan-card .lp-soft {
+  color: color-mix(in srgb, var(--lp-ink), var(--tone) 20%);
+}
+
+.lp-faint {
+  color: var(--lp-ink-faint);
+}
+
+.lp-alert {
+  color: var(--lp-alert);
+}
+
+.lp-fill {
+  background-color: color-mix(in srgb, var(--lp-ink), transparent 94%);
+}
+
+.lp-accent-fill {
+  background-color: var(--lp-accent);
+}
+
+.lp-hairline {
+  border-color: var(--lp-line);
+}
+
+.lp-hairline-soft {
+  border-color: var(--lp-line-soft);
 }
 
 @keyframes landing-line-rise {
@@ -118,20 +386,33 @@
 .fan-card {
   position: relative;
   display: flex;
-  height: 268px;
+  height: 262px;
   width: 204px;
   flex: none;
   flex-direction: column;
-  margin-left: -22px;
-  padding: 16px 16px 16px 28px;
-  border-radius: 12px;
-  background: var(--color-paper);
-  color: var(--color-ink);
+  margin-left: -24px;
+  padding: 16px 18px 16px 28px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--tone), var(--lp-ink) 15%);
+  border-radius: 22px;
+  background-color: var(--tone);
+  background-image: linear-gradient(
+    168deg,
+    rgba(255, 255, 255, 0.36) 0%,
+    rgba(255, 255, 255, 0.08) 36%,
+    rgba(0, 0, 0, 0.035) 100%
+  );
+  box-shadow:
+    0 34px 54px -36px var(--lp-shadow),
+    0 10px 18px -16px rgba(40, 30, 24, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  color: var(--lp-ink);
   z-index: var(--z, 1);
-  transform: translateY(var(--ty, 0px)) rotate(var(--rot, 0deg));
+  transform: translateY(var(--ty, 0px));
   transition:
-    transform 280ms cubic-bezier(0.2, 0.7, 0.2, 1),
-    box-shadow 280ms;
+    transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 320ms ease,
+    border-color 320ms ease;
 }
 
 .fan-card:first-child {
@@ -139,14 +420,53 @@
 }
 
 .fan-detail {
+  display: flex;
+  min-height: 0;
   flex: 1;
+}
+
+.fan-panel {
+  display: flex;
+  width: 100%;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  padding: 10px;
+  border: 1px solid color-mix(in srgb, var(--tone), var(--lp-ink) 11%);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--tone), #fff 54%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  color: var(--lp-ink);
+}
+
+.module-chip {
+  display: inline-flex;
+  height: 30px;
+  width: 30px;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--tone), var(--lp-ink) 16%);
+  border-radius: 10px;
+  background-color: color-mix(in srgb, var(--tone), #fff 64%);
+  color: var(--lp-ink);
+  font-family: var(--font-serif);
+  font-size: 15px;
+  transform: rotate(-3deg);
+  box-shadow: 0 2px 5px -3px rgba(40, 30, 24, 0.4);
 }
 
 @media (hover: hover) {
   .fan-card:hover {
     z-index: 40;
-    transform: translateY(calc(var(--ty, 0px) - 16px)) rotate(0deg);
-    box-shadow: 0 36px 60px -30px rgba(0, 0, 0, 0.95);
+    border-color: color-mix(in srgb, var(--tone), var(--lp-ink) 28%);
+    transform: translateY(calc(var(--ty, 0px) - 14px)) scale(1.012);
+    box-shadow:
+      0 46px 68px -40px var(--lp-shadow),
+      0 18px 26px -20px rgba(40, 30, 24, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
   }
 }
 
@@ -160,10 +480,11 @@
   .fan-card {
     width: auto;
     height: auto;
-    min-height: 96px;
+    min-height: 0;
     margin-left: 0;
-    padding: 14px;
+    padding: 16px;
     transform: none;
+    border-radius: 20px;
   }
 
   .fan-card:hover {
@@ -198,8 +519,7 @@
 @media (prefers-reduced-motion: reduce) {
   .landing-line,
   .landing-enter,
-  .fan,
-  .landing-path {
+  .fan {
     animation: none;
   }
 
