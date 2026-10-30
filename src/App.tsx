@@ -13,6 +13,7 @@ import AssignmentsPage from "./pages/assignments/AssignmentsPage";
 import ExperiencesPage from "./pages/experiences/ExperiencesPage";
 import ResumePage from "./pages/resume/ResumePage";
 import PortfolioPage from "./pages/portfolio/PortfolioPage";
+import OpportunitiesPage from "./pages/opportunities/OpportunitiesPage";
 import { clearLocalData, loadTimetable, saveTimetable } from "./store/idb";
 import {
   loadAssignments,
@@ -36,6 +37,7 @@ type Route =
   | "assignments"
   | "experiences"
   | "resume"
+  | "opportunities"
   | "portfolio";
 
 function readRoute(): Route {
@@ -45,6 +47,7 @@ function readRoute(): Route {
   if (hash === "assignments") return "assignments";
   if (hash === "experiences") return "experiences";
   if (hash === "resume") return "resume";
+  if (hash === "opportunities") return "opportunities";
   if (hash.startsWith("p/")) return "portfolio";
   return "landing";
 }
@@ -164,7 +167,9 @@ export default function App() {
     setTimetable(sample);
   }
 
-  async function handleUseSample() {
+  async function handleUseSample(
+    destination: "today" | "opportunities" = "today",
+  ) {
     let nextTimetable = timetable;
     if (!nextTimetable) {
       nextTimetable = createSampleTimetable();
@@ -178,7 +183,7 @@ export default function App() {
     }
 
     let nextExperiences = experiences;
-    if (!nextExperiences) {
+    if (!nextExperiences || nextExperiences.experiences.length === 0) {
       nextExperiences = createSampleExperiences();
       await saveExperiences(nextExperiences);
     }
@@ -186,7 +191,7 @@ export default function App() {
     setTimetable(nextTimetable);
     setAssignments(nextAssignments);
     setExperiences(nextExperiences);
-    navigate("today");
+    navigate(destination);
   }
 
   async function handleClear() {
@@ -207,16 +212,7 @@ export default function App() {
     return <LandingPage onStart={handleStart} />;
   }
 
-  const active =
-    route === "resume"
-      ? "resume"
-      : route === "today"
-        ? "today"
-        : route === "assignments"
-          ? "assignments"
-          : route === "experiences"
-            ? "experiences"
-            : "timetable";
+  const active = route;
   const assignmentCount =
     assignments?.items.filter((item) => item.status !== "done").length ?? 0;
 
@@ -232,17 +228,7 @@ export default function App() {
       assignmentCount={assignmentCount}
       onClear={handleClear}
       onHome={() => navigate("landing")}
-      onNavigate={(id) => {
-        if (
-          id === "today" ||
-          id === "timetable" ||
-          id === "assignments" ||
-          id === "experiences" ||
-          id === "resume"
-        ) {
-          navigate(id);
-        }
-      }}
+      onNavigate={(id) => navigate(id)}
     >
       {loading ? (
         <LoadingState module={active} />
@@ -252,7 +238,7 @@ export default function App() {
           assignments={assignments}
           experiences={experiences}
           onSaveAssignments={handleSaveAssignments}
-          onUseSample={handleUseSample}
+          onUseSample={() => handleUseSample()}
           onNavigate={(id) => navigate(id)}
         />
       ) : route === "assignments" ? (
@@ -265,6 +251,15 @@ export default function App() {
           resume={resume}
           onSaveResume={handleSaveResume}
           onNavigateExperiences={() => navigate("experiences")}
+          onNavigateOpportunities={() => navigate("opportunities")}
+        />
+      ) : route === "opportunities" ? (
+        <OpportunitiesPage
+          experiences={experiences}
+          resume={resume}
+          onNavigateResume={() => navigate("resume")}
+          onNavigateExperiences={() => navigate("experiences")}
+          onUseSample={() => handleUseSample("opportunities")}
         />
       ) : (
         <TimetablePage
@@ -280,7 +275,13 @@ export default function App() {
 function LoadingState({
   module,
 }: {
-  module: "today" | "timetable" | "assignments" | "experiences" | "resume";
+  module:
+    | "today"
+    | "timetable"
+    | "assignments"
+    | "experiences"
+    | "resume"
+    | "opportunities";
 }) {
   const meta = {
     today: { code: "M1 · 今日 / 01", title: "今天" },
@@ -288,6 +289,7 @@ function LoadingState({
     assignments: { code: "M1 · 作业 / 03", title: "作业与待办" },
     experiences: { code: "M2 · 经历 / 04", title: "经历库" },
     resume: { code: "M3 · 简历 / 05", title: "简历工作台" },
+    opportunities: { code: "M4 · 机会 / 06", title: "机会仪表盘" },
   }[module];
   return (
     <div className="px-4 py-8 sm:px-6 lg:px-8 lg:py-12">

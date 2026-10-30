@@ -1,12 +1,12 @@
 import { useState, type ReactNode } from "react";
 
 const NAV = [
-  { id: "today", no: "01", label: "今日", ready: true },
-  { id: "timetable", no: "02", label: "课表", ready: true },
-  { id: "assignments", no: "03", label: "作业", ready: true },
-  { id: "experiences", no: "04", label: "经历", ready: true },
-  { id: "resume", no: "05", label: "简历", ready: true },
-  { id: "opportunities", no: "06", label: "机会", ready: false },
+  { id: "today", no: "01", label: "今日" },
+  { id: "timetable", no: "02", label: "课表" },
+  { id: "assignments", no: "03", label: "作业" },
+  { id: "experiences", no: "04", label: "经历" },
+  { id: "resume", no: "05", label: "简历" },
+  { id: "opportunities", no: "06", label: "机会" },
 ] as const;
 
 type NavId = (typeof NAV)[number]["id"];
@@ -79,18 +79,13 @@ export default function AppShell({
               <button
                 key={item.id}
                 type="button"
-                disabled={!item.ready}
-                onClick={() => {
-                  if (item.ready) onNavigate(item.id);
-                }}
+                onClick={() => onNavigate(item.id)}
                 aria-current={isActive ? "page" : undefined}
                 className={[
                   "flex min-h-11 shrink-0 items-center gap-3 rounded-lg px-3 text-sm whitespace-nowrap transition-colors lg:w-full",
                   isActive
                     ? "bg-ink/[0.06] text-ink"
-                    : item.ready
-                      ? "text-ink/70 hover:bg-ink/[0.04]"
-                      : "cursor-not-allowed text-ink/30",
+                    : "text-ink/70 hover:bg-ink/[0.04]",
                 ].join(" ")}
               >
                 <span
@@ -108,11 +103,6 @@ export default function AppShell({
                     className="bg-amber/15 ml-auto rounded-full px-1.5 py-0.5 font-mono text-[9px] tabular-nums text-ink/70"
                   >
                     {assignmentCount}
-                  </span>
-                )}
-                {!item.ready && (
-                  <span className="ml-auto hidden font-mono text-[9px] tracking-[0.12em] text-ink/25 lg:inline">
-                    待建
                   </span>
                 )}
               </button>

@@ -1,0 +1,1014 @@
+[
+  {
+    "id": "job-frontend-intern-zhilu",
+    "company": "知路教育",
+    "title": "前端开发实习生",
+    "city": "杭州",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "技术",
+    "track": "前端",
+    "requirements": [
+      "熟悉 React 与 TypeScript，能独立完成页面开发",
+      "了解前端性能优化，能定位首屏加载瓶颈",
+      "熟练使用 Git 协作，能参与代码评审",
+      "每周到岗 4 天以上，连续实习 3 个月"
+    ],
+    "requirementSkills": [
+      { "all": ["React", "TypeScript"] },
+      { "any": ["性能优化"] },
+      { "any": ["Git"] },
+      {}
+    ],
+    "skills": ["React", "TypeScript", "性能优化", "Git"],
+    "gradeFit": [2, 3, 4, 5],
+    "collectedAt": "2026-10-26"
+  },
+  {
+    "id": "job-frontend-campus-xinglan",
+    "company": "星澜科技",
+    "title": "前端开发工程师（2027届校招）",
+    "city": "深圳",
+    "type": "campus",
+    "cohort": "2027届秋招",
+    "family": "技术",
+    "track": "前端",
+    "requirements": [
+      "扎实的 JavaScript 与 TypeScript 基础",
+      "熟悉 React 或 Vue，理解组件化开发",
+      "了解浏览器渲染原理、前端工程化或性能优化",
+      "有课程项目或开源项目可展示"
+    ],
+    "requirementSkills": [
+      { "any": ["JavaScript", "TypeScript"] },
+      { "any": ["React", "Vue"] },
+      { "any": ["浏览器原理", "前端工程化", "性能优化"] },
+      {}
+    ],
+    "skills": [
+      "JavaScript",
+      "TypeScript",
+      "React",
+      "Vue",
+      "组件化",
+      "前端工程化",
+      "浏览器原理",
+      "性能优化",
+      "Git"
+    ],
+    "gradeFit": [4, 5],
+    "collectedAt": "2026-10-24"
+  },
+  {
+    "id": "job-backend-campus-yunshu",
+    "company": "云枢数据",
+    "title": "后端开发工程师（Java）",
+    "city": "北京",
+    "type": "campus",
+    "cohort": "2027届秋招",
+    "family": "技术",
+    "track": "后端",
+    "requirements": [
+      "扎实的 Java 基础，理解面向对象设计",
+      "熟悉 Spring Boot 与 MySQL，能独立开发接口",
+      "了解 Redis 缓存与常见性能优化",
+      "熟悉 Linux 常用命令"
+    ],
+    "requirementSkills": [
+      { "any": ["Java"] },
+      { "all": ["Spring Boot", "MySQL"] },
+      { "any": ["Redis", "性能优化"] },
+      { "any": ["Linux"] }
+    ],
+    "skills": ["Java", "Spring Boot", "MySQL", "Redis", "Linux", "数据结构"],
+    "gradeFit": [4, 5],
+    "collectedAt": "2026-10-21"
+  },
+  {
+    "id": "job-backend-intern-yuanshan",
+    "company": "远山网络",
+    "title": "后端开发实习生（Go）",
+    "city": "上海",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "技术",
+    "track": "后端",
+    "requirements": [
+      "熟悉 Go 或愿意转 Go，有扎实的编程基础",
+      "了解 MySQL 与 Redis 的基本使用",
+      "熟悉 Linux 开发环境",
+      "能连续实习 3 个月以上"
+    ],
+    "requirementSkills": [
+      { "any": ["Go", "Java", "Python", "C++"] },
+      { "any": ["MySQL", "Redis"] },
+      { "any": ["Linux"] },
+      {}
+    ],
+    "skills": ["Go", "MySQL", "Redis", "Linux", "分布式"],
+    "gradeFit": [3, 4, 5],
+    "collectedAt": "2026-10-19"
+  },
+  {
+    "id": "job-android-campus-shibei",
+    "company": "拾贝科技",
+    "title": "客户端开发工程师（Android）",
+    "city": "深圳",
+    "type": "campus",
+    "cohort": "2027届秋招",
+    "family": "技术",
+    "track": "客户端",
+    "requirements": [
+      "熟悉 Java 或 Kotlin 语言",
+      "了解 Android 基础组件与生命周期",
+      "有性能优化意识，能定位卡顿问题",
+      "2027届本科及以上学历"
+    ],
+    "requirementSkills": [
+      { "any": ["Java", "Kotlin"] },
+      { "any": ["Android"] },
+      { "any": ["性能优化"] },
+      {}
+    ],
+    "skills": ["Java", "Kotlin", "Android", "性能优化"],
+    "gradeFit": [4, 5],
+    "collectedAt": "2026-10-18"
+  },
+  {
+    "id": "job-test-intern-weifen",
+    "company": "微分软件",
+    "title": "测试开发实习生",
+    "city": "南京",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "技术",
+    "track": "测试",
+    "requirements": [
+      "熟悉测试流程，能编写清晰的测试用例",
+      "会使用 Python 或 Java 编写自动化脚本",
+      "了解 Linux 常用命令",
+      "每周到岗 3 天以上"
+    ],
+    "requirementSkills": [
+      { "any": ["测试"] },
+      { "any": ["自动化测试", "Python", "Java"] },
+      { "any": ["Linux"] },
+      {}
+    ],
+    "skills": ["测试", "自动化测试", "Python", "Java", "Linux"],
+    "gradeFit": [3, 4, 5],
+    "collectedAt": "2026-10-17"
+  },
+  {
+    "id": "job-embedded-campus-beichen",
+    "company": "北辰智能",
+    "title": "嵌入式软件工程师",
+    "city": "西安",
+    "type": "campus",
+    "cohort": "2027届秋招",
+    "family": "技术",
+    "track": "嵌入式",
+    "requirements": [
+      "熟悉 C/C++ 编程",
+      "了解嵌入式开发与常见总线",
+      "能看懂电路图并配合硬件调试",
+      "2027届本科及以上学历"
+    ],
+    "requirementSkills": [
+      { "any": ["C", "C++"] },
+      { "any": ["嵌入式"] },
+      { "any": ["硬件调试", "电路设计"] },
+      {}
+    ],
+    "skills": ["C", "C++", "嵌入式", "Linux", "硬件调试"],
+    "gradeFit": [4, 5],
+    "collectedAt": "2026-10-16"
+  },
+  {
+    "id": "job-security-campus-qiaojian",
+    "company": "桥见科技",
+    "title": "网络安全工程师",
+    "city": "北京",
+    "type": "campus",
+    "cohort": "2027届秋招",
+    "family": "技术",
+    "track": "安全",
+    "requirements": [
+      "熟悉常见 Web 漏洞原理与防护",
+      "熟悉 Linux 与常见脚本语言",
+      "有 CTF 或渗透测试经历优先",
+      "2027届本科及以上学历"
+    ],
+    "requirementSkills": [
+      { "any": ["网络安全", "Web安全"] },
+      { "any": ["Linux", "Python"] },
+      { "any": ["渗透测试", "CTF"] },
+      {}
+    ],
+    "skills": ["网络安全", "Linux", "Python", "渗透测试", "CTF"],
+    "gradeFit": [4, 5],
+    "collectedAt": "2026-10-15"
+  },
+  {
+    "id": "job-devops-intern-shanhai",
+    "company": "山海云",
+    "title": "运维开发实习生",
+    "city": "上海",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "技术",
+    "track": "运维",
+    "requirements": [
+      "熟悉 Linux 系统与常用命令",
+      "了解 Docker 与 Kubernetes",
+      "会写 Shell 或 Python 脚本",
+      "每周到岗 4 天以上"
+    ],
+    "requirementSkills": [
+      { "any": ["Linux"] },
+      { "any": ["Docker", "Kubernetes"] },
+      { "any": ["Python", "Shell", "脚本"] },
+      {}
+    ],
+    "skills": ["Linux", "Docker", "Kubernetes", "Python", "Shell"],
+    "gradeFit": [3, 4, 5],
+    "collectedAt": "2026-10-14"
+  },
+  {
+    "id": "job-fullstack-intern-maisui",
+    "company": "麦穗科技",
+    "title": "全栈开发实习生",
+    "city": "成都",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "技术",
+    "track": "全栈",
+    "requirements": [
+      "熟悉 React 与 TypeScript",
+      "了解 Node.js 或 MySQL",
+      "能独立完成前后端联调",
+      "每周到岗 3 天以上，连续 4 个月"
+    ],
+    "requirementSkills": [
+      { "all": ["React", "TypeScript"] },
+      { "any": ["Node.js", "MySQL"] },
+      {},
+      {}
+    ],
+    "skills": ["React", "TypeScript", "Node.js", "MySQL"],
+    "gradeFit": [3, 4, 5],
+    "collectedAt": "2026-10-13"
+  },
+  {
+    "id": "job-unity-campus-xiangsu",
+    "company": "像素工坊",
+    "title": "游戏客户端开发（Unity）",
+    "city": "广州",
+    "type": "campus",
+    "cohort": "2027届秋招",
+    "family": "技术",
+    "track": "游戏",
+    "requirements": [
+      "熟悉 C# 或 C++",
+      "了解 Unity 引擎与游戏开发流程",
+      "具备数据结构与算法基础",
+      "热爱游戏，有作品可展示"
+    ],
+    "requirementSkills": [
+      { "any": ["C#", "C++"] },
+      { "any": ["Unity"] },
+      { "any": ["数据结构", "算法"] },
+      {}
+    ],
+    "skills": ["C#", "C++", "Unity", "数据结构", "图形学"],
+    "gradeFit": [4, 5],
+    "collectedAt": "2026-10-12"
+  },
+  {
+    "id": "job-hardware-campus-songguo",
+    "company": "松果智能",
+    "title": "硬件产品工程师",
+    "city": "苏州",
+    "type": "campus",
+    "cohort": "2027届秋招",
+    "family": "技术",
+    "track": "硬件",
+    "requirements": [
+      "电子、自动化或计算机相关专业",
+      "了解电路设计与嵌入式开发",
+      "能跟进硬件打样与测试",
+      "有项目管理经验优先"
+    ],
+    "requirementSkills": [
+      {},
+      { "any": ["电路设计", "嵌入式"] },
+      { "any": ["硬件调试", "硬件"] },
+      { "any": ["项目管理"] }
+    ],
+    "skills": ["电路设计", "嵌入式", "硬件调试", "项目管理", "硬件"],
+    "gradeFit": [4, 5],
+    "collectedAt": "2026-10-11"
+  },
+  {
+    "id": "job-miniapp-campus-zhiyuan",
+    "company": "纸鸢文化",
+    "title": "前端开发工程师（小程序方向）",
+    "city": "上海",
+    "type": "campus",
+    "cohort": "2027届秋招",
+    "family": "技术",
+    "track": "前端",
+    "requirements": [
+      "熟悉 JavaScript 与微信小程序开发",
+      "有组件化与工程化意识",
+      "能与设计、产品协作推进页面落地",
+      "2027届本科及以上学历"
+    ],
+    "requirementSkills": [
+      { "all": ["JavaScript", "微信小程序"] },
+      { "any": ["组件化", "前端工程化"] },
+      { "any": ["沟通", "团队协作"] },
+      {}
+    ],
+    "skills": ["JavaScript", "微信小程序", "组件化", "前端工程化", "沟通"],
+    "gradeFit": [4, 5],
+    "collectedAt": "2026-10-10"
+  },
+  {
+    "id": "job-deveff-intern-guangnian",
+    "company": "光年软件",
+    "title": "研发效能实习生",
+    "city": "北京",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "技术",
+    "track": "研发效能",
+    "requirements": [
+      "熟悉 Git 与代码评审流程",
+      "了解 CI/CD 与自动化脚本",
+      "有前端或后端开发基础",
+      "每周到岗 3 天以上"
+    ],
+    "requirementSkills": [
+      { "all": ["Git"] },
+      { "any": ["CI/CD", "脚本", "自动化测试"] },
+      { "any": ["React", "Java", "Python", "Node.js"] },
+      {}
+    ],
+    "skills": ["Git", "CI/CD", "脚本", "前端工程化", "React", "Java"],
+    "gradeFit": [3, 4, 5],
+    "collectedAt": "2026-10-09"
+  },
+  {
+    "id": "job-data-intern-chaoxi",
+    "company": "潮汐数据",
+    "title": "数据分析实习生",
+    "city": "上海",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "数据",
+    "track": "数据分析",
+    "requirements": [
+      "熟练使用 Python 处理数据",
+      "会写 SQL 查询",
+      "能完成数据清洗与可视化",
+      "会用 Excel 做基础分析"
+    ],
+    "requirementSkills": [
+      { "any": ["Python"] },
+      { "any": ["SQL"] },
+      { "any": ["数据清洗", "可视化"] },
+      { "any": ["Excel"] }
+    ],
+    "skills": ["Python", "SQL", "数据清洗", "可视化", "Excel"],
+    "gradeFit": [2, 3, 4, 5],
+    "collectedAt": "2026-10-27"
+  },
+  {
+    "id": "job-data-campus-yunshu",
+    "company": "云枢数据",
+    "title": "数据分析师（2027届）",
+    "city": "北京",
+    "type": "campus",
+    "cohort": "2027届秋招",
+    "family": "数据",
+    "track": "数据分析",
+    "requirements": [
+      "熟练使用 SQL 与 Python",
+      "掌握统计分析与 AB 实验基础",
+      "能独立撰写分析报告",
+      "2027届本科及以上学历"
+    ],
+    "requirementSkills": [
+      { "all": ["SQL", "Python"] },
+      { "any": ["统计分析", "AB测试"] },
+      { "any": ["数据分析", "论文写作", "业务分析"] },
+      {}
+    ],
+    "skills": ["SQL", "Python", "统计分析", "AB测试", "数据分析", "业务分析"],
+    "gradeFit": [4, 5],
+    "collectedAt": "2026-10-22"
+  },
+  {
+    "id": "job-algo-campus-xinglan",
+    "company": "星澜科技",
+    "title": "算法工程师（推荐方向）",
+    "city": "北京",
+    "type": "campus",
+    "cohort": "2027届秋招",
+    "family": "数据",
+    "track": "算法",
+    "requirements": [
+      "扎实的机器学习与深度学习基础",
+      "熟悉 PyTorch 或 TensorFlow",
+      "有推荐系统相关项目经验",
+      "硕士及以上优先"
+    ],
+    "requirementSkills": [
+      { "all": ["机器学习", "深度学习"] },
+      { "any": ["PyTorch", "TensorFlow"] },
+      { "any": ["推荐系统"] },
+      {}
+    ],
+    "skills": ["Python", "机器学习", "深度学习", "PyTorch", "推荐系统", "算法"],
+    "gradeFit": [4, 5],
+    "collectedAt": "2026-10-20"
+  },
+  {
+    "id": "job-ml-intern-xuanyue",
+    "company": "弦月网络",
+    "title": "机器学习实习生",
+    "city": "深圳",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "数据",
+    "track": "算法",
+    "requirements": [
+      "熟悉 Python 与常用机器学习算法",
+      "了解 PyTorch 框架",
+      "有数学建模或竞赛经历",
+      "能实习 6 个月以上"
+    ],
+    "requirementSkills": [
+      { "all": ["Python", "机器学习"] },
+      { "any": ["PyTorch"] },
+      { "any": ["数学建模"] },
+      {}
+    ],
+    "skills": ["Python", "机器学习", "PyTorch", "数学建模", "深度学习"],
+    "gradeFit": [3, 4, 5],
+    "collectedAt": "2026-10-18"
+  },
+  {
+    "id": "job-dataproduct-intern-chaoxi",
+    "company": "潮汐数据",
+    "title": "数据产品实习生",
+    "city": "杭州",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "数据",
+    "track": "数据产品",
+    "requirements": [
+      "能独立完成需求分析与指标设计",
+      "会写产品需求文档",
+      "熟练使用 SQL",
+      "有用户研究经验优先"
+    ],
+    "requirementSkills": [
+      { "all": ["需求分析", "数据分析"] },
+      { "any": ["产品需求文档"] },
+      { "any": ["SQL"] },
+      { "any": ["用户访谈", "用户研究"] }
+    ],
+    "skills": ["数据分析", "需求分析", "产品需求文档", "SQL", "用户研究"],
+    "gradeFit": [3, 4, 5],
+    "collectedAt": "2026-10-16"
+  },
+  {
+    "id": "job-bizanalysis-intern-mailang",
+    "company": "麦浪传媒",
+    "title": "商业分析实习生",
+    "city": "上海",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "数据",
+    "track": "商业分析",
+    "requirements": [
+      "熟练使用 Excel 处理业务数据",
+      "具备数据分析与商业分析思维",
+      "能独立撰写分析报告",
+      "沟通表达清晰"
+    ],
+    "requirementSkills": [
+      { "any": ["Excel"] },
+      { "any": ["数据分析", "商业分析"] },
+      { "any": ["论文写作", "数据分析"] },
+      { "any": ["沟通"] }
+    ],
+    "skills": ["Excel", "数据分析", "商业分析", "沟通"],
+    "gradeFit": [3, 4, 5],
+    "collectedAt": "2026-10-14"
+  },
+  {
+    "id": "job-nlp-intern-guiye",
+    "company": "归野科技",
+    "title": "算法研究实习生（NLP）",
+    "city": "北京",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "数据",
+    "track": "算法研究",
+    "requirements": [
+      "熟悉 NLP 基础与大模型应用",
+      "有 Python 与 PyTorch 实践经验",
+      "能阅读英文论文并复现实验",
+      "有科研项目经历优先"
+    ],
+    "requirementSkills": [
+      { "any": ["NLP", "大模型"] },
+      { "all": ["Python", "PyTorch"] },
+      { "any": ["论文写作", "英语"] },
+      { "any": ["科研"] }
+    ],
+    "skills": ["Python", "NLP", "PyTorch", "深度学习", "论文写作", "英语"],
+    "gradeFit": [4, 5],
+    "collectedAt": "2026-10-12"
+  },
+  {
+    "id": "job-pm-intern-qingxiu",
+    "company": "青岫文创",
+    "title": "产品经理实习生",
+    "city": "北京",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "产品",
+    "track": "产品经理",
+    "requirements": [
+      "能独立完成用户访谈与需求分析",
+      "会写产品需求文档",
+      "能用数据分析验证想法",
+      "沟通协调能力强"
+    ],
+    "requirementSkills": [
+      { "all": ["用户访谈", "需求分析"] },
+      { "any": ["产品需求文档"] },
+      { "any": ["数据分析"] },
+      { "any": ["沟通", "团队协作"] }
+    ],
+    "skills": ["用户访谈", "需求分析", "产品需求文档", "数据分析", "沟通", "团队协作"],
+    "gradeFit": [2, 3, 4, 5],
+    "collectedAt": "2026-10-25"
+  },
+  {
+    "id": "job-pm-campus-lanxing",
+    "company": "岚行科技",
+    "title": "产品经理（2027届校招）",
+    "city": "上海",
+    "type": "campus",
+    "cohort": "2027届秋招",
+    "family": "产品",
+    "track": "产品经理",
+    "requirements": [
+      "具备需求分析与产品设计能力",
+      "能独立撰写 PRD",
+      "有数据分析与用户研究基础",
+      "有校园项目或实习经历"
+    ],
+    "requirementSkills": [
+      { "all": ["需求分析", "产品设计"] },
+      { "any": ["产品需求文档"] },
+      { "any": ["数据分析", "用户研究", "用户访谈"] },
+      {}
+    ],
+    "skills": ["需求分析", "产品设计", "产品需求文档", "数据分析", "用户研究", "项目管理"],
+    "gradeFit": [4, 5],
+    "collectedAt": "2026-10-23"
+  },
+  {
+    "id": "job-userresearch-intern-shiguang",
+    "company": "拾光设计",
+    "title": "用户研究实习生",
+    "city": "上海",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "产品",
+    "track": "用户研究",
+    "requirements": [
+      "能独立执行用户访谈",
+      "会设计问卷并分析结果",
+      "了解可用性测试",
+      "每周到岗 3 天以上"
+    ],
+    "requirementSkills": [
+      { "any": ["用户访谈"] },
+      { "any": ["问卷设计", "数据分析"] },
+      { "any": ["可用性测试"] },
+      {}
+    ],
+    "skills": ["用户访谈", "问卷设计", "数据分析", "可用性测试", "用户研究"],
+    "gradeFit": [3, 4, 5],
+    "collectedAt": "2026-10-15"
+  },
+  {
+    "id": "job-aiproduct-intern-songguo",
+    "company": "松果智能",
+    "title": "AI 产品实习生",
+    "city": "深圳",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "产品",
+    "track": "AI 产品",
+    "requirements": [
+      "对 AI 产品有理解，能拆解使用场景",
+      "能写提示词并做效果评估",
+      "具备数据分析能力",
+      "沟通与项目管理能力"
+    ],
+    "requirementSkills": [
+      { "any": ["AI 产品"] },
+      { "any": ["提示词"] },
+      { "any": ["数据分析"] },
+      { "any": ["沟通", "项目管理"] }
+    ],
+    "skills": ["AI 产品", "提示词", "需求分析", "数据分析", "沟通"],
+    "gradeFit": [3, 4, 5],
+    "collectedAt": "2026-10-13"
+  },
+  {
+    "id": "job-productops-intern-bailu",
+    "company": "白鹭互动",
+    "title": "产品运营实习生",
+    "city": "广州",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "产品",
+    "track": "产品运营",
+    "requirements": [
+      "具备数据分析能力",
+      "有内容运营或用户运营经验",
+      "沟通协调能力强",
+      "每周到岗 3 天以上"
+    ],
+    "requirementSkills": [
+      { "any": ["数据分析"] },
+      { "any": ["内容运营", "用户运营"] },
+      { "any": ["沟通", "团队协作"] },
+      {}
+    ],
+    "skills": ["数据分析", "内容运营", "用户运营", "沟通"],
+    "gradeFit": [2, 3, 4, 5],
+    "collectedAt": "2026-10-11"
+  },
+  {
+    "id": "job-uiux-intern-shiguang",
+    "company": "拾光设计",
+    "title": "UI/UX 设计实习生",
+    "city": "上海",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "设计",
+    "track": "UI/UX",
+    "requirements": [
+      "熟练使用 Figma 完成高保真设计",
+      "具备视觉设计基础",
+      "了解组件规范与设计系统",
+      "能独立完成交互设计",
+      "有用户访谈经验优先"
+    ],
+    "requirementSkills": [
+      { "any": ["Figma"] },
+      { "any": ["视觉设计"] },
+      { "any": ["组件规范", "设计规范"] },
+      { "any": ["交互设计"] },
+      { "any": ["用户访谈"] }
+    ],
+    "skills": ["Figma", "交互设计", "视觉设计", "组件规范", "用户访谈"],
+    "gradeFit": [2, 3, 4, 5],
+    "collectedAt": "2026-10-28"
+  },
+  {
+    "id": "job-interaction-campus-xiangsu",
+    "company": "像素工坊",
+    "title": "交互设计师（2027届）",
+    "city": "深圳",
+    "type": "campus",
+    "cohort": "2027届秋招",
+    "family": "设计",
+    "track": "交互设计",
+    "requirements": [
+      "熟练使用 Figma 与原型工具",
+      "具备交互设计能力",
+      "能独立完成用户研究",
+      "有设计规范意识"
+    ],
+    "requirementSkills": [
+      { "any": ["Figma", "原型设计"] },
+      { "any": ["交互设计"] },
+      { "any": ["用户研究", "用户访谈"] },
+      { "any": ["设计规范", "组件规范"] }
+    ],
+    "skills": ["Figma", "交互设计", "原型设计", "用户研究", "设计规范", "组件规范"],
+    "gradeFit": [4, 5],
+    "collectedAt": "2026-10-22"
+  },
+  {
+    "id": "job-visual-intern-zhiyuan",
+    "company": "纸鸢文化",
+    "title": "视觉设计实习生",
+    "city": "杭州",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "设计",
+    "track": "视觉设计",
+    "requirements": [
+      "熟练使用 Photoshop 与 Illustrator",
+      "具备视觉设计与排版能力",
+      "能独立完成海报与物料设计",
+      "每周到岗 3 天以上"
+    ],
+    "requirementSkills": [
+      { "any": ["Photoshop", "Illustrator"] },
+      { "any": ["视觉设计", "排版"] },
+      { "any": ["视觉设计"] },
+      {}
+    ],
+    "skills": ["Photoshop", "Illustrator", "视觉设计", "排版"],
+    "gradeFit": [2, 3, 4, 5],
+    "collectedAt": "2026-10-17"
+  },
+  {
+    "id": "job-brand-intern-qingxiu",
+    "company": "青岫文创",
+    "title": "品牌设计实习生",
+    "city": "北京",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "设计",
+    "track": "品牌设计",
+    "requirements": [
+      "具备品牌设计或视觉传达基础",
+      "熟练使用 Illustrator",
+      "有良好的排版与色彩感觉",
+      "能写简单文案"
+    ],
+    "requirementSkills": [
+      { "any": ["品牌设计", "视觉设计"] },
+      { "any": ["Illustrator"] },
+      { "any": ["排版"] },
+      { "any": ["文案"] }
+    ],
+    "skills": ["品牌设计", "Illustrator", "排版", "文案", "视觉设计"],
+    "gradeFit": [2, 3, 4, 5],
+    "collectedAt": "2026-10-14"
+  },
+  {
+    "id": "job-gameui-campus-xiangsu",
+    "company": "像素工坊",
+    "title": "游戏 UI 设计师",
+    "city": "广州",
+    "type": "campus",
+    "cohort": "2027届秋招",
+    "family": "设计",
+    "track": "游戏UI",
+    "requirements": [
+      "熟练使用 Figma 与 Photoshop",
+      "具备游戏 UI 设计经验",
+      "有视觉设计与组件规范基础",
+      "热爱游戏，有作品可展示"
+    ],
+    "requirementSkills": [
+      { "all": ["Figma", "Photoshop"] },
+      { "any": ["游戏UI"] },
+      { "all": ["视觉设计", "组件规范"] },
+      {}
+    ],
+    "skills": ["Figma", "Photoshop", "游戏UI", "视觉设计", "组件规范"],
+    "gradeFit": [4, 5],
+    "collectedAt": "2026-10-12"
+  },
+  {
+    "id": "job-contentops-intern-mailang",
+    "company": "麦浪传媒",
+    "title": "内容运营实习生",
+    "city": "北京",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "运营",
+    "track": "内容运营",
+    "requirements": [
+      "具备内容策划与文案能力",
+      "了解短视频平台内容逻辑",
+      "能使用数据复盘内容效果",
+      "每周到岗 3 天以上"
+    ],
+    "requirementSkills": [
+      { "any": ["内容运营", "文案"] },
+      { "any": ["短视频"] },
+      { "any": ["数据分析"] },
+      {}
+    ],
+    "skills": ["内容运营", "文案", "短视频", "数据分析"],
+    "gradeFit": [2, 3, 4, 5],
+    "collectedAt": "2026-10-27"
+  },
+  {
+    "id": "job-newmedia-campus-bailu",
+    "company": "白鹭互动",
+    "title": "新媒体运营（2027届）",
+    "city": "上海",
+    "type": "campus",
+    "cohort": "2027届秋招",
+    "family": "运营",
+    "track": "新媒体",
+    "requirements": [
+      "具备内容运营与文案能力",
+      "熟悉短视频内容制作",
+      "能使用数据分析优化内容",
+      "沟通与协作能力强"
+    ],
+    "requirementSkills": [
+      { "any": ["内容运营", "文案"] },
+      { "any": ["短视频"] },
+      { "any": ["数据分析"] },
+      { "any": ["沟通", "团队协作"] }
+    ],
+    "skills": ["内容运营", "短视频", "文案", "数据分析", "沟通"],
+    "gradeFit": [4, 5],
+    "collectedAt": "2026-10-21"
+  },
+  {
+    "id": "job-userops-intern-zhilu",
+    "company": "知路教育",
+    "title": "用户运营实习生",
+    "city": "杭州",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "运营",
+    "track": "用户运营",
+    "requirements": [
+      "有用户运营或社群运营经验",
+      "能通过数据分析发现问题",
+      "沟通与共情能力强",
+      "每周到岗 3 天以上"
+    ],
+    "requirementSkills": [
+      { "any": ["用户运营", "社群运营"] },
+      { "any": ["数据分析"] },
+      { "any": ["沟通"] },
+      {}
+    ],
+    "skills": ["用户运营", "社群运营", "数据分析", "沟通"],
+    "gradeFit": [2, 3, 4, 5],
+    "collectedAt": "2026-10-16"
+  },
+  {
+    "id": "job-marketing-intern-fengling",
+    "company": "风铃科技",
+    "title": "市场推广实习生",
+    "city": "成都",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "运营",
+    "track": "市场推广",
+    "requirements": [
+      "具备活动策划与执行能力",
+      "沟通表达清晰",
+      "有文案基础",
+      "每周到岗 3 天以上"
+    ],
+    "requirementSkills": [
+      { "any": ["活动策划", "活动组织"] },
+      { "any": ["沟通"] },
+      { "any": ["文案"] },
+      {}
+    ],
+    "skills": ["市场推广", "活动策划", "活动组织", "沟通", "文案"],
+    "gradeFit": [2, 3, 4, 5],
+    "collectedAt": "2026-10-10"
+  },
+  {
+    "id": "job-ambassador-xingye",
+    "company": "星野互联",
+    "title": "校园大使（兼职）",
+    "city": "远程",
+    "type": "intern",
+    "cohort": "学期兼职",
+    "family": "运营",
+    "track": "校园运营",
+    "requirements": [
+      "组织过校园活动",
+      "善于沟通，能维护学生社群",
+      "运营过公众号或社群优先",
+      "在校本科生"
+    ],
+    "requirementSkills": [
+      { "any": ["活动组织"] },
+      { "any": ["沟通", "社群运营"] },
+      { "any": ["社群运营", "内容运营"] },
+      {}
+    ],
+    "skills": ["活动组织", "沟通", "社群运营", "内容运营"],
+    "gradeFit": [1, 2, 3, 4],
+    "collectedAt": "2026-10-09"
+  },
+  {
+    "id": "job-teaching-intern-chengming",
+    "company": "澄明教育",
+    "title": "教研内容实习生",
+    "city": "北京",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "研究",
+    "track": "教研",
+    "requirements": [
+      "有课程设计或教案编写经验",
+      "沟通表达清晰",
+      "能独立策划学习活动",
+      "每周到岗 3 天以上"
+    ],
+    "requirementSkills": [
+      { "any": ["课程设计", "内容写作"] },
+      { "any": ["沟通"] },
+      { "any": ["活动组织"] },
+      {}
+    ],
+    "skills": ["课程设计", "内容写作", "沟通", "活动组织", "教育"],
+    "gradeFit": [2, 3, 4, 5],
+    "collectedAt": "2026-10-29"
+  },
+  {
+    "id": "job-curriculum-campus-qinghe",
+    "company": "青禾教育",
+    "title": "课程研发（2027届）",
+    "city": "南京",
+    "type": "campus",
+    "cohort": "2027届秋招",
+    "family": "研究",
+    "track": "课程研发",
+    "requirements": [
+      "具备课程设计与内容研发能力",
+      "能独立完成需求分析",
+      "有项目管理与沟通能力",
+      "2027届本科及以上学历"
+    ],
+    "requirementSkills": [
+      { "all": ["课程设计", "内容写作"] },
+      { "any": ["需求分析"] },
+      { "any": ["项目管理", "沟通"] },
+      {}
+    ],
+    "skills": ["课程设计", "内容写作", "需求分析", "项目管理", "沟通"],
+    "gradeFit": [4, 5],
+    "collectedAt": "2026-10-19"
+  },
+  {
+    "id": "job-hr-intern-hemu",
+    "company": "禾木科技",
+    "title": "人力资源实习生",
+    "city": "武汉",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "职能",
+    "track": "人力资源",
+    "requirements": [
+      "沟通表达清晰，善于倾听",
+      "有招聘或活动组织经验",
+      "熟练使用 Excel",
+      "每周到岗 3 天以上"
+    ],
+    "requirementSkills": [
+      { "any": ["沟通"] },
+      { "any": ["招聘", "活动组织"] },
+      { "any": ["Excel"] },
+      {}
+    ],
+    "skills": ["沟通", "招聘", "活动组织", "Excel"],
+    "gradeFit": [2, 3, 4, 5],
+    "collectedAt": "2026-10-08"
+  },
+  {
+    "id": "job-finance-intern-changjie",
+    "company": "长街网络",
+    "title": "财务分析实习生",
+    "city": "深圳",
+    "type": "intern",
+    "cohort": "日常实习",
+    "family": "职能",
+    "track": "财务",
+    "requirements": [
+      "财务、会计或金融相关专业",
+      "熟练使用 Excel",
+      "具备数据分析能力",
+      "沟通表达清晰"
+    ],
+    "requirementSkills": [
+      {},
+      { "any": ["Excel"] },
+      { "any": ["数据分析"] },
+      { "any": ["沟通"] }
+    ],
+    "skills": ["Excel", "财务分析", "数据分析", "沟通"],
+    "gradeFit": [2, 3, 4, 5],
+    "collectedAt": "2026-10-07"
+  }
+]

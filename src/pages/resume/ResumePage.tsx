@@ -43,6 +43,7 @@ interface ResumePageProps {
   resume: ResumeData;
   onSaveResume: (data: ResumeData) => void;
   onNavigateExperiences: () => void;
+  onNavigateOpportunities: () => void;
 }
 
 const BTN_PRIMARY =
@@ -55,6 +56,7 @@ export default function ResumePage({
   resume,
   onSaveResume,
   onNavigateExperiences,
+  onNavigateOpportunities,
 }: ResumePageProps) {
   const items = useMemo(
     () => experiences?.experiences ?? [],
@@ -540,6 +542,13 @@ export default function ResumePage({
                 className={BTN_SECONDARY}
               >
                 生成作品集
+              </button>
+              <button
+                type="button"
+                onClick={onNavigateOpportunities}
+                className={BTN_SECONDARY}
+              >
+                按简历找机会
               </button>
               <button
                 type="button"

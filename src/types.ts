@@ -206,3 +206,125 @@ export const DAY_LABELS = ["周一", "周二", "周三", "周四", "周五", "�
 export const COURSE_COLORS = ["clay", "blue", "moss", "plum", "sand", "slate"] as const;
 
 export type CourseColor = (typeof COURSE_COLORS)[number];
+
+export type JobType = "campus" | "intern";
+
+export type JobFamily =
+  | "技术"
+  | "数据"
+  | "产品"
+  | "设计"
+  | "运营"
+  | "研究"
+  | "职能"
+  | "其他";
+
+export interface RequirementSkillRule {
+  all?: string[];
+  any?: string[];
+}
+
+export interface JobPosting {
+  id: string;
+  company: string;
+  title: string;
+  city: string;
+  type: JobType;
+  cohort: string;
+  family: JobFamily;
+  track: string;
+  requirements: string[];
+  requirementSkills: RequirementSkillRule[];
+  skills: string[];
+  gradeFit: number[];
+  collectedAt: string;
+  custom?: boolean;
+}
+
+export type ChannelType = "campus" | "platform" | "public";
+
+export interface Channel {
+  id: string;
+  name: string;
+  type: ChannelType;
+  entryUrl: string;
+  openMonths: number[];
+  fitGrade: number[];
+  note?: string;
+}
+
+export type MatchTier = "high" | "medium" | "low";
+
+export type MatchEvidenceSource = "text" | "bullet" | "tag";
+
+export interface MatchHit {
+  index: number;
+  requirement: string;
+  experienceId: string;
+  quote: string;
+  skills: string[];
+  source: MatchEvidenceSource;
+}
+
+export interface MatchGap {
+  index: number;
+  requirement: string;
+  advice: string;
+  archiveExperienceId?: string;
+  archiveQuote?: string;
+}
+
+export interface MatchEligibility {
+  index: number;
+  requirement: string;
+  note: string;
+}
+
+export interface JobMatch {
+  jobId: string;
+  score: number;
+  tier: MatchTier;
+  hits: MatchHit[];
+  gaps: MatchGap[];
+  eligibility: MatchEligibility[];
+  matchedSkills: string[];
+  missingSkills: string[];
+  reasons: string[];
+  warnings: string[];
+  coverage: number;
+}
+
+export interface OpportunityProfile {
+  grade: string;
+  gradeNumber: number;
+  major: string;
+  city: string;
+  target: string;
+  skills: string[];
+  experienceCount: number;
+  selectedCount: number;
+  usesSelected: boolean;
+  completeness: {
+    label: string;
+    done: boolean;
+    action: string;
+    target: "resume" | "experiences";
+  }[];
+}
+
+export const JOB_TYPE_LABELS: Record<JobType, string> = {
+  campus: "校招",
+  intern: "实习",
+};
+
+export const CHANNEL_TYPE_LABELS: Record<ChannelType, string> = {
+  campus: "校招官网",
+  platform: "招聘平台",
+  public: "公共服务",
+};
+
+export const MATCH_TIER_LABELS: Record<MatchTier, string> = {
+  high: "高匹配",
+  medium: "可尝试",
+  low: "缺口较大",
+};

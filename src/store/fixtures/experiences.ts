@@ -82,9 +82,9 @@ export function createSampleExperiences(): ExperienceData {
         problem:
           "课程详情页在低端安卓机上首屏加载超过 5 秒，用户流失明显。",
         method:
-          "用 Chrome Performance 定位瓶颈，拆分长列表、图片懒加载、把首屏接口从串行改成并行；补充关键路径的加载占位。",
+          "在 React + TypeScript 页面里做性能优化：用 Chrome Performance 定位瓶颈，拆分长列表、图片懒加载、把首屏接口从串行改成并行；补充关键路径的加载占位。",
         contribution:
-          "独立完成课程详情页改版，交付 6 个页面和 23 个缺陷修复，参与每周代码评审。",
+          "独立完成课程详情页改版，交付 6 个页面和 23 个缺陷修复，用 Git 分支协作并参与每周代码评审。",
         result: "首屏时间从 5.2 秒降到 1.8 秒，页面跳出率下降约 18%。",
         metrics: [
           { label: "首屏时间", value: "5.2s → 1.8s" },
