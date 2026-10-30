@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { AssignmentData, TimetableData } from "./types";
 import AppShell from "./components/AppShell";
 import LandingPage from "./pages/landing/LandingPage";
+import TodayPage from "./pages/today/TodayPage";
 import TimetablePage from "./pages/timetable/TimetablePage";
 import AssignmentsPage from "./pages/assignments/AssignmentsPage";
 import { clearLocalData, loadTimetable, saveTimetable } from "./store/idb";
@@ -12,10 +13,11 @@ import {
 import { createSampleTimetable } from "./store/fixtures/timetable";
 import { createSampleAssignments } from "./store/fixtures/assignments";
 
-type Route = "landing" | "timetable" | "assignments";
+type Route = "landing" | "today" | "timetable" | "assignments";
 
 function readRoute(): Route {
   const hash = window.location.hash.replace(/^#\/?/, "");
+  if (hash === "today") return "today";
   if (hash === "timetable") return "timetable";
   if (hash === "assignments") return "assignments";
   return "landing";
@@ -54,11 +56,13 @@ export default function App() {
 
   const navigate = useCallback((next: Route) => {
     const hash =
-      next === "timetable"
-        ? "#/timetable"
-        : next === "assignments"
-          ? "#/assignments"
-          : "#/";
+      next === "today"
+        ? "#/today"
+        : next === "timetable"
+          ? "#/timetable"
+          : next === "assignments"
+            ? "#/assignments"
+            : "#/";
     if (window.location.hash !== hash) {
       window.history.pushState(null, "", hash);
     }
@@ -86,7 +90,7 @@ export default function App() {
 
     setTimetable(nextTimetable);
     setAssignments(nextAssignments);
-    navigate("timetable");
+    navigate("today");
   }
 
   async function handleSaveTimetable(next: TimetableData) {
@@ -105,6 +109,24 @@ export default function App() {
     setTimetable(sample);
   }
 
+  async function handleUseSample() {
+    let nextTimetable = timetable;
+    if (!nextTimetable) {
+      nextTimetable = createSampleTimetable();
+      await saveTimetable(nextTimetable);
+    }
+
+    let nextAssignments = assignments;
+    if (!nextAssignments) {
+      nextAssignments = createSampleAssignments();
+      await saveAssignments(nextAssignments);
+    }
+
+    setTimetable(nextTimetable);
+    setAssignments(nextAssignments);
+    navigate("today");
+  }
+
   async function handleClear() {
     await clearLocalData();
     setTimetable(null);
@@ -115,7 +137,12 @@ export default function App() {
     return <LandingPage onStart={handleStart} />;
   }
 
-  const active = route === "assignments" ? "assignments" : "timetable";
+  const active =
+    route === "today"
+      ? "today"
+      : route === "assignments"
+        ? "assignments"
+        : "timetable";
   const assignmentCount =
     assignments?.items.filter((item) => item.status !== "done").length ?? 0;
 
@@ -127,11 +154,21 @@ export default function App() {
       onClear={handleClear}
       onHome={() => navigate("landing")}
       onNavigate={(id) => {
-        if (id === "timetable" || id === "assignments") navigate(id);
+        if (id === "today" || id === "timetable" || id === "assignments") {
+          navigate(id);
+        }
       }}
     >
       {loading ? (
         <LoadingState module={active} />
+      ) : route === "today" ? (
+        <TodayPage
+          timetable={timetable}
+          assignments={assignments}
+          onSaveAssignments={handleSaveAssignments}
+          onUseSample={handleUseSample}
+          onNavigate={(id) => navigate(id)}
+        />
       ) : route === "assignments" ? (
         <AssignmentsPage data={assignments} onSave={handleSaveAssignments} />
       ) : (
@@ -145,16 +182,24 @@ export default function App() {
   );
 }
 
-function LoadingState({ module }: { module: "timetable" | "assignments" }) {
-  const isAssignments = module === "assignments";
+function LoadingState({
+  module,
+}: {
+  module: "today" | "timetable" | "assignments";
+}) {
+  const meta = {
+    today: { code: "M1 · 今日 / 01", title: "今天" },
+    timetable: { code: "M1 · 课表 / 02", title: "课表" },
+    assignments: { code: "M1 · 作业 / 03", title: "作业与待办" },
+  }[module];
   return (
     <div className="px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
       <div className="mx-auto w-full max-w-3xl">
         <p className="font-mono text-[10px] tracking-[0.2em] text-ink/40">
-          {isAssignments ? "M1 · 作业 / 03" : "M1 · 课表 / 02"}
+          {meta.code}
         </p>
         <h1 className="mt-2 font-serif text-2xl tracking-tight sm:text-3xl">
-          {isAssignments ? "作业与待办" : "课表"}
+          {meta.title}
         </h1>
         <p
           role="status"

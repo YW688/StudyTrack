@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 
 const NAV = [
-  { id: "today", no: "01", label: "今日", ready: false },
+  { id: "today", no: "01", label: "今日", ready: true },
   { id: "timetable", no: "02", label: "课表", ready: true },
   { id: "assignments", no: "03", label: "作业", ready: true },
   { id: "experiences", no: "04", label: "经历", ready: false },
@@ -32,6 +32,10 @@ export default function AppShell({
 }: AppShellProps) {
   const [confirming, setConfirming] = useState(false);
   const [clearing, setClearing] = useState(false);
+  const activeNo = String(NAV.findIndex((item) => item.id === active) + 1).padStart(
+    2,
+    "0",
+  );
 
   async function handleClear() {
     setClearing(true);
@@ -59,7 +63,7 @@ export default function AppShell({
             </span>
           </button>
           <span className="font-mono text-[10px] tracking-[0.16em] text-ink/35 lg:hidden">
-            档案 02
+            档案 {activeNo}
           </span>
         </div>
 
