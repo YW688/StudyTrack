@@ -5,10 +5,11 @@
   --color-ink: #16233a;
   --color-rule: #ddd9d0;
   --color-amber: #c8842a;
+  --color-amber-ink: #8a5511;
 
   --font-sans: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
-  --font-serif: "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", Georgia,
-    serif;
+  --font-serif: "Songti SC", "STSong", "Noto Serif CJK SC",
+    "Source Han Serif SC", "SimSun", Georgia, serif;
   --font-mono: "SFMono-Regular", "JetBrains Mono", Consolas, "Courier New",
     monospace;
 }
@@ -40,5 +41,175 @@
   .tt-grid {
     --tt-row: 66px;
     grid-template-columns: 48px repeat(7, minmax(0, 1fr));
+  }
+}
+
+.landing-hero {
+  background-color: var(--color-ink);
+  background-image: linear-gradient(
+    90deg,
+    rgba(250, 250, 248, 0.045) 1px,
+    transparent 1px
+  );
+  background-size: 104px 100%;
+}
+
+.landing-couplet {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+
+.landing-path {
+  animation: landing-path-drift 24s linear infinite;
+}
+
+@keyframes landing-path-drift {
+  to {
+    stroke-dashoffset: -110;
+  }
+}
+
+@keyframes landing-line-rise {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes landing-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes landing-fan-in {
+  from {
+    opacity: 0;
+    transform: translateY(84px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.landing-line {
+  animation: landing-line-rise 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.landing-enter {
+  animation: landing-fade-up 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.fan {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: landing-fan-in 1000ms 320ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.fan-card {
+  position: relative;
+  display: flex;
+  height: 268px;
+  width: 204px;
+  flex: none;
+  flex-direction: column;
+  margin-left: -22px;
+  padding: 16px 16px 16px 28px;
+  border-radius: 12px;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  z-index: var(--z, 1);
+  transform: translateY(var(--ty, 0px)) rotate(var(--rot, 0deg));
+  transition:
+    transform 280ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 280ms;
+}
+
+.fan-card:first-child {
+  margin-left: 0;
+}
+
+.fan-detail {
+  flex: 1;
+}
+
+@media (hover: hover) {
+  .fan-card:hover {
+    z-index: 40;
+    transform: translateY(calc(var(--ty, 0px) - 16px)) rotate(0deg);
+    box-shadow: 0 36px 60px -30px rgba(0, 0, 0, 0.95);
+  }
+}
+
+@media (max-width: 1279px) {
+  .fan {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .fan-card {
+    width: auto;
+    height: auto;
+    min-height: 96px;
+    margin-left: 0;
+    padding: 14px;
+    transform: none;
+  }
+
+  .fan-card:hover {
+    transform: none;
+  }
+
+  .fan-detail {
+    display: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .fan {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 700ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-line,
+  .landing-enter,
+  .fan,
+  .landing-path {
+    animation: none;
+  }
+
+  .fan-card {
+    transition: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
