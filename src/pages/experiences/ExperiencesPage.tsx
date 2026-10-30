@@ -248,7 +248,7 @@ export default function ExperiencesPage({
                 从一件已经做完的事开始
               </h2>
               <p className="mt-2 max-w-xl text-sm leading-6 text-ink/60">
-                课程设计、比赛、科研、实习、作品、志愿。先写标题和时间，
+                课程设计、比赛、科研、实习、作品、志愿，或其他类型。先写标题和时间，
                 四段式可以慢慢补；没有数字就留空，不会替你编。
               </p>
 

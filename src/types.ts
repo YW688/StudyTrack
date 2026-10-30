@@ -79,7 +79,8 @@ export type ExperienceKind =
   | "research"
   | "intern"
   | "design"
-  | "volunteer";
+  | "volunteer"
+  | "other";
 
 export type ExperienceSource = "manual" | "sample" | "ai";
 
@@ -96,6 +97,7 @@ export interface ExperienceEvidence {
 export interface Experience {
   id: string;
   kind: ExperienceKind;
+  kindLabel?: string;
   title: string;
   org?: string;
   start?: string;

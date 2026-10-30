@@ -13,6 +13,7 @@ import { ASSIGNMENT_KIND_LABELS, DAY_LABELS } from "../../types";
 import { currentWeekOf, formatWeeksLabel } from "../../parse/schedule";
 import {
   EXPERIENCE_KIND_META,
+  experienceKindLabel,
   formatExperienceRange,
   fourPartCount,
   relativeDaysLabel,
@@ -670,7 +671,7 @@ function TodayExperience({
             className="rounded-full px-1.5 py-0.5 font-mono text-[9px]"
             style={{ color: meta.color, backgroundColor: meta.pale }}
           >
-            {meta.label}
+            {experienceKindLabel(latest.kind, latest.kindLabel)}
           </span>
           <span className="font-mono text-[9px] text-ink/40">
             {formatExperienceRange(latest.start, latest.end)}

@@ -8,6 +8,7 @@ export const EXPERIENCE_KINDS: ExperienceKind[] = [
   "intern",
   "design",
   "volunteer",
+  "other",
 ];
 
 export const EXPERIENCE_KIND_META: Record<
@@ -50,7 +51,23 @@ export const EXPERIENCE_KIND_META: Record<
     pale: "#E9EAEC",
     hint: "志愿服务与社会实践",
   },
+  other: {
+    label: "其他",
+    color: "#6B5B4A",
+    pale: "#F1EDE8",
+    hint: "不属于以上分类？自己写一个类型名",
+  },
 };
+
+export function experienceKindLabel(
+  kind: ExperienceKind,
+  kindLabel?: string,
+): string {
+  if (kind === "other") {
+    return kindLabel?.trim() || EXPERIENCE_KIND_META.other.label;
+  }
+  return EXPERIENCE_KIND_META[kind].label;
+}
 
 const MONTH_RE = /^(\d{4})-(\d{2})$/;
 

@@ -15,6 +15,7 @@ import {
 
 export interface ExperienceFormValue {
   kind: ExperienceKind;
+  kindLabel?: string;
   title: string;
   org?: string;
   start?: string;
@@ -77,6 +78,7 @@ export default function ExperienceEditor({
   const [kind, setKind] = useState<ExperienceKind>(
     initial?.kind ?? "course",
   );
+  const [kindLabel, setKindLabel] = useState(initial?.kindLabel ?? "");
   const [title, setTitle] = useState(initial?.title ?? "");
   const [org, setOrg] = useState(initial?.org ?? "");
   const [start, setStart] = useState(
@@ -170,6 +172,7 @@ export default function ExperienceEditor({
 
     const value: ExperienceFormValue = {
       kind,
+      kindLabel: kind === "other" ? kindLabel.trim() || undefined : undefined,
       title: cleanTitle,
       org: org.trim() || undefined,
       start: normalizeMonth(start),
@@ -280,6 +283,28 @@ export default function ExperienceEditor({
                 <p className="mt-1.5 text-[10px] leading-4 text-ink/35">
                   {EXPERIENCE_KIND_META[kind].hint}
                 </p>
+
+                {kind === "other" && (
+                  <div className="mt-2">
+                    <label
+                      htmlFor="experience-kind-label"
+                      className="mb-1.5 block text-xs text-ink/55"
+                    >
+                      自定义类型
+                    </label>
+                    <input
+                      id="experience-kind-label"
+                      value={kindLabel}
+                      onChange={(event) => setKindLabel(event.target.value)}
+                      maxLength={20}
+                      placeholder="例如：军训、社团、交换学习"
+                      className={FIELD}
+                    />
+                    <p className="mt-1 text-[10px] leading-4 text-ink/35">
+                      会显示在经历卡片上；留空则显示「其他」。
+                    </p>
+                  </div>
+                )}
               </div>
 
               <div>

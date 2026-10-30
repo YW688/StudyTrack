@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Experience } from "../types";
 import {
   EXPERIENCE_KIND_META,
+  experienceKindLabel,
   formatExperienceRange,
   fourPartCount,
   isSafeHttpUrl,
@@ -77,7 +78,7 @@ export default function ExperienceCard({
               backgroundColor: meta.pale,
             }}
           >
-            {meta.label}
+            {experienceKindLabel(experience.kind, experience.kindLabel)}
           </span>
           <span className="font-mono text-[10px] tabular-nums text-ink/45">
             {range}
