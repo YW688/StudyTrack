@@ -4,7 +4,7 @@ const NAV = [
   { id: "today", no: "01", label: "今日", ready: true },
   { id: "timetable", no: "02", label: "课表", ready: true },
   { id: "assignments", no: "03", label: "作业", ready: true },
-  { id: "experiences", no: "04", label: "经历", ready: false },
+  { id: "experiences", no: "04", label: "经历", ready: true },
   { id: "resume", no: "05", label: "简历", ready: false },
   { id: "opportunities", no: "06", label: "机会", ready: false },
 ] as const;
@@ -54,12 +54,14 @@ export default function AppShell({
           <button
             type="button"
             onClick={onHome}
-            className="flex items-baseline gap-2.5 rounded-md focus-visible:ring-2 focus-visible:ring-amber focus-visible:outline-none"
+            className="-mx-2 flex min-h-11 items-center rounded-md px-2 focus-visible:ring-2 focus-visible:ring-amber focus-visible:outline-none"
             aria-label="返回首页"
           >
-            <span className="font-serif text-xl tracking-[0.02em]">学径</span>
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink/45">
-              StudyTrack
+            <span className="flex items-baseline gap-2.5">
+              <span className="font-serif text-xl tracking-[0.02em]">学径</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink/45">
+                StudyTrack
+              </span>
             </span>
           </button>
           <span className="font-mono text-[10px] tracking-[0.16em] text-ink/35 lg:hidden">

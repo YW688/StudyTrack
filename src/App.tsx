@@ -1,25 +1,38 @@
 import { useCallback, useEffect, useState } from "react";
-import type { AssignmentData, TimetableData } from "./types";
+import type {
+  AssignmentData,
+  ExperienceData,
+  TimetableData,
+} from "./types";
 import AppShell from "./components/AppShell";
 import LandingPage from "./pages/landing/LandingPage";
 import TodayPage from "./pages/today/TodayPage";
 import TimetablePage from "./pages/timetable/TimetablePage";
 import AssignmentsPage from "./pages/assignments/AssignmentsPage";
+import ExperiencesPage from "./pages/experiences/ExperiencesPage";
 import { clearLocalData, loadTimetable, saveTimetable } from "./store/idb";
 import {
   loadAssignments,
   saveAssignments,
 } from "./store/assignments";
+import { loadExperiences, saveExperiences } from "./store/experiences";
 import { createSampleTimetable } from "./store/fixtures/timetable";
 import { createSampleAssignments } from "./store/fixtures/assignments";
+import { createSampleExperiences } from "./store/fixtures/experiences";
 
-type Route = "landing" | "today" | "timetable" | "assignments";
+type Route =
+  | "landing"
+  | "today"
+  | "timetable"
+  | "assignments"
+  | "experiences";
 
 function readRoute(): Route {
   const hash = window.location.hash.replace(/^#\/?/, "");
   if (hash === "today") return "today";
   if (hash === "timetable") return "timetable";
   if (hash === "assignments") return "assignments";
+  if (hash === "experiences") return "experiences";
   return "landing";
 }
 
@@ -27,18 +40,22 @@ export default function App() {
   const [route, setRoute] = useState<Route>(readRoute);
   const [timetable, setTimetable] = useState<TimetableData | null>(null);
   const [assignments, setAssignments] = useState<AssignmentData | null>(null);
+  const [experiences, setExperiences] = useState<ExperienceData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let alive = true;
-    void Promise.all([loadTimetable(), loadAssignments()]).then(
-      ([storedTimetable, storedAssignments]) => {
-        if (!alive) return;
-        setTimetable(storedTimetable);
-        setAssignments(storedAssignments);
-        setLoading(false);
-      },
-    );
+    void Promise.all([
+      loadTimetable(),
+      loadAssignments(),
+      loadExperiences(),
+    ]).then(([storedTimetable, storedAssignments, storedExperiences]) => {
+      if (!alive) return;
+      setTimetable(storedTimetable);
+      setAssignments(storedAssignments);
+      setExperiences(storedExperiences);
+      setLoading(false);
+    });
     return () => {
       alive = false;
     };
@@ -55,14 +72,7 @@ export default function App() {
   }, []);
 
   const navigate = useCallback((next: Route) => {
-    const hash =
-      next === "today"
-        ? "#/today"
-        : next === "timetable"
-          ? "#/timetable"
-          : next === "assignments"
-            ? "#/assignments"
-            : "#/";
+    const hash = next === "landing" ? "#/" : `#/${next}`;
     if (window.location.hash !== hash) {
       window.history.pushState(null, "", hash);
     }
@@ -71,10 +81,12 @@ export default function App() {
   }, []);
 
   async function handleStart() {
-    const [storedTimetable, storedAssignments] = await Promise.all([
-      timetable ?? loadTimetable(),
-      assignments ?? loadAssignments(),
-    ]);
+    const [storedTimetable, storedAssignments, storedExperiences] =
+      await Promise.all([
+        timetable ?? loadTimetable(),
+        assignments ?? loadAssignments(),
+        experiences ?? loadExperiences(),
+      ]);
 
     let nextTimetable = storedTimetable;
     if (!nextTimetable) {
@@ -88,8 +100,15 @@ export default function App() {
       await saveAssignments(nextAssignments);
     }
 
+    let nextExperiences = storedExperiences;
+    if (!nextExperiences) {
+      nextExperiences = createSampleExperiences();
+      await saveExperiences(nextExperiences);
+    }
+
     setTimetable(nextTimetable);
     setAssignments(nextAssignments);
+    setExperiences(nextExperiences);
     navigate("today");
   }
 
@@ -101,6 +120,11 @@ export default function App() {
   async function handleSaveAssignments(next: AssignmentData) {
     await saveAssignments(next);
     setAssignments(next);
+  }
+
+  async function handleSaveExperiences(next: ExperienceData) {
+    await saveExperiences(next);
+    setExperiences(next);
   }
 
   async function handleUseSampleTimetable() {
@@ -122,8 +146,15 @@ export default function App() {
       await saveAssignments(nextAssignments);
     }
 
+    let nextExperiences = experiences;
+    if (!nextExperiences) {
+      nextExperiences = createSampleExperiences();
+      await saveExperiences(nextExperiences);
+    }
+
     setTimetable(nextTimetable);
     setAssignments(nextAssignments);
+    setExperiences(nextExperiences);
     navigate("today");
   }
 
@@ -131,6 +162,7 @@ export default function App() {
     await clearLocalData();
     setTimetable(null);
     setAssignments(null);
+    setExperiences(null);
   }
 
   if (route === "landing") {
@@ -142,19 +174,28 @@ export default function App() {
       ? "today"
       : route === "assignments"
         ? "assignments"
-        : "timetable";
+        : route === "experiences"
+          ? "experiences"
+          : "timetable";
   const assignmentCount =
     assignments?.items.filter((item) => item.status !== "done").length ?? 0;
 
   return (
     <AppShell
       active={active}
-      hasData={timetable !== null || assignments !== null}
+      hasData={
+        timetable !== null || assignments !== null || experiences !== null
+      }
       assignmentCount={assignmentCount}
       onClear={handleClear}
       onHome={() => navigate("landing")}
       onNavigate={(id) => {
-        if (id === "today" || id === "timetable" || id === "assignments") {
+        if (
+          id === "today" ||
+          id === "timetable" ||
+          id === "assignments" ||
+          id === "experiences"
+        ) {
           navigate(id);
         }
       }}
@@ -165,12 +206,15 @@ export default function App() {
         <TodayPage
           timetable={timetable}
           assignments={assignments}
+          experiences={experiences}
           onSaveAssignments={handleSaveAssignments}
           onUseSample={handleUseSample}
           onNavigate={(id) => navigate(id)}
         />
       ) : route === "assignments" ? (
         <AssignmentsPage data={assignments} onSave={handleSaveAssignments} />
+      ) : route === "experiences" ? (
+        <ExperiencesPage data={experiences} onSave={handleSaveExperiences} />
       ) : (
         <TimetablePage
           data={timetable}
@@ -185,12 +229,13 @@ export default function App() {
 function LoadingState({
   module,
 }: {
-  module: "today" | "timetable" | "assignments";
+  module: "today" | "timetable" | "assignments" | "experiences";
 }) {
   const meta = {
     today: { code: "M1 · 今日 / 01", title: "今天" },
     timetable: { code: "M1 · 课表 / 02", title: "课表" },
     assignments: { code: "M1 · 作业 / 03", title: "作业与待办" },
+    experiences: { code: "M2 · 经历 / 04", title: "经历库" },
   }[module];
   return (
     <div className="px-4 py-8 sm:px-6 lg:px-8 lg:py-12">

@@ -6,10 +6,18 @@ import type {
   Course,
   CourseSession,
   DayOfWeek,
+  ExperienceData,
   TimetableData,
 } from "../../types";
 import { ASSIGNMENT_KIND_LABELS, DAY_LABELS } from "../../types";
 import { currentWeekOf, formatWeeksLabel } from "../../parse/schedule";
+import {
+  EXPERIENCE_KIND_META,
+  formatExperienceRange,
+  fourPartCount,
+  relativeDaysLabel,
+  summarizeExperienceActivity,
+} from "../../lib/experience";
 import {
   ddlTier,
   formatDue,
@@ -22,9 +30,10 @@ import {
 interface TodayPageProps {
   timetable: TimetableData | null;
   assignments: AssignmentData | null;
+  experiences: ExperienceData | null;
   onSaveAssignments: (data: AssignmentData) => Promise<void>;
   onUseSample: () => Promise<void>;
-  onNavigate: (id: "timetable" | "assignments") => void;
+  onNavigate: (id: "timetable" | "assignments" | "experiences") => void;
 }
 
 interface DaySession {
@@ -132,6 +141,7 @@ function tierTextClass(tier: string): string {
 export default function TodayPage({
   timetable,
   assignments,
+  experiences,
   onSaveAssignments,
   onUseSample,
   onNavigate,
@@ -576,20 +586,19 @@ export default function TodayPage({
                   index="04"
                   title="经历"
                   action={
-                    <span className="bg-ink/[0.05] rounded-full px-2 py-0.5 font-mono text-[9px] tracking-[0.08em] text-ink/40">
-                      M2 · 待建
-                    </span>
+                    <button
+                      type="button"
+                      onClick={() => onNavigate("experiences")}
+                      className={BTN_LINK}
+                    >
+                      经历库
+                    </button>
                   }
                 >
-                  <div className="px-4 py-4 sm:px-5">
-                    <p className="text-sm font-medium">最近没记经历</p>
-                    <p className="mt-1 text-[11px] leading-5 text-ink/50">
-                      经历库还没开放。上线后，这里会提醒你最近两周没有记录新的课程设计、比赛或实习，免得写简历时才回想。
-                    </p>
-                    <p className="mt-3 font-mono text-[9px] tracking-[0.12em] text-ink/30">
-                      课程设计 · 竞赛 · 科研 · 实习 · 志愿
-                    </p>
-                  </div>
+                  <TodayExperience
+                    data={experiences}
+                    onOpen={() => onNavigate("experiences")}
+                  />
                 </Panel>
               </div>
             </div>
@@ -597,6 +606,102 @@ export default function TodayPage({
             <PageFoot />
           </>
         )}
+      </div>
+    </div>
+  );
+}
+
+function TodayExperience({
+  data,
+  onOpen,
+}: {
+  data: ExperienceData | null;
+  onOpen: () => void;
+}) {
+  const items = data?.experiences ?? [];
+
+  if (!items.length) {
+    return (
+      <div className="px-4 py-4 sm:px-5">
+        <p className="text-sm font-medium">还没有记录经历</p>
+        <p className="mt-1 text-[11px] leading-5 text-ink/50">
+          把最近做完的课程设计、比赛或实习记一条；四段式可以先写一句。
+        </p>
+        <button
+          type="button"
+          onClick={onOpen}
+          className="mt-1 inline-flex min-h-11 items-center text-xs text-ink/55 underline underline-offset-4 hover:text-ink sm:min-h-9"
+        >
+          去记第一条 →
+        </button>
+      </div>
+    );
+  }
+
+  const activity = summarizeExperienceActivity(items);
+  const latest = activity.latest;
+  if (!latest) return null;
+
+  const meta = EXPERIENCE_KIND_META[latest.kind];
+
+  return (
+    <div className="px-4 py-4 sm:px-5">
+      <div className="flex items-baseline justify-between gap-2">
+        <p className="text-sm font-medium">
+          {activity.stale ? "最近没记经历" : "经历在更新"}
+        </p>
+        <span className="shrink-0 font-mono text-[9px] tabular-nums text-ink/35">
+          {activity.total} 条
+        </span>
+      </div>
+      <p className="mt-1 text-[11px] leading-5 text-ink/50">
+        {activity.stale
+          ? `最近 30 天没有新增经历。距上次记录 ${activity.daysSinceLatest ?? 0} 天，趁还记得，把最近做完的事补一条。`
+          : `${relativeDaysLabel(activity.daysSinceLatest)}新增了一条经历。`}
+      </p>
+
+      <button
+        type="button"
+        onClick={onOpen}
+        className="border-rule hover:bg-ink/[0.02] mt-3 block w-full rounded-lg border border-dashed px-3 py-2.5 text-left"
+      >
+        <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <span
+            className="rounded-full px-1.5 py-0.5 font-mono text-[9px]"
+            style={{ color: meta.color, backgroundColor: meta.pale }}
+          >
+            {meta.label}
+          </span>
+          <span className="font-mono text-[9px] text-ink/40">
+            {formatExperienceRange(latest.start, latest.end)}
+          </span>
+          {latest.confidence === "low" && (
+            <span className="bg-amber/15 rounded-full px-1.5 py-0.5 font-mono text-[9px] text-amber">
+              待确认
+            </span>
+          )}
+        </span>
+        <span className="mt-1.5 line-clamp-1 block text-xs font-medium">
+          {latest.title}
+        </span>
+        {latest.org && (
+          <span className="mt-0.5 line-clamp-1 block text-[10px] text-ink/40">
+            {latest.org}
+          </span>
+        )}
+      </button>
+
+      <div className="mt-2 flex items-center justify-between gap-2">
+        <button
+          type="button"
+          onClick={onOpen}
+          className="inline-flex min-h-11 items-center text-[11px] text-ink/50 underline underline-offset-4 hover:text-ink sm:min-h-9"
+        >
+          查看时间线
+        </button>
+        <span className="font-mono text-[9px] tabular-nums text-ink/30">
+          四段式 {fourPartCount(latest)}/4
+        </span>
       </div>
     </div>
   );

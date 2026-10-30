@@ -73,6 +73,53 @@ export const ASSIGNMENT_SOURCE_LABELS: Record<AssignmentSource, string> = {
   sample: "示例",
 };
 
+export type ExperienceKind =
+  | "course"
+  | "contest"
+  | "research"
+  | "intern"
+  | "design"
+  | "volunteer";
+
+export type ExperienceSource = "manual" | "sample" | "ai";
+
+export interface ExperienceMetric {
+  label: string;
+  value: string;
+}
+
+export interface ExperienceEvidence {
+  label: string;
+  url?: string;
+}
+
+export interface Experience {
+  id: string;
+  kind: ExperienceKind;
+  title: string;
+  org?: string;
+  start?: string;
+  end?: string;
+  problem: string;
+  method: string;
+  contribution: string;
+  result: string;
+  metrics: ExperienceMetric[];
+  evidence: ExperienceEvidence[];
+  skills: string[];
+  tags: string[];
+  confidence: Confidence;
+  source: ExperienceSource;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ExperienceData {
+  experiences: Experience[];
+  updatedAt: string;
+  sourceLabel?: string;
+}
+
 export interface GridMerge {
   s: { r: number; c: number };
   e: { r: number; c: number };

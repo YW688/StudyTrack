@@ -2,6 +2,7 @@ import { del, get, set } from "idb-keyval";
 import { z } from "zod";
 import type { TimetableData } from "../types";
 import { ASSIGNMENTS_KEY } from "./assignments";
+import { EXPERIENCES_KEY } from "./experiences";
 
 const KEY = "studytrack:v1:timetable";
 
@@ -52,4 +53,5 @@ export async function saveTimetable(data: TimetableData): Promise<void> {
 export async function clearLocalData(): Promise<void> {
   await del(KEY);
   await del(ASSIGNMENTS_KEY);
+  await del(EXPERIENCES_KEY);
 }
