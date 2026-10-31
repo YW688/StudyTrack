@@ -5,22 +5,18 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
+import {
+  ExperienceShowcase,
+  MatchShowcase,
+  ResumeShowcase,
+  WeekShowcase,
+} from "./Showcases";
 
 type StartState = "idle" | "loading" | "error";
 
 const THEME_KEY = "studytrack:landing-theme";
 
 const THEMES = [
-  {
-    id: "warm",
-    name: "暖沙",
-    swatch: "linear-gradient(135deg,#f5ebe1,#d7bdb0)",
-  },
-  {
-    id: "cool",
-    name: "雾白",
-    swatch: "linear-gradient(135deg,#fafaff,#daddd8)",
-  },
   {
     id: "dawn",
     name: "霞光",
@@ -30,6 +26,11 @@ const THEMES = [
     id: "sprout",
     name: "新芽",
     swatch: "linear-gradient(135deg,#f8fff5,#c6e6b3 45%,#688f40)",
+  },
+  {
+    id: "sunset",
+    name: "落日",
+    swatch: "linear-gradient(135deg,#ea6113,#fbb931 55%,#ffe3b3)",
   },
 ] as const;
 
@@ -97,55 +98,47 @@ const MODULES: Module[] = [
   },
 ];
 
-const STAGES = [
+interface Stage {
+  year: string;
+  title: string;
+  hint: string;
+  label: string;
+  tone: string;
+  preview: ReactNode;
+}
+
+const STAGES: Stage[] = [
   {
     year: "大一",
     title: "先不漏",
+    hint: "课表、作业、DDL，一眼看完今天。",
+    label: "课表 · 周视图",
     tone: "tone-2",
-    artifact: "课表文件 周视图",
-    body: [
-      "把课表和作业放进来",
-      "知道每天上什么 交什么",
-      "截止时间按 24 小时 72 小时分级",
-      "红色只留给真正紧急的事",
-    ],
-    preview: <WeekArtifact />,
+    preview: <WeekShowcase />,
   },
   {
     year: "大二",
     title: "开始攒",
+    hint: "课程设计、比赛、实习，做完就记一条。",
+    label: "经历 · 四段式",
     tone: "tone-4",
-    artifact: "课程设计 经历卡",
-    body: [
-      "比赛 科研 志愿 实习都能记",
-      "四段式写清问题 方法 贡献 结果",
-      "没有真实数字就留空 不编",
-    ],
-    preview: <ExperienceArtifact />,
+    preview: <ExperienceShowcase />,
   },
   {
     year: "大三",
     title: "拿出证据",
-    tone: "tone-3",
-    artifact: "经历 A4 一页",
-    body: [
-      "勾选经历自动排版",
-      "低置信内容标黄 确认后才进简历",
-      "版本存快照 投不同岗位不用重写",
-    ],
-    preview: <ResumeArtifact />,
+    hint: "勾选经历自动排版，低置信标黄再确认。",
+    label: "简历 · A4 一页",
+    tone: "tone-5",
+    preview: <ResumeShowcase />,
   },
   {
     year: "大四",
     title: "找对机会",
-    tone: "tone-5",
-    artifact: "JD 命中与缺口",
-    body: [
-      "按技能 年级 城市检索岗位库",
-      "每条命中都指回经历原文",
-      "缺口写成下一学期的计划",
-    ],
-    preview: <MatchArtifact />,
+    hint: "按经历检索岗位，命中与缺口一目了然。",
+    label: "机会 · 岗位匹配",
+    tone: "tone-1",
+    preview: <MatchShowcase />,
   },
 ];
 
@@ -157,15 +150,15 @@ function readTheme(): LandingTheme {
   try {
     const saved = localStorage.getItem(THEME_KEY);
     const match = THEMES.find((item) => item.id === saved);
-    return match ? match.id : "warm";
+    return match ? match.id : "dawn";
   } catch {
-    return "warm";
+    return "dawn";
   }
 }
 
 function nextTheme(current: LandingTheme): LandingTheme {
   const index = THEMES.findIndex((item) => item.id === current);
-  return THEMES[(index + 1) % THEMES.length]?.id ?? "warm";
+  return THEMES[(index + 1) % THEMES.length]?.id ?? "dawn";
 }
 
 export default function LandingPage({ onStart }: LandingPageProps) {
@@ -203,8 +196,8 @@ export default function LandingPage({ onStart }: LandingPageProps) {
         <section className="landing-hero flex min-h-dvh flex-col overflow-hidden px-4 sm:px-8">
           <div aria-hidden="true" className="landing-noise" />
 
-          <header className="landing-glass-nav relative z-20 mx-auto mt-4 flex w-full max-w-[1120px] items-center justify-between gap-2 rounded-full py-2 pr-2 pl-2 sm:mt-6 sm:gap-3 sm:pl-3">
-            <div className="flex items-center gap-2.5">
+          <header className="landing-glass-nav relative z-20 mx-auto mt-4 flex w-fit max-w-full items-center gap-3 rounded-full p-2 sm:mt-6 sm:gap-8">
+            <div className="flex shrink-0 items-center gap-2.5">
               <span
                 aria-hidden="true"
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--lp-line)] bg-white/55 font-serif text-[15px] leading-none"
@@ -220,16 +213,19 @@ export default function LandingPage({ onStart }: LandingPageProps) {
                 </span>
               </span>
             </div>
-            <nav aria-label="页面导航" className="flex items-center gap-1">
+            <nav
+              aria-label="页面导航"
+              className="flex min-w-0 items-center gap-1.5 sm:gap-2"
+            >
               <a
                 href="#path"
-                className="lp-soft hidden min-h-11 items-center rounded-full px-3.5 text-[13px] transition-colors hover:text-[color:var(--lp-ink)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-accent)] sm:inline-flex"
+                className="lp-soft hidden min-h-11 items-center rounded-full px-4 text-[14px] tracking-[0.01em] transition-colors hover:text-[color:var(--lp-ink)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-accent)] md:inline-flex"
               >
                 四个年级
               </a>
               <a
                 href="#privacy"
-                className="lp-soft hidden min-h-11 items-center rounded-full px-3.5 text-[13px] transition-colors hover:text-[color:var(--lp-ink)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-accent)] sm:inline-flex"
+                className="lp-soft hidden min-h-11 items-center rounded-full px-4 text-[14px] tracking-[0.01em] transition-colors hover:text-[color:var(--lp-ink)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-accent)] md:inline-flex"
               >
                 数据说明
               </a>
@@ -319,76 +315,58 @@ export default function LandingPage({ onStart }: LandingPageProps) {
 
         <section
           id="path"
-          className="landing-band px-4 py-24 sm:px-8 lg:py-32"
+          className="landing-band px-4 py-20 sm:px-8 lg:py-28"
         >
-          <div className="mx-auto grid w-full max-w-[1120px] gap-16 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-16">
-            <div className="lg:sticky lg:top-16 lg:self-start">
-              <Reveal>
-                <h2 className="font-serif text-[clamp(2rem,4.4vw,3.5rem)] leading-[1.2] tracking-[0.01em]">
-                  一条径
-                  <br />
-                  四个年级
+          <div className="mx-auto w-full max-w-[1120px]">
+            <Reveal>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <h2 className="font-serif text-[clamp(2rem,4.4vw,3.25rem)] leading-[1.16] tracking-[0.01em]">
+                  一条径，四个年级
                 </h2>
-              </Reveal>
-              <Reveal delay={80}>
-                <p className="lp-soft mt-5 max-w-[30rem] text-[16px] leading-8">
-                  <span className="block">不用等到大四才整理</span>
-                  <span className="block">
-                    每一次课程设计 比赛 实习 做完就记一条
-                  </span>
-                  <span className="block">
-                    到需要简历的那天 你已经有材料了
-                  </span>
+                <p className="lp-soft max-w-[21rem] text-[14px] leading-7 sm:text-right">
+                  径不是捷径，是把每一天收进同一条路。
                 </p>
-              </Reveal>
-              <Reveal delay={160}>
-                <div className="mt-14 max-w-[24rem] border-l-[3px] border-[color:var(--lp-accent)] pl-5">
-                  <p className="font-serif text-[clamp(1.45rem,2.2vw,1.85rem)] leading-[1.8]">
-                    <span className="block">径不是捷径</span>
-                    <span className="block">是把每一天收进同一条路</span>
-                  </p>
-                  <p className="lp-faint mt-4 text-[15px] leading-7">
-                    <span className="block">
-                      每天上的课 交过的作业 做过的项目
-                    </span>
-                    <span className="block">回头看得到 往前走得动</span>
-                  </p>
-                </div>
-              </Reveal>
-            </div>
+              </div>
+            </Reveal>
 
-            <ol className="flex flex-col gap-12 lg:gap-10">
+            <div className="mx-auto mt-12 grid w-full max-w-[640px] gap-10 lg:max-w-none lg:grid-cols-2 lg:gap-x-8 lg:gap-y-14">
               {STAGES.map((stage, index) => (
-                <li key={stage.year}>
-                  <Reveal delay={index * 80}>
-                    <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_300px] xl:items-start xl:gap-7">
-                      <div>
-                        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <Reveal key={stage.year} delay={(index % 2) * 90}>
+                  <article>
+                    <div className="stage-shot" data-ui>
+                      <div className="stage-bar">
+                        <span className="flex items-center gap-2">
                           <span
-                            className={`inline-flex h-9 w-14 -rotate-1 items-center justify-center rounded-[10px] border border-[color:var(--lp-line)] font-serif text-[13px] ${stage.tone}`}
-                          >
-                            {stage.year}
+                            aria-hidden="true"
+                            className={`h-1.5 w-1.5 rounded-full border border-[color:var(--lp-line)] ${stage.tone}`}
+                          />
+                          <span className="lp-soft text-[11px] tracking-[0.04em]">
+                            {stage.label}
                           </span>
-                          <h3 className="font-serif text-[clamp(1.6rem,2.8vw,2rem)] leading-[1.2]">
-                            {stage.title}
-                          </h3>
-                        </div>
-                        <p className="lp-soft mt-4 max-w-[26rem] text-[16px] leading-8 xl:max-w-none">
-                          {stage.body.map((line) => (
-                            <span key={line} className="block">
-                              {line}
-                            </span>
-                          ))}
-                        </p>
+                        </span>
+                        <span className="lp-faint text-[10px] tracking-[0.08em]">
+                          示例数据
+                        </span>
                       </div>
-                      <ArtifactFrame label={stage.artifact}>
+                      <div className="stage-canvas" aria-hidden="true">
                         {stage.preview}
-                      </ArtifactFrame>
+                      </div>
                     </div>
-                  </Reveal>
-                </li>
+                    <div className="mt-4 flex flex-col gap-1.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-x-5">
+                      <h3 className="flex items-baseline gap-2.5 font-serif text-[clamp(1.35rem,2.3vw,1.65rem)] leading-tight">
+                        <span className={`stage-year ${stage.tone}`}>
+                          {stage.year}
+                        </span>
+                        {stage.title}
+                      </h3>
+                      <p className="lp-soft text-[13px] leading-6">
+                        {stage.hint}
+                      </p>
+                    </div>
+                  </article>
+                </Reveal>
               ))}
-            </ol>
+            </div>
           </div>
         </section>
 
@@ -541,14 +519,14 @@ function ThemeToggle({
       onClick={onToggle}
       aria-label={`切换配色 当前${current.name} 下一套${next.name}`}
       title={`切换到${next.name}`}
-      className="lp-theme-toggle inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-full px-3 text-[12px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-accent)] sm:px-3.5"
+      className="lp-theme-toggle inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-full px-4 text-[13px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-accent)]"
     >
       <span
         aria-hidden="true"
         className="h-3 w-3 rounded-full border border-black/10"
         style={{ backgroundImage: current.swatch }}
       />
-      <span className="hidden sm:inline">{current.name}</span>
+      <span className="hidden min-[360px]:inline">{current.name}</span>
     </button>
   );
 }
@@ -603,7 +581,7 @@ function StartButton({
       disabled={state === "loading"}
       className={[
         "start-button inline-flex items-center justify-center gap-2 rounded-full font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-cta)] disabled:cursor-wait",
-        size === "lg" ? "min-h-12 px-7 text-[15px]" : "min-h-11 px-4 text-[13px]",
+        size === "lg" ? "min-h-12 px-7 text-[15px]" : "min-h-11 px-5 text-[14px]",
       ].join(" ")}
     >
       {state === "loading" ? "正在准备示例" : "用示例体验"}
@@ -806,234 +784,3 @@ function MatchPreview() {
   );
 }
 
-function ArtifactFrame({
-  label,
-  children,
-}: {
-  label: string;
-  children: ReactNode;
-}) {
-  return (
-    <div
-      data-ui
-      className="landing-artifact mt-6 w-full max-w-[420px] overflow-hidden rounded-xl xl:mt-0 xl:w-[300px] xl:max-w-none xl:shrink-0"
-    >
-      <div className="lp-hairline flex h-8 items-center justify-between border-b px-3.5">
-        <span className="lp-soft text-[11px]">{label}</span>
-        <span className="lp-faint text-[9px]">示例</span>
-      </div>
-      <div className="h-[200px] p-4">{children}</div>
-    </div>
-  );
-}
-
-const WEEK_COLUMNS = [
-  {
-    day: "一",
-    blocks: [
-      {
-        top: "34%",
-        label: "智能机器人",
-        detail: "3-4 节",
-        tone: "tone-2",
-      },
-    ],
-  },
-  {
-    day: "二",
-    blocks: [
-      {
-        top: "0%",
-        label: "Python 开发",
-        detail: "1-2 节",
-        tone: "tone-4",
-      },
-      {
-        top: "34%",
-        label: "Python 开发",
-        detail: "3-4 节",
-        tone: "tone-4",
-      },
-    ],
-  },
-  {
-    day: "三",
-    blocks: [
-      {
-        top: "34%",
-        label: "智能机器人",
-        detail: "3-4 节",
-        tone: "tone-1",
-      },
-    ],
-  },
-  {
-    day: "四",
-    blocks: [
-      {
-        top: "34%",
-        label: "形势与政策",
-        detail: "3-4 节",
-        tone: "tone-5",
-      },
-    ],
-  },
-  { day: "五", blocks: [] },
-];
-
-function WeekArtifact() {
-  return (
-    <div className="flex h-full flex-col">
-      <div className="flex items-baseline justify-between gap-2">
-        <p className="text-[10px] font-medium">第 2 周 周一至周五</p>
-        <p className="lp-faint text-[8px]">单双周已展开</p>
-      </div>
-      <div className="mt-2 grid flex-1 grid-cols-5 gap-1.5">
-        {WEEK_COLUMNS.map((column) => (
-          <div key={column.day} className="flex min-w-0 flex-col gap-1">
-            <span className="lp-faint text-center text-[8px]">
-              {column.day}
-            </span>
-            <div className="lp-fill relative flex-1 rounded-[3px]">
-              {column.blocks.map((block) => (
-                <span
-                  key={block.top}
-                  className={`lp-hairline-soft absolute inset-x-0 rounded-[2px] border px-1 py-0.5 ${block.tone}`}
-                  style={{ top: block.top, height: "30%" }}
-                >
-                  <span className="block truncate text-[8px] leading-[1.3] font-medium">
-                    {block.label}
-                  </span>
-                  <span className="lp-soft block text-[7.5px] leading-[1.3]">
-                    {block.detail}
-                  </span>
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-const EXPERIENCE_PARTS = [
-  ["问题", "选课高峰易超选"],
-  ["方法", "E-R 建模 + 事务"],
-  ["贡献", "12 张表 6 个页面"],
-  ["结果", "200 人并发无超选"],
-];
-
-function ExperienceArtifact() {
-  return (
-    <div className="flex h-full flex-col">
-      <p className="text-[12px] leading-5 font-medium">
-        数据库课程设计 校园选课系统
-      </p>
-      <p className="lp-faint mt-0.5 text-[8.5px]">
-        数据库原理 课程设计 2026 年 6 月
-      </p>
-      <div className="mt-2.5 grid grid-cols-2 gap-x-3 gap-y-2">
-        {EXPERIENCE_PARTS.map(([label, text]) => (
-          <div key={label}>
-            <p className="lp-faint text-[8px]">{label}</p>
-            <p className="lp-soft mt-0.5 text-[9.5px] leading-[1.45]">
-              {text}
-            </p>
-          </div>
-        ))}
-      </div>
-      <div className="mt-auto flex flex-wrap gap-1 pt-2">
-        {["MySQL", "Java", "事务"].map((skill) => (
-          <span
-            key={skill}
-            className="lp-fill lp-soft rounded-[3px] px-1.5 py-0.5 text-[8px]"
-          >
-            {skill}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ResumeArtifact() {
-  return (
-    <div className="mx-auto flex h-full w-[88%] flex-col rounded-[3px] border border-[color:var(--lp-line)] bg-[#fffdf9] px-3 py-2.5">
-      <div className="flex items-baseline justify-between">
-        <p className="font-serif text-[12px] leading-4">示例同学</p>
-        <p className="lp-faint text-[7.5px]">A4 一页</p>
-      </div>
-      <p className="lp-soft text-[7.5px]">
-        计算机学院 2027 届 求职方向 数据分析
-      </p>
-      <div className="lp-hairline mt-1.5 border-t pt-1">
-        <p className="lp-soft text-[7.5px] font-medium">教育经历</p>
-        <p className="lp-soft text-[8px]">
-          某大学 计算机科学与技术 2023 至 2027
-        </p>
-      </div>
-      <div className="lp-hairline mt-1 border-t pt-1">
-        <p className="lp-soft text-[7.5px] font-medium">项目经历</p>
-        <p className="lp-soft text-[8px] leading-[1.45]">
-          数学建模校赛 二等奖 Python 预测与调度模型 22 页论文
-        </p>
-        <p className="lp-soft text-[8px] leading-[1.45]">
-          数据库课程设计 12 张表 200 人并发选课无超选
-        </p>
-      </div>
-      <div className="lp-hairline mt-1 border-t pt-1">
-        <p className="lp-soft text-[7.5px] font-medium">技能</p>
-        <p className="lp-soft text-[8px]">Python SQL Java Figma</p>
-      </div>
-    </div>
-  );
-}
-
-function MatchArtifact() {
-  return (
-    <div className="flex h-full flex-col">
-      <div className="flex items-start justify-between gap-2">
-        <div>
-          <p className="text-[12px] leading-5 font-medium">数据分析实习生</p>
-          <p className="lp-faint mt-0.5 text-[8.5px]">杭州 2027 届</p>
-        </div>
-        <p className="shrink-0 text-right">
-          <span className="font-serif text-[22px] leading-none">86</span>
-          <span className="lp-faint ml-1 text-[8px]">匹配</span>
-        </p>
-      </div>
-      <div className="lp-fill mt-2 h-1 overflow-hidden rounded-full">
-        <span className="lp-accent-fill block h-full w-[86%] rounded-full" />
-      </div>
-      <div className="mt-2.5 space-y-1.5">
-        <div className="flex gap-2">
-          <span className="lp-faint w-7 shrink-0 text-[8px]">命中</span>
-          <p className="lp-soft text-[9px] leading-[1.45]">
-            Python 数学建模校赛
-            <span className="lp-faint block text-[8px]">
-              用 Python 完成全部计算与图表
-            </span>
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <span className="lp-faint w-7 shrink-0 text-[8px]">命中</span>
-          <p className="lp-soft text-[9px] leading-[1.45]">
-            MySQL 数据库课程设计
-            <span className="lp-faint block text-[8px]">
-              12 张表 200 人并发无超选
-            </span>
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <span className="lp-faint w-7 shrink-0 text-[8px]">缺口</span>
-          <p className="lp-soft text-[9px] leading-[1.45]">
-            SQL 窗口函数
-            <span className="lp-alert"> 下学期补</span>
-          </p>
-        </div>
-      </div>
-      <p className="lp-faint mt-auto text-[8px]">每条命中都指回经历原文</p>
-    </div>
-  );
-}
