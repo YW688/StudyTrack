@@ -942,7 +942,7 @@
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
-  width: min(86vw, 700px);
+  width: min(calc(86vw - 48px), 700px);
   font-family: var(--font-serif);
   font-size: clamp(26px, 3.4vw, 42px);
   font-weight: 600;
