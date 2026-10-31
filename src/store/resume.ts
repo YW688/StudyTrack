@@ -41,7 +41,7 @@ const bulletCacheSchema = z.object({
   note: z.string().max(200).optional(),
 });
 
-const resumeSchema = z.object({
+export const resumeSchema = z.object({
   basics: basicsSchema,
   selectedExperienceIds: z.array(z.string()).max(60),
   conciseIds: z.array(z.string()).max(60),
@@ -49,7 +49,7 @@ const resumeSchema = z.object({
   updatedAt: z.string(),
 });
 
-const snapshotSchema = z.object({
+export const snapshotSchema = z.object({
   id: z.string().min(1),
   version: z.number().int().min(1),
   createdAt: z.string(),

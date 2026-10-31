@@ -670,7 +670,7 @@ html[data-app-theme="sunset"] {
   position: relative;
   display: flex;
   height: 262px;
-  width: 204px;
+  width: 236px;
   flex: none;
   flex-direction: column;
   margin-left: -24px;
@@ -756,7 +756,7 @@ html[data-app-theme="sunset"] {
 @media (max-width: 1279px) {
   .fan {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
 

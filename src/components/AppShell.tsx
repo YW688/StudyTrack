@@ -1,14 +1,13 @@
-import { useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import BrandMark from "./BrandMark";
+import DataBackup from "./DataBackup";
 import { THEMES, nextTheme, type ThemeId } from "../lib/theme";
 
 const NAV = [
   { id: "today", no: "01", label: "今日" },
-  { id: "timetable", no: "02", label: "课表" },
-  { id: "assignments", no: "03", label: "作业" },
-  { id: "experiences", no: "04", label: "经历" },
-  { id: "resume", no: "05", label: "简历" },
-  { id: "opportunities", no: "06", label: "机会" },
+  { id: "experiences", no: "02", label: "账本" },
+  { id: "opportunities", no: "03", label: "悬赏" },
+  { id: "toolbox", no: "04", label: "工具箱" },
 ] as const;
 
 type NavId = (typeof NAV)[number]["id"];
@@ -19,7 +18,11 @@ interface AppShellProps {
   onThemeChange: (theme: ThemeId) => void;
   hasData: boolean;
   assignmentCount: number;
+  demoMode: boolean;
+  onExitDemo: () => void;
   onClear: () => Promise<void>;
+  onExport: () => Promise<void>;
+  onImport: (text: string) => Promise<{ ok: boolean; message: string }>;
   onHome: () => void;
   onNavigate: (id: NavId) => void;
   children: ReactNode;
@@ -31,13 +34,15 @@ export default function AppShell({
   onThemeChange,
   hasData,
   assignmentCount,
+  demoMode,
+  onExitDemo,
   onClear,
+  onExport,
+  onImport,
   onHome,
   onNavigate,
   children,
 }: AppShellProps) {
-  const [confirming, setConfirming] = useState(false);
-  const [clearing, setClearing] = useState(false);
   const activeNo = String(NAV.findIndex((item) => item.id === active) + 1).padStart(
     2,
     "0",
@@ -45,16 +50,6 @@ export default function AppShell({
   const currentTheme = THEMES.find((item) => item.id === theme) ?? THEMES[0];
   const upcomingTheme =
     THEMES.find((item) => item.id === nextTheme(theme)) ?? THEMES[0];
-
-  async function handleClear() {
-    setClearing(true);
-    try {
-      await onClear();
-      setConfirming(false);
-    } finally {
-      setClearing(false);
-    }
-  }
 
   return (
     <div className="app-shell min-h-dvh bg-paper lg:grid lg:grid-cols-[224px_minmax(0,1fr)]">
@@ -107,7 +102,7 @@ export default function AppShell({
         </div>
 
         <nav
-          aria-label="模块导航"
+          aria-label="四个面导航"
           className="border-rule flex gap-1 overflow-x-auto border-y px-3 py-2 lg:flex-col lg:gap-0 lg:border-y-0 lg:px-3 lg:py-4"
         >
           {NAV.map((item) => {
@@ -134,7 +129,7 @@ export default function AppShell({
                   {item.no}
                 </span>
                 <span>{item.label}</span>
-                {item.id === "assignments" && assignmentCount > 0 && (
+                {item.id === "toolbox" && assignmentCount > 0 && (
                   <span
                     aria-label={`未完成 ${assignmentCount} 项`}
                     className="bg-accent/15 text-accent-ink ml-auto rounded-full px-1.5 py-0.5 font-mono text-[9px] tabular-nums"
@@ -146,6 +141,26 @@ export default function AppShell({
             );
           })}
         </nav>
+
+        <details className="border-rule group border-b px-3 py-1 lg:hidden">
+          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-md px-3 text-xs text-ink/55 [&::-webkit-details-marker]:hidden">
+            数据与备份
+            <span
+              aria-hidden="true"
+              className="font-mono text-ink/30 transition-transform group-open:rotate-45"
+            >
+              +
+            </span>
+          </summary>
+          <div className="px-3 pt-1 pb-3">
+            <DataBackup
+              hasData={hasData}
+              onExport={onExport}
+              onImport={onImport}
+              onClear={onClear}
+            />
+          </div>
+        </details>
 
         <div className="mt-auto hidden px-6 pt-6 pb-6 lg:block">
           <div className="mb-5">
@@ -187,42 +202,42 @@ export default function AppShell({
             <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
             数据只存在你的浏览器
           </p>
-          {hasData && (
-            <div className="mt-3 border-t border-rule pt-3">
-              {confirming ? (
-                <div className="flex items-center gap-2 text-[11px]">
-                  <button
-                    type="button"
-                    disabled={clearing}
-                    onClick={handleClear}
-                    className="rounded-md text-red-800 underline underline-offset-2 disabled:opacity-50"
-                  >
-                    {clearing ? "清除中…" : "确认清除"}
-                  </button>
-                  <span className="text-ink/25">/</span>
-                  <button
-                    type="button"
-                    onClick={() => setConfirming(false)}
-                    className="text-ink/50 underline underline-offset-2"
-                  >
-                    取消
-                  </button>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setConfirming(true)}
-                  className="text-[11px] text-ink/40 underline underline-offset-2 hover:text-ink/70"
-                >
-                  清除本机数据
-                </button>
-              )}
-            </div>
-          )}
+          <div className="border-rule mt-3 border-t pt-3">
+            <DataBackup
+              hasData={hasData}
+              onExport={onExport}
+              onImport={onImport}
+              onClear={onClear}
+            />
+          </div>
         </div>
       </aside>
 
-      <main className="app-main min-w-0">{children}</main>
+      <main className="app-main min-w-0">
+        {demoMode && (
+          <div
+            aria-label="演示模式"
+            className="no-print border-amber/40 bg-amber/[0.06] border-b px-4 py-2 sm:px-6 lg:px-8"
+          >
+            <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2">
+              <p className="text-[11px] leading-5 text-ink/60">
+                <span className="text-amber-ink font-mono text-[9px] tracking-[0.12em]">
+                  演示模式
+                </span>{" "}
+                当前是本机示例数据，不会上传；可随时清除。
+              </p>
+              <button
+                type="button"
+                onClick={onExitDemo}
+                className="border-amber/40 text-amber-ink hover:bg-amber/[0.08] inline-flex min-h-11 items-center rounded-md border bg-surface px-3 text-[10px]"
+              >
+                清除示例并退出
+              </button>
+            </div>
+          </div>
+        )}
+        {children}
+      </main>
     </div>
   );
 }

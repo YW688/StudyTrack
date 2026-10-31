@@ -489,7 +489,7 @@ export default function ResumePage({
         <header className="resume-page-header border-rule flex flex-col gap-4 border-b py-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="font-mono text-[10px] tracking-[0.2em] text-ink/40">
-              M3 · 简历 / 05
+              工具箱 · 简历 / 04
             </p>
             <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <h1 className="font-serif text-2xl tracking-tight sm:text-3xl">
@@ -727,7 +727,7 @@ export default function ResumePage({
                   view === "paper" ? "" : "hidden lg:block",
                 ].join(" ")}
               >
-                <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                <div className="screen-only mb-2 flex flex-wrap items-center justify-between gap-2">
                   <p className="font-mono text-[10px] tabular-nums text-ink/40">
                     已选 {entries.length} 条 ·{" "}
                     {overflow ? "预计超过 1 页" : "1 页内"}
@@ -750,7 +750,7 @@ export default function ResumePage({
                   onChange={patchBasics}
                 />
 
-                <div className="mt-3">
+                <div className="resume-paper-wrap mt-3">
                   <ResumePaper
                     basics={resume.basics}
                     entries={entries}

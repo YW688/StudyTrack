@@ -1,9 +1,11 @@
 # 学径 StudyTrack · 项目方案 v4（2026 Qoder 高校创造力大赛 · StudyHack）
 
-> **本文件是本项目唯一的事实来源（single source of truth）**：定位、模块规格、数据模型、技术方案、排期、验收。
+> **本文件是项目方案的历史基线**；2026-10-31 起，产品规格以 `docs/spec-v0.1.md` 为准。
 > 工程硬约束在 `.qoder/rules/00-core.md`（Always Apply），模块规格在 `.qoder/rules/10-plan.md`（手动挂）。
 > 仓库现状：**只有文档，尚无代码**。代码从 `src/` 开始建（见 §14）。
 > 约束：从零开始、开源、无付费、无账号、不复用任何旧项目代码与资产。
+
+> **2026-10-31 更新**：信息架构改为「今日 / 账本 / 悬赏 / 工具箱 + 记录官」；今日页改为变化流；新增 Profile / LedgerEvent / Note / CalendarItem / AgentMessage；记录官不是开放域聊天；日历首版 15 条；六家公司只做官方入口 + 人工岗位卡，不抓取。本文件其余技术方案、数据铁律、合规边界仍然有效；冲突处以 spec 为准。
 
 ---
 
@@ -13,17 +15,18 @@
 E:\StudyTrack\                     ← 项目根（Qoder 直接打开这一层）
 ├─ .qoder\rules\
 │  ├─ 00-core.md        Always Apply      技术/合规/数据/视觉硬约束
-│  ├─ 10-plan.md        Apply Manually    六模块规格摘要（@rule 挂）
+│  ├─ 10-plan.md        Apply Manually    四个面规格摘要（@rule 挂）
 │  └─ 20-print.md       Specific Files    A4 打印规范（src/styles/** 等）
 ├─ docs\
-│  ├─ plan.md                          ← 本文件，唯一事实源
+│  ├─ plan.md                          ← 本文件，历史基线；冲突处以 spec 为准
+│  ├─ spec-v0.1.md                      ← 2026-10-31 新方向，当前规格
 │  └─ system-prompt-archive.md         系统提示词原文（已拆进 rules，仅留档）
 ├─ README.md                           开工说明 + W0 清单
 ├─ STUDYTRACK_2026_PLAN.md             指针占位（勿编辑，内容已并入 docs/plan.md）
 └─ QODER_SYSTEM_PROMPT.md              指针占位（勿编辑，内容已并入 .qoder/rules/）
 ```
 
-**改文档只改这三处**：产品规则改 `00-core.md` / 模块规格改 `10-plan.md` / 方案本身改 `docs/plan.md`。根目录两个 `.md` 是占位，避免同一份内容出现两个版本。
+**改文档只改这几处**：产品规则改 `00-core.md` / 模块规格改 `10-plan.md` / 当前产品规格改 `docs/spec-v0.1.md` / 历史方案改 `docs/plan.md`。根目录两个 `.md` 是占位，避免同一份内容出现两个版本。
 
 ---
 
@@ -32,8 +35,8 @@ E:\StudyTrack\                     ← 项目根（Qoder 直接打开这一层�
 | 项 | 内容 |
 |---|---|
 | 作品名 | **学径 StudyTrack**（备选：学迹 / 四年） |
-| 一句话 | **你在大学做的每件事，都该留下证据。** |
-| 产品定义 | 面向**全年级本科生**的「学习 + 经历」聚合工作台：日常用课表/作业，四年持续沉淀经历，随时导出简历，按经历推荐实习 |
+| 一句话 | **每天 30 秒，把大学四年变成一份可验证的履历。** |
+| 产品定义 | 面向**全年级本科生**的四年经历账本：今日负责节奏，账本沉淀经历与证据，悬赏提供机会与匹配，工具箱放课表/作业/简历/日历 |
 | 赛道 | StudyHack 学习科研 |
 | 覆盖官方示例 | **课表与作业管理 + 简历与作品集 + 实习信息聚合**（三条并列，不是先后） |
 | 截止 | 报名 + 论坛作品帖 **2026-11-30 18:00**；初筛 12-01~12-07；决赛 12-15 线上路演 |
@@ -41,16 +44,16 @@ E:\StudyTrack\                     ← 项目根（Qoder 直接打开这一层�
 | 技术 | React + Vite 静态站 → Qoder Sites；IndexedDB 本地库；SheetJS 解析课表；本地 BM25 检索；Qwen-VL/plus 走薄代理；附带一个 MCP Server |
 | 工期 | 4 周（10/31–11/29），11/28 定稿，留 2 天缓冲 |
 
-**为什么是"聚合"而不是"流程"**：课表是**每天**打开的理由（留存钩子），经历库是**四年**沉淀的资产（护城河），简历/作品集是**导出视图**，机会推荐是**出口**。四件事在页面上**并列**，共享同一份「学生档案」作为数据底座。
+**产品模型（五层）**：输入（课表/作业/对话/截图）→ 账本（经历/证据/技能/时间线）→ 输出（简历/作品集/学期战报）→ 用途（机会/悬赏/匹配）→ 节奏（今日/绿格/日结）。四个工作面并列，共享同一份「学生档案」作为数据底座。
 
 ---
 
 ## 2. 定位与叙事
 
 ### 2.1 产品定位
-> 一个大学生从大一到大四都能用的工具：**日常管课表作业，长期存经历作品，随时出简历，按经历找实习。**
+> **每天 30 秒，把大学四年变成一份可验证的履历。**
 
-不是"求职季才打开的简历工具"，而是"**四年经历的总账本 + 每学期的日常工具**"。
+不是"求职季才打开的简历工具"，而是"**四年经历的总账本 + 每学期的节奏工具**"。
 
 ### 2.2 年级差异（同一套功能，不同侧重）
 | 年级 | 主用模块 | 得到什么 |
@@ -67,25 +70,24 @@ E:\StudyTrack\                     ← 项目根（Qoder 直接打开这一层�
 
 ---
 
-## 3. 信息架构（并列，不是线性）
+## 3. 信息架构（四个面 + 记录官）
 
 ```
 ┌──────────────── 学径 StudyTrack（单页应用，左侧常驻导航） ────────────────┐
-│ ① 今日 Today        今日课程 · 未完成作业 · 本周 DDL · 最近经历（默认入口） │
-│ ② 课表 Timetable    周视图（单/双周、周次切换）· 导入 Excel                 │
-│ ③ 作业 Assignments  未完成/已完成 · 截图或粘贴导入 · DDL 分级               │
-│ ④ 经历 Experiences  课程设计 / 比赛 / 科研 / 实习 / 作品 · 时间线视图       │
-│ ⑤ 简历 Resume       从经历挑选 → 排版 → A4 打印；作品集页可分享            │
-│ ⑥ 机会 Opportunities 渠道入口 + 岗位库 · 匹配分 · 缺口建议                  │
+│ ① 今日 Today        判词 · 昨日结算 · 今日委托 · 留痕 · 情报 · 回声 · 绿格 │
+│ ② 账本 Ledger       战绩 · 证据 · 时间线 · 热力图 · 碎片收件箱 · 就绪度   │
+│ ③ 悬赏 Bounty       官方入口 · 人工岗位卡 · 粘贴 JD · 匹配与缺口          │
+│ ④ 工具箱 Toolbox    课表 · 作业 · 简历 · 日历 · 存档 · 关于               │
+│ 记录官 Agent        全局侧栏：建档 · 写账 · 查账 · 解读 · 记忆            │
 └───────────────────────────────┬──────────────────────────────────────────┘
                                 │ 同一份「学生档案」（IndexedDB）
                                 ▼
         AI 只做三件事：抽取（课表/作业/经历）· 生成（简历文案）· 匹配（经历×岗位）
 ```
 
-**首次使用（≤5 分钟必须出结果）**：落地页 →「用示例体验」或「上传课表」→ 解析确认（左原表 / 右结构化）→ 进入「今日」看到今天的课与未完成作业 → 顶部提示「这学期有课程设计吗？记一条经历，简历会自动更新」。
+**首次使用（≤3 分钟必须出结果）**：三步对话（专业年级 / 目标 / 最近在忙什么，每步可跳过）→ 第一段战绩草稿 + 个性化今日 + 一条匹配悬赏 + 第一格绿；不要求先导入课表。
 
-**聚合的产品表现**：导入课表后，经历库自动联想「这学期你上了《数据结构》」；记一条经历后，简历页立刻多一段；简历更新后，机会页的匹配分随之变化。
+**聚合的产品表现**：导入课表后，账本自动联想「这学期你上了《数据结构》」；记一条战绩后，简历就绪度立刻变化；简历更新后，悬赏页的匹配分随之变化。
 
 ---
 
@@ -116,7 +118,7 @@ E:\StudyTrack\                     ← 项目根（Qoder 直接打开这一层�
 - 提醒（不依赖推送）：首页常驻「未完成 N 项」，按 DDL 升序，≤24h 红 / ≤72h 琥珀；每周一顶部「本周 N 门课 M 个 DDL」
 - 待办不止作业：比赛报名截止、实习投递截止也可加（为 M4 服务）
 
-**M1.3 今日仪表盘**：今日课程（含地点/周次）→ 未完成作业 → 本周 DDL →「最近 30 天没有新增经历，记一条？」
+**M1.3 今日页**：判词 → 昨日结算 → 今日委托 → 留痕 → 今日情报 → 回声 → 本周绿格；详见 `docs/spec-v0.1.md` §4。
 
 ### M2 经历库（资产护城河，四年沉淀）
 
@@ -171,14 +173,14 @@ resources: studytrack://profile（结构化简历 JSON）、studytrack://timelin
 
 | 优先级 | 内容 |
 |---|---|
-| **Must（不做完不参赛）** | 课表 Excel 导入（含单双周）+ 周视图 + 作业（粘贴/手动/截图）+ 未完成提醒 + 经历库（录入/时间线）+ 简历 A4 打印 + 作品集页 |
-| **Should** | 机会库 40 条 + 粘贴 JD 匹配 + 缺口建议 + MCP Server（本地可调用） |
-| **Could** | 简历版本快照、百炼知识库增强检索、投递跟踪看板、学期回顾海报 |
-| **Won't** | 登录/账号、云同步、服务端数据库、支付、**任何爬虫**、代投、AI 聊天窗、多端 App、多语言、主题系统 |
+| **Must（不做完不参赛）** | 三步建档 + 今日页（判词/昨日结算/今日委托/留痕/情报/回声/绿格）+ 留痕到账本 + 日历 15 条 + 课表/作业基础 + 经历时间线 + 简历 A4 打印 + 悬赏 6 入口/3 张演示卡 + 数据导出/导入 |
+| **Should** | 记录官完整写账/解读 + 粘贴 JD 匹配 + 缺口建议 + 演示模式 + MCP Server（本地可调用） |
+| **Could** | 周报/学期战报、投递跟踪、简历版本快照、真实新闻 RSS |
+| **Won't** | 登录/账号、云同步、服务端数据库、支付、**任何爬虫**、代投、开放域聊天机器人、通用资讯流、推送、多端 App、多语言、主题系统 |
 
 ---
 
-## 6. 数据模型（唯一事实源，zod 校验，`src/ai/schema.ts`）
+## 6. 数据模型（zod 校验，`src/ai/schema.ts`；新增模型见 spec §7）
 
 ```ts
 type Profile = { grade: 1|2|3|4; major?: string; school?: string;
@@ -211,6 +213,8 @@ type Match = { jobId: string; score: number;
 type ResumeSnapshot = { id: string; selectedExperienceIds: string[];
   createdAt: string; version: number };
 ```
+
+> 新增模型（Profile / LedgerEvent / Note / CalendarItem / AgentMessage）以 `docs/spec-v0.1.md` §7 为准；上面的旧 Profile 草稿已被替换。
 
 **五条数据铁律**
 1. `weeks` 必须是具体周次数组；"单双周"字符串禁止入库。
@@ -294,11 +298,11 @@ type ResumeSnapshot = { id: string; selectedExperienceIds: string[];
 
 | 阶段 | 日期 | 交付 | Gate |
 |---|---|---|---|
-| W0 | 10/31–11/02 | 报名+天池实名+阿里云大学生认证；Qoder 项目；GitHub 空仓库；**Sites 空站发布并改公开** | G0：手机 + 隐身窗口能打开公网站点 |
-| W1 | 11/03–11/09 | 课表导入（4 份样例）+ 周视图 + 今日仪表盘 + 作业（手动/粘贴/截图） | G1：4 份样例解析 ≥90%，「导入→今日→未完成作业」3 分钟可演示 |
-| W2 | 11/10–11/16 | 经历库（录入/时间线）+ 简历勾选与 A4 打印 + 作品集页 | G2：从 0 条经历录到 6 条 → 导出简历 + 分享作品集，全链路通 |
-| W3 | 11/17–11/23 | 岗位库 40 条 + BM25 检索 + 匹配/缺口 + MCP Server + 视觉打磨 | G3：5 位同学盲测走完主流程；MCP 被 AI 助手成功调用一次 |
-| W4 | 11/24–11/30 | 90 秒录屏 + 作品帖 + 开源整理 + 提交 | G4：**11/28 提交**，11/29–30 只修 bug |
+| W0 | 10/31–11/02 | 规则同步 + 规格定稿 + Qoder 项目/GitHub 仓库 + **Sites 空站发布并改公开** | G0：手机 + 隐身窗口能打开公网站点 |
+| W1 | 11/03–11/09 | 数据层（Profile/Ledger/Note/Calendar/Agent）+ 今日页骨架 + 留痕/绿格 | G1：建档 → 今日 → 留痕 → 绿格 3 分钟可演示 |
+| W2 | 11/10–11/16 | 日历 15 条 + 账本页/热力图 + 作业/课表基础 + 导出/导入 | G2：记 3 条战绩 → 账本变厚 → 导出/导入不丢数据 |
+| W3 | 11/17–11/23 | 记录官建档/写账 + 悬赏 6 入口/3 张卡 + BM25 匹配 | G3：对话 → 保存 → 匹配闭环；5 人盲测 |
+| W4 | 11/24–11/30 | 演示模式 + 移动端/打印/空态 + 90 秒录屏 + 作品帖 | G4：**11/28 提交**，11/29–30 只修 bug |
 
 **每日纪律**：上午写功能 / 下午在 Qoder 里发版并截图存档 / 晚上写 3 行进度（作品帖素材）。
 
@@ -309,7 +313,7 @@ type ResumeSnapshot = { id: string; selectedExperienceIds: string[];
 | 维度 | 做法 | 作品帖位置 |
 |---|---|---|
 | 问题真实 | 四年经历无处沉淀；课表/简历/招聘三端割裂 | 第 2 段 + 1 个真实案例 |
-| 流程走得通 | 首次 5 分钟出结果；无 Key 也能跑；六模块都能点通 | 第 4 段 + 6 张流程图 |
+| 流程走得通 | 首次 3 分钟出结果；无 Key 也能跑；四个面 + 记录官都能点通 | 第 4 段 + 6 张流程图 |
 | 体验设计 | 解析左右对照、低置信标黄、A4 打印级排版、移动单栏 | 第 3 段 + 3 张界面 |
 | Qoder 深度 | 全流程 Qoder + 3 个自建 Skill + `.qoder/rules` + Sites 发布 | 第 5 段 + 6 张过程图 |
 
@@ -346,15 +350,15 @@ type ResumeSnapshot = { id: string; selectedExperienceIds: string[];
 StudyTrack/
 ├─ .qoder/rules/{00-core,10-plan,20-print}.md      ✅ 已有
 ├─ .qoder/skills/{timetable-xlsx,experience-to-resume,opportunity-match}/   ⬜ 待建（W1–W3）
-├─ docs/{plan.md,system-prompt-archive.md}          ✅ 已有
-├─ data/{jobs.json,channels.json}                   ⬜ 待建（W3）
+├─ docs/{plan.md,spec-v0.1.md,system-prompt-archive.md}  ✅ 已有
+├─ data/{jobs.json,channels.json,calendar.json}          ⬜ 待建（W2–W3）
 ├─ src/
-│  ├─ pages/        today · timetable · assignments · experiences · resume · portfolio · opportunities · about
-│  ├─ components/   TimetableGrid ParseConfirm AssignmentItem ExperienceCard Timeline ResumeSheet MatchMatrix PrintSheet
+│  ├─ pages/        today · experiences(账本) · opportunities(悬赏) · toolbox · calendar · timetable · assignments · resume · portfolio · about
+│  ├─ components/   TimetableGrid ParseConfirm AssignmentItem ExperienceCard Timeline ResumeSheet MatchMatrix PrintSheet TodayBrief CaptureBox LedgerHeatmap AgentPanel CalendarView
 │  ├─ parse/        xlsx.ts · heuristics.ts · schedule.ts
 │  ├─ ai/           rules.ts · client.ts · schema.ts · tasks/
 │  ├─ search/       bm25.ts · index.ts
-│  ├─ store/        idb.ts · fixtures/
+│  ├─ store/        idb.ts · profile.ts · ledger.ts · notes.ts · agent.ts · fixtures/
 │  └─ styles/       print.css
 ├─ mcp/server.ts                                    ⬜ 待建（W3）
 ├─ api/proxy/                                       ⬜ 待建（W2）

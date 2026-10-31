@@ -1,11 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type {
+  AgentMessage,
+  Assignment,
   AssignmentData,
+  Experience,
   ExperienceData,
+  Grade,
+  LedgerEvent,
+  Note,
+  Profile,
   ResumeData,
   TimetableData,
 } from "./types";
+import { RESUME_GRADES } from "./types";
 import AppShell from "./components/AppShell";
+import AgentPanel from "./components/AgentPanel";
 import EntryRitual from "./components/EntryRitual";
 import LandingPage from "./pages/landing/LandingPage";
 import TodayPage from "./pages/today/TodayPage";
@@ -15,6 +24,8 @@ import ExperiencesPage from "./pages/experiences/ExperiencesPage";
 import ResumePage from "./pages/resume/ResumePage";
 import PortfolioPage from "./pages/portfolio/PortfolioPage";
 import OpportunitiesPage from "./pages/opportunities/OpportunitiesPage";
+import ToolboxPage from "./pages/toolbox/ToolboxPage";
+import CalendarPage from "./pages/calendar/CalendarPage";
 import { clearLocalData, loadTimetable, saveTimetable } from "./store/idb";
 import {
   loadAssignments,
@@ -26,11 +37,39 @@ import {
   loadResume,
   saveResume,
 } from "./store/resume";
+import {
+  createOnboardedProfile,
+  loadProfile,
+  saveProfile,
+} from "./store/profile";
+import {
+  createLedgerEvent,
+  loadLedger,
+  saveLedger,
+} from "./store/ledger";
+import { createNote, loadNotes, saveNotes } from "./store/notes";
+import { loadAgentMessages, saveAgentMessages } from "./store/agent";
+import {
+  applyBackup,
+  collectBackup,
+  parseBackupText,
+} from "./store/backup";
 import { createSampleTimetable } from "./store/fixtures/timetable";
-import { createSampleAssignments } from "./store/fixtures/assignments";
-import { createSampleExperiences } from "./store/fixtures/experiences";
+import { createDemoSeed } from "./store/fixtures/demo";
+import {
+  CALENDAR_ISSUE,
+  CALENDAR_ITEMS,
+  CALENDAR_UPDATED_AT,
+} from "./store/calendar";
 import { resumeHasContent } from "./lib/resume";
 import { applyTheme, readStoredTheme, type ThemeId } from "./lib/theme";
+import { backupFileName, downloadBackupFile } from "./lib/backup";
+import { newId } from "./lib/id";
+import type { OnboardingValues } from "./components/TodayOnboarding";
+import type {
+  AgentExperienceDraft,
+  AgentProfileDraft,
+} from "./ai/tasks/agent";
 
 type Route =
   | "landing"
@@ -40,7 +79,38 @@ type Route =
   | "experiences"
   | "resume"
   | "opportunities"
+  | "toolbox"
+  | "calendar"
   | "portfolio";
+
+type ModuleRoute = Exclude<Route, "landing" | "portfolio">;
+type SurfaceId = "today" | "experiences" | "opportunities" | "toolbox";
+
+function navIdForRoute(route: Route): SurfaceId {
+  if (route === "today") return "today";
+  if (route === "experiences") return "experiences";
+  if (route === "opportunities") return "opportunities";
+  return "toolbox";
+}
+
+const DEMO_KEY = "studytrack:demo";
+
+function readDemoMode(): boolean {
+  try {
+    return window.localStorage.getItem(DEMO_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function writeDemoMode(value: boolean): void {
+  try {
+    if (value) window.localStorage.setItem(DEMO_KEY, "1");
+    else window.localStorage.removeItem(DEMO_KEY);
+  } catch {
+    // UI-only preference; storage may be disabled.
+  }
+}
 
 function shouldPlayEntryRitual(): boolean {
   try {
@@ -58,6 +128,8 @@ function readRoute(): Route {
   if (hash === "experiences") return "experiences";
   if (hash === "resume") return "resume";
   if (hash === "opportunities") return "opportunities";
+  if (hash === "toolbox") return "toolbox";
+  if (hash === "calendar") return "calendar";
   if (hash.startsWith("p/")) return "portfolio";
   return "landing";
 }
@@ -69,11 +141,18 @@ export default function App() {
   const [assignments, setAssignments] = useState<AssignmentData | null>(null);
   const [experiences, setExperiences] = useState<ExperienceData | null>(null);
   const [resume, setResume] = useState<ResumeData>(() => createEmptyResume());
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [ledger, setLedger] = useState<LedgerEvent[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [agentMessages, setAgentMessages] = useState<AgentMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState<ThemeId>(readStoredTheme);
+  const [demoMode, setDemoMode] = useState(readDemoMode);
   const [ritual, setRitual] = useState<{ theme: ThemeId } | null>(null);
   const [ritualReady, setRitualReady] = useState(false);
   const resumeWriteRef = useRef<Promise<void>>(Promise.resolve());
+  const agentWriteRef = useRef<Promise<void>>(Promise.resolve());
+  const loadedRef = useRef(false);
 
   useEffect(() => {
     applyTheme(theme);
@@ -86,13 +165,42 @@ export default function App() {
       loadAssignments(),
       loadExperiences(),
       loadResume(),
+      loadProfile(),
+      loadLedger(),
+      loadNotes(),
+      loadAgentMessages(),
     ]).then(
-      ([storedTimetable, storedAssignments, storedExperiences, storedResume]) => {
-        if (!alive) return;
+      ([
+        storedTimetable,
+        storedAssignments,
+        storedExperiences,
+        storedResume,
+        storedProfile,
+        storedLedger,
+        storedNotes,
+        storedAgentMessages,
+      ]) => {
+        if (!alive || loadedRef.current) return;
+        loadedRef.current = true;
         setTimetable(storedTimetable);
         setAssignments(storedAssignments);
         setExperiences(storedExperiences);
         setResume(storedResume ?? createEmptyResume());
+        setProfile(storedProfile);
+        setLedger(storedLedger);
+        setNotes(storedNotes);
+        setAgentMessages(storedAgentMessages);
+        const hasStoredData =
+          storedTimetable !== null ||
+          storedAssignments !== null ||
+          (storedExperiences?.experiences.length ?? 0) > 0 ||
+          storedProfile !== null ||
+          storedLedger.length > 0 ||
+          storedNotes.length > 0 ||
+          (storedResume ? resumeHasContent(storedResume) : false);
+        const demo = readDemoMode() && hasStoredData;
+        setDemoMode(demo);
+        if (!demo) writeDemoMode(false);
         setLoading(false);
       },
     );
@@ -131,7 +239,68 @@ export default function App() {
       .catch(() => undefined);
   }, []);
 
+  const handleAgentMessages = useCallback((next: AgentMessage[]) => {
+    setAgentMessages(next);
+    agentWriteRef.current = agentWriteRef.current
+      .then(() => saveAgentMessages(next))
+      .catch(() => undefined);
+  }, []);
+
   const dismissRitual = useCallback(() => setRitual(null), []);
+
+  async function seedDemoData(): Promise<void> {
+    loadedRef.current = true;
+    setLoading(false);
+    const seed = createDemoSeed();
+    const fullDemo =
+      timetable === null &&
+      assignments === null &&
+      (!experiences || experiences.experiences.length === 0) &&
+      profile === null &&
+      ledger.length === 0 &&
+      notes.length === 0 &&
+      !resumeHasContent(resume);
+
+    const nextTimetable = timetable ?? seed.timetable;
+    const nextAssignments = assignments ?? seed.assignments;
+    const nextExperiences =
+      experiences && experiences.experiences.length > 0
+        ? experiences
+        : seed.experiences;
+    const nextProfile = fullDemo ? seed.profile : profile;
+    const nextResume = fullDemo ? seed.resume : resume;
+    const nextLedger = fullDemo ? seed.ledger : ledger;
+    const nextNotes = fullDemo ? seed.notes : notes;
+
+    const writes: Promise<void>[] = [];
+    if (nextTimetable !== timetable) writes.push(saveTimetable(nextTimetable));
+    if (nextAssignments !== assignments) {
+      writes.push(saveAssignments(nextAssignments));
+    }
+    if (nextExperiences !== experiences) {
+      writes.push(saveExperiences(nextExperiences));
+    }
+    if (nextProfile && nextProfile !== profile) {
+      writes.push(saveProfile(nextProfile));
+    }
+    if (nextResume !== resume) writes.push(saveResume(nextResume));
+    if (nextLedger !== ledger) writes.push(saveLedger(nextLedger));
+    if (nextNotes !== notes) writes.push(saveNotes(nextNotes));
+    await Promise.all(writes);
+
+    setTimetable(nextTimetable);
+    setAssignments(nextAssignments);
+    setExperiences(nextExperiences);
+    if (nextProfile) setProfile(nextProfile);
+    if (nextResume !== resume) setResume(nextResume);
+    if (nextLedger !== ledger) setLedger(nextLedger);
+    if (nextNotes !== notes) setNotes(nextNotes);
+
+    if (fullDemo) {
+      writeDemoMode(true);
+      setDemoMode(true);
+    }
+  }
 
   async function handleStart() {
     const playRitual = shouldPlayEntryRitual();
@@ -141,34 +310,7 @@ export default function App() {
     }
 
     try {
-      const [storedTimetable, storedAssignments, storedExperiences] =
-        await Promise.all([
-          timetable ?? loadTimetable(),
-          assignments ?? loadAssignments(),
-          experiences ?? loadExperiences(),
-        ]);
-
-      let nextTimetable = storedTimetable;
-      if (!nextTimetable) {
-        nextTimetable = createSampleTimetable();
-        await saveTimetable(nextTimetable);
-      }
-
-      let nextAssignments = storedAssignments;
-      if (!nextAssignments) {
-        nextAssignments = createSampleAssignments();
-        await saveAssignments(nextAssignments);
-      }
-
-      let nextExperiences = storedExperiences;
-      if (!nextExperiences) {
-        nextExperiences = createSampleExperiences();
-        await saveExperiences(nextExperiences);
-      }
-
-      setTimetable(nextTimetable);
-      setAssignments(nextAssignments);
-      setExperiences(nextExperiences);
+      await seedDemoData();
       navigate("today");
       if (playRitual) setRitualReady(true);
     } catch (error) {
@@ -192,6 +334,264 @@ export default function App() {
     setExperiences(next);
   }
 
+  async function handleAgentSaveProfile(draft: AgentProfileDraft) {
+    const now = new Date().toISOString();
+    const resumeGrade = (RESUME_GRADES as readonly string[]).includes(
+      resume.basics.grade,
+    )
+      ? (resume.basics.grade as Grade)
+      : "";
+    const nextProfile: Profile = {
+      id: "me",
+      grade: draft.grade || profile?.grade || resumeGrade || "",
+      major:
+        draft.major.trim() || profile?.major || resume.basics.major || "",
+      school: profile?.school,
+      goal: draft.goal,
+      targetRoles:
+        draft.targetRoles.length > 0
+          ? draft.targetRoles
+          : (profile?.targetRoles ?? []),
+      skills:
+        draft.skills.length > 0
+          ? draft.skills
+          : (profile?.skills ?? []),
+      interests: profile?.interests ?? [],
+      onboardedAt: profile?.onboardedAt ?? now,
+      updatedAt: now,
+    };
+    const nextResume: ResumeData = {
+      ...resume,
+      basics: {
+        ...resume.basics,
+        grade: nextProfile.grade || resume.basics.grade,
+        major: nextProfile.major || resume.basics.major,
+        target:
+          nextProfile.targetRoles.slice(0, 2).join(" / ").slice(0, 80) ||
+          resume.basics.target,
+      },
+      updatedAt: now,
+    };
+    await saveProfile(nextProfile);
+    await saveResume(nextResume);
+    setProfile(nextProfile);
+    setResume(nextResume);
+  }
+
+  async function handleAgentSaveExperience(draft: AgentExperienceDraft) {
+    const now = new Date().toISOString();
+    const experience: Experience = {
+      id: newId("experience"),
+      kind: draft.kind,
+      title: draft.title.trim().slice(0, 120),
+      problem: draft.problem.trim().slice(0, 2000),
+      method: draft.method.trim().slice(0, 2000),
+      contribution: draft.contribution.trim().slice(0, 2000),
+      result: draft.result.trim().slice(0, 2000),
+      metrics: [],
+      evidence: [],
+      skills: draft.skills,
+      tags: ["记录官"],
+      confidence: draft.confidence,
+      source: "ai",
+      createdAt: now,
+      updatedAt: now,
+    };
+    const nextExperiences: ExperienceData = {
+      experiences: [...(experiences?.experiences ?? []), experience],
+      updatedAt: now,
+      sourceLabel:
+        experiences?.sourceLabel === "示例经历"
+          ? "示例 + 记录官"
+          : experiences?.sourceLabel,
+    };
+    const nextLedger = [
+      ...ledger,
+      createLedgerEvent({
+        type: "experience_added",
+        title: `记下「${experience.title}」`,
+        detail: (experience.result || experience.method).slice(0, 80),
+        refId: experience.id,
+      }),
+    ];
+    await saveExperiences(nextExperiences);
+    await saveLedger(nextLedger);
+    setExperiences(nextExperiences);
+    setLedger(nextLedger);
+  }
+
+  async function handleOnboard(
+    values: OnboardingValues,
+    recentWork: string,
+  ) {
+    const nextProfile = createOnboardedProfile(values);
+    const now = new Date().toISOString();
+    const nextResume: ResumeData = {
+      ...resume,
+      basics: {
+        ...resume.basics,
+        grade: resume.basics.grade || nextProfile.grade,
+        major: resume.basics.major || nextProfile.major,
+      },
+      updatedAt: now,
+    };
+    await saveProfile(nextProfile);
+    await saveResume(nextResume);
+    setResume(nextResume);
+
+    let nextNotes = notes;
+    let nextLedger = ledger;
+    const firstRecord = recentWork.trim();
+    if (firstRecord) {
+      const note = createNote({
+        text: firstRecord.slice(0, 1000),
+        tags: ["建档"],
+      });
+      nextNotes = [...notes, note];
+      await saveNotes(nextNotes);
+      nextLedger = [
+        ...ledger,
+        createLedgerEvent({
+          type: "note_added",
+          title: "写下第一条记录",
+          detail: firstRecord.slice(0, 80),
+          refId: note.id,
+        }),
+      ];
+      await saveLedger(nextLedger);
+    }
+
+    setProfile(nextProfile);
+    setNotes(nextNotes);
+    setLedger(nextLedger);
+    try {
+      window.sessionStorage.removeItem("studytrack:onboarding-hidden");
+    } catch {
+      // UI-only preference; storage may be disabled.
+    }
+  }
+
+  async function handleToggleAssignment(item: Assignment) {
+    if (!assignments) return;
+    const willComplete = item.status !== "done";
+    const nextAssignments: AssignmentData = {
+      ...assignments,
+      items: assignments.items.map((current) =>
+        current.id === item.id
+          ? {
+              ...current,
+              status: willComplete ? "done" : "todo",
+            }
+          : current,
+      ),
+      updatedAt: new Date().toISOString(),
+    };
+    await saveAssignments(nextAssignments);
+    setAssignments(nextAssignments);
+
+    let nextLedger = ledger;
+    if (willComplete) {
+      const exists = ledger.some(
+        (event) =>
+          !event.revokedAt &&
+          event.type === "assignment_done" &&
+          event.refId === item.id,
+      );
+      if (!exists) {
+        nextLedger = [
+          ...ledger,
+          createLedgerEvent({
+            type: "assignment_done",
+            title: `完成「${item.title}」`,
+            refId: item.id,
+          }),
+        ];
+      }
+    } else {
+      const revokedAt = new Date().toISOString();
+      let changed = false;
+      const revoked = ledger.map((event) => {
+        if (
+          !event.revokedAt &&
+          event.type === "assignment_done" &&
+          event.refId === item.id
+        ) {
+          changed = true;
+          return { ...event, revokedAt };
+        }
+        return event;
+      });
+      if (changed) nextLedger = revoked;
+    }
+
+    if (nextLedger !== ledger) {
+      await saveLedger(nextLedger);
+      setLedger(nextLedger);
+    }
+  }
+
+  async function handleAddNote(text: string, tags?: string[]) {
+    const value = text.trim();
+    if (!value) return;
+    const note = createNote({
+      text: value.slice(0, 1000),
+      tags,
+    });
+    const nextNotes = [...notes, note];
+    await saveNotes(nextNotes);
+    setNotes(nextNotes);
+
+    const nextLedger = [
+      ...ledger,
+      createLedgerEvent({
+        type: "note_added",
+        title: "留下一条记录",
+        detail: value.slice(0, 80),
+        refId: note.id,
+      }),
+    ];
+    await saveLedger(nextLedger);
+    setLedger(nextLedger);
+  }
+
+  async function handleExport() {
+    const backup = await collectBackup();
+    downloadBackupFile(backup, backupFileName());
+  }
+
+  async function handleImport(
+    text: string,
+  ): Promise<{ ok: boolean; message: string }> {
+    await agentWriteRef.current.catch(() => undefined);
+    const parsed = parseBackupText(text);
+    if (!parsed.ok) {
+      return { ok: false, message: parsed.message };
+    }
+    try {
+      const snapshot = await applyBackup(parsed.backup);
+      setProfile(snapshot.profile);
+      setTimetable(snapshot.timetable);
+      setAssignments(snapshot.assignments);
+      setExperiences(snapshot.experiences);
+      setResume(snapshot.resume ?? createEmptyResume());
+      setLedger(snapshot.ledger);
+      setNotes(snapshot.notes);
+      setAgentMessages(snapshot.agentMessages);
+      writeDemoMode(false);
+      setDemoMode(false);
+      navigate("today");
+      return {
+        ok: true,
+        message: `已导入 ${snapshot.experiences?.experiences.length ?? 0} 条战绩、${snapshot.ledger.length} 条账本记录、${snapshot.notes.length} 条记录。`,
+      };
+    } catch {
+      return {
+        ok: false,
+        message: "导入失败，请重试或检查浏览器存储权限。",
+      };
+    }
+  }
+
   async function handleUseSampleTimetable() {
     const sample = createSampleTimetable();
     await saveTimetable(sample);
@@ -201,38 +601,39 @@ export default function App() {
   async function handleUseSample(
     destination: "today" | "opportunities" = "today",
   ) {
-    let nextTimetable = timetable;
-    if (!nextTimetable) {
-      nextTimetable = createSampleTimetable();
-      await saveTimetable(nextTimetable);
-    }
-
-    let nextAssignments = assignments;
-    if (!nextAssignments) {
-      nextAssignments = createSampleAssignments();
-      await saveAssignments(nextAssignments);
-    }
-
-    let nextExperiences = experiences;
-    if (!nextExperiences || nextExperiences.experiences.length === 0) {
-      nextExperiences = createSampleExperiences();
-      await saveExperiences(nextExperiences);
-    }
-
-    setTimetable(nextTimetable);
-    setAssignments(nextAssignments);
-    setExperiences(nextExperiences);
+    await seedDemoData();
     navigate(destination);
   }
 
   async function handleClear() {
     await resumeWriteRef.current.catch(() => undefined);
+    await agentWriteRef.current.catch(() => undefined);
     await clearLocalData();
     setTimetable(null);
     setAssignments(null);
     setExperiences(null);
     setResume(createEmptyResume());
+    setProfile(null);
+    setLedger([]);
+    setNotes([]);
+    setAgentMessages([]);
+    writeDemoMode(false);
+    setDemoMode(false);
+    try {
+      window.sessionStorage.removeItem("studytrack:onboarding-hidden");
+    } catch {
+      // UI-only preference; storage may be disabled.
+    }
     navigate("landing");
+  }
+
+  async function handleExitDemo() {
+    if (
+      !window.confirm("退出演示会清除本机示例数据，继续吗？")
+    ) {
+      return;
+    }
+    await handleClear();
   }
 
   const ritualOverlay = ritual ? (
@@ -265,7 +666,7 @@ export default function App() {
     );
   }
 
-  const active = route;
+  const active = navIdForRoute(route);
   const assignmentCount =
     assignments?.items.filter((item) => item.status !== "done").length ?? 0;
 
@@ -279,21 +680,33 @@ export default function App() {
           timetable !== null ||
           assignments !== null ||
           experiences !== null ||
+          profile !== null ||
+          ledger.length > 0 ||
+          notes.length > 0 ||
           resumeHasContent(resume)
         }
         assignmentCount={assignmentCount}
+        demoMode={demoMode}
+        onExitDemo={() => void handleExitDemo()}
         onClear={handleClear}
+        onExport={handleExport}
+        onImport={handleImport}
         onHome={() => navigate("landing")}
         onNavigate={(id) => navigate(id)}
       >
         {loading ? (
-          <LoadingState module={active} />
+          <LoadingState module={route} />
         ) : route === "today" ? (
           <TodayPage
             timetable={timetable}
             assignments={assignments}
             experiences={experiences}
-            onSaveAssignments={handleSaveAssignments}
+            profile={profile}
+            ledger={ledger}
+            notes={notes}
+            onOnboard={handleOnboard}
+            onToggleAssignment={handleToggleAssignment}
+            onAddNote={handleAddNote}
             onUseSample={() => handleUseSample()}
             onNavigate={(id) => navigate(id)}
           />
@@ -317,6 +730,19 @@ export default function App() {
             onNavigateExperiences={() => navigate("experiences")}
             onUseSample={() => handleUseSample("opportunities")}
           />
+        ) : route === "toolbox" ? (
+          <ToolboxPage
+            calendarCount={CALENDAR_ITEMS.length}
+            calendarUpdatedAt={CALENDAR_UPDATED_AT}
+            onNavigate={(id) => navigate(id)}
+          />
+        ) : route === "calendar" ? (
+          <CalendarPage
+            items={CALENDAR_ITEMS}
+            updatedAt={CALENDAR_UPDATED_AT}
+            issue={CALENDAR_ISSUE}
+            onNavigate={(id) => navigate(id)}
+          />
         ) : (
           <TimetablePage
             data={timetable}
@@ -325,29 +751,35 @@ export default function App() {
           />
         )}
       </AppShell>
+      <AgentPanel
+        profile={profile}
+        experiences={experiences?.experiences ?? []}
+        ledger={ledger}
+        notes={notes}
+        resume={resume}
+        messages={agentMessages}
+        raised={route === "resume"}
+        onMessagesChange={handleAgentMessages}
+        onSaveProfile={handleAgentSaveProfile}
+        onSaveExperience={handleAgentSaveExperience}
+        onAddNote={handleAddNote}
+        onNavigate={(id) => navigate(id)}
+      />
       {ritualOverlay}
     </>
   );
 }
 
-function LoadingState({
-  module,
-}: {
-  module:
-    | "today"
-    | "timetable"
-    | "assignments"
-    | "experiences"
-    | "resume"
-    | "opportunities";
-}) {
+function LoadingState({ module }: { module: ModuleRoute }) {
   const meta = {
-    today: { code: "M1 · 今日 / 01", title: "今天" },
-    timetable: { code: "M1 · 课表 / 02", title: "课表" },
-    assignments: { code: "M1 · 作业 / 03", title: "作业与待办" },
-    experiences: { code: "M2 · 经历 / 04", title: "经历库" },
-    resume: { code: "M3 · 简历 / 05", title: "简历工作台" },
-    opportunities: { code: "M4 · 机会 / 06", title: "机会仪表盘" },
+    today: { code: "今日 / 01", title: "今天" },
+    timetable: { code: "工具箱 · 课表 / 04", title: "课表" },
+    assignments: { code: "工具箱 · 作业 / 04", title: "作业与待办" },
+    experiences: { code: "账本 / 02", title: "经历库" },
+    resume: { code: "工具箱 · 简历 / 04", title: "简历工作台" },
+    opportunities: { code: "悬赏 / 03", title: "机会仪表盘" },
+    toolbox: { code: "工具箱 / 04", title: "工具箱" },
+    calendar: { code: "工具箱 · 日历 / 04", title: "日历" },
   }[module];
   return (
     <div className="px-4 py-8 sm:px-6 lg:px-8 lg:py-12">

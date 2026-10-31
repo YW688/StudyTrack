@@ -46,7 +46,7 @@ export const experienceSchema = z.object({
   updatedAt: z.string(),
 });
 
-const experienceDataSchema = z.object({
+export const experienceDataSchema = z.object({
   experiences: z.array(experienceSchema),
   updatedAt: z.string(),
   sourceLabel: z.string().optional(),

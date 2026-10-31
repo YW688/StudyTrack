@@ -1,7 +1,7 @@
 # StudyTrack · 开工说明（Start Here）
 
 > 「学径 StudyTrack」参赛项目。本项目**从零开始**，旧仓库 `旧仓库` 一行代码、一张素材都不复用。
-> 唯一事实来源：`docs/plan.md`；工程硬约束：`.qoder/rules/00-core.md`。
+> 产品规格：`docs/spec-v0.1.md`（当前）→ `docs/plan.md`（历史基线）；工程硬约束：`.qoder/rules/00-core.md`。
 
 ## 目录（✅ 已有 / ⬜ 待建）
 
@@ -9,10 +9,11 @@
 E:\StudyTrack\                     ← Qoder 直接打开这一层
 ├─ .qoder\rules\
 │  ├─ 00-core.md        ✅  Always Apply      技术/合规/数据/视觉硬约束
-│  ├─ 10-plan.md        ✅  Apply Manually    六模块规格摘要（@rule 挂）
+│  ├─ 10-plan.md        ✅  Apply Manually    四个面规格摘要（@rule 挂）
 │  └─ 20-print.md       ✅  Specific Files    A4 打印规范（src/styles/** 等）
 ├─ docs\
-│  ├─ plan.md           ✅  唯一事实来源（v4）
+│  ├─ spec-v0.1.md      ✅  当前产品规格（四个面 + 记录官）
+│  ├─ plan.md           ✅  历史基线（v4，部分已被 spec 取代）
 │  └─ system-prompt-archive.md ✅  系统提示词原文，仅留档
 ├─ src\                 ⬜  W0 建空项目后出现
 ├─ data\                ⬜  W3 岗位库/渠道库
@@ -24,7 +25,7 @@ E:\StudyTrack\                     ← Qoder 直接打开这一层
 └─ STUDYTRACK_2026_PLAN.md / QODER_SYSTEM_PROMPT.md  ✅ 占位，勿编辑
 ```
 
-**只改这三处**：产品规则 → `00-core.md`；模块规格 → `10-plan.md`；方案本身 → `docs/plan.md`。
+**只改这三处**：产品规则 → `00-core.md`；模块规格 → `10-plan.md`；方案本身 → `docs/spec-v0.1.md`。
 
 ## 一、先在 Qoder 里做 3 个设置
 
@@ -76,4 +77,4 @@ E:\StudyTrack\                     ← Qoder 直接打开这一层
 
 ## 五、铁律速记
 
-静态站 · 无登录 · 无数据库 · 零爬虫 · Key 不进前端 · 打印出 PDF · 单双周展开成 `weeks[]` · 不编造数字 · 六模块并列不是向导。
+静态站 · 无登录 · 无数据库 · 零爬虫 · Key 不进前端 · 打印出 PDF · 单双周展开成 `weeks[]` · 不编造数字 · 四个面并列不是向导 · 记录官只记账不闲聊。

@@ -25,12 +25,10 @@ interface Module {
 }
 
 const FAN_POSITIONS = [
-  { ty: 36, z: 6 },
-  { ty: 14, z: 5 },
-  { ty: 0, z: 4 },
-  { ty: 0, z: 3 },
-  { ty: 14, z: 2 },
-  { ty: 36, z: 1 },
+  { ty: 30, z: 4 },
+  { ty: 8, z: 3 },
+  { ty: 8, z: 2 },
+  { ty: 30, z: 1 },
 ];
 
 const MODULES: Module[] = [
@@ -42,39 +40,25 @@ const MODULES: Module[] = [
     preview: <TodayPreview />,
   },
   {
-    char: "课",
-    name: "课表",
-    hint: "单双周 节次 教室",
-    tone: "var(--lp-tone-2)",
-    preview: <TimetablePreview />,
-  },
-  {
-    char: "作",
-    name: "作业",
-    hint: "截止时间与完成状态",
-    tone: "var(--lp-tone-3)",
-    preview: <AssignmentPreview />,
-  },
-  {
-    char: "经",
-    name: "经历",
+    char: "账",
+    name: "账本",
     hint: "课程设计 比赛 实习",
     tone: "var(--lp-tone-4)",
     preview: <ExperiencePreview />,
   },
   {
-    char: "简",
-    name: "简历",
-    hint: "勾选经历 导出 A4",
-    tone: "var(--lp-tone-5)",
-    preview: <ResumePreview />,
-  },
-  {
-    char: "机",
-    name: "机会",
+    char: "悬",
+    name: "悬赏",
     hint: "按经历找实习",
     tone: "var(--lp-tone-6)",
     preview: <MatchPreview />,
+  },
+  {
+    char: "箱",
+    name: "工具箱",
+    hint: "课表 作业 简历 日历",
+    tone: "var(--lp-tone-2)",
+    preview: <ToolboxPreview />,
   },
 ];
 
@@ -92,7 +76,7 @@ const STAGES: Stage[] = [
     year: "大一",
     title: "先不漏",
     hint: "课表、作业、DDL，一眼看完今天。",
-    label: "课表 · 周视图",
+    label: "工具箱 · 课表",
     tone: "tone-2",
     preview: <WeekShowcase />,
   },
@@ -100,7 +84,7 @@ const STAGES: Stage[] = [
     year: "大二",
     title: "开始攒",
     hint: "课程设计、比赛、实习，做完就记一条。",
-    label: "经历 · 四段式",
+    label: "账本 · 经历",
     tone: "tone-4",
     preview: <ExperienceShowcase />,
   },
@@ -108,7 +92,7 @@ const STAGES: Stage[] = [
     year: "大三",
     title: "拿出证据",
     hint: "勾选经历自动排版，低置信标黄再确认。",
-    label: "简历 · A4 一页",
+    label: "工具箱 · 简历",
     tone: "tone-5",
     preview: <ResumeShowcase />,
   },
@@ -116,7 +100,7 @@ const STAGES: Stage[] = [
     year: "大四",
     title: "找对机会",
     hint: "按经历检索岗位，命中与缺口一目了然。",
-    label: "机会 · 岗位匹配",
+    label: "悬赏 · 岗位匹配",
     tone: "tone-1",
     preview: <MatchShowcase />,
   },
@@ -221,7 +205,7 @@ export default function LandingPage({
               </h1>
 
               <ul
-                aria-label="六个模块"
+                aria-label="四个面"
                 className="landing-enter mt-5 flex max-w-[34rem] flex-wrap items-center justify-center gap-x-5 gap-y-2 [animation-delay:260ms]"
               >
                 {MODULES.map((module) => (
@@ -250,7 +234,7 @@ export default function LandingPage({
               <div className="landing-enter mt-4 flex flex-wrap items-center justify-center gap-2 [animation-delay:420ms]">
                 <span className="landing-chip">无需注册</span>
                 <span className="landing-chip">数据只存本机</span>
-                <span className="landing-chip">示例预览</span>
+                <span className="landing-chip">记录官随叫随到</span>
               </div>
 
               <p
@@ -264,7 +248,7 @@ export default function LandingPage({
             </div>
 
             <div className="mt-auto pb-10 sm:pb-12 lg:pb-20">
-              <ul className="fan" data-ui aria-label="六个模块的示例预览">
+              <ul className="fan" data-ui aria-label="四个面的示例预览">
                 {MODULES.map((module, index) => (
                   <ModuleCard key={module.name} module={module} index={index} />
                 ))}
@@ -340,12 +324,14 @@ export default function LandingPage({
               <div className="landing-panel grid gap-10 rounded-[32px] p-8 sm:p-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
                 <div>
                   <h2 className="font-serif text-[clamp(2.2rem,5vw,3.5rem)] leading-[1.16]">
-                    从今天的课表开始
+                    从今天开始，留下第一条记录
                   </h2>
                   <p className="lp-soft mt-5 max-w-md text-[15px] leading-8">
-                    <span className="block">先看示例 再换成你自己的</span>
                     <span className="block">
-                      所有数据只存在这台设备上 随时可以一键清除
+                      今日、账本、悬赏、工具箱 四个面并列
+                    </span>
+                    <span className="block">
+                      先看示例 再换成你自己的 数据只存在这台设备
                     </span>
                   </p>
                 </div>
@@ -358,7 +344,7 @@ export default function LandingPage({
             </Reveal>
             <Reveal delay={120}>
               <p className="lp-faint mt-6 text-center text-[12px] tracking-[0.08em] lg:text-left">
-                今日 课表 作业 经历 简历 机会 六个模块并列 不排队 随时切换
+                今日 账本 悬赏 工具箱 四个面并列 不排队 随时切换
               </p>
             </Reveal>
           </div>
@@ -581,87 +567,6 @@ function TodayPreview() {
   );
 }
 
-const TT_DAYS = ["一", "二", "三", "四", "五"];
-const TT_COLUMNS = [
-  [
-    { h: 26, tone: "tone-1" },
-    { h: 16, tone: "tone-1" },
-  ],
-  [{ h: 20, tone: "tone-2" }],
-  [],
-  [{ h: 26, tone: "tone-4" }],
-  [{ h: 18, tone: "tone-5" }],
-];
-
-function TimetablePreview() {
-  return (
-    <div className="flex h-full flex-col">
-      <div className="flex items-baseline justify-between">
-        <span className="lp-faint text-[9px] tracking-[0.08em]">第 8 周</span>
-        <span className="lp-faint text-[8px]">周一到周五</span>
-      </div>
-      <div className="mt-2 grid flex-1 grid-cols-5 gap-1">
-        {TT_DAYS.map((day, index) => (
-          <div key={day} className="flex flex-col gap-1">
-            <span className="lp-faint text-center text-[8px]">{day}</span>
-            <div className="lp-fill flex flex-1 flex-col gap-1 rounded-[5px] p-0.5">
-              {TT_COLUMNS[index].map((block, blockIndex) => (
-                <span
-                  key={blockIndex}
-                  className={`lp-hairline-soft block w-full rounded-[3px] border ${block.tone}`}
-                  style={{ height: block.h }}
-                />
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="lp-faint mt-2 flex items-baseline justify-between text-[8px]">
-        <span>单双周已展开</span>
-        <span>冲突会标出</span>
-      </div>
-    </div>
-  );
-}
-
-const SAMPLE_ASSIGNMENTS = [
-  { title: "实验三 数据库操作", due: "11 月 8 日", urgent: false },
-  { title: "外部中断指示灯", due: "11 月 2 日", urgent: true },
-  { title: "实验四 综合实训", due: "11 月 14 日", urgent: false },
-];
-
-function AssignmentPreview() {
-  return (
-    <div className="flex h-full flex-col">
-      <p className="lp-faint text-[9px] tracking-[0.08em]">本周待办</p>
-      <ul className="mt-2.5 space-y-2">
-        {SAMPLE_ASSIGNMENTS.map((item) => (
-          <li key={item.title} className="flex items-start gap-1.5">
-            <span className="lp-hairline mt-0.5 h-2.5 w-2.5 shrink-0 rounded-[3px] border" />
-            <span className="min-w-0">
-              <span className="block truncate text-[10px] leading-4">
-                {item.title}
-              </span>
-              <span
-                className={
-                  item.urgent
-                    ? "lp-alert block text-[8px] leading-3"
-                    : "lp-faint block text-[8px] leading-3"
-                }
-              >
-                {item.due}
-              </span>
-            </span>
-          </li>
-        ))}
-      </ul>
-      <p className="lp-hairline lp-faint mt-auto border-t pt-1.5 text-[8px]">
-        24 小时红色 72 小时琥珀
-      </p>
-    </div>
-  );
-}
-
 function ExperiencePreview() {
   return (
     <div className="flex h-full flex-col">
@@ -686,32 +591,42 @@ function ExperiencePreview() {
   );
 }
 
-function ResumePreview() {
+const TOOL_ROWS = [
+  { label: "课表", meta: "单双周 · 周视图", tone: "tone-2" },
+  { label: "作业", meta: "DDL · 完成状态", tone: "tone-3" },
+  { label: "简历", meta: "勾选经历 · A4", tone: "tone-5" },
+  { label: "日历", meta: "竞赛 · 考试 · 校内", tone: "tone-1" },
+];
+
+function ToolboxPreview() {
   return (
     <div className="flex h-full flex-col">
-      <div className="flex flex-1 flex-col rounded-[7px] border border-[color:var(--lp-line-soft)] bg-[#fffdf9] px-2.5 py-2 shadow-[0_18px_30px_-24px_rgba(60,45,35,0.45)]">
-        <div className="flex items-baseline justify-between gap-2">
-          <p className="font-serif text-[11px] leading-4">示例同学</p>
-          <p className="lp-faint text-[7px]">A4 一页</p>
-        </div>
-        <p className="lp-soft text-[7px] leading-3">计算机学院 2027 届</p>
-        <div className="lp-hairline mt-1 border-t pt-1">
-          <p className="lp-soft text-[7px] leading-3 font-medium">教育经历</p>
-          <p className="lp-soft text-[7px] leading-3">
-            某大学 计算机科学与技术
-          </p>
-        </div>
-        <div className="lp-hairline mt-1 border-t pt-1">
-          <p className="lp-soft text-[7px] leading-3 font-medium">项目经历</p>
-          <p className="lp-soft text-[7px] leading-3">
-            校园选课系统 数据库设计
-          </p>
-          <p className="lp-soft text-[7px] leading-3">
-            数学建模校赛 二等奖
-          </p>
-        </div>
+      <div className="flex items-baseline justify-between">
+        <span className="lp-faint text-[9px] tracking-[0.08em]">四件工具</span>
+        <span className="lp-faint text-[8px]">需要时打开</span>
       </div>
-      <p className="lp-faint mt-2 text-center text-[8px]">勾选即排版</p>
+      <ul className="mt-2 space-y-1">
+        {TOOL_ROWS.map((tool) => (
+          <li
+            key={tool.label}
+            className="lp-fill lp-hairline-soft flex items-center gap-1.5 rounded-md border px-1.5 py-1"
+          >
+            <span
+              aria-hidden="true"
+              className={`h-2.5 w-2.5 shrink-0 rounded-[3px] ${tool.tone}`}
+            />
+            <span className="text-[9px] leading-3 font-medium">
+              {tool.label}
+            </span>
+            <span className="lp-faint ml-auto truncate text-[7px] leading-3">
+              {tool.meta}
+            </span>
+          </li>
+        ))}
+      </ul>
+      <p className="lp-hairline lp-faint mt-auto border-t pt-1.5 text-[8px]">
+        日历只写官方已公布日期
+      </p>
     </div>
   );
 }

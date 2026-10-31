@@ -7,7 +7,7 @@
 | 规则文件 | 推荐类型 | 内容 |
 |---|---|---|
 | [`.qoder/rules/00-core.md`](.qoder/rules/00-core.md) | Always Apply | 技术约束、红线、数据铁律、反模式 |
-| [`.qoder/rules/10-plan.md`](.qoder/rules/10-plan.md) | Apply Manually | 六模块规格、数据模型、排期 |
+| [`.qoder/rules/10-plan.md`](.qoder/rules/10-plan.md) | Apply Manually | 四个面 + 记录官规格、数据模型、排期 |
 | [`.qoder/rules/20-print.md`](.qoder/rules/20-print.md) | Specific Files | A4 打印规范 |
 
 原文留档：[`docs/system-prompt-archive.md`](docs/system-prompt-archive.md)（仅供查阅）。

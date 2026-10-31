@@ -3,10 +3,10 @@
     "id": "ch-tencent",
     "name": "腾讯校园招聘",
     "type": "campus",
-    "entryUrl": "https://campus.tencent.com",
+    "entryUrl": "https://join.qq.com/",
     "openMonths": [8, 9, 10, 11],
     "fitGrade": [3, 4, 5],
-    "note": "秋招与暑期实习分不同批次开放"
+    "note": "官方入口；具体岗位与截止时间以官网为准"
   },
   {
     "id": "ch-bytedance",
@@ -15,156 +15,42 @@
     "entryUrl": "https://jobs.bytedance.com/campus",
     "openMonths": [3, 4, 5, 8, 9, 10, 11],
     "fitGrade": [3, 4, 5],
-    "note": "春招与秋招均有技术、产品、设计岗位"
+    "note": "官方入口；具体岗位与截止时间以官网为准"
   },
   {
     "id": "ch-alibaba",
     "name": "阿里巴巴校园招聘",
     "type": "campus",
-    "entryUrl": "https://campus-talent.alibaba.com/campus/index",
+    "entryUrl": "https://talent.alibaba.com/",
     "openMonths": [8, 9, 10, 11],
-    "fitGrade": [3, 4, 5]
-  },
-  {
-    "id": "ch-meituan",
-    "name": "美团校园招聘",
-    "type": "campus",
-    "entryUrl": "https://zhaopin.meituan.com",
-    "openMonths": [8, 9, 10, 11],
-    "fitGrade": [3, 4, 5]
+    "fitGrade": [3, 4, 5],
+    "note": "官方入口；具体岗位与截止时间以官网为准"
   },
   {
     "id": "ch-huawei",
     "name": "华为校园招聘",
     "type": "campus",
-    "entryUrl": "https://career.huawei.com",
+    "entryUrl": "https://career.huawei.com/cn/campus-recruitment",
     "openMonths": [8, 9, 10, 11],
-    "fitGrade": [4, 5]
-  },
-  {
-    "id": "ch-xiaomi",
-    "name": "小米校园招聘",
-    "type": "campus",
-    "entryUrl": "https://hr.xiaomi.com/campus",
-    "openMonths": [8, 9, 10, 11],
-    "fitGrade": [4, 5]
-  },
-  {
-    "id": "ch-netease",
-    "name": "网易校园招聘",
-    "type": "campus",
-    "entryUrl": "https://campus.163.com",
-    "openMonths": [8, 9, 10, 11],
-    "fitGrade": [4, 5]
-  },
-  {
-    "id": "ch-jd",
-    "name": "京东校园招聘",
-    "type": "campus",
-    "entryUrl": "https://campus.jd.com",
-    "openMonths": [8, 9, 10, 11],
-    "fitGrade": [4, 5]
-  },
-  {
-    "id": "ch-kuaishou",
-    "name": "快手校园招聘",
-    "type": "campus",
-    "entryUrl": "https://zhaopin.kuaishou.cn",
-    "openMonths": [8, 9, 10, 11],
-    "fitGrade": [4, 5]
-  },
-  {
-    "id": "ch-bilibili",
-    "name": "哔哩哔哩校园招聘",
-    "type": "campus",
-    "entryUrl": "https://campus.bilibili.com",
-    "openMonths": [8, 9, 10, 11],
-    "fitGrade": [3, 4, 5]
-  },
-  {
-    "id": "ch-xiaohongshu",
-    "name": "小红书校园招聘",
-    "type": "campus",
-    "entryUrl": "https://campus.xiaohongshu.com",
-    "openMonths": [8, 9, 10, 11],
-    "fitGrade": [4, 5]
+    "fitGrade": [4, 5],
+    "note": "官方入口；具体岗位与截止时间以官网为准"
   },
   {
     "id": "ch-dji",
     "name": "大疆校园招聘",
     "type": "campus",
-    "entryUrl": "https://we.dji.com/campus",
+    "entryUrl": "https://careers.dji.com/zh-CN/campus",
     "openMonths": [7, 8, 9, 10],
-    "fitGrade": [4, 5]
+    "fitGrade": [4, 5],
+    "note": "官方入口；含校园招聘与实习生方向"
   },
   {
-    "id": "ch-mihoyo",
-    "name": "米哈游校园招聘",
+    "id": "ch-tesla",
+    "name": "特斯拉招聘",
     "type": "campus",
-    "entryUrl": "https://campus.mihoyo.com",
-    "openMonths": [7, 8, 9, 10, 11],
-    "fitGrade": [4, 5]
-  },
-  {
-    "id": "ch-didi",
-    "name": "滴滴校园招聘",
-    "type": "campus",
-    "entryUrl": "https://campus.didiglobal.com",
+    "entryUrl": "https://www.tesla.cn/careers",
     "openMonths": [8, 9, 10, 11],
-    "fitGrade": [4, 5]
-  },
-  {
-    "id": "ch-ncss",
-    "name": "国家大学生就业服务平台",
-    "type": "public",
-    "entryUrl": "https://www.ncss.cn",
-    "openMonths": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    "fitGrade": [1, 2, 3, 4, 5],
-    "note": "教育部主办，含政策与专场招聘信息"
-  },
-  {
-    "id": "ch-yingjiesheng",
-    "name": "应届生求职网",
-    "type": "platform",
-    "entryUrl": "https://www.yingjiesheng.com",
-    "openMonths": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     "fitGrade": [3, 4, 5],
-    "note": "校招信息聚合，投递前核对原企业公告"
-  },
-  {
-    "id": "ch-nowcoder",
-    "name": "牛客校招",
-    "type": "platform",
-    "entryUrl": "https://www.nowcoder.com/jobs/campus",
-    "openMonths": [3, 4, 5, 8, 9, 10, 11],
-    "fitGrade": [3, 4, 5],
-    "note": "技术岗位与笔面经较多"
-  },
-  {
-    "id": "ch-shixiseng",
-    "name": "实习僧",
-    "type": "platform",
-    "entryUrl": "https://www.shixiseng.com",
-    "openMonths": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    "fitGrade": [1, 2, 3, 4, 5],
-    "note": "日常实习为主，注意甄别岗位真实性"
-  },
-  {
-    "id": "ch-boss",
-    "name": "BOSS直聘（仅入口）",
-    "type": "platform",
-    "entryUrl": "https://www.zhipin.com",
-    "openMonths": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    "fitGrade": [3, 4, 5],
-    "note": "学径不抓取站内内容，仅提供入口"
-  },
-  {
-    "id": "ch-zhaopin",
-    "name": "智联招聘",
-    "type": "platform",
-    "entryUrl": "https://www.zhaopin.com",
-    "openMonths": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    "fitGrade": [3, 4, 5],
-    "note": "校招与实习专区，以企业发布为准"
+    "note": "官方入口；校招批次以官网公告为准"
   }
 ]

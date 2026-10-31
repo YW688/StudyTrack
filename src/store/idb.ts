@@ -4,11 +4,25 @@ import type { TimetableData } from "../types";
 import { ASSIGNMENTS_KEY } from "./assignments";
 import { EXPERIENCES_KEY } from "./experiences";
 import { RESUME_KEY, RESUME_SNAPSHOTS_KEY } from "./resume";
+import { PROFILE_KEY } from "./profile";
+import { LEDGER_KEY } from "./ledger";
+import { NOTES_KEY } from "./notes";
+import { AGENT_KEY } from "./agent";
 
-const KEY = "studytrack:v1:timetable";
+export const TIMETABLE_KEY = "studytrack:v1:timetable";
+
+const daySchema = z.union([
+  z.literal(1),
+  z.literal(2),
+  z.literal(3),
+  z.literal(4),
+  z.literal(5),
+  z.literal(6),
+  z.literal(7),
+]);
 
 const sessionSchema = z.object({
-  day: z.number().int().min(1).max(7),
+  day: daySchema,
   startPeriod: z.number().int().min(1).max(20),
   endPeriod: z.number().int().min(1).max(20),
   weeks: z.array(z.number().int().min(1).max(40)),
@@ -25,7 +39,7 @@ const courseSchema = z.object({
   source: z.enum(["excel", "sample", "manual"]),
 });
 
-const timetableSchema = z.object({
+export const timetableSchema = z.object({
   courses: z.array(courseSchema),
   semester: z.object({
     name: z.string().optional(),
@@ -38,7 +52,7 @@ const timetableSchema = z.object({
 
 export async function loadTimetable(): Promise<TimetableData | null> {
   try {
-    const value = await get(KEY);
+    const value = await get(TIMETABLE_KEY);
     if (!value) return null;
     const parsed = timetableSchema.safeParse(value);
     return parsed.success ? (parsed.data as TimetableData) : null;
@@ -48,13 +62,19 @@ export async function loadTimetable(): Promise<TimetableData | null> {
 }
 
 export async function saveTimetable(data: TimetableData): Promise<void> {
-  await set(KEY, timetableSchema.parse(data));
+  await set(TIMETABLE_KEY, timetableSchema.parse(data));
 }
 
 export async function clearLocalData(): Promise<void> {
-  await del(KEY);
-  await del(ASSIGNMENTS_KEY);
-  await del(EXPERIENCES_KEY);
-  await del(RESUME_KEY);
-  await del(RESUME_SNAPSHOTS_KEY);
+  await Promise.all([
+    del(TIMETABLE_KEY),
+    del(ASSIGNMENTS_KEY),
+    del(EXPERIENCES_KEY),
+    del(RESUME_KEY),
+    del(RESUME_SNAPSHOTS_KEY),
+    del(PROFILE_KEY),
+    del(LEDGER_KEY),
+    del(NOTES_KEY),
+    del(AGENT_KEY),
+  ]);
 }

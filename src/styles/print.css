@@ -226,10 +226,15 @@
 
   .resume-page-grid {
     display: block !important;
+    margin: 0 !important;
   }
 
   .resume-preview-pane {
     display: block !important;
+  }
+
+  .resume-paper-wrap {
+    margin: 0 !important;
   }
 
   .paper-frame {

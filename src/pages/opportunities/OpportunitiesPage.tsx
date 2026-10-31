@@ -193,6 +193,15 @@ export default function OpportunitiesPage({
   const filteredChannels = CHANNELS.filter(
     (channel) => channelType === "all" || channel.type === channelType,
   );
+  const typeTabs = TYPE_TABS.filter(
+    (tab) =>
+      tab.id === "all" || allJobs.some((job) => job.type === tab.id),
+  );
+  const channelTabs = CHANNEL_TABS.filter(
+    (tab) =>
+      tab.id === "all" ||
+      CHANNELS.some((channel) => channel.type === tab.id),
+  );
   const month = currentMonth();
 
   const stats = [
@@ -316,11 +325,11 @@ export default function OpportunitiesPage({
         <header className="border-rule flex flex-col gap-4 border-b py-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="font-mono text-[10px] tracking-[0.2em] text-ink/40">
-              M4 · 机会 / 06
+              悬赏 / 03
             </p>
             <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <h1 className="font-serif text-2xl tracking-tight sm:text-3xl">
-                机会仪表盘
+                悬赏
               </h1>
               <span className="bg-ink/[0.05] rounded-full px-2 py-0.5 font-mono text-[10px] text-ink/55">
                 {profile.usesSelected
@@ -331,7 +340,7 @@ export default function OpportunitiesPage({
               </span>
             </div>
             <p className="mt-2 text-xs leading-5 text-ink/55">
-              把简历里的经历对到岗位要求上：命中哪几条、缺什么、下一步补什么。
+              {CHANNELS.length} 个官方入口 + {JOB_POSTINGS.length} 张演示岗位卡。把经历对到要求上：命中指回原文，缺口给出下一步。
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -573,7 +582,7 @@ export default function OpportunitiesPage({
               aria-label="岗位类型"
               className="border-rule inline-flex rounded-lg border bg-surface p-0.5"
             >
-              {TYPE_TABS.map((tab) => (
+              {typeTabs.map((tab) => (
                 <button
                   key={tab.id}
                   type="button"
@@ -927,7 +936,7 @@ export default function OpportunitiesPage({
                 id="channel-heading"
                 className="mt-1 font-serif text-xl tracking-tight"
               >
-                官方渠道，自己去投
+                {CHANNELS.length} 个官方入口，自己去投
               </h2>
               <p className="mt-1 max-w-2xl text-[11px] leading-5 text-ink/45">
                 {CHANNEL_LIBRARY_NOTE}
@@ -948,7 +957,7 @@ export default function OpportunitiesPage({
           )}
 
           <div className="mt-4 flex flex-wrap gap-1.5">
-            {CHANNEL_TABS.map((tab) => {
+            {channelTabs.map((tab) => {
               const count =
                 tab.id === "all"
                   ? CHANNELS.length

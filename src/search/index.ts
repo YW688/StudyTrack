@@ -25,11 +25,6 @@ import {
 } from "../lib/opportunities";
 import { createJobIndex, searchJobScores } from "./bm25";
 
-export const JOB_LIBRARY_NOTE =
-  "岗位方向库：人工整理自企业官方校园招聘页面，链接直达官网；具体在招职位、城市与截止时间以官网为准。";
-
-export const CHANNEL_LIBRARY_NOTE =
-  "学径不抓取招聘平台内容，只提供官方入口；开放月份与具体岗位以官网为准。";
 
 const ruleSchema = z.object({
   all: z.array(z.string().min(1).max(30)).max(5).optional(),
@@ -94,6 +89,10 @@ export const JOB_POSTINGS: JobPosting[] = jobsParsed.success
 export const CHANNELS: Channel[] = channelsParsed.success
   ? (channelsParsed.data as Channel[])
   : [];
+
+export const JOB_LIBRARY_NOTE = `${JOB_POSTINGS.length} 张演示岗位卡：人工整理自企业官方招聘方向，只用于本地对照；具体在招职位、城市与截止时间以官网为准。`;
+
+export const CHANNEL_LIBRARY_NOTE = `${CHANNELS.length} 个官方入口：只做链接，不抓取站内职位；开放月份与具体岗位以官网为准。`;
 
 export const JOB_LIBRARY_ISSUE = jobsParsed.success
   ? null
@@ -277,7 +276,7 @@ function skillAlternatives(skill: string): string[] {
   return [canonical, ...(ALIAS_BY_CANONICAL.get(canonical) ?? [])];
 }
 
-function detectSkills(text: string): string[] {
+export function detectSkills(text: string): string[] {
   const found: string[] = [];
   const seen = new Set<string>();
   for (const candidate of ALL_SKILL_CANDIDATES) {

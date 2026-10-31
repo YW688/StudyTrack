@@ -18,7 +18,7 @@ const assignmentSchema = z.object({
   createdAt: z.string(),
 });
 
-const assignmentDataSchema = z.object({
+export const assignmentDataSchema = z.object({
   items: z.array(assignmentSchema),
   updatedAt: z.string(),
   sourceLabel: z.string().optional(),

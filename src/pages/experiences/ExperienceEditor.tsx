@@ -213,7 +213,7 @@ export default function ExperienceEditor({
         <header className="border-rule flex items-start justify-between gap-4 border-b px-5 py-4">
           <div>
             <p className="font-mono text-[9px] tracking-[0.18em] text-ink/35">
-              M2 · 经历 / {initial ? "编辑" : "新记录"}
+              账本 · 经历 / {initial ? "编辑" : "新记录"}
             </p>
             <h2
               id="experience-editor-title"

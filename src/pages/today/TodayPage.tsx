@@ -3,61 +3,71 @@ import dayjs, { type Dayjs } from "dayjs";
 import type {
   Assignment,
   AssignmentData,
-  Course,
-  CourseSession,
-  DayOfWeek,
+  CalendarCategory,
+  CalendarItem,
   ExperienceData,
+  LedgerEvent,
+  Note,
+  Profile,
   TimetableData,
 } from "../../types";
-import { ASSIGNMENT_KIND_LABELS, DAY_LABELS } from "../../types";
-import { currentWeekOf, formatWeeksLabel } from "../../parse/schedule";
+import {
+  ASSIGNMENT_KIND_LABELS,
+  CALENDAR_CATEGORY_LABELS,
+  DAY_LABELS,
+} from "../../types";
+import { currentWeekOf } from "../../parse/schedule";
 import {
   EXPERIENCE_KIND_META,
   experienceKindLabel,
   formatExperienceRange,
-  fourPartCount,
-  relativeDaysLabel,
-  summarizeExperienceActivity,
 } from "../../lib/experience";
+import { ddlTier, formatDue, formatDueFull } from "../../lib/ddl";
 import {
-  ddlTier,
-  formatDue,
-  formatDueFull,
-  mondayOf,
-  sortAssignments,
-  weeklySummary,
-} from "../../lib/ddl";
+  buildCapturePrompts,
+  buildTodayJudgment,
+  coursesOnDay,
+  pickEcho,
+  pendingAssignments,
+  weekdayOf,
+} from "../../lib/today";
+import {
+  calendarTimingLabel,
+  pickRelevantCalendarItems,
+  whyRelevant,
+} from "../../lib/calendar";
+import {
+  archiveStats,
+  computeReadiness,
+  settleDay,
+  studyDateKey,
+} from "../../lib/ledger";
+import { CALENDAR_ISSUE, CALENDAR_ITEMS } from "../../store/calendar";
+import TodayBrief from "../../components/TodayBrief";
+import TodayOnboarding, {
+  type OnboardingValues,
+} from "../../components/TodayOnboarding";
+import CaptureBox from "../../components/CaptureBox";
+import LedgerHeatmap from "../../components/LedgerHeatmap";
 
 interface TodayPageProps {
   timetable: TimetableData | null;
   assignments: AssignmentData | null;
   experiences: ExperienceData | null;
-  onSaveAssignments: (data: AssignmentData) => Promise<void>;
+  profile: Profile | null;
+  ledger: LedgerEvent[];
+  notes: Note[];
+  onOnboard: (
+    values: OnboardingValues,
+    recentWork: string,
+  ) => Promise<void>;
+  onToggleAssignment: (item: Assignment) => Promise<void>;
+  onAddNote: (text: string, tags?: string[]) => Promise<void>;
   onUseSample: () => Promise<void>;
-  onNavigate: (id: "timetable" | "assignments" | "experiences") => void;
+  onNavigate: (
+    id: "timetable" | "assignments" | "experiences" | "resume" | "calendar",
+  ) => void;
 }
-
-interface DaySession {
-  course: Course;
-  session: CourseSession;
-}
-
-interface NextTeachingDay {
-  date: Dayjs;
-  week: number;
-  sessions: DaySession[];
-}
-
-const WEEKDAY_NAMES = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
-
-const PALETTE: Record<string, { bg: string; border: string; text: string }> = {
-  blue: { bg: "#E7EDF6", border: "#C5D2E5", text: "#1C3355" },
-  clay: { bg: "#F5EAE3", border: "#E4D0C3", text: "#5A3A2B" },
-  moss: { bg: "#E8EFE8", border: "#CBDCCB", text: "#2F4A36" },
-  plum: { bg: "#EEE9F1", border: "#D8CEDF", text: "#46324F" },
-  sand: { bg: "#F3EEE2", border: "#E1D6BE", text: "#4F4128" },
-  slate: { bg: "#E9EAEC", border: "#D2D5DA", text: "#333B45" },
-};
 
 const TIER_TEXT: Record<string, string> = {
   overdue: "已逾期",
@@ -67,65 +77,38 @@ const TIER_TEXT: Record<string, string> = {
   none: "",
 };
 
-const BTN_PRIMARY =
-  "bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-5 text-sm font-medium disabled:opacity-60";
 const BTN_SECONDARY =
   "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-surface px-4 text-sm disabled:opacity-60";
-const BTN_LINK =
-  "hover:text-ink inline-flex min-h-11 items-center text-[11px] text-ink/50 underline underline-offset-4 sm:min-h-9";
+
+const CATEGORY_CHIP: Record<CalendarCategory, string> = {
+  contest: "bg-accent/10 text-accent-ink",
+  exam: "bg-amber/15 text-amber-ink",
+  campus: "bg-ink/[0.06] text-ink/60",
+};
+
+const ONBOARDING_HIDDEN_KEY = "studytrack:onboarding-hidden";
+
+function readOnboardingHidden(): boolean {
+  try {
+    return window.sessionStorage.getItem(ONBOARDING_HIDDEN_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
 
 function dayIndexOf(date: Dayjs): number {
   return (date.day() + 6) % 7;
 }
 
-function daySessions(
-  courses: Course[],
-  day: DayOfWeek,
-  week: number,
-): DaySession[] {
-  return courses
-    .flatMap((course) =>
-      course.sessions
-        .filter((session) => session.day === day && session.weeks.includes(week))
-        .map((session) => ({ course, session })),
-    )
-    .sort(
-      (a, b) =>
-        a.session.startPeriod - b.session.startPeriod ||
-        a.session.endPeriod - b.session.endPeriod,
-    );
-}
-
-function nextTeachingDay(
-  timetable: TimetableData,
-  from: Dayjs,
-): NextTeachingDay | null {
-  for (let offset = 1; offset <= 7; offset += 1) {
-    const date = from.add(offset, "day");
-    const week = currentWeekOf(
-      timetable.semester.startDate,
-      timetable.semester.totalWeeks,
-      date,
-    );
-    if (week === null) continue;
-    const day = (dayIndexOf(date) + 1) as DayOfWeek;
-    const sessions = daySessions(timetable.courses, day, week);
-    if (sessions.length) return { date, week, sessions };
-  }
-  return null;
-}
-
-function dueLabel(due: string | null): string {
+function dueLabel(due: string | null, now: Dayjs): string {
   if (!due) return "未设截止";
   const target = dayjs(due);
   if (!target.isValid()) return "未设截止";
-
-  const today = dayjs();
-  if (target.isSame(today, "day")) return `今天 ${target.format("HH:mm")}`;
-  if (target.isSame(today.add(1, "day"), "day")) {
+  if (target.isSame(now, "day")) return `今天 ${target.format("HH:mm")}`;
+  if (target.isSame(now.add(1, "day"), "day")) {
     return `明天 ${target.format("HH:mm")}`;
   }
-  const diffDays = target.startOf("day").diff(today.startOf("day"), "day");
+  const diffDays = target.startOf("day").diff(now.startOf("day"), "day");
   if (diffDays > 1 && diffDays < 7) {
     return `${DAY_LABELS[dayIndexOf(target)]} ${target.format("HH:mm")}`;
   }
@@ -143,14 +126,24 @@ export default function TodayPage({
   timetable,
   assignments,
   experiences,
-  onSaveAssignments,
+  profile,
+  ledger,
+  notes,
+  onOnboard,
+  onToggleAssignment,
+  onAddNote,
   onUseSample,
   onNavigate,
 }: TodayPageProps) {
   const [, setTick] = useState(0);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [seeding, setSeeding] = useState(false);
+  const [sampleSeeding, setSampleSeeding] = useState(false);
   const [sampleError, setSampleError] = useState<string | null>(null);
+  const [onboardingHidden, setOnboardingHidden] = useState(
+    readOnboardingHidden,
+  );
+  const [intelBusy, setIntelBusy] = useState<string | null>(null);
+  const [intelError, setIntelError] = useState<string | null>(null);
 
   useEffect(() => {
     const timer = window.setInterval(
@@ -168,96 +161,103 @@ export default function TodayPage({
         now,
       )
     : null;
-  const todayDay = (dayIndexOf(now) + 1) as DayOfWeek;
-  const todaySessions =
-    timetable && currentWeek !== null
-      ? daySessions(timetable.courses, todayDay, currentWeek)
-      : [];
-  const next =
-    timetable && todaySessions.length === 0
-      ? nextTeachingDay(timetable, now)
-      : null;
-
-  const items = assignments?.items ?? [];
-  const pending = sortAssignments(items).filter(
-    (item) => item.status !== "done",
-  );
-  const summary = weeklySummary(items, now);
-
-  const weekStart = mondayOf(now);
-  const nextWeekStart = weekStart.add(7, "day");
-  const nextWeekEnd = nextWeekStart.add(7, "day");
-  const weekDays = Array.from({ length: 7 }, (_, index) =>
-    weekStart.add(index, "day"),
-  );
-  const weekItems = pending.filter((item) => {
-    if (!item.due) return false;
-    const due = dayjs(item.due);
-    return due.isValid() && !due.isBefore(weekStart) && due.isBefore(nextWeekStart);
+  const courses = coursesOnDay(timetable, currentWeek, weekdayOf(now));
+  const pending = pendingAssignments(assignments?.items ?? null);
+  const experienceItems = experiences?.experiences ?? [];
+  const judgment = buildTodayJudgment({
+    now,
+    profile,
+    courses,
+    pending,
+    ledger,
   });
-  const nextWeekCount = pending.filter((item) => {
-    if (!item.due) return false;
-    const due = dayjs(item.due);
-    return due.isValid() && !due.isBefore(nextWeekStart) && due.isBefore(nextWeekEnd);
-  }).length;
+  const echo = pickEcho(experienceItems, now);
+  const intel = pickRelevantCalendarItems(CALENDAR_ITEMS, profile, 3, now);
+  const prompts = buildCapturePrompts(courses, pending);
+  const readiness = computeReadiness(profile, experienceItems);
+  const stats = archiveStats(experienceItems, notes, ledger);
 
-  const hasAny = timetable !== null || assignments !== null;
+  const todayKey = studyDateKey(now);
+  const todaySettlement = settleDay(ledger, todayKey);
+  const completedToday = [
+    ...new Map(
+      todaySettlement.events
+        .filter(
+          (event) =>
+            !event.revokedAt &&
+            event.type === "assignment_done" &&
+            event.refId,
+        )
+        .map((event) => {
+          const item = assignments?.items.find(
+            (candidate) =>
+              candidate.id === event.refId && candidate.status === "done",
+          );
+          return item ? [item.id, item] : null;
+        })
+        .filter((entry): entry is [string, Assignment] => entry !== null),
+    ).values(),
+  ].slice(0, 3);
 
-  const courseHint = !timetable
-    ? "课表未导入"
-    : currentWeek === null
-      ? timetable.semester.startDate
-        ? "不在学期周次"
-        : "缺开学日期"
-      : todaySessions.length > 0
-        ? `首节 ${todaySessions[0].session.startPeriod}-${todaySessions[0].session.endPeriod} 节`
-        : next
-          ? `下一课 ${DAY_LABELS[dayIndexOf(next.date)]}`
-          : "本周无排课";
-  const pendingHint = assignments
-    ? pending.length > 0
-      ? `${formatDue(pending[0].due)} 最近`
-      : "全部完成"
-    : "作业未导入";
-  const ddlHint = assignments
-    ? nextWeekCount > 0
-      ? `下周 ${nextWeekCount} 项`
-      : summary.ddlCount > 0
-        ? "都在本周内"
-        : "暂无近期 DDL"
-    : "作业未导入";
+  const showOnboarding = profile === null && !onboardingHidden;
+  const showStarter = timetable === null && assignments === null;
+  const weekLabel = currentWeek !== null ? `第 ${currentWeek} 周` : null;
+
+  function hideOnboarding() {
+    setOnboardingHidden(true);
+    try {
+      window.sessionStorage.setItem(ONBOARDING_HIDDEN_KEY, "1");
+    } catch {
+      // UI-only preference; storage may be disabled.
+    }
+  }
+
+  function reopenOnboarding() {
+    setOnboardingHidden(false);
+    try {
+      window.sessionStorage.removeItem(ONBOARDING_HIDDEN_KEY);
+    } catch {
+      // UI-only preference; storage may be disabled.
+    }
+  }
+
+  async function handleToggle(item: Assignment) {
+    setSaveError(null);
+    try {
+      await onToggleAssignment(item);
+    } catch {
+      setSaveError("这项没写进本机，请检查浏览器存储权限后重试。");
+    }
+  }
 
   async function handleSample() {
-    setSeeding(true);
+    setSampleSeeding(true);
     setSampleError(null);
     try {
       await onUseSample();
     } catch {
       setSampleError("示例数据写入失败，请检查浏览器存储权限后重试。");
     } finally {
-      setSeeding(false);
+      setSampleSeeding(false);
     }
   }
 
-  async function toggleAssignment(item: Assignment) {
-    if (!assignments) return;
-    const nextData: AssignmentData = {
-      ...assignments,
-      items: assignments.items.map((current) =>
-        current.id === item.id
-          ? {
-              ...current,
-              status: current.status === "done" ? "todo" : "done",
-            }
-          : current,
-      ),
-      updatedAt: new Date().toISOString(),
-    };
+  function intelSaved(item: CalendarItem): boolean {
+    return notes.some((note) => note.text.includes(item.title));
+  }
+
+  async function handleIntelNote(item: CalendarItem) {
+    setIntelBusy(item.id);
+    setIntelError(null);
     try {
-      await onSaveAssignments(nextData);
-      setSaveError(null);
+      await onAddNote(
+        `关注：${item.title}（${whyRelevant(item, profile)}，${calendarTimingLabel(item)}）`,
+        ["情报"],
+      );
     } catch {
-      setSaveError("写入本机失败，请检查浏览器存储权限后重试。");
+      setIntelError("这条没记下来，请检查浏览器存储权限后重试。");
+    } finally {
+      setIntelBusy(null);
     }
   }
 
@@ -267,77 +267,126 @@ export default function TodayPage({
         <header className="border-rule flex flex-col gap-4 border-b py-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="font-mono text-[10px] tracking-[0.2em] text-ink/40">
-              M1 · 今日 / 01
+              今日 / 01
             </p>
             <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <h1 className="font-serif text-2xl tracking-tight sm:text-3xl">
                 今天
               </h1>
               <p className="font-mono text-[11px] tabular-nums text-ink/45">
-                {now.format("M月D日")} · {WEEKDAY_NAMES[now.day()]}
-                {currentWeek !== null ? ` · 第 ${currentWeek} 周` : ""}
+                {now.format("YYYY年M月D日")} · {DAY_LABELS[dayIndexOf(now)]}
+                {weekLabel ? ` · ${weekLabel}` : ""}
               </p>
             </div>
             <p className="mt-2 text-xs leading-5 text-ink/55">
-              {timetable?.semester.name ?? "还没有导入课表"} ·{" "}
+              {timetable?.semester.name ?? "课表未导入"} ·{" "}
               {assignments
                 ? `未完成 ${pending.length} 项`
-                : "还没有作业数据"}
-              {next && ` · 下一课 ${DAY_LABELS[dayIndexOf(next.date)]}`}
+                : "作业未导入"}
+              {currentWeek === null && timetable?.semester.startDate
+                ? " · 今天不在学期周次内"
+                : ""}
             </p>
           </div>
 
-          {hasAny && (
-            <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2">
+            {profile === null && !showOnboarding && (
               <button
                 type="button"
-                onClick={() => onNavigate("timetable")}
-                className="border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center rounded-lg border px-3 text-xs"
+                onClick={reopenOnboarding}
+                className={BTN_SECONDARY}
               >
-                整周课表
+                建档
               </button>
-              <button
-                type="button"
-                onClick={() => onNavigate("assignments")}
-                className="border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center rounded-lg border px-3 text-xs"
-              >
-                管理作业
-              </button>
-            </div>
-          )}
+            )}
+            <button
+              type="button"
+              onClick={() => onNavigate("timetable")}
+              className={BTN_SECONDARY}
+            >
+              课表
+            </button>
+            <button
+              type="button"
+              onClick={() => onNavigate("assignments")}
+              className={BTN_SECONDARY}
+            >
+              作业
+            </button>
+          </div>
         </header>
 
-        {!hasAny ? (
-          <>
-            <section className="border-rule mt-5 rounded-xl border bg-surface p-5 sm:p-8">
-              <p className="font-mono text-[10px] tracking-[0.16em] text-ink/40">
-                本机还没有数据
-              </p>
-              <h2 className="mt-2 text-lg font-medium tracking-tight">
-                先看一眼今天该做什么
-              </h2>
-              <p className="mt-2 max-w-xl text-sm leading-6 text-ink/60">
-                用示例课表和三张作业截图的数据，直接体验今日的阅读顺序；
-                也可以从空白开始，导入自己的课表与作业。
-              </p>
-
-              {sampleError && (
+        {timetable && (
+          <div className="border-rule flex flex-wrap items-center gap-x-4 gap-y-2 border-b py-2.5">
+            <p className="font-mono text-[10px] tracking-[0.08em] text-ink/35">
+              今日课程
+            </p>
+            {courses.length > 0 ? (
+              courses.slice(0, 4).map((course) => (
                 <p
-                  role="alert"
-                  className="border-amber/50 bg-amber/[0.06] mt-3 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink/75"
+                  key={`${course.course.id}-${course.startPeriod}`}
+                  className="flex min-w-0 items-baseline gap-2 text-[11px] text-ink/60"
                 >
-                  {sampleError}
+                  <span className="font-mono text-[10px] tabular-nums text-ink/35">
+                    {course.startPeriod}-{course.endPeriod} 节
+                  </span>
+                  <span className="truncate font-medium text-ink/75">
+                    {course.course.name}
+                  </span>
+                  {course.location && (
+                    <span className="hidden truncate text-[10px] text-ink/30 sm:inline">
+                      {course.location}
+                    </span>
+                  )}
                 </p>
-              )}
+              ))
+            ) : (
+              <p className="text-[11px] text-ink/40">
+                今天没有课。
+                {currentWeek === null &&
+                  timetable.semester.startDate &&
+                  " 今天不在课表周次内。"}
+              </p>
+            )}
+            {courses.length > 4 && (
+              <p className="font-mono text-[10px] text-ink/30">
+                还有 {courses.length - 4} 个时段
+              </p>
+            )}
+          </div>
+        )}
 
-              <div className="mt-5 grid gap-2 sm:grid-cols-3">
+        <TodayBrief
+          now={now}
+          profile={profile}
+          judgment={judgment}
+          ledger={ledger}
+        />
+
+        {showOnboarding && (
+          <TodayOnboarding
+            onComplete={onOnboard}
+            onDismiss={hideOnboarding}
+          />
+        )}
+
+        {showStarter && (
+          <section className="border-amber/35 bg-amber/[0.05] mt-4 rounded-xl border px-4 py-3.5 sm:px-5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-medium">课表和作业还没进来。</p>
+                <p className="mt-0.5 text-[11px] leading-5 text-ink/50">
+                  可以先看示例，也可以直接在下面留一条记录；不要求先填表。
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
                   onClick={() => void handleSample()}
-                  disabled={seeding}
-                  className={BTN_PRIMARY}
+                  disabled={sampleSeeding}
+                  className="bg-ink text-paper inline-flex min-h-11 items-center rounded-lg px-4 text-xs font-medium disabled:opacity-50"
                 >
-                  {seeding ? "正在准备…" : "用示例体验"}
+                  {sampleSeeding ? "正在准备…" : "用示例体验"}
                 </button>
                 <button
                   type="button"
@@ -346,398 +395,340 @@ export default function TodayPage({
                 >
                   导入课表
                 </button>
+              </div>
+            </div>
+            {sampleError && (
+              <p role="alert" className="mt-2 text-[11px] text-red-800">
+                {sampleError}
+              </p>
+            )}
+          </section>
+        )}
+
+        {(saveError || intelError) && (
+          <p
+            role="alert"
+            className="border-amber/50 bg-amber/[0.06] mt-4 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink/75"
+          >
+            {saveError ?? intelError}
+          </p>
+        )}
+
+        <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+          <div className="space-y-4">
+            <Panel
+              index="03"
+              title="今日委托"
+              action={
                 <button
                   type="button"
                   onClick={() => onNavigate("assignments")}
-                  className={BTN_SECONDARY}
+                  className="hover:text-ink inline-flex min-h-9 items-center text-[11px] text-ink/45 underline underline-offset-4"
                 >
-                  添加作业
+                  全部作业
                 </button>
-              </div>
-
-              <p className="mt-4 text-[11px] leading-5 text-ink/40">
-                无需注册 · 不采集个人信息 · 示例数据只写入本机浏览器
-              </p>
-            </section>
-            <PageFoot />
-          </>
-        ) : (
-          <>
-            <section
-              aria-label="今日概览"
-              className="border-rule mt-5 grid grid-cols-3 overflow-hidden rounded-xl border bg-surface"
+              }
             >
-              <Stat
-                label="今日课程"
-                value={timetable ? String(todaySessions.length) : "—"}
-                unit={timetable ? "个时段" : "未导入"}
-                hint={courseHint}
-                divider
-              />
-              <Stat
-                label="未完成"
-                value={assignments ? String(pending.length) : "—"}
-                unit={assignments ? "项" : "未导入"}
-                hint={pendingHint}
-                divider
-              />
-              <Stat
-                label="本周 DDL"
-                value={assignments ? String(summary.ddlCount) : "—"}
-                unit={assignments ? "个" : "未导入"}
-                hint={ddlHint}
-              />
-            </section>
-
-            {saveError && (
-              <p
-                role="alert"
-                className="border-amber/50 bg-amber/[0.06] mt-4 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink/75"
-              >
-                {saveError}
-              </p>
-            )}
-
-            <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
-              <div className="space-y-4">
-                <Panel
-                  index="01"
-                  title="今日课程"
-                  action={
-                    <button
-                      type="button"
-                      onClick={() => onNavigate("timetable")}
-                      className={BTN_LINK}
-                    >
-                      整周课表
-                    </button>
-                  }
-                >
-                  <TodayCourses
-                    timetable={timetable}
-                    currentWeek={currentWeek}
-                    sessions={todaySessions}
-                    next={next}
-                    onTimetable={() => onNavigate("timetable")}
-                  />
-                </Panel>
-
-                <Panel
-                  index="02"
-                  title={`未完成作业${assignments ? ` · ${pending.length}` : ""}`}
-                  action={
-                    <button
-                      type="button"
-                      onClick={() => onNavigate("assignments")}
-                      className={BTN_LINK}
-                    >
-                      全部作业
-                    </button>
-                  }
-                >
-                  {!assignments ? (
-                    <EmptyBlock
-                      text="还没有作业数据，先把这周的 DDL 收进来。"
-                      actionLabel="去添加作业"
-                      onAction={() => onNavigate("assignments")}
-                    />
-                  ) : pending.length === 0 ? (
-                    <p className="px-4 py-8 text-center text-sm text-ink/50 sm:px-5">
-                      没有未完成的作业。
-                    </p>
-                  ) : (
-                    <>
-                      <ul>
-                        {pending.slice(0, 5).map((item) => (
-                          <PendingRow
-                            key={item.id}
-                            item={item}
-                            onToggle={() => void toggleAssignment(item)}
-                          />
-                        ))}
-                      </ul>
-                      {pending.length > 5 && (
-                        <div className="border-rule flex items-center justify-between border-t px-4 py-2.5 text-[10px] text-ink/40 sm:px-5">
-                          <span>还有 {pending.length - 5} 项未显示</span>
-                          <button
-                            type="button"
-                            onClick={() => onNavigate("assignments")}
-                            className="text-ink/55 underline underline-offset-2 hover:text-ink"
-                          >
-                            去作业页
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </Panel>
-              </div>
-
-              <div className="space-y-4">
-                <Panel
-                  index="03"
-                  title="本周 DDL"
-                  action={
-                    <button
-                      type="button"
-                      onClick={() => onNavigate("assignments")}
-                      className={BTN_LINK}
-                    >
-                      全部 DDL
-                    </button>
-                  }
-                >
-                  <div className="px-4 py-4 sm:px-5">
-                    <div className="grid grid-cols-7 gap-1">
-                      {weekDays.map((day, index) => {
-                        const count = assignments
-                          ? pending.filter(
-                              (item) =>
-                                item.due &&
-                                dayjs(item.due).isValid() &&
-                                dayjs(item.due).isSame(day, "day"),
-                            ).length
-                          : 0;
-                        const isToday = day.isSame(now, "day");
-                        return (
-                          <div
-                            key={day.format("YYYY-MM-DD")}
-                            aria-label={`${DAY_LABELS[index]} ${day.format("M月D日")}，${count} 个 DDL`}
-                            className={[
-                              "rounded-lg border px-0.5 py-2 text-center",
-                              isToday
-                                ? "border-accent/50 bg-accent/[0.07]"
-                                : index >= 5
-                                  ? "border-transparent bg-ink/[0.02]"
-                                  : "border-transparent",
-                            ].join(" ")}
-                          >
-                            <p className="font-mono text-[9px] text-ink/40">
-                              {DAY_LABELS[index].slice(1)}
-                            </p>
-                            <p
-                              className={[
-                                "mt-0.5 font-serif text-sm tabular-nums",
-                                isToday ? "text-ink" : "text-ink/70",
-                              ].join(" ")}
-                            >
-                              {day.format("D")}
-                            </p>
-                            <span
-                              aria-hidden="true"
-                              className={[
-                                "mx-auto mt-1 block h-1.5 w-1.5 rounded-full",
-                                count > 0 ? "bg-accent" : "bg-ink/10",
-                              ].join(" ")}
-                            />
-                          </div>
-                        );
-                      })}
+              {!assignments ? (
+                <EmptyBlock
+                  text="还没有作业数据。可以先看示例，或者去作业页添加。"
+                  actionLabel="去添加作业"
+                  onAction={() => onNavigate("assignments")}
+                />
+              ) : pending.length === 0 ? (
+                <div className="px-4 py-4 sm:px-5">
+                  <p className="text-sm leading-6 text-ink/55">
+                    今天没有未完成的作业。
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => onNavigate("assignments")}
+                    className="mt-1 inline-flex min-h-11 items-center text-xs text-ink/50 underline underline-offset-4 hover:text-ink"
+                  >
+                    看看之后的 DDL →
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <ul>
+                    {pending.slice(0, 3).map((item) => (
+                      <PendingRow
+                        key={item.id}
+                        item={item}
+                        now={now}
+                        onToggle={() => void handleToggle(item)}
+                      />
+                    ))}
+                  </ul>
+                  {pending.length > 3 && (
+                    <div className="border-rule flex items-center justify-between border-t px-4 py-2 text-[10px] text-ink/40 sm:px-5">
+                      <span>还有 {pending.length - 3} 项</span>
+                      <button
+                        type="button"
+                        onClick={() => onNavigate("assignments")}
+                        className="text-ink/55 underline underline-offset-2 hover:text-ink"
+                      >
+                        去作业页
+                      </button>
                     </div>
+                  )}
+                </>
+              )}
 
-                    <p className="mt-3 font-mono text-[10px] text-ink/40">
-                      本周 {summary.ddlCount} 个 DDL
-                      {summary.overdueCount > 0 && (
-                        <span className="text-red-800">
-                          {" "}
-                          · {summary.overdueCount} 项已逾期
+              {completedToday.length > 0 && (
+                <div className="border-rule bg-ink/[0.015] border-t px-4 py-2.5 sm:px-5">
+                  <p className="font-mono text-[9px] tracking-[0.08em] text-ink/35">
+                    今天已划掉 · {completedToday.length}
+                  </p>
+                  <ul className="mt-1 space-y-1">
+                    {completedToday.map((item) => (
+                      <li
+                        key={item.id}
+                        className="flex items-center gap-2 text-[11px]"
+                      >
+                        <CheckGlyph />
+                        <span className="min-w-0 flex-1 truncate text-ink/50 line-through">
+                          {item.title}
                         </span>
-                      )}
-                    </p>
+                        <button
+                          type="button"
+                          onClick={() => void handleToggle(item)}
+                          className="shrink-0 text-ink/40 underline underline-offset-2 hover:text-ink"
+                        >
+                          撤销
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </Panel>
 
-                    {weekItems.length > 0 ? (
-                      <ul className="mt-1">
-                        {weekItems.slice(0, 3).map((item) => (
-                          <li
-                            key={item.id}
-                            className="border-rule flex items-baseline gap-2 border-t py-2 text-xs first:border-t-0"
-                          >
+            <CaptureBox
+              now={now}
+              notes={notes}
+              prompts={prompts}
+              onAddNote={onAddNote}
+            />
+          </div>
+
+          <div className="space-y-4">
+            <Panel
+              index="05"
+              title="今日情报"
+              action={
+                <span className="font-mono text-[9px] text-ink/30">
+                  {intel.length} 条
+                </span>
+              }
+            >
+              {CALENDAR_ISSUE ? (
+                <div className="px-4 py-4 text-[11px] leading-5 text-amber sm:px-5">
+                  {CALENDAR_ISSUE}
+                </div>
+              ) : intel.length === 0 ? (
+                <div className="px-4 py-4 sm:px-5">
+                  <p className="text-sm leading-6 text-ink/55">
+                    近期没有已公布日期的情报。
+                  </p>
+                  <p className="mt-1 text-[11px] leading-5 text-ink/40">
+                    未公布日期的条目只留在日历里，不猜时间。
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => onNavigate("calendar")}
+                    className="mt-1 inline-flex min-h-11 items-center text-xs text-ink/50 underline underline-offset-4 hover:text-ink"
+                  >
+                    去日历看看 →
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <ul>
+                    {intel.map((item) => {
+                      const saved = intelSaved(item);
+                      return (
+                        <li
+                          key={item.id}
+                          className="border-rule border-t px-4 py-3 first:border-t-0 sm:px-5"
+                        >
+                          <div className="flex items-center gap-2">
                             <span
                               className={[
-                                "w-10 shrink-0 font-mono text-[10px] tabular-nums",
-                                tierTextClass(ddlTier(item.due)),
+                                "shrink-0 rounded-full px-1.5 py-0.5 font-mono text-[9px]",
+                                CATEGORY_CHIP[item.category],
                               ].join(" ")}
                             >
-                              {item.due ? dayjs(item.due).format("M/D") : "—"}
+                              {CALENDAR_CATEGORY_LABELS[item.category]}
                             </span>
-                            <span className="truncate text-ink/70">
-                              {item.title}
+                            <span className="min-w-0 truncate font-mono text-[9px] text-ink/35">
+                              {item.sourceType === "sample"
+                                ? "示例 · 待核对"
+                                : item.sourceName}
                             </span>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="mt-2 text-[11px] leading-5 text-ink/40">
-                        本周没有 DDL。
-                        {nextWeekCount > 0
-                          ? `下周有 ${nextWeekCount} 项，已经按截止时间排在待办里。`
-                          : "可以先把下周的作业记下来。"}
-                      </p>
-                    )}
-
-                    {weekItems.length > 3 && (
-                      <p className="mt-1 text-[10px] text-ink/35">
-                        本周还有 {weekItems.length - 3} 项。
-                      </p>
-                    )}
+                            <span className="ml-auto shrink-0 font-mono text-[9px] text-ink/35">
+                              {calendarTimingLabel(item)}
+                            </span>
+                          </div>
+                          <p className="mt-1.5 text-sm leading-5 font-medium">
+                            {item.title}
+                          </p>
+                          <p className="mt-0.5 text-[10px] leading-5 text-ink/45">
+                            {[item.organizer, whyRelevant(item, profile)]
+                              .filter(Boolean)
+                              .join(" · ")}
+                          </p>
+                          <div className="mt-1.5 flex items-center justify-between gap-2">
+                            {item.sourceUrl ? (
+                              <a
+                                href={item.sourceUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex min-h-9 items-center text-[10px] text-ink/50 underline underline-offset-2 hover:text-ink"
+                              >
+                                官网 ↗
+                              </a>
+                            ) : (
+                              <span className="text-[10px] text-ink/30">
+                                {item.sourceType === "sample"
+                                  ? "示例节点"
+                                  : "来源待补"}
+                              </span>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => void handleIntelNote(item)}
+                              disabled={saved || intelBusy === item.id}
+                              className="border-rule hover:bg-ink/[0.03] inline-flex min-h-9 items-center rounded-md border px-2.5 text-[10px] text-ink/55 disabled:opacity-45"
+                            >
+                              {saved
+                                ? "已记下"
+                                : intelBusy === item.id
+                                  ? "记录中…"
+                                  : "记下"}
+                            </button>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <div className="border-rule flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t px-4 py-2 text-[10px] leading-5 text-ink/35 sm:px-5">
+                    <span>只写官方已公布的时间，未公布不猜。</span>
+                    <button
+                      type="button"
+                      onClick={() => onNavigate("calendar")}
+                      className="shrink-0 text-ink/45 underline underline-offset-2 hover:text-ink"
+                    >
+                      完整日历 →
+                    </button>
                   </div>
-                </Panel>
+                </>
+              )}
+            </Panel>
 
-                <Panel
-                  index="04"
-                  title="经历"
-                  action={
+            <Panel
+              index="06"
+              title="回声"
+              action={
+                <button
+                  type="button"
+                  onClick={() => onNavigate("experiences")}
+                  className="hover:text-ink inline-flex min-h-9 items-center text-[11px] text-ink/45 underline underline-offset-4"
+                >
+                  经历库
+                </button>
+              }
+            >
+              {!echo ? (
+                <div className="px-4 py-4 sm:px-5">
+                  <p className="text-sm leading-6 text-ink/55">
+                    还没有可回声的战绩。
+                  </p>
+                  <p className="mt-1 text-[11px] leading-5 text-ink/40">
+                    今天写下第一条，过几天这里会把它送回来。
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => onNavigate("experiences")}
+                    className="mt-1 inline-flex min-h-11 items-center text-xs text-ink/50 underline underline-offset-4 hover:text-ink"
+                  >
+                    去记一条 →
+                  </button>
+                </div>
+              ) : (
+                <div className="px-4 py-4 sm:px-5">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <span
+                      className="rounded-full px-1.5 py-0.5 font-mono text-[9px]"
+                      style={{
+                        color: EXPERIENCE_KIND_META[echo.experience.kind].color,
+                        backgroundColor:
+                          EXPERIENCE_KIND_META[echo.experience.kind].pale,
+                      }}
+                    >
+                      {experienceKindLabel(
+                        echo.experience.kind,
+                        echo.experience.kindLabel,
+                      )}
+                    </span>
+                    <span className="font-mono text-[9px] text-ink/35">
+                      {echo.label}
+                    </span>
+                    <span className="font-mono text-[9px] text-ink/25">
+                      {formatExperienceRange(
+                        echo.experience.start,
+                        echo.experience.end,
+                      )}
+                    </span>
+                  </div>
+                  <p className="mt-2 font-serif text-lg leading-7">
+                    {echo.experience.title}
+                  </p>
+                  <p className="mt-1.5 line-clamp-3 text-[11px] leading-5 text-ink/55">
+                    “{echo.quote}”
+                  </p>
+                  <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap gap-1">
+                      {echo.experience.skills.slice(0, 3).map((skill) => (
+                        <span
+                          key={skill}
+                          className="bg-ink/[0.04] rounded-full px-1.5 py-0.5 font-mono text-[9px] text-ink/45"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
                     <button
                       type="button"
                       onClick={() => onNavigate("experiences")}
-                      className={BTN_LINK}
+                      className="inline-flex min-h-9 items-center text-[10px] text-ink/50 underline underline-offset-4 hover:text-ink"
                     >
-                      经历库
+                      看看原文 →
                     </button>
-                  }
-                >
-                  <TodayExperience
-                    data={experiences}
-                    onOpen={() => onNavigate("experiences")}
-                  />
-                </Panel>
-              </div>
-            </div>
+                  </div>
+                </div>
+              )}
+            </Panel>
+          </div>
+        </div>
 
-            <PageFoot />
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
+        <LedgerHeatmap
+          now={now}
+          ledger={ledger}
+          stats={stats}
+          readiness={readiness}
+          onOpenExperiences={() => onNavigate("experiences")}
+          onOpenResume={() => onNavigate("resume")}
+        />
 
-function TodayExperience({
-  data,
-  onOpen,
-}: {
-  data: ExperienceData | null;
-  onOpen: () => void;
-}) {
-  const items = data?.experiences ?? [];
-
-  if (!items.length) {
-    return (
-      <div className="px-4 py-4 sm:px-5">
-        <p className="text-sm font-medium">还没有记录经历</p>
-        <p className="mt-1 text-[11px] leading-5 text-ink/50">
-          把最近做完的课程设计、比赛或实习记一条；四段式可以先写一句。
-        </p>
-        <button
-          type="button"
-          onClick={onOpen}
-          className="mt-1 inline-flex min-h-11 items-center text-xs text-ink/55 underline underline-offset-4 hover:text-ink sm:min-h-9"
-        >
-          去记第一条 →
-        </button>
-      </div>
-    );
-  }
-
-  const activity = summarizeExperienceActivity(items);
-  const latest = activity.latest;
-  if (!latest) return null;
-
-  const meta = EXPERIENCE_KIND_META[latest.kind];
-
-  return (
-    <div className="px-4 py-4 sm:px-5">
-      <div className="flex items-baseline justify-between gap-2">
-        <p className="text-sm font-medium">
-          {activity.stale ? "最近没记经历" : "经历在更新"}
-        </p>
-        <span className="shrink-0 font-mono text-[9px] tabular-nums text-ink/35">
-          {activity.total} 条
-        </span>
-      </div>
-      <p className="mt-1 text-[11px] leading-5 text-ink/50">
-        {activity.stale
-          ? `最近 30 天没有新增经历。距上次记录 ${activity.daysSinceLatest ?? 0} 天，趁还记得，把最近做完的事补一条。`
-          : `${relativeDaysLabel(activity.daysSinceLatest)}新增了一条经历。`}
-      </p>
-
-      <button
-        type="button"
-        onClick={onOpen}
-        className="border-rule hover:bg-ink/[0.02] mt-3 block w-full rounded-lg border border-dashed px-3 py-2.5 text-left"
-      >
-        <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+        <p className="mt-6 flex items-center gap-2 text-[11px] text-ink/35">
           <span
-            className="rounded-full px-1.5 py-0.5 font-mono text-[9px]"
-            style={{ color: meta.color, backgroundColor: meta.pale }}
-          >
-            {experienceKindLabel(latest.kind, latest.kindLabel)}
-          </span>
-          <span className="font-mono text-[9px] text-ink/40">
-            {formatExperienceRange(latest.start, latest.end)}
-          </span>
-          {latest.confidence === "low" && (
-            <span className="bg-amber/15 rounded-full px-1.5 py-0.5 font-mono text-[9px] text-amber">
-              待确认
-            </span>
-          )}
-        </span>
-        <span className="mt-1.5 line-clamp-1 block text-xs font-medium">
-          {latest.title}
-        </span>
-        {latest.org && (
-          <span className="mt-0.5 line-clamp-1 block text-[10px] text-ink/40">
-            {latest.org}
-          </span>
-        )}
-      </button>
-
-      <div className="mt-2 flex items-center justify-between gap-2">
-        <button
-          type="button"
-          onClick={onOpen}
-          className="inline-flex min-h-11 items-center text-[11px] text-ink/50 underline underline-offset-4 hover:text-ink sm:min-h-9"
-        >
-          查看时间线
-        </button>
-        <span className="font-mono text-[9px] tabular-nums text-ink/30">
-          四段式 {fourPartCount(latest)}/4
-        </span>
+            aria-hidden="true"
+            className="h-1.5 w-1.5 rounded-full bg-[#6f8f6a]"
+          />
+          数据只存在你的浏览器 · 记录只在本机，不会推送
+        </p>
       </div>
-    </div>
-  );
-}
-
-function Stat({
-  label,
-  value,
-  unit,
-  hint,
-  divider,
-}: {
-  label: string;
-  value: string;
-  unit: string;
-  hint: string;
-  divider?: boolean;
-}) {
-  return (
-    <div
-      className={[
-        "px-3 py-3 sm:px-5 sm:py-4",
-        divider ? "border-rule border-r" : "",
-      ].join(" ")}
-    >
-      <p className="font-mono text-[9px] tracking-[0.12em] text-ink/40">
-        {label}
-      </p>
-      <p className="mt-1 flex flex-wrap items-baseline gap-x-1">
-        <span className="font-serif text-2xl leading-none tabular-nums sm:text-3xl">
-          {value}
-        </span>
-        <span className="text-[10px] text-ink/40">{unit}</span>
-      </p>
-      <p className="mt-1 truncate text-[10px] leading-4 text-ink/35">{hint}</p>
     </div>
   );
 }
@@ -769,137 +760,16 @@ function Panel({
   );
 }
 
-function TodayCourses({
-  timetable,
-  currentWeek,
-  sessions,
-  next,
-  onTimetable,
-}: {
-  timetable: TimetableData | null;
-  currentWeek: number | null;
-  sessions: DaySession[];
-  next: NextTeachingDay | null;
-  onTimetable: () => void;
-}) {
-  if (!timetable) {
-    return (
-      <EmptyBlock
-        text="还没有课表，无法判断今天上什么。"
-        actionLabel="去导入课表"
-        onAction={onTimetable}
-      />
-    );
-  }
-
-  if (currentWeek === null) {
-    return (
-      <EmptyBlock
-        text={
-          timetable.semester.startDate
-            ? `今天不在课表的周次范围内（共 ${timetable.semester.totalWeeks} 周）。`
-            : "课表缺少开学日期，无法定位今天属于第几周。"
-        }
-        actionLabel="去课表补全"
-        onAction={onTimetable}
-      />
-    );
-  }
-
-  if (sessions.length > 0) {
-    return (
-      <ul className="px-4 py-4 sm:px-5">
-        {sessions.map(({ course, session }, index) => {
-          const palette = PALETTE[course.color ?? "slate"] ?? PALETTE.slate;
-          const meta = [course.location, course.teacher]
-            .filter(Boolean)
-            .join(" · ");
-          return (
-            <li
-              key={`${course.id}-${index}`}
-              className="border-rule flex items-start gap-3 border-t py-3 first:border-t-0 first:pt-0 last:pb-0"
-            >
-              <div
-                className="w-14 shrink-0 rounded-lg border px-1 py-1.5 text-center"
-                style={{
-                  backgroundColor: palette.bg,
-                  borderColor: palette.border,
-                  color: palette.text,
-                }}
-              >
-                <p className="font-mono text-[11px] leading-4 tabular-nums">
-                  {session.startPeriod}-{session.endPeriod}
-                </p>
-                <p className="text-[9px] leading-3 opacity-60">节</p>
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm leading-5 font-medium">{course.name}</p>
-                {meta && (
-                  <p className="mt-1 text-[11px] leading-5 text-ink/55">
-                    {meta}
-                  </p>
-                )}
-                <p className="mt-0.5 font-mono text-[10px] text-ink/35">
-                  {formatWeeksLabel(session.weeks)}
-                </p>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
-    );
-  }
-
-  return (
-    <div className="px-4 py-4 sm:px-5">
-      <p className="text-sm leading-6 text-ink/60">今天没有课。</p>
-      {next ? (
-        <div className="border-rule mt-3 rounded-lg border border-dashed px-3 py-3">
-          <p className="font-mono text-[10px] tracking-[0.04em] text-ink/40">
-            下一上课日 · {DAY_LABELS[dayIndexOf(next.date)]}{" "}
-            {next.date.format("M月D日")} · 第 {next.week} 周
-          </p>
-          <ul className="mt-2 space-y-2">
-            {next.sessions.slice(0, 3).map(({ course, session }, index) => (
-              <li
-                key={`${course.id}-${index}`}
-                className="flex items-baseline gap-2 text-xs"
-              >
-                <span className="w-12 shrink-0 font-mono text-[10px] tabular-nums text-ink/45">
-                  {session.startPeriod}-{session.endPeriod} 节
-                </span>
-                <span className="truncate text-ink/75">{course.name}</span>
-                {course.location && (
-                  <span className="ml-auto hidden max-w-[45%] truncate text-[10px] text-ink/35 sm:block">
-                    {course.location}
-                  </span>
-                )}
-              </li>
-            ))}
-          </ul>
-          {next.sessions.length > 3 && (
-            <p className="mt-2 text-[10px] text-ink/35">
-              还有 {next.sessions.length - 3} 个时段。
-            </p>
-          )}
-        </div>
-      ) : (
-        <p className="mt-2 text-[11px] leading-5 text-ink/40">
-          接下来一周也没有排课，可切换到其他周查看课表。
-        </p>
-      )}
-    </div>
-  );
-}
-
 function PendingRow({
   item,
+  now,
   onToggle,
 }: {
   item: Assignment;
+  now: Dayjs;
   onToggle: () => void;
 }) {
-  const tier = ddlTier(item.due);
+  const tier = ddlTier(item.due, now);
   const meta = [item.courseName, ASSIGNMENT_KIND_LABELS[item.kind]]
     .filter(Boolean)
     .join(" · ");
@@ -941,7 +811,7 @@ function PendingRow({
             tierTextClass(tier),
           ].join(" ")}
         >
-          {dueLabel(item.due)}
+          {dueLabel(item.due, now)}
         </p>
         {TIER_TEXT[tier] && (
           <p
@@ -955,6 +825,23 @@ function PendingRow({
         )}
       </div>
     </li>
+  );
+}
+
+function CheckGlyph() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 16 16"
+      className="h-3.5 w-3.5 shrink-0 text-[#6f8f6a]"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M3 8.5 6.2 11.5 13 4.5" />
+    </svg>
   );
 }
 
@@ -978,14 +865,5 @@ function EmptyBlock({
         {actionLabel} →
       </button>
     </div>
-  );
-}
-
-function PageFoot() {
-  return (
-    <p className="mt-6 flex items-center gap-2 text-[11px] text-ink/35">
-      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
-      数据只存在你的浏览器 · 提醒只在本机，不会推送
-    </p>
   );
 }
