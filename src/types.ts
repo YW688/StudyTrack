@@ -224,6 +224,8 @@ export interface RequirementSkillRule {
   any?: string[];
 }
 
+export type JobSourceKind = "official" | "custom";
+
 export interface JobPosting {
   id: string;
   company: string;
@@ -238,6 +240,10 @@ export interface JobPosting {
   skills: string[];
   gradeFit: number[];
   collectedAt: string;
+  sourceName: string;
+  sourceUrl?: string;
+  sourceKind: JobSourceKind;
+  verifiedAt: string;
   custom?: boolean;
 }
 

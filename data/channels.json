@@ -21,7 +21,7 @@
     "id": "ch-alibaba",
     "name": "阿里巴巴校园招聘",
     "type": "campus",
-    "entryUrl": "https://talent.alibaba.com/campus",
+    "entryUrl": "https://campus-talent.alibaba.com/campus/index",
     "openMonths": [8, 9, 10, 11],
     "fitGrade": [3, 4, 5]
   },

@@ -26,7 +26,7 @@ import {
 import { createJobIndex, searchJobScores } from "./bm25";
 
 export const JOB_LIBRARY_NOTE =
-  "示例岗位库：人工整理常见校招 / 实习要求，仅用于演示匹配逻辑；投递前请以企业官网为准。";
+  "岗位方向库：人工整理自企业官方校园招聘页面，链接直达官网；具体在招职位、城市与截止时间以官网为准。";
 
 export const CHANNEL_LIBRARY_NOTE =
   "学径不抓取招聘平台内容，只提供官方入口；开放月份与具体岗位以官网为准。";
@@ -60,11 +60,19 @@ const jobSchema = z
     skills: z.array(z.string().min(1).max(30)).min(1).max(12),
     gradeFit: z.array(z.number().int().min(1).max(5)).min(1).max(5),
     collectedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    sourceName: z.string().min(1).max(60),
+    sourceUrl: z.string().url().max(220).optional(),
+    sourceKind: z.enum(["official", "custom"]),
+    verifiedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     custom: z.boolean().optional(),
   })
   .refine((job) => job.requirements.length === job.requirementSkills.length, {
     message: "岗位要求与技能规则数量不一致",
-  });
+  })
+  .refine(
+    (job) => job.sourceKind !== "official" || Boolean(job.sourceUrl),
+    { message: "官方岗位缺少来源链接" },
+  );
 
 const channelSchema = z.object({
   id: z.string().min(1).max(60),
@@ -1144,6 +1152,9 @@ export function parsePastedJd(input: PastedJdInput): ParsedJdResult {
     skills,
     gradeFit: [1, 2, 3, 4, 5],
     collectedAt: new Date().toISOString().slice(0, 10),
+    sourceName: "粘贴的 JD",
+    sourceKind: "custom",
+    verifiedAt: new Date().toISOString().slice(0, 10),
     custom: true,
   };
 

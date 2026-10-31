@@ -26,6 +26,11 @@ const THEMES = [
     name: "霞光",
     swatch: "linear-gradient(135deg,#ccfbff,#ef96c5)",
   },
+  {
+    id: "sprout",
+    name: "新芽",
+    swatch: "linear-gradient(135deg,#f8fff5,#c6e6b3 45%,#688f40)",
+  },
 ] as const;
 
 type LandingTheme = (typeof THEMES)[number]["id"];

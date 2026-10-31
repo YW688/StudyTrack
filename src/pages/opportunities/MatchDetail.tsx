@@ -21,6 +21,8 @@ const SOURCE_LABELS: Record<MatchEvidenceSource, string> = {
   tag: "技能标签",
 };
 
+const BTN_PRIMARY =
+  "bg-ink text-paper hover:bg-ink/90 inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg px-4 text-xs font-medium";
 const BTN_SECONDARY =
   "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-white px-3 text-xs disabled:cursor-not-allowed disabled:opacity-40";
 
@@ -105,7 +107,10 @@ export default function MatchDetail({
           }：${hit.quote}`,
       ),
       ...match.gaps.map((gap) => `[待补] ${gap.requirement}`),
-      "来源：学径本机简历与经历；岗位信息以企业官网为准。",
+      ...(job.sourceUrl
+        ? [`岗位来源：${job.sourceName}（${job.sourceUrl}）`]
+        : []),
+      "匹配依据：学径本机简历与经历；岗位信息以企业官网为准。",
     ];
     const ok = await copyText(lines.join("\n"));
     setCopied(ok);
@@ -119,7 +124,7 @@ export default function MatchDetail({
           <button
             type="button"
             onClick={onBack}
-            className="-ml-1 mb-3 inline-flex min-h-9 items-center rounded px-1 text-[11px] text-ink/50 hover:text-ink lg:hidden"
+            className="-ml-1 mb-3 inline-flex min-h-9 items-center rounded px-1 text-[11px] text-ink/50 hover:text-ink xl:hidden"
           >
             <span aria-hidden="true" className="mr-1">
               ←
@@ -161,7 +166,9 @@ export default function MatchDetail({
               <MetaChip>{formatGradeFit(job.gradeFit)}</MetaChip>
               <MetaChip>
                 {job.family}
-                {job.track !== "自定义" ? ` · ${job.track}` : ""}
+                {job.track !== "自定义" && job.track !== job.family
+                  ? ` · ${job.track}`
+                  : ""}
               </MetaChip>
             </div>
           </div>
@@ -199,11 +206,29 @@ export default function MatchDetail({
           </span>
         </div>
 
-        <p className="mt-2 text-[10px] text-ink/35">
-          {job.custom
-            ? "粘贴的岗位 · 只在当前页面有效，刷新后消失"
-            : `示例岗位库 · 收集于 ${formatCollectedAt(job.collectedAt)}`}
-        </p>
+        {job.custom ? (
+          <p className="mt-2 text-[10px] leading-5 text-ink/35">
+            粘贴的 JD · 只在当前页面有效，刷新后消失
+          </p>
+        ) : (
+          <div className="border-rule mt-3 border-t pt-2.5">
+            <p className="text-[10px] leading-5 text-ink/45">
+              来源：{job.sourceName} · 官方招聘页 · 核对{" "}
+              {formatCollectedAt(job.verifiedAt)}
+            </p>
+            {job.sourceUrl && (
+              <a
+                href={job.sourceUrl}
+                target="_blank"
+                rel="noreferrer noopener"
+                title={job.sourceUrl}
+                className="mt-0.5 block truncate font-mono text-[9px] leading-4 text-ink/35 underline decoration-ink/20 underline-offset-2 hover:text-ink"
+              >
+                {job.sourceUrl}
+              </a>
+            )}
+          </div>
+        )}
       </header>
 
       <div className="border-rule border-b px-4 py-4 sm:px-5">
@@ -258,6 +283,9 @@ export default function MatchDetail({
             {match.eligibility.length}
           </span>
         </div>
+        <p className="mt-1 text-[10px] leading-5 text-ink/35">
+          方向级要求，供自查使用；投递前以官网职位说明为准。
+        </p>
 
         <ol className="border-rule mt-2 divide-y divide-rule border-t">
           {job.requirements.map((requirement, index) => {
@@ -432,6 +460,30 @@ export default function MatchDetail({
 
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex flex-wrap items-center gap-2">
+            {job.sourceUrl && (
+              <a
+                href={job.sourceUrl}
+                target="_blank"
+                rel="noreferrer noopener"
+                className={BTN_PRIMARY}
+              >
+                去官网查看岗位
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  className="h-3 w-3"
+                >
+                  <path
+                    d="M4 2.5h5.5V8M9.5 2.5 2.5 9.5"
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </a>
+            )}
             <button
               type="button"
               onClick={() => void handleCopy()}
@@ -448,7 +500,7 @@ export default function MatchDetail({
             </button>
           </div>
           <p className="max-w-xs text-[10px] leading-5 text-ink/35">
-            岗位信息以企业官网为准；学径不代投、不抓取招聘平台。
+            匹配分由本机经历计算，不代表企业筛选结果；岗位以官网为准，学径不代投。
           </p>
         </div>
         {copyError && (

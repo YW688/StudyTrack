@@ -120,6 +120,30 @@
   --lp-tone-6: #ef96c5;
 }
 
+.landing-theme[data-theme="sprout"] {
+  --lp-ink: #23301a;
+  --lp-ink-soft: #526047;
+  --lp-ink-faint: #5f6d52;
+  --lp-bg: #f1f6ea;
+  --lp-bg-top: #fbfff7;
+  --lp-bg-bottom: #e4eedc;
+  --lp-surface: #f8fff5;
+  --lp-surface-2: #ebfae3;
+  --lp-line: rgba(35, 48, 26, 0.13);
+  --lp-line-soft: rgba(35, 48, 26, 0.08);
+  --lp-accent: #688f40;
+  --lp-alert: #9a5137;
+  --lp-cta: #3f5a28;
+  --lp-cta-ink: #f8fff5;
+  --lp-shadow: rgba(50, 70, 35, 0.2);
+  --lp-tone-1: #c6e6b3;
+  --lp-tone-2: #dbf2ce;
+  --lp-tone-3: #ebfae3;
+  --lp-tone-4: #a6cc8f;
+  --lp-tone-5: #f8fff5;
+  --lp-tone-6: #88b06d;
+}
+
 .landing-theme[data-theme="dawn"] .landing-hero {
   background-image:
     radial-gradient(58% 48% at 8% 4%, rgba(204, 251, 255, 0.62), transparent 70%),
@@ -160,6 +184,26 @@
   box-shadow:
     0 24px 44px -24px rgba(160, 100, 140, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.landing-theme[data-theme="sprout"] .landing-hero {
+  background-image:
+    radial-gradient(62% 52% at 6% 2%, rgba(166, 204, 143, 0.46), transparent 72%),
+    radial-gradient(58% 50% at 96% 8%, rgba(219, 242, 206, 0.62), transparent 74%),
+    radial-gradient(
+      120% 72% at 50% -8%,
+      var(--lp-bg-top) 0%,
+      var(--lp-bg) 55%,
+      var(--lp-bg-bottom) 100%
+    );
+}
+
+.landing-theme[data-theme="sprout"] .landing-hero::before {
+  background-image: radial-gradient(
+    closest-side,
+    rgba(136, 176, 109, 0.2),
+    transparent 76%
+  );
 }
 
 .landing-hero {

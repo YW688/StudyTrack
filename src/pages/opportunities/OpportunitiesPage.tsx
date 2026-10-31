@@ -139,6 +139,12 @@ export default function OpportunitiesPage({
     ? jobById.get(selectedMatch.jobId) ?? null
     : null;
 
+  useEffect(() => {
+    document
+      .getElementById("match-detail-pane")
+      ?.scrollTo({ top: 0 });
+  }, [selectedMatch?.jobId]);
+
   const cityOptions = useMemo(
     () =>
       [...new Set(allJobs.map((job) => job.city))]
@@ -251,7 +257,7 @@ export default function OpportunitiesPage({
 
   function selectJob(id: string) {
     setSelectedId(id);
-    if (!window.matchMedia("(min-width: 1024px)").matches) {
+    if (!window.matchMedia("(min-width: 1280px)").matches) {
       setView("detail");
       window.setTimeout(() => {
         document
@@ -643,7 +649,7 @@ export default function OpportunitiesPage({
           </div>
         </section>
 
-        <div className="mt-4 flex items-center justify-between gap-3 lg:hidden">
+        <div className="mt-4 flex items-center justify-between gap-3 xl:hidden">
           <div
             className="border-rule inline-flex rounded-lg border bg-white p-0.5"
             aria-label="切换岗位列表与详情"
@@ -676,16 +682,16 @@ export default function OpportunitiesPage({
           </span>
         </div>
 
-        <div className="mt-3 grid gap-4 lg:grid-cols-[minmax(0,410px)_minmax(0,1fr)] lg:items-start">
+        <div className="mt-3 grid gap-4 xl:grid-cols-[minmax(0,400px)_minmax(0,1fr)] xl:items-start 2xl:grid-cols-[minmax(0,430px)_minmax(0,1fr)]">
           <section
             id="job-list"
             aria-label="岗位列表"
-            className={view === "list" ? "scroll-mt-4" : "hidden lg:block"}
+            className={view === "list" ? "scroll-mt-4" : "hidden xl:block"}
           >
             <div className="mb-2 flex items-baseline justify-between gap-2 px-1">
               <h2 className="text-xs font-medium">推荐结果</h2>
               <span className="font-mono text-[9px] tracking-[0.08em] text-ink/35">
-                按匹配分降序
+                按匹配分降序 · 附官网
               </span>
             </div>
 
@@ -703,17 +709,20 @@ export default function OpportunitiesPage({
                 );
 
                 return (
-                  <li key={job.id}>
+                  <li
+                    key={job.id}
+                    className={[
+                      "overflow-hidden rounded-xl border bg-white transition-colors",
+                      selected
+                        ? "border-ink/35 ring-1 ring-ink/10"
+                        : "border-rule hover:border-ink/25 hover:bg-ink/[0.015]",
+                    ].join(" ")}
+                  >
                     <button
                       type="button"
                       onClick={() => selectJob(job.id)}
                       aria-current={selected ? "true" : undefined}
-                      className={[
-                        "focus-visible:ring-amber w-full rounded-xl border bg-white p-3.5 text-left transition-colors focus-visible:ring-2 focus-visible:outline-none",
-                        selected
-                          ? "border-ink/35 ring-1 ring-ink/10"
-                          : "border-rule hover:border-ink/25 hover:bg-ink/[0.015]",
-                      ].join(" ")}
+                      className="focus-visible:ring-amber w-full p-3.5 text-left focus-visible:ring-2 focus-visible:ring-inset focus-visible:outline-none"
                     >
                       <span className="flex items-start gap-3">
                         <span
@@ -788,6 +797,41 @@ export default function OpportunitiesPage({
                         </span>
                       </span>
                     </button>
+                    <div className="border-rule flex items-center justify-between gap-2 border-t pr-1.5 pl-3.5">
+                      <span className="min-w-0 truncate font-mono text-[9px] text-ink/35">
+                        {job.custom
+                          ? "粘贴 JD · 仅当前页面"
+                          : `来源：${job.sourceName}`}
+                      </span>
+                      {job.sourceUrl ? (
+                        <a
+                          href={job.sourceUrl}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="text-ink/55 hover:text-ink inline-flex min-h-11 shrink-0 items-center gap-1 text-[10px] font-medium underline decoration-ink/20 underline-offset-2 xl:min-h-8"
+                        >
+                          查看官网
+                          <svg
+                            aria-hidden="true"
+                            viewBox="0 0 12 12"
+                            fill="none"
+                            className="h-2.5 w-2.5"
+                          >
+                            <path
+                              d="M4 2.5h5.5V8M9.5 2.5 2.5 9.5"
+                              stroke="currentColor"
+                              strokeWidth="1.2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </a>
+                      ) : (
+                        <span className="font-mono text-[9px] text-ink/30">
+                          本地匹配
+                        </span>
+                      )}
+                    </div>
                   </li>
                 );
               })}
@@ -803,7 +847,7 @@ export default function OpportunitiesPage({
                 <p className="mx-auto mt-1.5 max-w-sm text-[11px] leading-5 text-ink/45">
                   {allJobs.length === 0
                     ? "仍可粘贴一份 JD，在本地对照经历。"
-                    : "换个关键词或重置筛选。示例岗位库不覆盖所有城市与方向。"}
+                    : "换个关键词或重置筛选。岗位方向库只收录已核对的官方校招与实习方向。"}
                 </p>
                 <div className="mt-3 flex flex-wrap justify-center gap-2">
                   {filtersActive && (
@@ -830,8 +874,8 @@ export default function OpportunitiesPage({
           <div
             id="match-detail-pane"
             className={[
-              "scroll-mt-4",
-              view === "detail" ? "" : "hidden lg:block",
+              "scroll-mt-4 xl:sticky xl:top-4 xl:max-h-[calc(100dvh-2rem)] xl:overflow-y-auto xl:overscroll-contain xl:pr-1 xl:[scrollbar-width:thin]",
+              view === "detail" ? "" : "hidden xl:block",
             ].join(" ")}
           >
             {selectedJob && selectedMatch ? (
@@ -1006,7 +1050,7 @@ export default function OpportunitiesPage({
 
         <footer className="border-rule mt-8 border-t py-5">
           <p className="text-[10px] leading-5 text-ink/35">
-            匹配、检索与数据存储均在本机浏览器完成；示例岗位与真实企业无关，渠道入口指向官方页面。
+            匹配、检索与数据存储均在本机浏览器完成；岗位方向整理自企业官方校园招聘页面，链接直达官网，具体在招职位与截止时间以官网为准；学径不代投、不抓取招聘平台。
           </p>
         </footer>
       </div>
