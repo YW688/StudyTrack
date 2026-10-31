@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from "react";
+import BrandMark from "./BrandMark";
 
 const NAV = [
   { id: "today", no: "01", label: "今日" },
@@ -57,15 +58,20 @@ export default function AppShell({
             className="-mx-2 flex min-h-11 items-center rounded-md px-2 focus-visible:ring-2 focus-visible:ring-amber focus-visible:outline-none"
             aria-label="返回首页"
           >
-            <span className="flex items-baseline gap-2.5">
+            <span className="flex items-center gap-2.5">
               <span
                 data-brand-mark="true"
-                className="font-serif text-xl tracking-[0.02em]"
+                className="app-brand-mark inline-flex h-[30px] w-[30px] shrink-0"
               >
-                学径
+                <BrandMark size={30} />
               </span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink/45">
-                StudyTrack
+              <span className="flex items-baseline gap-2">
+                <span className="font-serif text-xl leading-none tracking-[0.02em]">
+                  学径
+                </span>
+                <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-ink/45">
+                  StudyTrack
+                </span>
               </span>
             </span>
           </button>

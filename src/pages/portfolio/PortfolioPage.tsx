@@ -5,6 +5,7 @@ import {
   decodePortfolio,
   portfolioIdFromHash,
 } from "../../lib/portfolio";
+import BrandMark from "../../components/BrandMark";
 
 interface PortfolioPageProps {
   hash: string;
@@ -92,9 +93,10 @@ export default function PortfolioPage({ hash }: PortfolioPageProps) {
         <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-2 px-4 py-3 sm:px-6">
           <a
             href="#/"
+            aria-label="返回学径首页"
             className="hover:text-ink inline-flex min-h-11 items-center gap-2 text-xs text-ink/55"
           >
-            <span aria-hidden="true">←</span>
+            <BrandMark size={22} className="app-brand-mark shrink-0" />
             学径
           </a>
           <div className="flex flex-wrap items-center gap-2">

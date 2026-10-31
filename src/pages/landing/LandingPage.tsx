@@ -11,6 +11,7 @@ import {
   ResumeShowcase,
   WeekShowcase,
 } from "./Showcases";
+import BrandMark from "../../components/BrandMark";
 
 type StartState = "idle" | "loading" | "error";
 
@@ -196,48 +197,48 @@ export default function LandingPage({ onStart }: LandingPageProps) {
         <section className="landing-hero flex min-h-dvh flex-col overflow-hidden px-4 sm:px-8">
           <div aria-hidden="true" className="landing-noise" />
 
-          <header className="landing-glass-nav relative z-20 mx-auto mt-4 flex w-fit max-w-full items-center gap-3 rounded-full p-2 sm:mt-6 sm:gap-8">
-            <div className="flex shrink-0 items-center gap-2.5">
-              <span
-                aria-hidden="true"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--lp-line)] bg-white/55 font-serif text-[15px] leading-none"
-              >
-                径
-              </span>
+          <header className="landing-glass-nav relative z-20 mx-auto mt-4 flex w-fit max-w-full items-center gap-3 rounded-full py-2 pr-2 pl-3 sm:mt-6 sm:gap-5 sm:pl-3.5">
+            <div className="flex shrink-0 items-center gap-3 sm:gap-3.5">
+              <BrandMark
+                size={32}
+                className="landing-brand-mark h-8 w-8 shrink-0 sm:h-9 sm:w-9"
+              />
               <span className="flex items-baseline gap-2">
                 <span className="font-serif text-[19px] tracking-[0.04em]">
                   学径
                 </span>
-                <span className="lp-faint hidden text-[11px] tracking-[0.16em] sm:inline">
+                <span className="lp-faint hidden text-[10px] tracking-[0.12em] sm:inline">
                   StudyTrack
                 </span>
               </span>
             </div>
             <nav
               aria-label="页面导航"
-              className="flex min-w-0 items-center gap-1.5 sm:gap-2"
+              className="flex min-w-0 items-center gap-1.5 md:gap-1"
             >
               <a
                 href="#path"
-                className="lp-soft hidden min-h-11 items-center rounded-full px-4 text-[14px] tracking-[0.01em] transition-colors hover:text-[color:var(--lp-ink)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-accent)] md:inline-flex"
+                className="lp-soft hidden min-h-11 items-center rounded-full px-3.5 text-[13.5px] tracking-[0.01em] transition-colors hover:text-[color:var(--lp-ink)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-accent)] md:inline-flex"
               >
                 四个年级
               </a>
               <a
                 href="#privacy"
-                className="lp-soft hidden min-h-11 items-center rounded-full px-4 text-[14px] tracking-[0.01em] transition-colors hover:text-[color:var(--lp-ink)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-accent)] md:inline-flex"
+                className="lp-soft hidden min-h-11 items-center rounded-full px-3.5 text-[13.5px] tracking-[0.01em] transition-colors hover:text-[color:var(--lp-ink)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-accent)] md:inline-flex"
               >
                 数据说明
               </a>
-              <ThemeToggle
-                theme={theme}
-                onToggle={() => setTheme((current) => nextTheme(current))}
-              />
-              <StartButton
-                state={state}
-                size="sm"
-                onClick={() => void handleStart()}
-              />
+              <div className="flex items-center gap-1.5 md:gap-2">
+                <ThemeToggle
+                  theme={theme}
+                  onToggle={() => setTheme((current) => nextTheme(current))}
+                />
+                <StartButton
+                  state={state}
+                  size="sm"
+                  onClick={() => void handleStart()}
+                />
+              </div>
             </nav>
           </header>
 
@@ -415,14 +416,10 @@ export default function LandingPage({ onStart }: LandingPageProps) {
                   StudyTrack 2026
                 </p>
               </div>
-              <span
-                aria-hidden="true"
-                className="tone-3 inline-flex h-14 w-14 -rotate-3 flex-col items-center justify-center rounded-[14px] border border-[color:var(--lp-line)] font-serif text-[15px] leading-[1.2] text-[color:var(--lp-ink)] shadow-[0_14px_24px_-18px_var(--lp-shadow)]"
-              >
-                学
-                <br />
-                径
-              </span>
+              <BrandMark
+                size={56}
+                className="landing-brand-mark landing-footer-mark shrink-0"
+              />
             </div>
           </Reveal>
 
@@ -519,7 +516,7 @@ function ThemeToggle({
       onClick={onToggle}
       aria-label={`切换配色 当前${current.name} 下一套${next.name}`}
       title={`切换到${next.name}`}
-      className="lp-theme-toggle inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-full px-4 text-[13px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-accent)]"
+      className="lp-theme-toggle inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-full px-3.5 text-[12.5px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-accent)]"
     >
       <span
         aria-hidden="true"

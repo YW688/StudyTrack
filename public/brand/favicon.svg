@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title desc">
+  <title id="title">学径</title>
+  <desc id="desc">黑底白画：帆船与四角星，为 16px 小尺寸加粗的版本。</desc>
+  <rect width="256" height="256" rx="56" fill="#0A0A0B"/>
+  <path fill="#F7F3EA" d="M200 40C203 54 210 61 224 64C210 67 203 74 200 88C197 74 190 67 176 64C190 61 197 54 200 40Z"/>
+  <path fill="#F7F3EA" d="M44 174L204 168C196 188 174 204 144 204H86C62 204 48 192 44 174Z"/>
+  <path d="M124 172V82" fill="none" stroke="#F7F3EA" stroke-width="12" stroke-linecap="round"/>
+  <path fill="#F7F3EA" d="M130 88C158 100 180 128 188 164H130Z"/>
+</svg>

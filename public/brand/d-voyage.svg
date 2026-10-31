@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title desc">
+  <title id="title">学径 · 远航</title>
+  <desc id="desc">黑底白画：一叶帆船驶过海面，右上方一颗四角星指引方向。</desc>
+  <rect width="256" height="256" rx="56" fill="#0A0A0B"/>
+  <path fill="#F7F3EA" d="M196 46C199 59 205 65 218 68C205 71 199 77 196 90C193 77 187 71 174 68C187 65 193 59 196 46Z"/>
+  <path fill="#F7F3EA" d="M52 178L196 172C188 188 168 200 142 200H90C68 200 56 190 52 178Z"/>
+  <path d="M122 175V96" fill="none" stroke="#F7F3EA" stroke-width="10" stroke-linecap="round"/>
+  <path fill="#F7F3EA" d="M127 102C151 112 172 136 179 168H127Z"/>
+  <g fill="none" stroke="#F7F3EA" stroke-width="7" stroke-linecap="round">
+    <path d="M42 212C58 204 76 220 94 211"/>
+    <path d="M156 212C174 204 192 220 212 211"/>
+  </g>
+</svg>

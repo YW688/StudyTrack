@@ -5,6 +5,7 @@ import {
   useState,
   type CSSProperties,
 } from "react";
+import BrandMark from "./BrandMark";
 
 export type RitualTheme = "dawn" | "sprout" | "sunset";
 
@@ -32,7 +33,7 @@ export default function EntryRitual({
 }: EntryRitualProps) {
   const [phase, setPhase] = useState<Phase>("poem");
   const [flight, setFlight] = useState<CSSProperties | null>(null);
-  const markRef = useRef<HTMLSpanElement>(null);
+  const markRef = useRef<HTMLDivElement>(null);
   const doneRef = useRef(false);
 
   const finish = useCallback(() => {
@@ -157,14 +158,18 @@ export default function EntryRitual({
       </div>
 
       <div className="entry-ritual__mark-wrap">
-        <span
+        <div
           ref={markRef}
           className="entry-ritual__mark"
           style={flight ?? undefined}
           aria-hidden="true"
         >
-          学径
-        </span>
+          <span className="entry-ritual__logo-bob">
+            <span className="entry-ritual__logo-in">
+              <BrandMark className="entry-ritual__logo" />
+            </span>
+          </span>
+        </div>
         <span className="entry-ritual__caption" aria-hidden="true">
           记录大学的点点滴滴
         </span>
