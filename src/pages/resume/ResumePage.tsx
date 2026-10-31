@@ -47,9 +47,9 @@ interface ResumePageProps {
 }
 
 const BTN_PRIMARY =
-  "bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-4 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-40";
+  "bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-4 text-xs font-medium disabled:cursor-not-allowed disabled:bg-ink/10 disabled:text-ink/40";
 const BTN_SECONDARY =
-  "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-white px-3 text-xs disabled:cursor-not-allowed disabled:opacity-40";
+  "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-surface px-3 text-xs disabled:cursor-not-allowed disabled:opacity-40";
 
 export default function ResumePage({
   experiences,
@@ -565,11 +565,11 @@ export default function ResumePage({
         {notice && (
           <p
             role="status"
-            className="resume-banner border-rule mt-4 flex items-center gap-2 rounded-lg border bg-white px-3 py-2 text-xs text-ink/60"
+            className="resume-banner border-rule mt-4 flex items-center gap-2 rounded-lg border bg-surface px-3 py-2 text-xs text-ink/60"
           >
             <span
               aria-hidden="true"
-              className="h-1.5 w-1.5 shrink-0 rounded-full bg-amber"
+              className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
             />
             {notice}
           </p>
@@ -601,7 +601,7 @@ export default function ResumePage({
 
         {previewSnapshot ? (
           <div className="mt-4">
-            <div className="resume-banner border-rule flex flex-col gap-3 rounded-xl border bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="resume-banner border-rule flex flex-col gap-3 rounded-xl border bg-surface px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm font-medium">
                   正在预览 v{previewSnapshot.version}
@@ -659,7 +659,7 @@ export default function ResumePage({
           <>
             <div className="resume-toolbar mt-4 flex items-center justify-between gap-3 lg:hidden">
               <div
-                className="border-rule inline-flex rounded-lg border bg-white p-0.5"
+                className="border-rule inline-flex rounded-lg border bg-surface p-0.5"
                 aria-label="切换经历池与预览"
               >
                 <button

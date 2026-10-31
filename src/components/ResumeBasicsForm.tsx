@@ -9,7 +9,7 @@ interface ResumeBasicsFormProps {
 }
 
 const FIELD =
-  "border-rule focus:border-ink/35 focus:ring-2 focus:ring-amber/25 min-h-11 w-full rounded-lg border bg-white px-3 text-sm text-ink outline-none transition-colors placeholder:text-ink/25";
+  "border-rule focus:border-ink/35 focus:ring-2 focus:ring-accent/25 min-h-11 w-full rounded-lg border bg-surface px-3 text-sm text-ink outline-none transition-colors placeholder:text-ink/25";
 const LABEL =
   "mb-1.5 block font-mono text-[9px] tracking-[0.14em] text-ink/40";
 
@@ -26,7 +26,7 @@ export default function ResumeBasicsForm({
   return (
     <section
       id="resume-basics"
-      className="resume-basics border-rule rounded-xl border bg-white"
+      className="resume-basics border-rule rounded-xl border bg-surface"
     >
       <button
         type="button"

@@ -63,7 +63,7 @@ export default function ExperienceCard({
   return (
     <article
       className={[
-        "border-rule rounded-xl border bg-white transition-colors",
+        "border-rule rounded-xl border bg-surface transition-colors",
         experience.confidence === "low"
           ? "border-amber/50 bg-amber/[0.03]"
           : "",

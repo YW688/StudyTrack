@@ -219,11 +219,11 @@ export default function ExperiencesPage({
         {notice && (
           <p
             role="status"
-            className="border-rule mt-4 flex items-center gap-2 rounded-lg border bg-white px-3 py-2 text-xs text-ink/60"
+            className="border-rule mt-4 flex items-center gap-2 rounded-lg border bg-surface px-3 py-2 text-xs text-ink/60"
           >
             <span
               aria-hidden="true"
-              className="h-1.5 w-1.5 rounded-full bg-amber"
+              className="h-1.5 w-1.5 rounded-full bg-accent"
             />
             {notice}
           </p>
@@ -240,7 +240,7 @@ export default function ExperiencesPage({
 
         {items.length === 0 ? (
           <>
-            <section className="border-rule mt-5 rounded-xl border bg-white p-5 sm:p-8">
+            <section className="border-rule mt-5 rounded-xl border bg-surface p-5 sm:p-8">
               <p className="font-mono text-[10px] tracking-[0.16em] text-ink/40">
                 本机还没有经历
               </p>
@@ -304,7 +304,7 @@ export default function ExperiencesPage({
           </>
         ) : (
           <>
-            <section className="border-rule mt-5 overflow-hidden rounded-xl border bg-white">
+            <section className="border-rule mt-5 overflow-hidden rounded-xl border bg-surface">
               <header className="border-rule flex items-center justify-between gap-3 border-b px-4 py-3 sm:px-5">
                 <div>
                   <p className="font-mono text-[9px] tracking-[0.16em] text-ink/40">
@@ -351,7 +351,7 @@ export default function ExperiencesPage({
                           <button
                             type="button"
                             onClick={() => openCreate(termStartMonth(cell.term))}
-                            className="text-amber -ml-2 mt-0.5 inline-flex min-h-11 min-w-11 items-center px-2 text-[10px] underline underline-offset-2"
+                            className="text-accent-ink -ml-2 mt-0.5 inline-flex min-h-11 min-w-11 items-center px-2 text-[10px] underline underline-offset-2"
                           >
                             补记
                           </button>
@@ -434,7 +434,7 @@ export default function ExperiencesPage({
           <p className="flex items-center gap-2 text-[11px] text-ink/35">
             <span
               aria-hidden="true"
-              className="h-1.5 w-1.5 rounded-full bg-amber"
+              className="h-1.5 w-1.5 rounded-full bg-accent"
             />
             数据只存在你的浏览器 · 四段式与证据都可在简历阶段复用
           </p>
@@ -473,7 +473,7 @@ function FilterButton({
         "inline-flex min-h-11 items-center gap-1.5 rounded-full border px-3 text-xs transition-colors sm:min-h-9",
         active
           ? "bg-ink border-ink text-paper"
-          : "border-rule bg-white text-ink/55 hover:bg-ink/[0.03]",
+          : "border-rule bg-surface text-ink/55 hover:bg-ink/[0.03]",
       ].join(" ")}
     >
       {label}

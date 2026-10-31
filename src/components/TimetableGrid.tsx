@@ -100,7 +100,7 @@ export default function TimetableGrid({
   return (
     <>
       <div className="sm:hidden">
-        <div className="border-rule overflow-hidden rounded-xl border bg-white">
+        <div className="border-rule overflow-hidden rounded-xl border bg-surface">
           {DAYS.map((day) => {
             const sessions = byDay.get(day) ?? [];
             if (!sessions.length) return null;
@@ -114,13 +114,13 @@ export default function TimetableGrid({
                 <div
                   className={[
                     "flex items-baseline justify-between px-3 py-2",
-                    isToday ? "bg-amber/[0.07]" : "bg-ink/[0.02]",
+                    isToday ? "bg-accent/[0.10]" : "bg-ink/[0.02]",
                   ].join(" ")}
                 >
                   <p className="text-xs font-medium">
                     {DAY_LABELS[day - 1]}
                     {isToday && (
-                      <span className="ml-2 font-mono text-[10px] text-amber">
+                      <span className="ml-2 font-mono text-[10px] text-accent-ink">
                         今天
                       </span>
                     )}
@@ -178,7 +178,7 @@ export default function TimetableGrid({
         </div>
       </div>
 
-      <div className="border-rule hidden overflow-hidden rounded-xl border bg-white sm:block">
+      <div className="border-rule hidden overflow-hidden rounded-xl border bg-surface sm:block">
         <div className="tt-grid grid">
         <div className="border-rule border-b" />
         {DAYS.map((day) => {
@@ -190,18 +190,23 @@ export default function TimetableGrid({
               className={[
                 "border-rule border-b border-l px-1 py-2 text-center sm:px-2",
                 day >= 6 ? "bg-ink/[0.02]" : "",
-                isToday ? "bg-amber/[0.07]" : "",
+                isToday ? "bg-accent/[0.10]" : "",
               ].join(" ")}
             >
               <p
                 className={[
                   "text-[11px] sm:text-xs",
-                  isToday ? "font-medium text-ink" : "text-ink/70",
+                  isToday ? "font-medium text-accent-ink" : "text-ink/70",
                 ].join(" ")}
               >
                 {DAY_LABELS[day - 1]}
               </p>
-              <p className="mt-0.5 font-mono text-[9px] tabular-nums text-ink/35 sm:text-[10px]">
+              <p
+                className={[
+                  "mt-0.5 font-mono text-[9px] tabular-nums sm:text-[10px]",
+                  isToday ? "text-accent-ink" : "text-ink/35",
+                ].join(" ")}
+              >
                 {isToday ? "今天" : (date ?? "")}
               </p>
             </div>
@@ -224,12 +229,17 @@ export default function TimetableGrid({
 
         {DAYS.map((day) => {
           const sessions = byDay.get(day) ?? [];
+          const isToday = isCurrentWeek && todayDay === day;
           return (
             <div
               key={day}
               className={[
                 "border-rule relative border-l",
-                day >= 6 ? "bg-ink/[0.015]" : "",
+                isToday
+                  ? "bg-accent/[0.035]"
+                  : day >= 6
+                    ? "bg-ink/[0.015]"
+                    : "",
               ].join(" ")}
               style={{ height: "calc(var(--tt-row) * " + maxPeriod + ")" }}
             >

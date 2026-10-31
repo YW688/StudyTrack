@@ -1,9 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #fafaf8;
-  --color-ink: #16233a;
-  --color-rule: #ddd9d0;
+  --color-paper: #f2f5f6;
+  --color-surface: #fbfdfe;
+  --color-ink: #232c33;
+  --color-rule: #d8e0e4;
+  --color-accent: #bd5f90;
+  --color-accent-ink: #8c3f6b;
   --color-amber: #c8842a;
   --color-amber-ink: #8a5511;
 
@@ -12,6 +15,39 @@
     "Source Han Serif SC", "SimSun", Georgia, serif;
   --font-mono: "SFMono-Regular", "JetBrains Mono", Consolas, "Courier New",
     monospace;
+}
+
+/* ---------- App themes (dashboards) ---------- */
+
+html {
+  color-scheme: light;
+}
+
+html[data-app-theme="dawn"] {
+  --color-paper: #f2f5f6;
+  --color-surface: #fbfdfe;
+  --color-ink: #232c33;
+  --color-rule: #d8e0e4;
+  --color-accent: #bd5f90;
+  --color-accent-ink: #8c3f6b;
+}
+
+html[data-app-theme="sprout"] {
+  --color-paper: #f0f5e8;
+  --color-surface: #fafdf5;
+  --color-ink: #22301a;
+  --color-rule: #d7e0cb;
+  --color-accent: #688f40;
+  --color-accent-ink: #45632a;
+}
+
+html[data-app-theme="sunset"] {
+  --color-paper: #fdf3e4;
+  --color-surface: #fffaf1;
+  --color-ink: #3a1d0e;
+  --color-rule: #e7d6bf;
+  --color-accent: #b8460a;
+  --color-accent-ink: #8f3407;
 }
 
 @layer base {
@@ -24,10 +60,14 @@
     background-color: var(--color-paper);
     color: var(--color-ink);
     font-family: var(--font-sans);
+    accent-color: var(--color-accent);
+    transition:
+      background-color 260ms ease,
+      color 260ms ease;
   }
 
   ::selection {
-    background-color: #f0e3cc;
+    background-color: color-mix(in srgb, var(--color-accent) 24%, transparent);
     color: var(--color-ink);
   }
 }
@@ -828,7 +868,7 @@
 .app-brand-mark {
   --mark-tile: #0a0a0b;
   --mark-ink: #f7f3ea;
-  --mark-accent: var(--color-amber);
+  --mark-accent: var(--color-accent);
 }
 
 /* ---------- Entry ritual ---------- */
@@ -1078,7 +1118,7 @@
 .entry-ritual[data-phase="exit"] .entry-ritual__mark {
   --mark-tile: #0a0a0b;
   --mark-ink: #f7f3ea;
-  --mark-accent: var(--color-amber, #c8842a);
+  --mark-accent: var(--color-accent, #c8842a);
 }
 
 .entry-ritual[data-phase="exit"] .entry-ritual__mark {

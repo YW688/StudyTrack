@@ -24,7 +24,7 @@ export const BTN_PRIMARY =
 export const BTN_SECONDARY =
   "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border px-4 text-sm";
 const FIELD =
-  "border-rule focus:border-ink/40 h-10 w-full rounded-md border bg-white px-2 text-sm outline-none";
+  "border-rule focus:border-ink/40 h-10 w-full rounded-md border bg-surface px-2 text-sm outline-none";
 
 export interface ReviewPayload {
   items: ParsedAssignment[];
@@ -184,7 +184,7 @@ export function PasteDialog({
           rows={7}
           autoFocus
           placeholder={SAMPLE_TEXT}
-          className="border-rule focus:border-ink/40 w-full resize-y rounded-lg border bg-white px-3 py-2 text-sm leading-6 outline-none"
+          className="border-rule focus:border-ink/40 w-full resize-y rounded-lg border bg-surface px-3 py-2 text-sm leading-6 outline-none"
         />
       </label>
 
@@ -319,14 +319,14 @@ export function ScreenshotDialog({
           role="status"
           className="flex items-center gap-2 text-sm text-ink/60"
         >
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber" />
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
           正在识别截图，最长等待 45 秒…
         </p>
       )}
 
       {phase !== "working" && (
         <>
-          <div className="border-rule rounded-xl border bg-white p-4">
+          <div className="border-rule rounded-xl border bg-surface p-4">
             <p className="text-sm leading-6 text-ink/70">
               识别标题与截止时间，结果会先给你核对。截图里的课程名、教师等
               信息若没有出现，不会凭空补全。
@@ -364,7 +364,7 @@ export function ScreenshotDialog({
             <img
               src={preview}
               alt="待识别截图预览"
-              className="border-rule mt-3 max-h-44 w-full rounded-lg border bg-white object-contain"
+              className="border-rule mt-3 max-h-44 w-full rounded-lg border bg-surface object-contain"
             />
           )}
 
@@ -512,7 +512,7 @@ export function ReviewDialog({
           <article
             key={index}
             className={[
-              "rounded-xl border bg-white p-3",
+              "rounded-xl border bg-surface p-3",
               row.confidence === "low" || !row.due
                 ? "border-amber/50 bg-amber/[0.03]"
                 : "border-rule",
@@ -747,7 +747,7 @@ export function AssignmentFormDialog({
               setForm({ ...form, detail: event.target.value })
             }
             rows={3}
-            className="border-rule focus:border-ink/40 w-full resize-y rounded-md border bg-white px-2 py-2 text-sm leading-6 outline-none"
+            className="border-rule focus:border-ink/40 w-full resize-y rounded-md border bg-surface px-2 py-2 text-sm leading-6 outline-none"
             placeholder="链接、附件名或提交要求"
           />
         </label>

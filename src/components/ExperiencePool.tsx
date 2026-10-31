@@ -36,7 +36,7 @@ interface ExperiencePoolProps {
 const BTN_LINK =
   "hover:text-ink inline-flex min-h-11 items-center text-[11px] text-ink/50 underline-offset-2 hover:underline sm:min-h-8";
 const BTN_SMALL =
-  "border-rule hover:bg-ink/[0.03] inline-flex min-h-9 items-center justify-center rounded-md border bg-white px-2.5 text-[10px] text-ink/60 disabled:cursor-not-allowed disabled:opacity-40";
+  "border-rule hover:bg-ink/[0.03] inline-flex min-h-9 items-center justify-center rounded-md border bg-surface px-2.5 text-[10px] text-ink/60 disabled:cursor-not-allowed disabled:opacity-40";
 
 export default function ExperiencePool({
   experiences,
@@ -94,7 +94,7 @@ export default function ExperiencePool({
 
   if (experiences.length === 0) {
     return (
-      <section className="border-rule rounded-xl border bg-white p-5">
+      <section className="border-rule rounded-xl border bg-surface p-5">
         <p className="font-mono text-[10px] tracking-[0.16em] text-ink/40">
           经历池 · 空
         </p>
@@ -199,7 +199,7 @@ export default function ExperiencePool({
                 "inline-flex min-h-9 items-center gap-1 rounded-full border px-2.5 text-[10px] transition-colors",
                 active
                   ? "border-ink bg-ink text-paper"
-                  : "border-rule bg-white text-ink/50 hover:bg-ink/[0.03]",
+                  : "border-rule bg-surface text-ink/50 hover:bg-ink/[0.03]",
               ].join(" ")}
             >
               {EXPERIENCE_KIND_META[kind].label}
@@ -252,7 +252,7 @@ export default function ExperiencePool({
               <li
                 key={item.id}
                 className={[
-                  "border-rule rounded-xl border bg-white transition-colors",
+                  "border-rule rounded-xl border bg-surface transition-colors",
                   selected ? "border-ink/25" : "",
                   low ? "bg-amber/[0.03]" : "",
                 ].join(" ")}
@@ -400,7 +400,7 @@ export default function ExperiencePool({
                           type="button"
                           onClick={() => onGenerate(item.id)}
                           disabled={generating}
-                          className="border-rule hover:bg-ink/[0.03] inline-flex min-h-9 items-center justify-center rounded-md border bg-white px-2.5 text-[10px] font-medium text-ink/70 disabled:cursor-wait disabled:opacity-50"
+                          className="border-rule hover:bg-ink/[0.03] inline-flex min-h-9 items-center justify-center rounded-md border bg-surface px-2.5 text-[10px] font-medium text-ink/70 disabled:cursor-wait disabled:opacity-50"
                         >
                           {generating
                             ? "生成中…"
@@ -486,7 +486,7 @@ function FilterPill({
         "inline-flex min-h-9 items-center gap-1.5 rounded-full border px-3 text-[11px] transition-colors",
         active
           ? "border-ink bg-ink text-paper"
-          : "border-rule bg-white text-ink/55 hover:bg-ink/[0.03]",
+          : "border-rule bg-surface text-ink/55 hover:bg-ink/[0.03]",
       ].join(" ")}
     >
       {label}

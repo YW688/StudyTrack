@@ -12,7 +12,7 @@ interface BulletManagerProps {
 }
 
 const BTN =
-  "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-md border bg-white px-2.5 text-[10px] text-ink/65 disabled:cursor-wait disabled:opacity-40 sm:min-h-8";
+  "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-md border bg-surface px-2.5 text-[10px] text-ink/65 disabled:cursor-wait disabled:opacity-40 sm:min-h-8";
 const BTN_TEXT =
   "hover:text-ink inline-flex min-h-11 items-center text-[10px] text-ink/45 underline-offset-2 hover:underline sm:min-h-8";
 
@@ -30,7 +30,7 @@ export default function BulletManager({
   ).length;
 
   return (
-    <section className="resume-bullet-manager screen-only border-rule mt-3 rounded-xl border bg-white">
+    <section className="resume-bullet-manager screen-only border-rule mt-3 rounded-xl border bg-surface">
       <button
         type="button"
         onClick={onToggle}

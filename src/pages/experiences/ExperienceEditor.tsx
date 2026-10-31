@@ -38,9 +38,9 @@ interface ExperienceEditorProps {
 }
 
 const FIELD =
-  "border-rule focus:border-ink/40 h-11 w-full rounded-md border bg-white px-2.5 text-sm outline-none";
+  "border-rule focus:border-ink/40 h-11 w-full rounded-md border bg-surface px-2.5 text-sm outline-none";
 const TEXTAREA =
-  "border-rule focus:border-ink/40 min-h-24 w-full resize-y rounded-md border bg-white px-2.5 py-2 text-sm leading-6 outline-none";
+  "border-rule focus:border-ink/40 min-h-24 w-full resize-y rounded-md border bg-surface px-2.5 py-2 text-sm leading-6 outline-none";
 const BTN_PRIMARY =
   "bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-5 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-40";
 const BTN_SECONDARY =
@@ -263,7 +263,7 @@ export default function ExperienceEditor({
                         onClick={() => setKind(item)}
                         className={[
                           "min-h-11 rounded-lg border px-2 text-xs transition-colors",
-                          active ? "font-medium" : "border-rule bg-white text-ink/60 hover:bg-ink/[0.03]",
+                          active ? "font-medium" : "border-rule bg-surface text-ink/60 hover:bg-ink/[0.03]",
                         ].join(" ")}
                         style={
                           active
@@ -620,7 +620,7 @@ function SectionLabel({
 }) {
   return (
     <div className="flex items-baseline gap-2.5">
-      <span className="font-mono text-[10px] tracking-[0.12em] text-amber">
+      <span className="font-mono text-[10px] tracking-[0.12em] text-accent-ink">
         {index}
       </span>
       <h3 id={id} className="text-sm font-medium">

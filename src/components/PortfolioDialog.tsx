@@ -19,11 +19,11 @@ interface PortfolioDialogProps {
 }
 
 const FIELD =
-  "border-rule focus:border-ink/35 focus:ring-2 focus:ring-amber/25 min-h-11 w-full rounded-lg border bg-white px-3 text-sm text-ink outline-none transition-colors placeholder:text-ink/25";
+  "border-rule focus:border-ink/35 focus:ring-2 focus:ring-accent/25 min-h-11 w-full rounded-lg border bg-surface px-3 text-sm text-ink outline-none transition-colors placeholder:text-ink/25";
 const BTN_PRIMARY =
   "bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-5 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-40";
 const BTN_SECONDARY =
-  "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-white px-4 text-sm disabled:cursor-not-allowed disabled:opacity-40";
+  "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-surface px-4 text-sm disabled:cursor-not-allowed disabled:opacity-40";
 
 export default function PortfolioDialog({
   open,
@@ -137,9 +137,9 @@ export default function PortfolioDialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby="portfolio-dialog-title"
-        className="max-h-[92dvh] w-full max-w-2xl overflow-y-auto rounded-t-2xl bg-white sm:rounded-xl"
+        className="max-h-[92dvh] w-full max-w-2xl overflow-y-auto rounded-t-2xl bg-surface sm:rounded-xl"
       >
-        <header className="border-rule sticky top-0 z-10 flex items-start justify-between gap-3 border-b bg-white px-4 py-3 sm:px-5">
+        <header className="border-rule sticky top-0 z-10 flex items-start justify-between gap-3 border-b bg-surface px-4 py-3 sm:px-5">
           <div>
             <p className="font-mono text-[9px] tracking-[0.16em] text-ink/40">
               作品集 · 无后端
@@ -233,7 +233,7 @@ export default function PortfolioDialog({
                             "flex min-h-11 cursor-pointer items-start gap-3 rounded-lg border px-3 py-2 transition-colors",
                             selected
                               ? "border-ink/25 bg-paper"
-                              : "border-rule bg-white hover:bg-ink/[0.02]",
+                              : "border-rule bg-surface hover:bg-ink/[0.02]",
                           ].join(" ")}
                         >
                           <input
@@ -307,7 +307,7 @@ export default function PortfolioDialog({
                     value={link}
                     onFocus={(event) => event.currentTarget.select()}
                     aria-label="作品集分享链接"
-                    className="border-rule mt-2 min-h-11 w-full rounded-lg border bg-white px-2 font-mono text-[10px] text-ink/60"
+                    className="border-rule mt-2 min-h-11 w-full rounded-lg border bg-surface px-2 font-mono text-[10px] text-ink/60"
                   />
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     <button

@@ -77,7 +77,7 @@ function WeeksInput({
         placeholder="如 1-16 或 2-16双"
         aria-invalid={invalid}
         className={[
-          "h-8 w-full rounded-md border bg-white px-2 font-mono text-[11px] outline-none",
+          "h-8 w-full rounded-md border bg-surface px-2 font-mono text-[11px] outline-none",
           invalid
             ? "border-amber bg-amber/[0.04] text-ink"
             : "border-rule focus:border-ink/40",
@@ -327,7 +327,7 @@ export default function ParseConfirm({
                 <article
                   key={course.id}
                   className={[
-                    "rounded-xl border bg-white p-3",
+                    "rounded-xl border bg-surface p-3",
                     course.confidence === "low"
                       ? "border-amber/50 bg-amber/[0.03]"
                       : "border-rule",
@@ -344,7 +344,7 @@ export default function ParseConfirm({
                           onChange={(event) =>
                             updateCourse(course.id, { name: event.target.value })
                           }
-                          className="border-rule focus:border-ink/40 h-9 w-full rounded-md border bg-white px-2 text-sm font-medium outline-none"
+                          className="border-rule focus:border-ink/40 h-9 w-full rounded-md border bg-surface px-2 text-sm font-medium outline-none"
                         />
                       </label>
                       <div className="mt-2 grid grid-cols-2 gap-2">
@@ -359,7 +359,7 @@ export default function ParseConfirm({
                                 teacher: event.target.value,
                               })
                             }
-                            className="border-rule focus:border-ink/40 h-8 w-full rounded-md border bg-white px-2 text-xs outline-none"
+                            className="border-rule focus:border-ink/40 h-8 w-full rounded-md border bg-surface px-2 text-xs outline-none"
                           />
                         </label>
                         <label className="block">
@@ -373,7 +373,7 @@ export default function ParseConfirm({
                                 location: event.target.value,
                               })
                             }
-                            className="border-rule focus:border-ink/40 h-8 w-full rounded-md border bg-white px-2 text-xs outline-none"
+                            className="border-rule focus:border-ink/40 h-8 w-full rounded-md border bg-surface px-2 text-xs outline-none"
                           />
                         </label>
                       </div>
@@ -419,7 +419,7 @@ export default function ParseConfirm({
                                     day: Number(event.target.value) as DayOfWeek,
                                   })
                                 }
-                                className="border-rule h-8 w-full rounded-md border bg-white px-1 text-[11px] outline-none"
+                                className="border-rule h-8 w-full rounded-md border bg-surface px-1 text-[11px] outline-none"
                               >
                                 {DAY_LABELS.map((label, index) => (
                                   <option key={label} value={index + 1}>
@@ -442,7 +442,7 @@ export default function ParseConfirm({
                                     endPeriod: Math.max(start, session.endPeriod),
                                   });
                                 }}
-                                className="border-rule h-8 w-full rounded-md border bg-white px-1 text-center font-mono text-[11px] outline-none"
+                                className="border-rule h-8 w-full rounded-md border bg-surface px-1 text-center font-mono text-[11px] outline-none"
                               />
                             </label>
                             <span className="pt-1.5 text-center text-[10px] text-ink/30">
@@ -461,7 +461,7 @@ export default function ParseConfirm({
                                   })
                                 }
                                 className={[
-                                  "h-8 w-full rounded-md border bg-white px-1 text-center font-mono text-[11px] outline-none",
+                                  "h-8 w-full rounded-md border bg-surface px-1 text-center font-mono text-[11px] outline-none",
                                   invalid ? "border-amber" : "border-rule",
                                 ].join(" ")}
                               />
@@ -529,7 +529,7 @@ function RawTable({ sheet }: { sheet: RawSheet }) {
   }
 
   return (
-    <div className="border-rule max-h-[60vh] overflow-auto rounded-lg border bg-white">
+    <div className="border-rule max-h-[60vh] overflow-auto rounded-lg border bg-surface">
       <table className="w-max min-w-full border-collapse text-[10px]">
         <tbody>
           {sheet.rows.map((row, r) => {

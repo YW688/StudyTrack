@@ -46,7 +46,7 @@ export default function AssignmentItem({
   return (
     <article
       className={[
-        "border-rule flex items-start gap-2 rounded-xl border bg-white px-2.5 py-3 transition-colors sm:gap-3 sm:px-4",
+        "border-rule flex items-start gap-2 rounded-xl border bg-surface px-2.5 py-3 transition-colors sm:gap-3 sm:px-4",
         done ? "opacity-60" : "",
         !done && item.confidence === "low"
           ? "border-amber/50 bg-amber/[0.03]"

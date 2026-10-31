@@ -6,7 +6,7 @@ import type {
   TimetableData,
 } from "./types";
 import AppShell from "./components/AppShell";
-import EntryRitual, { type RitualTheme } from "./components/EntryRitual";
+import EntryRitual from "./components/EntryRitual";
 import LandingPage from "./pages/landing/LandingPage";
 import TodayPage from "./pages/today/TodayPage";
 import TimetablePage from "./pages/timetable/TimetablePage";
@@ -30,6 +30,7 @@ import { createSampleTimetable } from "./store/fixtures/timetable";
 import { createSampleAssignments } from "./store/fixtures/assignments";
 import { createSampleExperiences } from "./store/fixtures/experiences";
 import { resumeHasContent } from "./lib/resume";
+import { applyTheme, readStoredTheme, type ThemeId } from "./lib/theme";
 
 type Route =
   | "landing"
@@ -40,18 +41,6 @@ type Route =
   | "resume"
   | "opportunities"
   | "portfolio";
-
-const LANDING_THEME_KEY = "studytrack:landing-theme";
-
-function readRitualTheme(): RitualTheme {
-  try {
-    const saved = localStorage.getItem(LANDING_THEME_KEY);
-    if (saved === "sprout" || saved === "sunset") return saved;
-  } catch {
-    /* 主题读不到时按默认霞光处理 */
-  }
-  return "dawn";
-}
 
 function shouldPlayEntryRitual(): boolean {
   try {
@@ -81,9 +70,14 @@ export default function App() {
   const [experiences, setExperiences] = useState<ExperienceData | null>(null);
   const [resume, setResume] = useState<ResumeData>(() => createEmptyResume());
   const [loading, setLoading] = useState(true);
-  const [ritual, setRitual] = useState<{ theme: RitualTheme } | null>(null);
+  const [theme, setTheme] = useState<ThemeId>(readStoredTheme);
+  const [ritual, setRitual] = useState<{ theme: ThemeId } | null>(null);
   const [ritualReady, setRitualReady] = useState(false);
   const resumeWriteRef = useRef<Promise<void>>(Promise.resolve());
+
+  useEffect(() => {
+    applyTheme(theme);
+  }, [theme]);
 
   useEffect(() => {
     let alive = true;
@@ -143,7 +137,7 @@ export default function App() {
     const playRitual = shouldPlayEntryRitual();
     if (playRitual) {
       setRitualReady(false);
-      setRitual({ theme: readRitualTheme() });
+      setRitual({ theme });
     }
 
     try {
@@ -261,7 +255,11 @@ export default function App() {
   if (route === "landing") {
     return (
       <>
-        <LandingPage onStart={handleStart} />
+        <LandingPage
+          theme={theme}
+          onThemeChange={setTheme}
+          onStart={handleStart}
+        />
         {ritualOverlay}
       </>
     );
@@ -275,6 +273,8 @@ export default function App() {
     <>
       <AppShell
         active={active}
+        theme={theme}
+        onThemeChange={setTheme}
         hasData={
           timetable !== null ||
           assignments !== null ||

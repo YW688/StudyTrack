@@ -35,7 +35,7 @@ export default function SnapshotMenu({
     <div
       role="dialog"
       aria-label="简历版本列表"
-      className="border-rule absolute top-full right-0 z-30 mt-2 w-[min(21rem,calc(100vw-2rem))] rounded-xl border bg-white shadow-[0_18px_48px_rgba(22,35,58,0.14)]"
+      className="border-rule absolute top-full right-0 z-30 mt-2 w-[min(21rem,calc(100vw-2rem))] rounded-xl border bg-surface shadow-xl"
     >
       <div className="border-rule flex items-center justify-between border-b px-3 py-2">
         <div>
@@ -95,7 +95,7 @@ export default function SnapshotMenu({
                 <button
                   type="button"
                   onClick={() => onRestore(snapshot)}
-                  className="text-amber inline-flex min-h-11 items-center text-[10px] font-medium underline underline-offset-2 sm:min-h-8"
+                  className="text-accent-ink inline-flex min-h-11 items-center text-[10px] font-medium underline underline-offset-2 sm:min-h-8"
                 >
                   恢复
                 </button>

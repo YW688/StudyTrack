@@ -12,30 +12,9 @@ import {
   WeekShowcase,
 } from "./Showcases";
 import BrandMark from "../../components/BrandMark";
+import { THEMES, nextTheme, type ThemeId } from "../../lib/theme";
 
 type StartState = "idle" | "loading" | "error";
-
-const THEME_KEY = "studytrack:landing-theme";
-
-const THEMES = [
-  {
-    id: "dawn",
-    name: "霞光",
-    swatch: "linear-gradient(135deg,#ccfbff,#ef96c5)",
-  },
-  {
-    id: "sprout",
-    name: "新芽",
-    swatch: "linear-gradient(135deg,#f8fff5,#c6e6b3 45%,#688f40)",
-  },
-  {
-    id: "sunset",
-    name: "落日",
-    swatch: "linear-gradient(135deg,#ea6113,#fbb931 55%,#ffe3b3)",
-  },
-] as const;
-
-type LandingTheme = (typeof THEMES)[number]["id"];
 
 interface Module {
   char: string;
@@ -144,35 +123,17 @@ const STAGES: Stage[] = [
 ];
 
 interface LandingPageProps {
+  theme: ThemeId;
+  onThemeChange: (theme: ThemeId) => void;
   onStart: () => Promise<void>;
 }
 
-function readTheme(): LandingTheme {
-  try {
-    const saved = localStorage.getItem(THEME_KEY);
-    const match = THEMES.find((item) => item.id === saved);
-    return match ? match.id : "dawn";
-  } catch {
-    return "dawn";
-  }
-}
-
-function nextTheme(current: LandingTheme): LandingTheme {
-  const index = THEMES.findIndex((item) => item.id === current);
-  return THEMES[(index + 1) % THEMES.length]?.id ?? "dawn";
-}
-
-export default function LandingPage({ onStart }: LandingPageProps) {
+export default function LandingPage({
+  theme,
+  onThemeChange,
+  onStart,
+}: LandingPageProps) {
   const [state, setState] = useState<StartState>("idle");
-  const [theme, setTheme] = useState<LandingTheme>(readTheme);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(THEME_KEY, theme);
-    } catch {
-      /* 主题偏好只是锦上添花 存不了也不影响使用 */
-    }
-  }, [theme]);
 
   async function handleStart() {
     setState("loading");
@@ -231,7 +192,7 @@ export default function LandingPage({ onStart }: LandingPageProps) {
               <div className="flex items-center gap-1.5 md:gap-2">
                 <ThemeToggle
                   theme={theme}
-                  onToggle={() => setTheme((current) => nextTheme(current))}
+                  onToggle={() => onThemeChange(nextTheme(theme))}
                 />
                 <StartButton
                   state={state}
@@ -505,7 +466,7 @@ function ThemeToggle({
   theme,
   onToggle,
 }: {
-  theme: LandingTheme;
+  theme: ThemeId;
   onToggle: () => void;
 }) {
   const current = THEMES.find((item) => item.id === theme) ?? THEMES[0];

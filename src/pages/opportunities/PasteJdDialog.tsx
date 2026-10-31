@@ -10,11 +10,11 @@ interface PasteJdDialogProps {
 }
 
 const FIELD =
-  "border-rule focus:border-ink/35 focus:ring-2 focus:ring-amber/25 min-h-11 w-full rounded-lg border bg-white px-3 text-sm text-ink outline-none transition-colors placeholder:text-ink/25";
+  "border-rule focus:border-ink/35 focus:ring-2 focus:ring-accent/25 min-h-11 w-full rounded-lg border bg-surface px-3 text-sm text-ink outline-none transition-colors placeholder:text-ink/25";
 const BTN_PRIMARY =
   "bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-5 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-40";
 const BTN_SECONDARY =
-  "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-white px-4 text-xs disabled:cursor-not-allowed disabled:opacity-40";
+  "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-surface px-4 text-xs disabled:cursor-not-allowed disabled:opacity-40";
 
 export default function PasteJdDialog({
   open,
@@ -90,9 +90,9 @@ export default function PasteJdDialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby="paste-jd-title"
-        className="max-h-[92dvh] w-full max-w-2xl overflow-y-auto rounded-t-2xl bg-white sm:rounded-xl"
+        className="max-h-[92dvh] w-full max-w-2xl overflow-y-auto rounded-t-2xl bg-surface sm:rounded-xl"
       >
-        <header className="border-rule sticky top-0 z-10 flex items-start justify-between gap-3 border-b bg-white px-4 py-3 sm:px-5">
+        <header className="border-rule sticky top-0 z-10 flex items-start justify-between gap-3 border-b bg-surface px-4 py-3 sm:px-5">
           <div>
             <p className="font-mono text-[9px] tracking-[0.16em] text-ink/40">
               粘贴 JD · 本地解析
@@ -175,7 +175,7 @@ export default function PasteJdDialog({
               <div
                 role="group"
                 aria-label="岗位类型"
-                className="border-rule inline-flex w-full rounded-lg border bg-white p-0.5"
+                className="border-rule inline-flex w-full rounded-lg border bg-surface p-0.5"
               >
                 {(["intern", "campus"] as JobType[]).map((item) => (
                   <button
@@ -214,7 +214,7 @@ export default function PasteJdDialog({
               rows={9}
               onChange={(event) => setRaw(event.target.value)}
               aria-describedby="jd-hint"
-              className="border-rule focus:border-ink/35 focus:ring-2 focus:ring-amber/25 mt-1.5 w-full resize-y rounded-lg border bg-white px-3 py-2.5 text-xs leading-6 text-ink outline-none transition-colors placeholder:text-ink/25"
+              className="border-rule focus:border-ink/35 focus:ring-2 focus:ring-accent/25 mt-1.5 w-full resize-y rounded-lg border bg-surface px-3 py-2.5 text-xs leading-6 text-ink outline-none transition-colors placeholder:text-ink/25"
               placeholder={
                 "粘贴岗位职责与任职要求，每行一条效果最好。\n例如：\n- 熟悉 React 与 TypeScript，能独立完成页面开发\n- 了解前端性能优化\n- 每周到岗 4 天以上"
               }

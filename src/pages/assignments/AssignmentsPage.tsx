@@ -198,7 +198,7 @@ export default function AssignmentsPage({
                 className={[
                   "rounded-full px-2 py-0.5 font-mono text-[10px]",
                   pending.length > 0
-                    ? "bg-amber/15 text-ink"
+                    ? "bg-accent/15 text-ink"
                     : "bg-ink/[0.05] text-ink/45",
                 ].join(" ")}
               >
@@ -235,7 +235,7 @@ export default function AssignmentsPage({
           </div>
         </header>
 
-        <section className="border-rule mt-5 rounded-xl border bg-white px-4 py-4">
+        <section className="border-rule mt-5 rounded-xl border bg-surface px-4 py-4">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <p className="font-mono text-[10px] tracking-[0.14em] text-ink/40">
               本周 · {summary.start} – {summary.end}
@@ -265,9 +265,9 @@ export default function AssignmentsPage({
         {notice && (
           <p
             role="status"
-            className="border-rule mt-4 flex items-center gap-2 rounded-lg border bg-white px-3 py-2 text-xs text-ink/60"
+            className="border-rule mt-4 flex items-center gap-2 rounded-lg border bg-surface px-3 py-2 text-xs text-ink/60"
           >
-            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-amber" />
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
             {notice}
           </p>
         )}
@@ -282,7 +282,7 @@ export default function AssignmentsPage({
         )}
 
         {items.length === 0 ? (
-          <section className="border-rule mt-5 rounded-xl border bg-white p-5 sm:p-8">
+          <section className="border-rule mt-5 rounded-xl border bg-surface p-5 sm:p-8">
             <h2 className="text-lg font-medium tracking-tight">
               先把这周的作业收进来
             </h2>
@@ -400,7 +400,7 @@ export default function AssignmentsPage({
 
         <div className="border-rule mt-6 border-t pt-4">
           <p className="flex items-center gap-2 text-[11px] text-ink/35">
-            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-amber" />
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
             数据只存在你的浏览器 · 支持作业、竞赛报名、实习投递等截止事项
           </p>
         </div>

@@ -70,7 +70,7 @@ const TIER_TEXT: Record<string, string> = {
 const BTN_PRIMARY =
   "bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-5 text-sm font-medium disabled:opacity-60";
 const BTN_SECONDARY =
-  "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-white px-4 text-sm disabled:opacity-60";
+  "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-surface px-4 text-sm disabled:opacity-60";
 const BTN_LINK =
   "hover:text-ink inline-flex min-h-11 items-center text-[11px] text-ink/50 underline underline-offset-4 sm:min-h-9";
 
@@ -309,7 +309,7 @@ export default function TodayPage({
 
         {!hasAny ? (
           <>
-            <section className="border-rule mt-5 rounded-xl border bg-white p-5 sm:p-8">
+            <section className="border-rule mt-5 rounded-xl border bg-surface p-5 sm:p-8">
               <p className="font-mono text-[10px] tracking-[0.16em] text-ink/40">
                 本机还没有数据
               </p>
@@ -365,7 +365,7 @@ export default function TodayPage({
           <>
             <section
               aria-label="今日概览"
-              className="border-rule mt-5 grid grid-cols-3 overflow-hidden rounded-xl border bg-white"
+              className="border-rule mt-5 grid grid-cols-3 overflow-hidden rounded-xl border bg-surface"
             >
               <Stat
                 label="今日课程"
@@ -506,7 +506,7 @@ export default function TodayPage({
                             className={[
                               "rounded-lg border px-0.5 py-2 text-center",
                               isToday
-                                ? "border-amber/50 bg-amber/[0.07]"
+                                ? "border-accent/50 bg-accent/[0.07]"
                                 : index >= 5
                                   ? "border-transparent bg-ink/[0.02]"
                                   : "border-transparent",
@@ -527,7 +527,7 @@ export default function TodayPage({
                               aria-hidden="true"
                               className={[
                                 "mx-auto mt-1 block h-1.5 w-1.5 rounded-full",
-                                count > 0 ? "bg-amber" : "bg-ink/10",
+                                count > 0 ? "bg-accent" : "bg-ink/10",
                               ].join(" ")}
                             />
                           </div>
@@ -754,10 +754,10 @@ function Panel({
   children: ReactNode;
 }) {
   return (
-    <section className="border-rule overflow-hidden rounded-xl border bg-white">
+    <section className="border-rule overflow-hidden rounded-xl border bg-surface">
       <header className="border-rule flex items-center justify-between gap-3 border-b px-4 py-2 sm:px-5">
         <div className="flex items-baseline gap-3">
-          <span className="font-mono text-[10px] tracking-[0.12em] text-amber">
+          <span className="font-mono text-[10px] tracking-[0.12em] text-accent-ink">
             {index}
           </span>
           <h2 className="text-sm font-medium">{title}</h2>
@@ -984,7 +984,7 @@ function EmptyBlock({
 function PageFoot() {
   return (
     <p className="mt-6 flex items-center gap-2 text-[11px] text-ink/35">
-      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-amber" />
+      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
       数据只存在你的浏览器 · 提醒只在本机，不会推送
     </p>
   );

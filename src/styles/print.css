@@ -7,6 +7,8 @@
 }
 
 .resume-paper {
+  --doc-ink: #1c2228;
+  --doc-rule: #d8d4cb;
   width: 100%;
   min-height: 141.43cqw;
   padding: 7.62%;
@@ -14,13 +16,13 @@
   border: 1px solid var(--color-rule);
   border-radius: 2px;
   box-shadow:
-    0 1px 3px rgba(22, 35, 58, 0.07),
-    0 16px 40px rgba(22, 35, 58, 0.06);
+    0 1px 3px color-mix(in srgb, var(--doc-ink) 7%, transparent),
+    0 16px 40px color-mix(in srgb, var(--doc-ink) 6%, transparent);
   overflow-wrap: break-word;
 }
 
 .resume-body {
-  color: var(--color-ink);
+  color: var(--doc-ink);
   font-size: clamp(8px, 1.73cqw, 13px);
   line-height: 1.45;
 }
@@ -31,7 +33,7 @@
   justify-content: space-between;
   gap: 1.2em;
   padding-bottom: 0.8em;
-  border-bottom: 2px solid var(--color-ink);
+  border-bottom: 2px solid var(--doc-ink);
 }
 
 .resume-head-main {
@@ -49,7 +51,7 @@
 .resume-target {
   margin-top: 0.28em;
   font-size: 0.92em;
-  color: rgba(22, 35, 58, 0.68);
+  color: color-mix(in srgb, var(--doc-ink) 68%, transparent);
 }
 
 .resume-contact {
@@ -58,7 +60,7 @@
   text-align: right;
   font-size: 0.82em;
   line-height: 1.5;
-  color: rgba(22, 35, 58, 0.62);
+  color: color-mix(in srgb, var(--doc-ink) 62%, transparent);
   overflow-wrap: anywhere;
 }
 
@@ -68,7 +70,7 @@
 
 .resume-section-title {
   padding-bottom: 0.32em;
-  border-bottom: 1px solid var(--color-rule);
+  border-bottom: 1px solid var(--doc-rule);
   font-size: 1em;
   font-weight: 600;
   letter-spacing: 0.16em;
@@ -105,7 +107,7 @@
 .resume-entry-org {
   margin-top: 0.1em;
   font-size: 0.86em;
-  color: rgba(22, 35, 58, 0.58);
+  color: color-mix(in srgb, var(--doc-ink) 58%, transparent);
 }
 
 .resume-date {
@@ -113,7 +115,7 @@
   font-family: var(--font-mono);
   font-size: 0.76em;
   white-space: nowrap;
-  color: rgba(22, 35, 58, 0.52);
+  color: color-mix(in srgb, var(--doc-ink) 52%, transparent);
 }
 
 .resume-bullets {
@@ -129,14 +131,14 @@
 }
 
 .resume-bullets li::marker {
-  color: rgba(22, 35, 58, 0.4);
+  color: color-mix(in srgb, var(--doc-ink) 40%, transparent);
 }
 
 .resume-empty,
 .resume-entry-empty {
   margin-top: 0.7em;
   font-size: 0.9em;
-  color: rgba(22, 35, 58, 0.4);
+  color: color-mix(in srgb, var(--doc-ink) 40%, transparent);
 }
 
 .resume-links {
@@ -157,7 +159,7 @@
   margin-left: 0.4em;
   font-family: var(--font-mono);
   font-size: 0.82em;
-  color: rgba(22, 35, 58, 0.45);
+  color: color-mix(in srgb, var(--doc-ink) 45%, transparent);
   overflow-wrap: anywhere;
 }
 
@@ -166,7 +168,8 @@
   top: 141.43cqw;
   right: 0;
   left: 0;
-  border-top: 1px dashed rgba(200, 132, 42, 0.5);
+  border-top: 1px dashed
+    color-mix(in srgb, var(--color-accent) 55%, transparent);
   pointer-events: none;
 }
 
@@ -176,7 +179,7 @@
   right: 0;
   font-family: var(--font-mono);
   font-size: 9px;
-  color: rgba(200, 132, 42, 0.8);
+  color: color-mix(in srgb, var(--color-accent) 85%, var(--color-ink));
 }
 
 @media print {

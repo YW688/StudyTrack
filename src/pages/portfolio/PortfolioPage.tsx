@@ -22,7 +22,7 @@ const SECTIONS: {
 ];
 
 const BTN =
-  "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-white px-3 text-xs text-ink/70";
+  "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-surface px-3 text-xs text-ink/70";
 const BTN_PRIMARY =
   "bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-4 text-xs font-medium";
 
@@ -190,7 +190,7 @@ function PortfolioCard({
   index: number;
 }) {
   return (
-    <li className="portfolio-card border-rule rounded-xl border bg-white p-5 sm:p-6">
+    <li className="portfolio-card border-rule rounded-xl border bg-surface p-5 sm:p-6">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
         <span className="font-mono text-[10px] tabular-nums text-ink/30">
           {String(index + 1).padStart(2, "0")}

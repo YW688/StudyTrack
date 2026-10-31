@@ -24,7 +24,7 @@ const SOURCE_LABELS: Record<MatchEvidenceSource, string> = {
 const BTN_PRIMARY =
   "bg-ink text-paper hover:bg-ink/90 inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg px-4 text-xs font-medium";
 const BTN_SECONDARY =
-  "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-white px-3 text-xs disabled:cursor-not-allowed disabled:opacity-40";
+  "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-surface px-3 text-xs disabled:cursor-not-allowed disabled:opacity-40";
 
 interface MatchDetailProps {
   job: JobPosting;
@@ -55,7 +55,7 @@ function StatusChip({ kind }: { kind: "hit" | "gap" | "eligibility" }) {
     },
     eligibility: {
       label: "资格",
-      className: "border-rule bg-white text-ink/40",
+      className: "border-rule bg-surface text-ink/40",
     },
   }[kind];
   return (
@@ -118,7 +118,7 @@ export default function MatchDetail({
   }
 
   return (
-    <article className="border-rule overflow-hidden rounded-xl border bg-white">
+    <article className="border-rule overflow-hidden rounded-xl border bg-surface">
       <header className="border-rule border-b px-4 pt-4 pb-4 sm:px-5">
         {onBack && (
           <button
@@ -152,7 +152,7 @@ export default function MatchDetail({
               <span aria-hidden="true">·</span>
               <span>{job.cohort}</span>
               {job.custom && (
-                <span className="border-amber/40 bg-amber/[0.08] text-amber-ink rounded-full border px-1.5 py-0.5 tracking-[0.06em]">
+                <span className="border-ink/15 bg-ink/[0.05] rounded-full border px-1.5 py-0.5 tracking-[0.06em] text-ink/55">
                   粘贴 JD
                 </span>
               )}
@@ -245,7 +245,7 @@ export default function MatchDetail({
                 key={reason}
                 className="flex gap-2 text-[11px] leading-5 text-ink/65"
               >
-                <span className="mt-0.5 font-mono text-[9px] tabular-nums text-amber">
+                <span className="mt-0.5 font-mono text-[9px] tabular-nums text-accent-ink">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <span>{reason}</span>
@@ -356,8 +356,8 @@ export default function MatchDetail({
                           {gap.advice}
                         </p>
                         {archiveExperience && (
-                          <div className="border-amber/30 bg-amber/[0.05] mt-2 rounded-lg border px-3 py-2.5">
-                            <p className="text-[10px] leading-5 text-amber-ink">
+                          <div className="border-accent/30 bg-accent/[0.05] mt-2 rounded-lg border px-3 py-2.5">
+                            <p className="text-[10px] leading-5 text-accent-ink">
                               这条经历还没进简历，勾选后可提升命中。
                             </p>
                             <p className="mt-1 text-[11px] font-medium leading-5">
@@ -440,7 +440,7 @@ export default function MatchDetail({
               {referenced.map((experience) => (
                 <li
                   key={experience.id}
-                  className="border-rule inline-flex min-h-7 items-center rounded-md border bg-white px-2 text-[10px] text-ink/60"
+                  className="border-rule inline-flex min-h-7 items-center rounded-md border bg-surface px-2 text-[10px] text-ink/60"
                 >
                   {experience.title}
                 </li>

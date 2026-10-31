@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import BrandMark from "./BrandMark";
+import { THEMES, nextTheme, type ThemeId } from "../lib/theme";
 
 const NAV = [
   { id: "today", no: "01", label: "今日" },
@@ -14,6 +15,8 @@ type NavId = (typeof NAV)[number]["id"];
 
 interface AppShellProps {
   active: NavId;
+  theme: ThemeId;
+  onThemeChange: (theme: ThemeId) => void;
   hasData: boolean;
   assignmentCount: number;
   onClear: () => Promise<void>;
@@ -24,6 +27,8 @@ interface AppShellProps {
 
 export default function AppShell({
   active,
+  theme,
+  onThemeChange,
   hasData,
   assignmentCount,
   onClear,
@@ -37,6 +42,9 @@ export default function AppShell({
     2,
     "0",
   );
+  const currentTheme = THEMES.find((item) => item.id === theme) ?? THEMES[0];
+  const upcomingTheme =
+    THEMES.find((item) => item.id === nextTheme(theme)) ?? THEMES[0];
 
   async function handleClear() {
     setClearing(true);
@@ -49,13 +57,13 @@ export default function AppShell({
   }
 
   return (
-    <div className="app-shell min-h-dvh lg:grid lg:grid-cols-[224px_minmax(0,1fr)]">
+    <div className="app-shell min-h-dvh bg-paper lg:grid lg:grid-cols-[224px_minmax(0,1fr)]">
       <aside className="app-sidebar border-rule lg:sticky lg:top-0 lg:flex lg:h-dvh lg:flex-col lg:border-r">
         <div className="flex h-16 items-center justify-between px-5 lg:px-6">
           <button
             type="button"
             onClick={onHome}
-            className="-mx-2 flex min-h-11 items-center rounded-md px-2 focus-visible:ring-2 focus-visible:ring-amber focus-visible:outline-none"
+            className="-mx-2 flex min-h-11 items-center rounded-md px-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
             aria-label="返回首页"
           >
             <span className="flex items-center gap-2.5">
@@ -75,9 +83,27 @@ export default function AppShell({
               </span>
             </span>
           </button>
-          <span className="font-mono text-[10px] tracking-[0.16em] text-ink/35 lg:hidden">
-            档案 {activeNo}
-          </span>
+          <div className="flex items-center gap-3 lg:hidden">
+            <span className="hidden font-mono text-[10px] tracking-[0.16em] text-ink/35 min-[420px]:inline">
+              档案 {activeNo}
+            </span>
+            <button
+              type="button"
+              onClick={() => onThemeChange(nextTheme(theme))}
+              aria-label={`切换配色 当前${currentTheme.name} 下一套${upcomingTheme.name}`}
+              title={`切换到${upcomingTheme.name}`}
+              className="border-rule bg-surface inline-flex h-11 min-w-11 items-center justify-center gap-1.5 rounded-full border px-3.5 text-[12px] transition-colors hover:bg-ink/[0.03] focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+            >
+              <span
+                aria-hidden="true"
+                className="ring-ink/10 h-3 w-3 rounded-full ring-1"
+                style={{ backgroundImage: currentTheme.swatch }}
+              />
+              <span className="hidden min-[360px]:inline">
+                {currentTheme.name}
+              </span>
+            </button>
+          </div>
         </div>
 
         <nav
@@ -95,14 +121,14 @@ export default function AppShell({
                 className={[
                   "flex min-h-11 shrink-0 items-center gap-3 rounded-lg px-3 text-sm whitespace-nowrap transition-colors lg:w-full",
                   isActive
-                    ? "bg-ink/[0.06] text-ink"
+                    ? "bg-accent/[0.10] text-ink"
                     : "text-ink/70 hover:bg-ink/[0.04]",
                 ].join(" ")}
               >
                 <span
                   className={[
                     "font-mono text-[10px] tabular-nums",
-                    isActive ? "text-amber" : "text-ink/30",
+                    isActive ? "text-accent-ink" : "text-ink/30",
                   ].join(" ")}
                 >
                   {item.no}
@@ -111,7 +137,7 @@ export default function AppShell({
                 {item.id === "assignments" && assignmentCount > 0 && (
                   <span
                     aria-label={`未完成 ${assignmentCount} 项`}
-                    className="bg-amber/15 ml-auto rounded-full px-1.5 py-0.5 font-mono text-[9px] tabular-nums text-ink/70"
+                    className="bg-accent/15 text-accent-ink ml-auto rounded-full px-1.5 py-0.5 font-mono text-[9px] tabular-nums"
                   >
                     {assignmentCount}
                   </span>
@@ -122,8 +148,43 @@ export default function AppShell({
         </nav>
 
         <div className="mt-auto hidden px-6 pt-6 pb-6 lg:block">
+          <div className="mb-5">
+            <p className="font-mono text-[9px] tracking-[0.2em] text-ink/30">
+              界面配色
+            </p>
+            <div
+              role="group"
+              aria-label="界面配色"
+              className="border-rule bg-surface mt-2 grid grid-cols-3 gap-0.5 rounded-lg border p-0.5"
+            >
+              {THEMES.map((item) => {
+                const selected = item.id === theme;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    aria-pressed={selected}
+                    onClick={() => onThemeChange(item.id)}
+                    className={[
+                      "flex min-h-11 flex-col items-center justify-center gap-1.5 rounded-md text-[10px] transition-colors focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none",
+                      selected
+                        ? "bg-accent/[0.12] text-ink"
+                        : "text-ink/45 hover:bg-ink/[0.04] hover:text-ink/70",
+                    ].join(" ")}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="ring-ink/10 h-3 w-3 rounded-full ring-1"
+                      style={{ backgroundImage: item.swatch }}
+                    />
+                    {item.name}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
           <p className="flex items-center gap-2 text-[11px] leading-5 text-ink/45">
-            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-amber" />
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
             数据只存在你的浏览器
           </p>
           {hasData && (

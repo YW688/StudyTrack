@@ -190,7 +190,7 @@ export default function TimetablePage({
       <div className="px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
         <div className="mx-auto w-full max-w-3xl">
           <EmptyHeader />
-          <div className="border-rule rounded-xl border bg-white p-5 sm:p-8">
+          <div className="border-rule rounded-xl border bg-surface p-5 sm:p-8">
             <h2 className="text-lg font-medium tracking-tight">
               先把这学期的课表放进来
             </h2>
@@ -286,7 +286,7 @@ export default function TimetablePage({
                   className={[
                     "rounded-full px-2 py-0.5 font-mono text-[10px]",
                     week === currentWeek
-                      ? "bg-amber/15 text-ink"
+                      ? "bg-accent/15 text-ink"
                       : "bg-ink/[0.05] text-ink/45",
                   ].join(" ")}
                 >
@@ -304,7 +304,7 @@ export default function TimetablePage({
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <div className="border-rule flex items-center rounded-lg border bg-white">
+            <div className="border-rule flex items-center rounded-lg border bg-surface">
               <button
                 type="button"
                 aria-label="上一周"
@@ -377,9 +377,9 @@ export default function TimetablePage({
         {notice && (
           <p
             role="status"
-            className="border-rule mt-4 flex items-center gap-2 rounded-lg border bg-white px-3 py-2 text-xs text-ink/60"
+            className="border-rule mt-4 flex items-center gap-2 rounded-lg border bg-surface px-3 py-2 text-xs text-ink/60"
           >
-            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-amber" />
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
             {notice}
           </p>
         )}
@@ -440,7 +440,7 @@ export default function TimetablePage({
           </section>
         )}
 
-        <details className="border-rule group mt-6 rounded-xl border bg-white/60 px-4 py-3">
+        <details className="border-rule group mt-6 rounded-xl border bg-surface/60 px-4 py-3">
           <summary className="cursor-pointer list-none text-xs text-ink/55">
             导入说明 · 支持 .xls / .xlsx / .csv
             <span className="ml-2 font-mono text-[10px] text-ink/30">
@@ -516,7 +516,7 @@ function EmptyHeader() {
 function PageFoot() {
   return (
     <p className="mt-6 flex items-center gap-2 text-[11px] text-ink/35">
-      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-amber" />
+      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
       数据只存在你的浏览器
     </p>
   );
@@ -536,7 +536,7 @@ function ManualDialog({
   onSubmit: () => void;
 }) {
   const field =
-    "border-rule focus:border-ink/40 h-9 w-full rounded-md border bg-white px-2 text-sm outline-none";
+    "border-rule focus:border-ink/40 h-9 w-full rounded-md border bg-surface px-2 text-sm outline-none";
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/30 p-0 sm:items-center sm:p-6">
       <div className="bg-paper max-h-[92dvh] w-full max-w-md overflow-y-auto rounded-t-2xl p-5 sm:rounded-2xl sm:p-6">
