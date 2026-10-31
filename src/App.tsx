@@ -6,6 +6,7 @@ import type {
   TimetableData,
 } from "./types";
 import AppShell from "./components/AppShell";
+import EntryRitual, { type RitualTheme } from "./components/EntryRitual";
 import LandingPage from "./pages/landing/LandingPage";
 import TodayPage from "./pages/today/TodayPage";
 import TimetablePage from "./pages/timetable/TimetablePage";
@@ -40,6 +41,26 @@ type Route =
   | "opportunities"
   | "portfolio";
 
+const LANDING_THEME_KEY = "studytrack:landing-theme";
+
+function readRitualTheme(): RitualTheme {
+  try {
+    const saved = localStorage.getItem(LANDING_THEME_KEY);
+    if (saved === "sprout" || saved === "sunset") return saved;
+  } catch {
+    /* 主题读不到时按默认霞光处理 */
+  }
+  return "dawn";
+}
+
+function shouldPlayEntryRitual(): boolean {
+  try {
+    return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  } catch {
+    return true;
+  }
+}
+
 function readRoute(): Route {
   const hash = window.location.hash.replace(/^#\/?/, "");
   if (hash === "today") return "today";
@@ -60,6 +81,8 @@ export default function App() {
   const [experiences, setExperiences] = useState<ExperienceData | null>(null);
   const [resume, setResume] = useState<ResumeData>(() => createEmptyResume());
   const [loading, setLoading] = useState(true);
+  const [ritual, setRitual] = useState<{ theme: RitualTheme } | null>(null);
+  const [ritualReady, setRitualReady] = useState(false);
   const resumeWriteRef = useRef<Promise<void>>(Promise.resolve());
 
   useEffect(() => {
@@ -114,36 +137,50 @@ export default function App() {
       .catch(() => undefined);
   }, []);
 
+  const dismissRitual = useCallback(() => setRitual(null), []);
+
   async function handleStart() {
-    const [storedTimetable, storedAssignments, storedExperiences] =
-      await Promise.all([
-        timetable ?? loadTimetable(),
-        assignments ?? loadAssignments(),
-        experiences ?? loadExperiences(),
-      ]);
-
-    let nextTimetable = storedTimetable;
-    if (!nextTimetable) {
-      nextTimetable = createSampleTimetable();
-      await saveTimetable(nextTimetable);
+    const playRitual = shouldPlayEntryRitual();
+    if (playRitual) {
+      setRitualReady(false);
+      setRitual({ theme: readRitualTheme() });
     }
 
-    let nextAssignments = storedAssignments;
-    if (!nextAssignments) {
-      nextAssignments = createSampleAssignments();
-      await saveAssignments(nextAssignments);
-    }
+    try {
+      const [storedTimetable, storedAssignments, storedExperiences] =
+        await Promise.all([
+          timetable ?? loadTimetable(),
+          assignments ?? loadAssignments(),
+          experiences ?? loadExperiences(),
+        ]);
 
-    let nextExperiences = storedExperiences;
-    if (!nextExperiences) {
-      nextExperiences = createSampleExperiences();
-      await saveExperiences(nextExperiences);
-    }
+      let nextTimetable = storedTimetable;
+      if (!nextTimetable) {
+        nextTimetable = createSampleTimetable();
+        await saveTimetable(nextTimetable);
+      }
 
-    setTimetable(nextTimetable);
-    setAssignments(nextAssignments);
-    setExperiences(nextExperiences);
-    navigate("today");
+      let nextAssignments = storedAssignments;
+      if (!nextAssignments) {
+        nextAssignments = createSampleAssignments();
+        await saveAssignments(nextAssignments);
+      }
+
+      let nextExperiences = storedExperiences;
+      if (!nextExperiences) {
+        nextExperiences = createSampleExperiences();
+        await saveExperiences(nextExperiences);
+      }
+
+      setTimetable(nextTimetable);
+      setAssignments(nextAssignments);
+      setExperiences(nextExperiences);
+      navigate("today");
+      if (playRitual) setRitualReady(true);
+    } catch (error) {
+      if (playRitual) setRitual(null);
+      throw error;
+    }
   }
 
   async function handleSaveTimetable(next: TimetableData) {
@@ -204,12 +241,30 @@ export default function App() {
     navigate("landing");
   }
 
+  const ritualOverlay = ritual ? (
+    <EntryRitual
+      theme={ritual.theme}
+      ready={ritualReady}
+      onDone={dismissRitual}
+    />
+  ) : null;
+
   if (route === "portfolio") {
-    return <PortfolioPage key={hash} hash={hash} />;
+    return (
+      <>
+        <PortfolioPage key={hash} hash={hash} />
+        {ritualOverlay}
+      </>
+    );
   }
 
   if (route === "landing") {
-    return <LandingPage onStart={handleStart} />;
+    return (
+      <>
+        <LandingPage onStart={handleStart} />
+        {ritualOverlay}
+      </>
+    );
   }
 
   const active = route;
@@ -217,58 +272,61 @@ export default function App() {
     assignments?.items.filter((item) => item.status !== "done").length ?? 0;
 
   return (
-    <AppShell
-      active={active}
-      hasData={
-        timetable !== null ||
-        assignments !== null ||
-        experiences !== null ||
-        resumeHasContent(resume)
-      }
-      assignmentCount={assignmentCount}
-      onClear={handleClear}
-      onHome={() => navigate("landing")}
-      onNavigate={(id) => navigate(id)}
-    >
-      {loading ? (
-        <LoadingState module={active} />
-      ) : route === "today" ? (
-        <TodayPage
-          timetable={timetable}
-          assignments={assignments}
-          experiences={experiences}
-          onSaveAssignments={handleSaveAssignments}
-          onUseSample={() => handleUseSample()}
-          onNavigate={(id) => navigate(id)}
-        />
-      ) : route === "assignments" ? (
-        <AssignmentsPage data={assignments} onSave={handleSaveAssignments} />
-      ) : route === "experiences" ? (
-        <ExperiencesPage data={experiences} onSave={handleSaveExperiences} />
-      ) : route === "resume" ? (
-        <ResumePage
-          experiences={experiences}
-          resume={resume}
-          onSaveResume={handleSaveResume}
-          onNavigateExperiences={() => navigate("experiences")}
-          onNavigateOpportunities={() => navigate("opportunities")}
-        />
-      ) : route === "opportunities" ? (
-        <OpportunitiesPage
-          experiences={experiences}
-          resume={resume}
-          onNavigateResume={() => navigate("resume")}
-          onNavigateExperiences={() => navigate("experiences")}
-          onUseSample={() => handleUseSample("opportunities")}
-        />
-      ) : (
-        <TimetablePage
-          data={timetable}
-          onSave={handleSaveTimetable}
-          onUseSample={handleUseSampleTimetable}
-        />
-      )}
-    </AppShell>
+    <>
+      <AppShell
+        active={active}
+        hasData={
+          timetable !== null ||
+          assignments !== null ||
+          experiences !== null ||
+          resumeHasContent(resume)
+        }
+        assignmentCount={assignmentCount}
+        onClear={handleClear}
+        onHome={() => navigate("landing")}
+        onNavigate={(id) => navigate(id)}
+      >
+        {loading ? (
+          <LoadingState module={active} />
+        ) : route === "today" ? (
+          <TodayPage
+            timetable={timetable}
+            assignments={assignments}
+            experiences={experiences}
+            onSaveAssignments={handleSaveAssignments}
+            onUseSample={() => handleUseSample()}
+            onNavigate={(id) => navigate(id)}
+          />
+        ) : route === "assignments" ? (
+          <AssignmentsPage data={assignments} onSave={handleSaveAssignments} />
+        ) : route === "experiences" ? (
+          <ExperiencesPage data={experiences} onSave={handleSaveExperiences} />
+        ) : route === "resume" ? (
+          <ResumePage
+            experiences={experiences}
+            resume={resume}
+            onSaveResume={handleSaveResume}
+            onNavigateExperiences={() => navigate("experiences")}
+            onNavigateOpportunities={() => navigate("opportunities")}
+          />
+        ) : route === "opportunities" ? (
+          <OpportunitiesPage
+            experiences={experiences}
+            resume={resume}
+            onNavigateResume={() => navigate("resume")}
+            onNavigateExperiences={() => navigate("experiences")}
+            onUseSample={() => handleUseSample("opportunities")}
+          />
+        ) : (
+          <TimetablePage
+            data={timetable}
+            onSave={handleSaveTimetable}
+            onUseSample={handleUseSampleTimetable}
+          />
+        )}
+      </AppShell>
+      {ritualOverlay}
+    </>
   );
 }
 

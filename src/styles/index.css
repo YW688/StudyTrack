@@ -776,3 +776,301 @@
     transition: none;
   }
 }
+
+/* ---------- Entry ritual ---------- */
+
+.entry-ritual {
+  --ritual-bg: #f6f9fa;
+  --ritual-ink: #26313a;
+  --ritual-soft: rgba(38, 49, 58, 0.68);
+  --ritual-line: rgba(38, 49, 58, 0.16);
+  --ritual-mist-a: rgba(197, 242, 247, 0.92);
+  --ritual-mist-b: rgba(239, 150, 197, 0.44);
+  --ritual-hi-a: #2f9fbb;
+  --ritual-hi-b: #cf5f9c;
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: var(--ritual-bg);
+  color: var(--ritual-ink);
+  transition: background-color 380ms ease 90ms;
+}
+
+.entry-ritual[data-theme="sprout"] {
+  --ritual-bg: #f6fbef;
+  --ritual-ink: #23301a;
+  --ritual-soft: rgba(35, 48, 26, 0.66);
+  --ritual-line: rgba(35, 48, 26, 0.16);
+  --ritual-mist-a: rgba(198, 230, 179, 0.92);
+  --ritual-mist-b: rgba(136, 176, 109, 0.38);
+  --ritual-hi-a: #4b7430;
+  --ritual-hi-b: #8db36f;
+}
+
+.entry-ritual[data-theme="sunset"] {
+  --ritual-bg: #fff7ea;
+  --ritual-ink: #3a1d0e;
+  --ritual-soft: rgba(58, 29, 14, 0.66);
+  --ritual-line: rgba(58, 29, 14, 0.16);
+  --ritual-mist-a: rgba(251, 185, 49, 0.5);
+  --ritual-mist-b: rgba(234, 97, 19, 0.3);
+  --ritual-hi-a: #b8460a;
+  --ritual-hi-b: #e08a1f;
+}
+
+.entry-ritual[data-phase="exit"] {
+  background-color: transparent;
+}
+
+.entry-ritual__mist {
+  position: absolute;
+  inset: -12%;
+  pointer-events: none;
+  background-image:
+    radial-gradient(46% 54% at 20% 26%, var(--ritual-mist-a), transparent 72%),
+    radial-gradient(42% 50% at 82% 72%, var(--ritual-mist-b), transparent 76%),
+    radial-gradient(66% 58% at 52% 46%, rgba(255, 255, 255, 0.6), transparent 78%);
+  transition: opacity 380ms ease 90ms;
+}
+
+.entry-ritual__plume {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(42px);
+  opacity: 0.5;
+  will-change: transform;
+}
+
+.entry-ritual__plume--a {
+  top: 8%;
+  left: 4%;
+  width: 46%;
+  height: 52%;
+  background: var(--ritual-mist-a);
+  animation: ritual-drift-a 11s ease-in-out infinite alternate;
+}
+
+.entry-ritual__plume--b {
+  right: 3%;
+  bottom: 5%;
+  width: 44%;
+  height: 48%;
+  background: var(--ritual-mist-b);
+  animation: ritual-drift-b 13s ease-in-out infinite alternate;
+}
+
+.entry-ritual[data-phase="exit"] .entry-ritual__mist {
+  opacity: 0;
+}
+
+.entry-ritual__grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  transition: opacity 380ms ease 90ms;
+}
+
+.entry-ritual[data-phase="exit"] .entry-ritual__grain {
+  opacity: 0;
+}
+
+.entry-ritual__poem {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: min(86vw, 700px);
+  font-family: var(--font-serif);
+  font-size: clamp(26px, 3.4vw, 42px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.5em;
+  color: color-mix(in srgb, var(--ritual-ink), transparent 18%);
+  transition:
+    opacity 320ms ease,
+    transform 320ms ease,
+    filter 320ms ease;
+}
+
+.entry-ritual__poem p {
+  margin: 0;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+
+.entry-ritual__poem p:last-child {
+  margin-top: clamp(44px, 9vh, 104px);
+}
+
+.entry-ritual__poem span {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(12px);
+  animation: ritual-char-in 650ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.entry-ritual[data-phase="mark"] .entry-ritual__poem,
+.entry-ritual[data-phase="handoff"] .entry-ritual__poem,
+.entry-ritual[data-phase="exit"] .entry-ritual__poem {
+  opacity: 0;
+  filter: blur(4px);
+  transform: translateY(-8px);
+}
+
+.entry-ritual__mark-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  pointer-events: none;
+}
+
+.entry-ritual__mark {
+  font-family: var(--font-serif);
+  font-size: clamp(88px, 10.5vw, 150px);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  color: transparent;
+  background-image: linear-gradient(
+    108deg,
+    var(--ritual-hi-a) 8%,
+    var(--ritual-hi-b) 92%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: blur(14px)
+    drop-shadow(0 22px 46px color-mix(in srgb, var(--ritual-hi-b), transparent 72%));
+  transform-origin: 0 0;
+  opacity: 0;
+  will-change: transform, opacity, filter;
+  transition:
+    opacity 640ms ease,
+    filter 760ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.entry-ritual[data-phase="mark"] .entry-ritual__mark,
+.entry-ritual[data-phase="handoff"] .entry-ritual__mark {
+  opacity: 1;
+  filter: blur(0)
+    drop-shadow(0 22px 46px color-mix(in srgb, var(--ritual-hi-b), transparent 72%));
+}
+
+.entry-ritual[data-phase="exit"] .entry-ritual__mark {
+  opacity: 0;
+}
+
+.entry-ritual__caption {
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  color: var(--ritual-soft);
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 420ms ease 120ms,
+    transform 420ms ease 120ms;
+}
+
+.entry-ritual[data-phase="mark"] .entry-ritual__caption {
+  opacity: 1;
+  transform: none;
+}
+
+.entry-ritual[data-phase="handoff"] .entry-ritual__caption,
+.entry-ritual[data-phase="exit"] .entry-ritual__caption {
+  opacity: 0;
+  transform: translateY(4px);
+  transition-delay: 0s;
+}
+
+.entry-ritual__skip {
+  position: absolute;
+  right: clamp(16px, 3vw, 32px);
+  bottom: clamp(16px, 3vw, 32px);
+  z-index: 4;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 0 18px;
+  border: 1px solid var(--ritual-line);
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.32);
+  color: var(--ritual-soft);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition:
+    opacity 240ms ease,
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+.entry-ritual__skip:hover {
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--ritual-ink);
+}
+
+.entry-ritual__skip:focus-visible {
+  outline: 2px solid var(--ritual-hi-a);
+  outline-offset: 3px;
+}
+
+.entry-ritual[data-phase="handoff"] .entry-ritual__skip,
+.entry-ritual[data-phase="exit"] .entry-ritual__skip {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes ritual-char-in {
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes ritual-drift-a {
+  from {
+    transform: translate3d(-2%, -1%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(4%, 3%, 0) scale(1.08);
+  }
+}
+
+@keyframes ritual-drift-b {
+  from {
+    transform: translate3d(2%, 2%, 0) scale(1.04);
+  }
+  to {
+    transform: translate3d(-3%, -2%, 0) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entry-ritual__poem span,
+  .entry-ritual__plume {
+    animation: none;
+  }
+
+  .entry-ritual__poem span {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}

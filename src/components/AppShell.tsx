@@ -58,7 +58,12 @@ export default function AppShell({
             aria-label="返回首页"
           >
             <span className="flex items-baseline gap-2.5">
-              <span className="font-serif text-xl tracking-[0.02em]">学径</span>
+              <span
+                data-brand-mark="true"
+                className="font-serif text-xl tracking-[0.02em]"
+              >
+                学径
+              </span>
               <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink/45">
                 StudyTrack
               </span>
