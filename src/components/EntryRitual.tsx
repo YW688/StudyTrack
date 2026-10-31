@@ -9,7 +9,13 @@ import BrandMark from "./BrandMark";
 
 export type RitualTheme = "dawn" | "sprout" | "sunset";
 
-const POEM_LINES = ["书山有路勤为径", "学海无涯苦作舟"];
+const POEMS = [
+  ["书山有路勤为径", "学海无涯苦作舟"],
+  ["长风破浪会有时", "直挂云帆济沧海"],
+  ["在坚冰还盖着北海的时候", "我看到了怒放的梅花"],
+] as const;
+
+const POEM_STORAGE_KEY = "studytrack:ritual-poem";
 const POEM_MS = 2200;
 const MARK_HOLD_MS = 1500;
 const FLY_MS = 800;
@@ -19,6 +25,26 @@ const POEM_CHAR_STEP = 0.04;
 const POEM_LINE_STEP = 0.08;
 
 type Phase = "poem" | "mark" | "handoff" | "exit";
+
+function pickPoemIndex() {
+  let previous = -1;
+  try {
+    const saved = sessionStorage.getItem(POEM_STORAGE_KEY);
+    if (saved !== null) {
+      const index = Number(saved);
+      if (Number.isInteger(index) && index >= 0 && index < POEMS.length) {
+        previous = index;
+      }
+    }
+  } catch {
+    /* 读不到上次的诗句时按纯随机处理 */
+  }
+
+  const pool = POEMS.map((_, index) => index).filter(
+    (index) => index !== previous,
+  );
+  return pool[Math.floor(Math.random() * pool.length)];
+}
 
 interface EntryRitualProps {
   theme: RitualTheme;
@@ -32,6 +58,8 @@ export default function EntryRitual({
   onDone,
 }: EntryRitualProps) {
   const [phase, setPhase] = useState<Phase>("poem");
+  const [poemIndex] = useState(pickPoemIndex);
+  const poem = POEMS[poemIndex];
   const [flight, setFlight] = useState<CSSProperties | null>(null);
   const markRef = useRef<HTMLDivElement>(null);
   const doneRef = useRef(false);
@@ -52,6 +80,14 @@ export default function EntryRitual({
     }
     setPhase("exit");
   }, [ready]);
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(POEM_STORAGE_KEY, String(poemIndex));
+    } catch {
+      /* 存不了也不影响本次展示 */
+    }
+  }, [poemIndex]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -136,8 +172,15 @@ export default function EntryRitual({
       </div>
       <div className="entry-ritual__grain" aria-hidden="true" />
 
-      <div className="entry-ritual__poem" aria-hidden="true">
-        {POEM_LINES.map((line, lineIndex) => (
+      <div
+        className={`entry-ritual__poem${
+          poem.some((line) => line.length > 8)
+            ? " entry-ritual__poem--long"
+            : ""
+        }`}
+        aria-hidden="true"
+      >
+        {poem.map((line, lineIndex) => (
           <p key={line}>
             {line.split("").map((char, charIndex) => (
               <span

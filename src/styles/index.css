@@ -955,6 +955,11 @@
     filter 320ms ease;
 }
 
+.entry-ritual__poem--long {
+  font-size: clamp(20px, 2.8vw, 34px);
+  letter-spacing: 0.34em;
+}
+
 .entry-ritual__poem p {
   margin: 0;
   writing-mode: vertical-rl;
