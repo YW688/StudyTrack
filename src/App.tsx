@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import type {
   AgentMessage,
   Assignment,
@@ -14,18 +21,25 @@ import type {
 } from "./types";
 import { RESUME_GRADES } from "./types";
 import AppShell from "./components/AppShell";
-import AgentPanel from "./components/AgentPanel";
 import EntryRitual from "./components/EntryRitual";
 import LandingPage from "./pages/landing/LandingPage";
 import TodayPage from "./pages/today/TodayPage";
-import TimetablePage from "./pages/timetable/TimetablePage";
-import AssignmentsPage from "./pages/assignments/AssignmentsPage";
-import ExperiencesPage from "./pages/experiences/ExperiencesPage";
-import ResumePage from "./pages/resume/ResumePage";
-import PortfolioPage from "./pages/portfolio/PortfolioPage";
-import OpportunitiesPage from "./pages/opportunities/OpportunitiesPage";
-import ToolboxPage from "./pages/toolbox/ToolboxPage";
-import CalendarPage from "./pages/calendar/CalendarPage";
+
+const AgentPanel = lazy(() => import("./components/AgentPanel"));
+const TimetablePage = lazy(() => import("./pages/timetable/TimetablePage"));
+const AssignmentsPage = lazy(
+  () => import("./pages/assignments/AssignmentsPage"),
+);
+const ExperiencesPage = lazy(
+  () => import("./pages/experiences/ExperiencesPage"),
+);
+const ResumePage = lazy(() => import("./pages/resume/ResumePage"));
+const PortfolioPage = lazy(() => import("./pages/portfolio/PortfolioPage"));
+const OpportunitiesPage = lazy(
+  () => import("./pages/opportunities/OpportunitiesPage"),
+);
+const ToolboxPage = lazy(() => import("./pages/toolbox/ToolboxPage"));
+const CalendarPage = lazy(() => import("./pages/calendar/CalendarPage"));
 import { clearLocalData, loadTimetable, saveTimetable } from "./store/idb";
 import {
   loadAssignments,
@@ -65,6 +79,7 @@ import { resumeHasContent } from "./lib/resume";
 import { applyTheme, readStoredTheme, type ThemeId } from "./lib/theme";
 import { backupFileName, downloadBackupFile } from "./lib/backup";
 import { newId } from "./lib/id";
+import { GUIDE_OPPORTUNITIES_KEY } from "./lib/guide";
 import type { OnboardingValues } from "./components/TodayOnboarding";
 import type {
   AgentExperienceDraft,
@@ -302,15 +317,23 @@ export default function App() {
     }
   }
 
-  async function handleStart() {
-    const playRitual = shouldPlayEntryRitual();
+  async function handleStart(mode: "fresh" | "demo") {
+    const playRitual = mode === "demo" && shouldPlayEntryRitual();
     if (playRitual) {
       setRitualReady(false);
       setRitual({ theme });
     }
 
     try {
-      await seedDemoData();
+      if (mode === "demo") {
+        await seedDemoData();
+      } else {
+        try {
+          window.sessionStorage.removeItem("studytrack:onboarding-hidden");
+        } catch {
+          // UI-only preference; storage may be disabled.
+        }
+      }
       navigate("today");
       if (playRitual) setRitualReady(true);
     } catch (error) {
@@ -579,6 +602,11 @@ export default function App() {
       setAgentMessages(snapshot.agentMessages);
       writeDemoMode(false);
       setDemoMode(false);
+      try {
+        window.localStorage.removeItem(GUIDE_OPPORTUNITIES_KEY);
+      } catch {
+        // UI-only preference; storage may be disabled.
+      }
       navigate("today");
       return {
         ok: true,
@@ -620,6 +648,11 @@ export default function App() {
     writeDemoMode(false);
     setDemoMode(false);
     try {
+      window.localStorage.removeItem(GUIDE_OPPORTUNITIES_KEY);
+    } catch {
+      // UI-only preference; storage may be disabled.
+    }
+    try {
       window.sessionStorage.removeItem("studytrack:onboarding-hidden");
     } catch {
       // UI-only preference; storage may be disabled.
@@ -647,7 +680,9 @@ export default function App() {
   if (route === "portfolio") {
     return (
       <>
-        <PortfolioPage key={hash} hash={hash} />
+        <Suspense fallback={<PageLoading />}>
+          <PortfolioPage key={hash} hash={hash} />
+        </Suspense>
         {ritualOverlay}
       </>
     );
@@ -694,9 +729,10 @@ export default function App() {
         onHome={() => navigate("landing")}
         onNavigate={(id) => navigate(id)}
       >
-        {loading ? (
-          <LoadingState module={route} />
-        ) : route === "today" ? (
+        <Suspense fallback={<PageLoading />}>
+          {loading ? (
+            <LoadingState module={route} />
+          ) : route === "today" ? (
           <TodayPage
             timetable={timetable}
             assignments={assignments}
@@ -708,6 +744,7 @@ export default function App() {
             onToggleAssignment={handleToggleAssignment}
             onAddNote={handleAddNote}
             onUseSample={() => handleUseSample()}
+            demoMode={demoMode}
             onNavigate={(id) => navigate(id)}
           />
         ) : route === "assignments" ? (
@@ -743,30 +780,52 @@ export default function App() {
             issue={CALENDAR_ISSUE}
             onNavigate={(id) => navigate(id)}
           />
-        ) : (
-          <TimetablePage
-            data={timetable}
-            onSave={handleSaveTimetable}
-            onUseSample={handleUseSampleTimetable}
-          />
-        )}
+          ) : (
+            <TimetablePage
+              data={timetable}
+              onSave={handleSaveTimetable}
+              onUseSample={handleUseSampleTimetable}
+            />
+          )}
+        </Suspense>
       </AppShell>
-      <AgentPanel
-        profile={profile}
-        experiences={experiences?.experiences ?? []}
-        ledger={ledger}
-        notes={notes}
-        resume={resume}
-        messages={agentMessages}
-        raised={route === "resume"}
-        onMessagesChange={handleAgentMessages}
-        onSaveProfile={handleAgentSaveProfile}
-        onSaveExperience={handleAgentSaveExperience}
-        onAddNote={handleAddNote}
-        onNavigate={(id) => navigate(id)}
-      />
+      <Suspense fallback={null}>
+        <AgentPanel
+          profile={profile}
+          experiences={experiences?.experiences ?? []}
+          ledger={ledger}
+          notes={notes}
+          resume={resume}
+          messages={agentMessages}
+          raised={route === "resume"}
+          onMessagesChange={handleAgentMessages}
+          onSaveProfile={handleAgentSaveProfile}
+          onSaveExperience={handleAgentSaveExperience}
+          onAddNote={handleAddNote}
+          onNavigate={(id) => navigate(id)}
+        />
+      </Suspense>
       {ritualOverlay}
     </>
+  );
+}
+
+function PageLoading() {
+  return (
+    <div className="px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-3xl">
+        <p className="font-mono text-[10px] tracking-[0.2em] text-ink/40">
+          正在打开
+        </p>
+        <p
+          role="status"
+          className="mt-3 flex items-center gap-2 text-sm text-ink/55"
+        >
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber" />
+          正在载入这一页…
+        </p>
+      </div>
+    </div>
   );
 }
 

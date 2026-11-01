@@ -49,6 +49,8 @@ import TodayOnboarding, {
 } from "../../components/TodayOnboarding";
 import CaptureBox from "../../components/CaptureBox";
 import LedgerHeatmap from "../../components/LedgerHeatmap";
+import GettingStartedGuide from "../../components/GettingStartedGuide";
+import { GUIDE_OPPORTUNITIES_KEY } from "../../lib/guide";
 
 interface TodayPageProps {
   timetable: TimetableData | null;
@@ -64,8 +66,15 @@ interface TodayPageProps {
   onToggleAssignment: (item: Assignment) => Promise<void>;
   onAddNote: (text: string, tags?: string[]) => Promise<void>;
   onUseSample: () => Promise<void>;
+  demoMode: boolean;
   onNavigate: (
-    id: "timetable" | "assignments" | "experiences" | "resume" | "calendar",
+    id:
+      | "timetable"
+      | "assignments"
+      | "experiences"
+      | "resume"
+      | "opportunities"
+      | "calendar",
   ) => void;
 }
 
@@ -91,6 +100,14 @@ const ONBOARDING_HIDDEN_KEY = "studytrack:onboarding-hidden";
 function readOnboardingHidden(): boolean {
   try {
     return window.sessionStorage.getItem(ONBOARDING_HIDDEN_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function readGuideOpportunities(): boolean {
+  try {
+    return window.localStorage.getItem(GUIDE_OPPORTUNITIES_KEY) === "1";
   } catch {
     return false;
   }
@@ -133,9 +150,13 @@ export default function TodayPage({
   onToggleAssignment,
   onAddNote,
   onUseSample,
+  demoMode,
   onNavigate,
 }: TodayPageProps) {
   const [, setTick] = useState(0);
+  const [opportunitiesVisited, setOpportunitiesVisited] = useState(
+    readGuideOpportunities,
+  );
   const [saveError, setSaveError] = useState<string | null>(null);
   const [sampleSeeding, setSampleSeeding] = useState(false);
   const [sampleError, setSampleError] = useState<string | null>(null);
@@ -200,7 +221,12 @@ export default function TodayPage({
   ].slice(0, 3);
 
   const showOnboarding = profile === null && !onboardingHidden;
-  const showStarter = timetable === null && assignments === null;
+  const showStarter =
+    profile !== null && timetable === null && assignments === null;
+  const showTodayBrief =
+    profile !== null && (notes.length > 0 || experienceItems.length > 0);
+  const showHeatmap =
+    profile !== null && (ledger.length > 0 || experienceItems.length > 0);
   const weekLabel = currentWeek !== null ? `第 ${currentWeek} 周` : null;
 
   function hideOnboarding() {
@@ -219,6 +245,36 @@ export default function TodayPage({
     } catch {
       // UI-only preference; storage may be disabled.
     }
+  }
+
+  function startOnboarding() {
+    reopenOnboarding();
+    window.setTimeout(() => {
+      document.getElementById("today-onboarding")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 40);
+  }
+
+  function focusCapture() {
+    document.getElementById("today-capture")?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+    window.setTimeout(() => {
+      document.getElementById("capture-text")?.focus();
+    }, 260);
+  }
+
+  function visitOpportunities() {
+    try {
+      window.localStorage.setItem(GUIDE_OPPORTUNITIES_KEY, "1");
+    } catch {
+      // UI-only preference; storage may be disabled.
+    }
+    setOpportunitiesVisited(true);
+    onNavigate("opportunities");
   }
 
   async function handleToggle(item: Assignment) {
@@ -356,18 +412,37 @@ export default function TodayPage({
           </div>
         )}
 
-        <TodayBrief
-          now={now}
+        <GettingStartedGuide
           profile={profile}
-          judgment={judgment}
-          ledger={ledger}
+          notes={notes}
+          experiences={experienceItems}
+          demoMode={demoMode}
+          sampleBusy={sampleSeeding}
+          sampleError={sampleError}
+          opportunitiesVisited={opportunitiesVisited}
+          onStartOnboarding={startOnboarding}
+          onWrite={focusCapture}
+          onUseSample={() => void handleSample()}
+          onNavigate={onNavigate}
+          onVisitOpportunities={visitOpportunities}
         />
 
-        {showOnboarding && (
-          <TodayOnboarding
-            onComplete={onOnboard}
-            onDismiss={hideOnboarding}
+        {showTodayBrief && (
+          <TodayBrief
+            now={now}
+            profile={profile}
+            judgment={judgment}
+            ledger={ledger}
           />
+        )}
+
+        {showOnboarding && (
+          <div id="today-onboarding" className="scroll-mt-4">
+            <TodayOnboarding
+              onComplete={onOnboard}
+              onDismiss={hideOnboarding}
+            />
+          </div>
         )}
 
         {showStarter && (
@@ -626,9 +701,10 @@ export default function TodayPage({
               )}
             </Panel>
 
-            <Panel
-              index="06"
-              title="回声"
+            {experienceItems.length > 0 && (
+              <Panel
+                index="06"
+                title="回声"
               action={
                 <button
                   type="button"
@@ -708,18 +784,21 @@ export default function TodayPage({
                   </div>
                 </div>
               )}
-            </Panel>
+              </Panel>
+            )}
           </div>
         </div>
 
-        <LedgerHeatmap
-          now={now}
-          ledger={ledger}
-          stats={stats}
-          readiness={readiness}
-          onOpenExperiences={() => onNavigate("experiences")}
-          onOpenResume={() => onNavigate("resume")}
-        />
+        {showHeatmap && (
+          <LedgerHeatmap
+            now={now}
+            ledger={ledger}
+            stats={stats}
+            readiness={readiness}
+            onOpenExperiences={() => onNavigate("experiences")}
+            onOpenResume={() => onNavigate("resume")}
+          />
+        )}
 
         <p className="mt-6 flex items-center gap-2 text-[11px] text-ink/35">
           <span

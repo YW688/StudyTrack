@@ -17,6 +17,7 @@ export const calendarItemSchema = z.object({
   deadline: z.string().optional(),
   sourceName: z.string().min(1).max(80),
   sourceUrl: z.string().max(500).optional(),
+  sourceDateTerms: z.array(z.string().max(80)).max(10).optional(),
   sourceType: z.enum(["official", "sample", "personal"]),
   verifiedAt: z.string().optional(),
   note: z.string().max(300).optional(),

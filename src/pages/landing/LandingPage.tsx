@@ -109,7 +109,7 @@ const STAGES: Stage[] = [
 interface LandingPageProps {
   theme: ThemeId;
   onThemeChange: (theme: ThemeId) => void;
-  onStart: () => Promise<void>;
+  onStart: (mode: "fresh" | "demo") => Promise<void>;
 }
 
 export default function LandingPage({
@@ -118,14 +118,18 @@ export default function LandingPage({
   onStart,
 }: LandingPageProps) {
   const [state, setState] = useState<StartState>("idle");
+  const [pending, setPending] = useState<"fresh" | "demo" | null>(null);
 
-  async function handleStart() {
+  async function handleStart(mode: "fresh" | "demo") {
+    setPending(mode);
     setState("loading");
     try {
-      await onStart();
+      await onStart(mode);
       setState("idle");
     } catch {
       setState("error");
+    } finally {
+      setPending(null);
     }
   }
 
@@ -180,8 +184,11 @@ export default function LandingPage({
                 />
                 <StartButton
                   state={state}
+                  pending={pending}
+                  mode="fresh"
+                  variant="primary"
                   size="sm"
-                  onClick={() => void handleStart()}
+                  onClick={() => void handleStart("fresh")}
                 />
               </div>
             </nav>
@@ -223,15 +230,30 @@ export default function LandingPage({
                 ))}
               </ul>
 
-              <div className="landing-enter mt-6 [animation-delay:340ms]">
+              <div className="landing-enter mt-6 flex flex-wrap items-center justify-center gap-2 [animation-delay:340ms]">
                 <StartButton
                   state={state}
+                  pending={pending}
+                  mode="fresh"
+                  variant="primary"
                   size="lg"
-                  onClick={() => void handleStart()}
+                  onClick={() => void handleStart("fresh")}
+                />
+                <StartButton
+                  state={state}
+                  pending={pending}
+                  mode="demo"
+                  variant="secondary"
+                  size="lg"
+                  onClick={() => void handleStart("demo")}
                 />
               </div>
 
-              <div className="landing-enter mt-4 flex flex-wrap items-center justify-center gap-2 [animation-delay:420ms]">
+              <p className="landing-enter lp-soft mt-3 text-[12px] leading-5 [animation-delay:380ms]">
+                第一步 建档 · 第二步 记一条 · 第三步 看匹配
+              </p>
+
+              <div className="landing-enter mt-3 flex flex-wrap items-center justify-center gap-2 [animation-delay:420ms]">
                 <span className="landing-chip">无需注册</span>
                 <span className="landing-chip">数据只存本机</span>
                 <span className="landing-chip">记录官随叫随到</span>
@@ -242,7 +264,7 @@ export default function LandingPage({
                 className="lp-alert mt-2 min-h-5 text-[12px] leading-5"
               >
                 {state === "error"
-                  ? "本机存储不可用 请检查浏览器隐私设置后重试"
+                  ? "没能打开今日页，请重试或检查浏览器存储权限。"
                   : ""}
               </p>
             </div>
@@ -335,11 +357,24 @@ export default function LandingPage({
                     </span>
                   </p>
                 </div>
-                <StartButton
-                  state={state}
-                  size="lg"
-                  onClick={() => void handleStart()}
-                />
+                <div className="flex flex-wrap items-center gap-2">
+                  <StartButton
+                    state={state}
+                    pending={pending}
+                    mode="fresh"
+                    variant="primary"
+                    size="lg"
+                    onClick={() => void handleStart("fresh")}
+                  />
+                  <StartButton
+                    state={state}
+                    pending={pending}
+                    mode="demo"
+                    variant="secondary"
+                    size="lg"
+                    onClick={() => void handleStart("demo")}
+                  />
+                </div>
               </div>
             </Reveal>
             <Reveal delay={120}>
@@ -511,24 +546,34 @@ function ModuleCard({ module, index }: { module: Module; index: number }) {
 
 function StartButton({
   state,
+  pending,
+  mode,
+  variant,
   size,
   onClick,
 }: {
   state: StartState;
+  pending: "fresh" | "demo" | null;
+  mode: "fresh" | "demo";
+  variant: "primary" | "secondary";
   size: "sm" | "lg";
   onClick: () => void;
 }) {
+  const loading = state === "loading" && pending === mode;
+  const label = mode === "demo" ? "先看示例" : "开始使用";
+  const loadingLabel = mode === "demo" ? "正在准备示例" : "正在打开";
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={state === "loading"}
       className={[
-        "start-button inline-flex items-center justify-center gap-2 rounded-full font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-cta)] disabled:cursor-wait",
+        "inline-flex items-center justify-center gap-2 rounded-full font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-cta)] disabled:cursor-wait disabled:opacity-60",
+        variant === "primary" ? "start-button" : "lp-theme-toggle",
         size === "lg" ? "min-h-12 px-7 text-[15px]" : "min-h-11 px-5 text-[14px]",
       ].join(" ")}
     >
-      {state === "loading" ? "正在准备示例" : "用示例体验"}
+      {loading ? loadingLabel : label}
       <span aria-hidden="true" className="text-[12px]">
         →
       </span>

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import dayjs from "dayjs";
 import type {
   ChannelType,
   Experience,
@@ -35,6 +36,13 @@ import {
 import { createJobIndex, searchJobScores } from "../../search/bm25";
 import MatchDetail from "./MatchDetail";
 import PasteJdDialog from "./PasteJdDialog";
+import SourceCheckBadge from "../../components/SourceCheckBadge";
+import {
+  SOURCE_CHECKS,
+  SOURCE_CHECKED_AT,
+  SOURCE_CHECK_POLICY,
+  getSourceCheck,
+} from "../../store/sourceChecks";
 
 interface OpportunitiesPageProps {
   experiences: ExperienceData | null;
@@ -203,6 +211,14 @@ export default function OpportunitiesPage({
       CHANNELS.some((channel) => channel.type === tab.id),
   );
   const month = currentMonth();
+  const channelChecks = SOURCE_CHECKS.filter(
+    (check) => check.kind === "channel",
+  );
+  const jobChecks = SOURCE_CHECKS.filter((check) => check.kind === "job");
+  const channelOk = channelChecks.filter(
+    (check) => check.status === "ok",
+  ).length;
+  const jobOk = jobChecks.filter((check) => check.status === "ok").length;
 
   const stats = [
     {
@@ -341,6 +357,13 @@ export default function OpportunitiesPage({
             </div>
             <p className="mt-2 text-xs leading-5 text-ink/55">
               {CHANNELS.length} 个官方入口 + {JOB_POSTINGS.length} 张演示岗位卡。把经历对到要求上：命中指回原文，缺口给出下一步。
+            </p>
+            <p className="mt-1 font-mono text-[10px] leading-5 text-ink/35">
+              来源核验：官方入口 {channelOk}/{CHANNELS.length} 可达 · 演示卡来源{" "}
+              {jobOk}/{JOB_POSTINGS.length} 可达
+              {SOURCE_CHECKED_AT
+                ? ` · 核验于 ${dayjs(SOURCE_CHECKED_AT).format("M月D日 HH:mm")}`
+                : ""}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -807,10 +830,18 @@ export default function OpportunitiesPage({
                       </span>
                     </button>
                     <div className="border-rule flex items-center justify-between gap-2 border-t pr-1.5 pl-3.5">
-                      <span className="min-w-0 truncate font-mono text-[9px] text-ink/35">
-                        {job.custom
-                          ? "粘贴 JD · 仅当前页面"
-                          : `来源：${job.sourceName}`}
+                      <span className="flex min-w-0 items-center gap-1.5">
+                        <span className="min-w-0 truncate font-mono text-[9px] text-ink/35">
+                          {job.custom
+                            ? "粘贴 JD · 仅当前页面"
+                            : `来源：${job.sourceName}`}
+                        </span>
+                        {!job.custom && (
+                          <SourceCheckBadge
+                            check={getSourceCheck(job.id)}
+                            compact
+                          />
+                        )}
                       </span>
                       {job.sourceUrl ? (
                         <a
@@ -1029,10 +1060,16 @@ export default function OpportunitiesPage({
                       </span>
                     )}
                     <span className="border-rule mt-3 flex items-center justify-between gap-2 border-t pt-2.5">
-                      <span className="text-[10px] text-ink/40">
-                        适合 {formatGradeFit(channel.fitGrade)}
+                      <span className="flex min-w-0 flex-wrap items-center gap-1.5">
+                        <span className="text-[10px] text-ink/40">
+                          适合 {formatGradeFit(channel.fitGrade)}
+                        </span>
+                        <SourceCheckBadge
+                          check={getSourceCheck(channel.id)}
+                          compact
+                        />
                       </span>
-                      <span className="inline-flex items-center gap-1 text-[10px] text-ink/55 group-hover:text-ink">
+                      <span className="inline-flex shrink-0 items-center gap-1 text-[10px] text-ink/55 group-hover:text-ink">
                         打开官网
                         <svg
                           aria-hidden="true"
@@ -1055,11 +1092,15 @@ export default function OpportunitiesPage({
               );
             })}
           </ul>
+
+          <p className="mt-3 text-[10px] leading-5 text-ink/35">
+            {SOURCE_CHECK_POLICY}
+          </p>
         </section>
 
         <footer className="border-rule mt-8 border-t py-5">
           <p className="text-[10px] leading-5 text-ink/35">
-            匹配、检索与数据存储均在本机浏览器完成；岗位方向整理自企业官方校园招聘页面，链接直达官网，具体在招职位与截止时间以官网为准；学径不代投、不抓取招聘平台。
+            匹配、检索与数据存储均在本机浏览器完成；来源核验在构建期完成，只检查官方公开入口可达性；岗位方向仍为人工整理，具体在招职位与截止时间以官网为准；学径不代投、不抓取招聘平台职位内容。
           </p>
         </footer>
       </div>

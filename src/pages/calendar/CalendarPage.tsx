@@ -13,6 +13,13 @@ import {
   isCalendarItemPast,
   isCalendarItemToday,
 } from "../../lib/calendar";
+import SourceCheckBadge from "../../components/SourceCheckBadge";
+import {
+  SOURCE_CHECKS,
+  SOURCE_CHECKED_AT,
+  SOURCE_CHECK_POLICY,
+  getSourceCheck,
+} from "../../store/sourceChecks";
 
 type CalendarFilter = "all" | CalendarCategory;
 
@@ -60,6 +67,18 @@ export default function CalendarPage({
     (item) => item.sourceType === "official",
   ).length;
   const sampleCount = items.filter((item) => item.sourceType === "sample").length;
+  const calendarChecks = SOURCE_CHECKS.filter(
+    (check) => check.kind === "calendar",
+  );
+  const reachableCount = calendarChecks.filter(
+    (check) => check.status === "ok",
+  ).length;
+  const fetchedCount = calendarChecks.filter(
+    (check) => check.mode === "fetch" && check.status === "ok",
+  ).length;
+  const dateMatchedCount = calendarChecks.filter(
+    (check) => check.dateMatched === true,
+  ).length;
 
   const filtered =
     filter === "all"
@@ -108,6 +127,15 @@ export default function CalendarPage({
                 : "更新日期待补"}{" "}
               · 官方 {officialCount} 条 · 示例 {sampleCount} 条
             </p>
+            {calendarChecks.length > 0 && (
+              <p className="mt-1 font-mono text-[10px] leading-5 text-ink/35">
+                来源核验：{reachableCount}/{calendarChecks.length} 可达 · 正文读取{" "}
+                {fetchedCount} 条 · 日期匹配 {dateMatchedCount} 条
+                {SOURCE_CHECKED_AT
+                  ? ` · 核验于 ${dayjs(SOURCE_CHECKED_AT).format("M月D日 HH:mm")}`
+                  : ""}
+              </p>
+            )}
           </div>
           <div className="flex flex-wrap gap-2">
             <button
@@ -262,12 +290,72 @@ export default function CalendarPage({
           </>
         )}
 
+        {calendarChecks.length > 0 && (
+          <details className="border-rule group mt-8 rounded-xl border bg-surface">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 text-xs text-ink/50 [&::-webkit-details-marker]:hidden sm:px-5">
+              来源核验明细 · {calendarChecks.length} 条
+              <span className="font-mono text-[9px] text-ink/30 group-open:hidden">
+                展开
+              </span>
+              <span className="hidden font-mono text-[9px] text-ink/30 group-open:inline">
+                收起
+              </span>
+            </summary>
+            <div className="border-rule border-t px-4 py-3 sm:px-5">
+              <p className="text-[10px] leading-5 text-ink/40">
+                {SOURCE_CHECK_POLICY}
+              </p>
+              <ul className="mt-3 space-y-3">
+                {calendarChecks.map((check) => (
+                  <li
+                    key={check.id}
+                    className="border-rule border-t pt-3 first:border-t-0 first:pt-0"
+                  >
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                      <span className="min-w-0 text-[11px] leading-5 font-medium text-ink/65">
+                        {check.label}
+                      </span>
+                      <SourceCheckBadge check={check} compact />
+                      <span className="font-mono text-[9px] text-ink/30">
+                        {dayjs(check.checkedAt).format("M月D日 HH:mm")}
+                      </span>
+                      <a
+                        href={check.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex min-h-9 items-center text-[10px] text-ink/45 underline underline-offset-2 hover:text-ink"
+                      >
+                        来源 ↗
+                      </a>
+                    </div>
+                    {check.title && (
+                      <p className="mt-1 text-[10px] leading-5 text-ink/40">
+                        页面标题：{check.title}
+                      </p>
+                    )}
+                    {check.excerpt && (
+                      <p className="mt-1 text-[10px] leading-5 text-ink/45">
+                        「{check.excerpt}」
+                      </p>
+                    )}
+                    {check.note && (
+                      <p className="mt-0.5 text-[9px] leading-4 text-ink/35">
+                        {check.note}
+                      </p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </details>
+        )}
+
         <div className="border-rule mt-8 border-t pt-4">
           <p className="text-[11px] leading-5 text-ink/40">
             日期以官方公告为准；未公布日期的条目只保留名称与来源，不写推测日期。
           </p>
           <p className="mt-1 text-[11px] leading-5 text-ink/40">
-            本站不抓取官网、不代报名；报名与材料提交请走官方入口或本校通知。
+            来源核验在构建期完成：只检查公开页面可达性，正文只保留标题与短片段；不在浏览器运行时抓取、不代报名。
           </p>
         </div>
       </div>
@@ -287,6 +375,7 @@ function CalendarRow({
   const today = isCalendarItemToday(item, now);
   const schedule = calendarScheduleLines(item);
   const official = item.sourceType === "official";
+  const sourceCheck = getSourceCheck(item.id);
   const meta = [
     item.organizer,
     official ? item.sourceName : "示例大学节点",
@@ -366,6 +455,7 @@ function CalendarRow({
                 以本校通知为准
               </span>
             )}
+            {official && <SourceCheckBadge check={sourceCheck} compact />}
             {official && item.verifiedAt && (
               <span className="font-mono text-[9px] text-ink/30">
                 核对于 {formatCalendarDate(item.verifiedAt)}

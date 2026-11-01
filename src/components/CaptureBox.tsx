@@ -59,8 +59,9 @@ export default function CaptureBox({
 
   return (
     <section
+      id="today-capture"
       aria-label="留痕"
-      className="border-rule overflow-hidden rounded-xl border bg-surface"
+      className="border-rule scroll-mt-4 overflow-hidden rounded-xl border bg-surface"
     >
       <header className="border-rule flex items-center justify-between gap-3 border-b px-4 py-2 sm:px-5">
         <div className="flex items-baseline gap-3">

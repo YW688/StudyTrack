@@ -452,6 +452,7 @@ export interface CalendarItem {
   deadline?: string;
   sourceName: string;
   sourceUrl?: string;
+  sourceDateTerms?: string[];
   sourceType: CalendarSourceType;
   verifiedAt?: string;
   note?: string;
