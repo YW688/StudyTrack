@@ -41,6 +41,7 @@ import { readyExperienceIds } from "../../lib/experience";
 import MatchDetail from "./MatchDetail";
 import PasteJdDialog from "./PasteJdDialog";
 import SourceCheckBadge from "../../components/SourceCheckBadge";
+import { Segmented } from "../../components/Controls";
 import {
   SOURCE_CHECKS,
   SOURCE_CHECKED_AT,
@@ -642,28 +643,12 @@ export default function OpportunitiesPage({
               )}
             </div>
 
-            <div
-              role="group"
-              aria-label="岗位类型"
-              className="border-rule inline-flex rounded-lg border bg-surface p-0.5"
-            >
-              {typeTabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  type="button"
-                  aria-pressed={typeFilter === tab.id}
-                  onClick={() => setTypeFilter(tab.id)}
-                  className={[
-                    "min-h-10 rounded-md px-3 text-xs whitespace-nowrap",
-                    typeFilter === tab.id
-                      ? "bg-ink text-paper"
-                      : "text-ink-3",
-                  ].join(" ")}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
+            <Segmented
+              label="岗位类型"
+              value={typeFilter}
+              options={typeTabs}
+              onChange={setTypeFilter}
+            />
 
             <label className="sr-only" htmlFor="job-city">
               城市
@@ -672,7 +657,7 @@ export default function OpportunitiesPage({
               id="job-city"
               value={cityFilter}
               onChange={(event) => setCityFilter(event.target.value)}
-              className="border-rule focus-visible:border-accent-ink focus:ring-2 focus:ring-accent/45 min-h-11 rounded-lg border bg-surface px-2 text-xs text-ink-3 outline-none"
+              className="ctl-field"
             >
               <option value="all">全部城市</option>
               {cityOptions.map((city) => (
@@ -691,7 +676,7 @@ export default function OpportunitiesPage({
               onChange={(event) =>
                 setFamilyFilter(event.target.value as "all" | JobFamily)
               }
-              className="border-rule focus-visible:border-accent-ink focus:ring-2 focus:ring-accent/45 min-h-11 rounded-lg border bg-surface px-2 text-xs text-ink-3 outline-none"
+              className="ctl-field"
             >
               <option value="all">全部方向</option>
               {familyOptions.map((family) => (
@@ -770,33 +755,15 @@ export default function OpportunitiesPage({
         </section>
 
         <div className="mt-4 flex items-center justify-between gap-3 xl:hidden">
-          <div
-            className="border-rule inline-flex rounded-lg border bg-surface p-0.5"
-            aria-label="切换岗位列表与详情"
-          >
-            <button
-              type="button"
-              aria-pressed={view === "list"}
-              onClick={() => setView("list")}
-              className={[
-                "min-h-10 rounded-md px-3 text-xs",
-                view === "list" ? "bg-ink text-paper" : "text-ink-3",
-              ].join(" ")}
-            >
-              岗位列表
-            </button>
-            <button
-              type="button"
-              aria-pressed={view === "detail"}
-              onClick={() => setView("detail")}
-              className={[
-                "min-h-10 rounded-md px-3 text-xs",
-                view === "detail" ? "bg-ink text-paper" : "text-ink-3",
-              ].join(" ")}
-            >
-              匹配详情
-            </button>
-          </div>
+          <Segmented
+            label="切换岗位列表与详情"
+            value={view}
+            options={[
+              { id: "list", label: "岗位列表" },
+              { id: "detail", label: "匹配详情" },
+            ]}
+            onChange={setView}
+          />
           <span className="font-mono text-micro tabular-nums text-ink-3">
             显示 {visible.length}
           </span>

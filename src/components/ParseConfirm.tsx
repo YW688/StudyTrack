@@ -102,6 +102,7 @@ export default function ParseConfirm({
   );
   const [sheetIndex, setSheetIndex] = useState(0);
   const [saving, setSaving] = useState(false);
+  const [startDate, setStartDate] = useState(result.semester.startDate ?? "");
 
   const sheet = result.sheets[sheetIndex];
   const sessionCount = useMemo(
@@ -217,7 +218,10 @@ export default function ParseConfirm({
     if (!cleaned.length) return;
     setSaving(true);
     try {
-      await onConfirm(cleaned, result.semester);
+      await onConfirm(cleaned, {
+        ...result.semester,
+        startDate: startDate || undefined,
+      });
     } finally {
       setSaving(false);
     }
@@ -240,10 +244,24 @@ export default function ParseConfirm({
             <p className="mt-1 text-xs text-ink-3">
               {result.semester.name ?? "未识别学期"} · 共读取 {draft.length} 门课、
               {sessionCount} 个时段
-              {result.semester.startDate
-                ? ` · ${result.semester.startDate} 开学`
-                : ""}
             </p>
+            <label className="mt-2 flex flex-wrap items-center gap-2 text-xs text-ink-3">
+              <span className={startDate ? "" : "text-amber-ink"}>
+                {startDate ? "开学日期" : "补开学日期"}
+              </span>
+              <input
+                type="date"
+                aria-label="开学日期"
+                value={startDate}
+                onChange={(event) => setStartDate(event.target.value)}
+                className="ctl-field"
+              />
+              {!startDate && (
+                <span className="text-amber-ink">
+                  没识别到 今日课程无法判断
+                </span>
+              )}
+            </label>
           </div>
           <div className="flex items-center gap-2">
             <button

@@ -31,13 +31,29 @@ export function coursesOnDay(
   weekday: DayOfWeek,
 ): TodayCourse[] {
   if (!timetable || week === null) return [];
+  return collectCourses(
+    timetable,
+    (session) => session.day === weekday && session.weeks.includes(week),
+  );
+}
+
+/** 开学日期缺失时 退化为按星期列出 周次不参与筛选 */
+export function coursesOnWeekday(
+  timetable: TimetableData | null,
+  weekday: DayOfWeek,
+): TodayCourse[] {
+  if (!timetable) return [];
+  return collectCourses(timetable, (session) => session.day === weekday);
+}
+
+function collectCourses(
+  timetable: TimetableData,
+  match: (session: Course["sessions"][number]) => boolean,
+): TodayCourse[] {
   return timetable.courses
     .flatMap((course) =>
       course.sessions
-        .filter(
-          (session) =>
-            session.day === weekday && session.weeks.includes(week),
-        )
+        .filter(match)
         .map((session) => ({
           course,
           startPeriod: session.startPeriod,
@@ -91,6 +107,7 @@ export interface JudgmentInput {
   courses: TodayCourse[];
   pending: Assignment[];
   ledger: LedgerEvent[];
+  weekUnknown?: boolean;
 }
 
 export function buildTodayJudgment(input: JudgmentInput): TodayJudgment {
@@ -122,6 +139,13 @@ export function buildTodayJudgment(input: JudgmentInput): TodayJudgment {
     return {
       line: "今天有个截止在等你",
       detail: `${urgent.title} ${formatDue(urgent.due)}`,
+    };
+  }
+
+  if (input.weekUnknown) {
+    return {
+      line: "先给课表补个开学日期",
+      detail: "补上就能算出今天是第几周 也能判断今天有没有课",
     };
   }
 

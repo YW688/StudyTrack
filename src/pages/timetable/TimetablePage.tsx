@@ -9,6 +9,7 @@ import {
 } from "../../parse/schedule";
 import TimetableGrid from "../../components/TimetableGrid";
 import ParseConfirm from "../../components/ParseConfirm";
+import { Stepper, ToolbarButton } from "../../components/Controls";
 
 interface TimetablePageProps {
   data: TimetableData | null;
@@ -113,6 +114,19 @@ export default function TimetablePage({
       setNotice(error instanceof Error ? error.message : "写入本机失败。");
     }
     setParseResult(null);
+  }
+
+  async function handleStartDateChange(value: string) {
+    if (!data) return;
+    try {
+      await onSave({
+        ...data,
+        semester: { ...data.semester, startDate: value || undefined },
+        updatedAt: new Date().toISOString(),
+      });
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "开学日期未保存。");
+    }
   }
 
   async function handleManualSubmit() {
@@ -265,6 +279,13 @@ export default function TimetablePage({
             onSubmit={handleManualSubmit}
           />
         )}
+        {parseResult && (
+          <ParseConfirm
+            result={parseResult}
+            onCancel={() => setParseResult(null)}
+            onConfirm={handleConfirm}
+          />
+        )}
       </div>
     );
   }
@@ -294,83 +315,64 @@ export default function TimetablePage({
                 </span>
               )}
             </div>
-            <p className="mt-2 text-xs leading-5 text-ink-3">
-              {data.semester.name ?? "未命名学期"} · 共 {data.semester.totalWeeks} 周
-              {data.semester.startDate ? ` · ${data.semester.startDate} 开学` : ""}
-              {" · "}
-              {data.courses.length} 门课
-              {data.sourceLabel ? ` · ${data.sourceLabel}` : ""}
-            </p>
+            <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-2 text-xs leading-5 text-ink-3">
+              <span>
+                {data.semester.name ?? "未命名学期"} · 共{" "}
+                {data.semester.totalWeeks} 周 · {data.courses.length} 门课
+                {data.sourceLabel ? ` · ${data.sourceLabel}` : ""}
+              </span>
+              <label className="inline-flex items-center gap-2">
+                <span className={data.semester.startDate ? "" : "text-amber-ink"}>
+                  {data.semester.startDate ? "开学日期" : "补开学日期"}
+                </span>
+                <input
+                  type="date"
+                  aria-label="开学日期"
+                  value={data.semester.startDate ?? ""}
+                  onChange={(event) =>
+                    void handleStartDateChange(event.target.value)
+                  }
+                  className="ctl-field"
+                />
+              </label>
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <div className="border-rule flex items-center rounded-lg border bg-surface">
-              <button
-                type="button"
-                aria-label="上一周"
-                onClick={() => setWeek((value) => Math.max(1, value - 1))}
-                disabled={week <= 1}
-                className="flex h-10 w-10 items-center justify-center rounded-l-lg text-ink-3 disabled:opacity-30"
-              >
-                ‹
-              </button>
-              <label className="border-rule border-x">
-                <span className="sr-only">选择周次</span>
-                <select
-                  value={week}
-                  onChange={(event) => setWeek(Number(event.target.value))}
-                  className="h-10 bg-transparent px-2 pr-6 text-sm font-medium outline-none"
-                >
-                  {Array.from(
-                    { length: data.semester.totalWeeks },
-                    (_, index) => index + 1,
-                  ).map((item) => (
-                    <option key={item} value={item}>
-                      第 {item} 周
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <button
-                type="button"
-                aria-label="下一周"
-                onClick={() =>
-                  setWeek((value) =>
-                    Math.min(data.semester.totalWeeks, value + 1),
-                  )
-                }
-                disabled={week >= data.semester.totalWeeks}
-                className="flex h-10 w-10 items-center justify-center rounded-r-lg text-ink-3 disabled:opacity-30"
-              >
-                ›
-              </button>
-            </div>
+            <Stepper
+              label="选择周次"
+              value={week}
+              items={Array.from(
+                { length: data.semester.totalWeeks },
+                (_, index) => ({
+                  value: index + 1,
+                  label: `第 ${index + 1} 周`,
+                }),
+              )}
+              onChange={setWeek}
+            />
 
             {currentWeek !== null && week !== currentWeek && (
-              <button
-                type="button"
-                onClick={() => setWeek(currentWeek)}
-                className="border-rule hover:bg-ink/[0.03] inline-flex h-10 items-center rounded-lg border px-3 text-xs"
-              >
+              <ToolbarButton onClick={() => setWeek(currentWeek)}>
                 回到本周
-              </button>
+              </ToolbarButton>
             )}
 
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={parsing}
-              className="border-rule hover:bg-ink/[0.03] inline-flex h-10 items-center gap-2 rounded-lg border px-4 text-xs disabled:opacity-60"
-            >
-              {parsing ? "解析中…" : "导入 / 更新"}
-            </button>
-            <button
-              type="button"
-              onClick={() => setManualOpen(true)}
-              className="hover:bg-ink/[0.04] inline-flex h-10 items-center rounded-lg px-3 text-xs text-ink-3"
-            >
-              手动添加
-            </button>
+            <div className="flex items-center gap-2">
+              <ToolbarButton
+                onClick={() => fileInputRef.current?.click()}
+                disabled={parsing}
+              >
+                {parsing ? "解析中…" : "导入 / 更新"}
+              </ToolbarButton>
+              <button
+                type="button"
+                onClick={() => setManualOpen(true)}
+                className="hover:bg-ink/[0.04] inline-flex min-h-12 items-center rounded-lg px-3 text-xs text-ink-3 sm:min-h-10"
+              >
+                手动添加
+              </button>
+            </div>
           </div>
         </header>
 

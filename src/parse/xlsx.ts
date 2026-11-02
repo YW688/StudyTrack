@@ -208,6 +208,20 @@ export function parseWorkbook(
   );
   semester.totalWeeks = totalWeeks || 20;
 
+  // 没写周次的课按整学期处理 否则导入后在任何一周都看不到
+  let filledWeeks = 0;
+  for (const course of courses.values()) {
+    if (course.sessions.some((session) => session.weeks.length)) continue;
+    filledWeeks += 1;
+    course.sessions.forEach((session) => {
+      session.weeks = Array.from(
+        { length: semester.totalWeeks },
+        (_, index) => index + 1,
+      );
+    });
+    course.confidence = "low";
+  }
+
   const lowConfidence = [...courses.values()].filter(
     (course) => course.confidence === "low",
   ).length;
@@ -220,6 +234,11 @@ export function parseWorkbook(
   if (lowConfidence) {
     warnings.push(
       `${lowConfidence} 门课程的周次或节次没有完全识别，已标黄，请在确认前补全。`,
+    );
+  }
+  if (filledWeeks) {
+    warnings.push(
+      `${filledWeeks} 门课程没写周次，已按整学期 1-${semester.totalWeeks} 周处理，请在确认时核对。`,
     );
   }
   if (parsedCells === 0 && unidentifiedCells > 0) {

@@ -15,6 +15,7 @@ import type {
   ResumeBulletCache,
   ResumeData,
   ResumeSnapshot,
+  ResumeTemplateId,
 } from "../../types";
 import ExperiencePool, {
   type PoolFilter,
@@ -23,8 +24,10 @@ import ResumePaper, {
   type ResumePaperEntry,
 } from "../../components/ResumePaper";
 import ResumeBasicsForm from "../../components/ResumeBasicsForm";
+import ResumeTemplates from "../../components/ResumeTemplates";
 import BulletManager from "../../components/BulletManager";
 import PortfolioDialog from "../../components/PortfolioDialog";
+import { Segmented } from "../../components/Controls";
 import SnapshotMenu from "./SnapshotMenu";
 import { generateResumeBullets } from "../../ai/tasks/resume";
 import {
@@ -189,6 +192,29 @@ export default function ResumePage({
       ...resume,
       basics: { ...resume.basics, ...patch },
     });
+  }
+
+  function patchTemplate(template: ResumeTemplateId) {
+    commit({ ...resume, template });
+    setNotice(
+      template === "classic"
+        ? "已换回经典单栏"
+        : "已换版式 预览与打印同步更新",
+    );
+    setError(null);
+  }
+
+  function patchPhoto(next: string | null) {
+    if (next) {
+      commit({ ...resume, photo: next });
+      setNotice("照片已放上简历 只存本机");
+    } else {
+      const nextResume = { ...resume };
+      delete nextResume.photo;
+      commit(nextResume);
+      setNotice("已移除简历照片");
+    }
+    setError(null);
   }
 
   function toggleSelect(id: string) {
@@ -491,6 +517,8 @@ export default function ResumePage({
   const nameMissing = !displayedBasics.name.trim();
   const selectedCount = displayedEntries.length;
   const latestSnapshot = snapshots[0] ?? null;
+  const template: ResumeTemplateId = resume.template ?? "classic";
+  const photo = resume.photo ?? null;
 
   return (
     <div className="resume-page px-4 pb-24 sm:px-6 lg:px-8 lg:pb-10">
@@ -659,6 +687,8 @@ export default function ResumePage({
               <ResumePaper
                 basics={displayedBasics}
                 entries={previewEntries}
+                template={template}
+                photo={photo}
                 frameRef={paperFrameRef}
                 paperRef={paperRef}
               />
@@ -667,37 +697,15 @@ export default function ResumePage({
         ) : (
           <>
             <div className="resume-toolbar mt-4 flex items-center justify-between gap-3 lg:hidden">
-              <div
-                className="border-rule inline-flex rounded-lg border bg-surface p-0.5"
-                aria-label="切换经历池与预览"
-              >
-                <button
-                  type="button"
-                  aria-pressed={view === "pool"}
-                  onClick={() => setView("pool")}
-                  className={[
-                    "min-h-10 rounded-md px-3 text-xs",
-                    view === "pool"
-                      ? "bg-ink text-paper"
-                      : "text-ink-3",
-                  ].join(" ")}
-                >
-                  经历池
-                </button>
-                <button
-                  type="button"
-                  aria-pressed={view === "paper"}
-                  onClick={() => setView("paper")}
-                  className={[
-                    "min-h-10 rounded-md px-3 text-xs",
-                    view === "paper"
-                      ? "bg-ink text-paper"
-                      : "text-ink-3",
-                  ].join(" ")}
-                >
-                  预览
-                </button>
-              </div>
+              <Segmented
+                label="切换经历池与预览"
+                value={view}
+                options={[
+                  { id: "pool", label: "经历池" },
+                  { id: "paper", label: "预览" },
+                ]}
+                onChange={setView}
+              />
               <span className="font-mono text-micro tabular-nums text-ink-3">
                 已选 {entries.length} 条
               </span>
@@ -755,15 +763,21 @@ export default function ResumePage({
 
                 <ResumeBasicsForm
                   basics={resume.basics}
+                  photo={photo}
                   open={basicsOpen}
                   onToggle={() => setBasicsOpen((open) => !open)}
                   onChange={patchBasics}
+                  onPhotoChange={patchPhoto}
                 />
+
+                <ResumeTemplates value={template} onChange={patchTemplate} />
 
                 <div className="resume-paper-wrap mt-3">
                   <ResumePaper
                     basics={resume.basics}
                     entries={entries}
+                    template={template}
+                    photo={photo}
                     frameRef={paperFrameRef}
                     paperRef={paperRef}
                   />

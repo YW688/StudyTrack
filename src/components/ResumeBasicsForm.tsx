@@ -1,11 +1,15 @@
+import { useRef, useState } from "react";
 import type { ResumeBasics } from "../types";
 import { RESUME_GRADES } from "../types";
+import { createResumePhotoFromFile } from "../lib/resumePhoto";
 
 interface ResumeBasicsFormProps {
   basics: ResumeBasics;
+  photo: string | null;
   open: boolean;
   onToggle: () => void;
   onChange: (patch: Partial<ResumeBasics>) => void;
+  onPhotoChange: (next: string | null) => void;
 }
 
 const FIELD =
@@ -15,13 +19,37 @@ const LABEL =
 
 export default function ResumeBasicsForm({
   basics,
+  photo,
   open,
   onToggle,
   onChange,
+  onPhotoChange,
 }: ResumeBasicsFormProps) {
   const filled = Object.values(basics).filter(
     (value) => value.trim().length > 0,
   ).length;
+
+  const photoInputRef = useRef<HTMLInputElement>(null);
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const [photoError, setPhotoError] = useState<string | null>(null);
+
+  async function handlePhotoFile(file: File | undefined) {
+    if (!file) return;
+    setPhotoBusy(true);
+    setPhotoError(null);
+    const result = await createResumePhotoFromFile(file);
+    if (result.ok) {
+      onPhotoChange(result.dataUrl);
+    } else {
+      setPhotoError(result.message);
+    }
+    setPhotoBusy(false);
+  }
+
+  function removePhoto() {
+    setPhotoError(null);
+    onPhotoChange(null);
+  }
 
   return (
     <section
@@ -62,6 +90,70 @@ export default function ResumeBasicsForm({
           id="resume-basics-fields"
           className="border-rule border-t px-4 py-4 sm:px-5"
         >
+          <div className="border-rule mb-4 flex items-start gap-3 border-b pb-4">
+            <div className="border-rule bg-ink/[0.03] flex h-[72px] w-[54px] shrink-0 items-center justify-center overflow-hidden rounded-md border">
+              {photo ? (
+                <img
+                  src={photo}
+                  alt="简历照片"
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <span className="text-center text-[10px] leading-4 text-ink-4">
+                  3:4
+                  <br />
+                  照片
+                </span>
+              )}
+            </div>
+            <div className="min-w-0">
+              <p className="mb-1.5 font-mono text-micro tracking-[0.14em] text-ink-3">
+                照片
+              </p>
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => photoInputRef.current?.click()}
+                  disabled={photoBusy}
+                  className="border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border px-3 text-xs disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  {photoBusy ? "处理中…" : photo ? "更换照片" : "上传照片"}
+                </button>
+                {photo && (
+                  <button
+                    type="button"
+                    onClick={removePhoto}
+                    disabled={photoBusy}
+                    className="inline-flex min-h-11 items-center text-[11px] font-medium text-red-800 underline-offset-2 hover:underline disabled:opacity-40"
+                  >
+                    移除照片
+                  </button>
+                )}
+                <input
+                  ref={photoInputRef}
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp,image/gif"
+                  aria-label="选择简历照片"
+                  tabIndex={-1}
+                  className="sr-only"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    event.target.value = "";
+                    void handlePhotoFile(file);
+                  }}
+                />
+              </div>
+              <p className="mt-1.5 text-micro leading-5 text-ink-4">
+                选填 建议 3:4 证件照 只存本机 不会上传
+              </p>
+              {photoError && (
+                <p role="alert" className="mt-1 text-micro text-red-800">
+                  {photoError}
+                </p>
+              )}
+            </div>
+          </div>
+
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
               <label htmlFor="resume-name" className={LABEL}>

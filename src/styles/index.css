@@ -2773,6 +2773,180 @@ button.app-mini-chip:hover {
   color: var(--color-ink);
 }
 
+/* ---------- 工具栏控件：分段切换 / 步进器 / 描边按钮 ---------- */
+
+.ctl-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--color-rule);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.ctl-seg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: 9px;
+  font-size: 12px;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--color-ink-3);
+  transition:
+    background-color 140ms ease,
+    color 140ms ease;
+}
+
+.ctl-seg:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+  color: var(--color-ink);
+}
+
+.ctl-seg[aria-pressed="true"] {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-weight: 500;
+}
+
+.ctl-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  min-height: 40px;
+  border-radius: 9px;
+  color: var(--color-ink-3);
+  transition:
+    background-color 140ms ease,
+    color 140ms ease;
+}
+
+.ctl-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ctl-icon:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+  color: var(--color-ink);
+}
+
+.ctl-icon:disabled {
+  opacity: 0.28;
+}
+
+.ctl-select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.ctl-select {
+  appearance: none;
+  -webkit-appearance: none;
+  min-height: 40px;
+  min-width: 96px;
+  padding: 0 26px 0 10px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+  text-align: center;
+  text-align-last: center;
+  cursor: pointer;
+  transition: background-color 140ms ease;
+}
+
+.ctl-select:hover {
+  background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+}
+
+.ctl-select-caret {
+  position: absolute;
+  right: 10px;
+  width: 11px;
+  height: 11px;
+  pointer-events: none;
+  color: var(--color-ink-4);
+}
+
+.ctl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--color-rule);
+  border-radius: 12px;
+  background: var(--color-surface);
+  font-size: 12px;
+  color: var(--color-ink-2);
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease;
+}
+
+.ctl-btn:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--color-ink) 18%, var(--color-rule));
+  background: color-mix(in srgb, var(--color-ink) 4%, var(--color-surface));
+  color: var(--color-ink);
+}
+
+.ctl-btn:disabled {
+  opacity: 0.45;
+}
+
+.ctl-field {
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--color-rule);
+  border-radius: 12px;
+  background: var(--color-surface);
+  font-size: 12px;
+  color: var(--color-ink-3);
+  outline: none;
+}
+
+.ctl-field:hover {
+  color: var(--color-ink);
+}
+
+.ctl-group button:focus-visible,
+.ctl-btn:focus-visible,
+.ctl-field:focus-visible,
+.ctl-select:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--color-accent) 55%, transparent);
+  outline-offset: 2px;
+}
+
+@media (min-width: 640px) {
+  .ctl-seg,
+  .ctl-select {
+    min-height: 36px;
+  }
+
+  .ctl-icon {
+    width: 34px;
+    min-height: 36px;
+  }
+}
+
+@media (max-width: 639px) {
+  .ctl-btn,
+  .ctl-field {
+    min-height: 48px;
+  }
+}
+
 .app-pill {
   border: 1px solid color-mix(in srgb, var(--tint) 55%, var(--color-rule));
   background: rgba(var(--wash-rgb), 0.48);
@@ -2960,8 +3134,8 @@ button.app-mini-chip:hover {
   display: flex;
   align-items: center;
   gap: 10px;
-  min-height: 48px;
-  padding: 0 6px 0 14px;
+  min-height: 52px;
+  padding: 0 4px 0 14px;
   border-radius: 9999px;
   border: 1px solid color-mix(in srgb, var(--tint) 55%, var(--color-rule));
   background: rgba(var(--wash-rgb), 0.5);
@@ -2994,10 +3168,10 @@ button.app-mini-chip:hover {
 
 .app-capture-submit {
   flex: none;
-  min-height: 38px;
+  min-height: 44px;
   border-radius: 9999px;
   background: color-mix(in srgb, var(--color-ink) 90%, transparent);
-  padding: 0 14px;
+  padding: 0 16px;
   font-size: 11px;
   color: var(--color-paper);
   transition: opacity 160ms ease;
@@ -5248,4 +5422,195 @@ html[data-app-theme="night"] .app-topbar-agent-mark {
 
 html[data-app-theme="night"] input[type="checkbox"] {
   accent-color: var(--color-accent);
+}
+
+/* ---------- 简历版式缩略图（纸白 不随夜间变暗） ---------- */
+
+.resume-template-thumb {
+  position: relative;
+  display: block;
+  width: 34px;
+  height: 44px;
+  flex: none;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, #24303a 20%, transparent);
+  border-radius: 2px;
+  background: #ffffff;
+}
+
+.resume-template-thumb .rtt-name,
+.resume-template-thumb .rtt-line {
+  position: absolute;
+  background: #24303a;
+  border-radius: 1px;
+  opacity: 0.6;
+}
+
+.resume-template-thumb .rtt-name {
+  left: 4px;
+  top: 5px;
+  width: 17px;
+  height: 3px;
+  opacity: 0.82;
+}
+
+.resume-template-thumb .rtt-line {
+  height: 2px;
+}
+
+.resume-template-thumb .rtt-line--1 {
+  left: 4px;
+  top: 14px;
+  width: 24px;
+}
+
+.resume-template-thumb .rtt-line--2 {
+  left: 4px;
+  top: 19px;
+  width: 20px;
+  opacity: 0.32;
+}
+
+.resume-template-thumb .rtt-line--3 {
+  left: 4px;
+  top: 28px;
+  width: 24px;
+  opacity: 0.32;
+}
+
+.resume-template-thumb .rtt-photo {
+  display: none;
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  width: 8px;
+  height: 11px;
+  border-radius: 1px;
+  background: color-mix(in srgb, #24303a 34%, #ffffff);
+}
+
+.resume-template-thumb[data-template="photo"] .rtt-photo,
+.resume-template-thumb[data-template="split"] .rtt-photo {
+  display: block;
+}
+
+.resume-template-thumb[data-template="photo"] .rtt-name {
+  width: 13px;
+}
+
+.resume-template-thumb[data-template="photo"] .rtt-line--1 {
+  top: 15px;
+  width: 15px;
+}
+
+.resume-template-thumb[data-template="photo"] .rtt-line--2 {
+  top: 20px;
+  width: 13px;
+}
+
+.resume-template-thumb[data-template="photo"] .rtt-line--3 {
+  top: 29px;
+  width: 25px;
+}
+
+.resume-template-thumb[data-template="split"] .rtt-name {
+  width: 24px;
+}
+
+.resume-template-thumb[data-template="split"] .rtt-line--1 {
+  top: 14px;
+  width: 9px;
+}
+
+.resume-template-thumb[data-template="split"] .rtt-line--2 {
+  top: 19px;
+  width: 9px;
+}
+
+.resume-template-thumb[data-template="split"] .rtt-line--3 {
+  top: 14px;
+  left: 18px;
+  width: 11px;
+}
+
+.resume-template-thumb[data-template="split"]::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 11px;
+  bottom: 4px;
+  border-left: 1px solid color-mix(in srgb, #24303a 20%, transparent);
+}
+
+.resume-template-thumb[data-template="timeline"]::before {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 13px;
+  bottom: 5px;
+  border-left: 1px solid color-mix(in srgb, #24303a 20%, transparent);
+}
+
+.resume-template-thumb[data-template="timeline"] .rtt-name {
+  width: 22px;
+}
+
+.resume-template-thumb[data-template="timeline"] .rtt-line--1 {
+  left: 13px;
+  top: 15px;
+  width: 17px;
+}
+
+.resume-template-thumb[data-template="timeline"] .rtt-line--2 {
+  left: 13px;
+  top: 21px;
+  width: 14px;
+}
+
+.resume-template-thumb[data-template="timeline"] .rtt-line--3 {
+  left: 13px;
+  top: 30px;
+  width: 17px;
+}
+
+.resume-template-thumb[data-template="labels"] .rtt-name {
+  width: 16px;
+}
+
+.resume-template-thumb[data-template="labels"] .rtt-line--1 {
+  top: 14px;
+  width: 6px;
+  opacity: 0.5;
+}
+
+.resume-template-thumb[data-template="labels"] .rtt-line--2 {
+  top: 14px;
+  left: 13px;
+  width: 16px;
+}
+
+.resume-template-thumb[data-template="labels"] .rtt-line--3 {
+  top: 23px;
+  left: 13px;
+  width: 16px;
+}
+
+.resume-template-thumb[data-template="compact"] .rtt-name {
+  width: 14px;
+  height: 2px;
+}
+
+.resume-template-thumb[data-template="compact"] .rtt-line--1 {
+  top: 11px;
+  width: 26px;
+}
+
+.resume-template-thumb[data-template="compact"] .rtt-line--2 {
+  top: 16px;
+  width: 23px;
+}
+
+.resume-template-thumb[data-template="compact"] .rtt-line--3 {
+  top: 21px;
+  width: 25px;
 }

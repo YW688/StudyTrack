@@ -131,6 +131,17 @@ export const RESUME_GRADES = [
   "其他",
 ] as const;
 
+export const RESUME_TEMPLATES = [
+  "classic",
+  "photo",
+  "split",
+  "timeline",
+  "labels",
+  "compact",
+] as const;
+
+export type ResumeTemplateId = (typeof RESUME_TEMPLATES)[number];
+
 export interface ResumeBasics {
   name: string;
   grade: string;
@@ -166,6 +177,8 @@ export interface ResumeData {
   selectedExperienceIds: string[];
   conciseIds: string[];
   bullets: Record<string, ResumeBulletCache>;
+  photo?: string;
+  template?: ResumeTemplateId;
   updatedAt: string;
 }
 

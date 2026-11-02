@@ -31,6 +31,7 @@ import {
   buildCapturePrompts,
   buildTodayJudgment,
   coursesOnDay,
+  coursesOnWeekday,
   pickEcho,
   pendingAssignments,
   weekdayOf,
@@ -166,19 +167,24 @@ export default function TodayPage({
         now,
       )
     : null;
-  const courses = coursesOnDay(timetable, currentWeek, weekdayOf(now));
+  const weekUnknown = Boolean(timetable && !timetable.semester.startDate);
+  const weekday = weekdayOf(now);
+  const courses = weekUnknown
+    ? coursesOnWeekday(timetable, weekday)
+    : coursesOnDay(timetable, currentWeek, weekday);
   const pending = pendingAssignments(assignments?.items ?? null);
   const experienceItems = experiences?.experiences ?? [];
   const judgment = buildTodayJudgment({
     now,
     profile,
-    courses,
+    courses: weekUnknown ? [] : courses,
     pending,
     ledger,
+    weekUnknown,
   });
   const echo = pickEcho(experienceItems, now);
   const intel = pickRelevantCalendarItems(CALENDAR_ITEMS, profile, 2, now);
-  const prompts = buildCapturePrompts(courses, pending);
+  const prompts = buildCapturePrompts(weekUnknown ? [] : courses, pending);
   const readiness = computeReadiness(profile, experienceItems);
   const level = characterLevel(experienceItems);
   const echoStars = echo ? tierStars(echo.experience) : 0;
@@ -403,7 +409,16 @@ export default function TodayPage({
                   ))
                 ) : (
                   <span className="text-[11px] text-ink-3">
-                    {timetable ? "今天没有课" : "课表未导入"}
+                    {timetable
+                      ? weekUnknown
+                        ? "课表已导入 未设开学日期"
+                        : "今天没有课"
+                      : "课表未导入"}
+                  </span>
+                )}
+                {weekUnknown && courses.length > 0 && (
+                  <span className="text-[11px] text-amber-ink">
+                    周次未校准 先按每周有课列出
                   </span>
                 )}
                 <button
@@ -411,7 +426,7 @@ export default function TodayPage({
                   onClick={() => onOpenWindow("timetable")}
                   className="app-text-link"
                 >
-                  课表 ↗
+                  {weekUnknown ? "设开学日期 ↗" : "课表 ↗"}
                 </button>
               </div>
 
@@ -478,7 +493,7 @@ export default function TodayPage({
                       disabled={captureStatus === "saving" || !captureText.trim()}
                       className="app-capture-submit"
                     >
-                      {captureStatus === "saving" ? "记录中…" : "记一条"}
+                      {captureStatus === "saving" ? "提交中…" : "提交征途碎片"}
                     </button>
                   </div>
 
@@ -510,8 +525,8 @@ export default function TodayPage({
                     {captureStatus === "error"
                       ? "这次没写进本机，请检查浏览器存储权限后重试"
                       : captureStatus === "done"
-                        ? `已记下 今天第 ${todayNotes.length} 条`
-                        : "写一句就够 会进征途 只统计产生结果的动作"}
+                        ? "已存进碎片收件箱"
+                        : "先进征途碎片收件箱 补齐四段式才算战绩"}
                   </p>
                 </form>
 

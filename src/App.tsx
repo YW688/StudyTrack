@@ -690,6 +690,26 @@ export default function App() {
     setLedger(nextLedger);
   }
 
+  async function handleArchiveNote(noteId: string, experienceId: string) {
+    const nextNotes = notes.map((note) =>
+      note.id === noteId
+        ? {
+            ...note,
+            status: "archived" as const,
+            linkedExperienceId: experienceId,
+          }
+        : note,
+    );
+    await saveNotes(nextNotes);
+    setNotes(nextNotes);
+  }
+
+  async function handleDiscardNote(noteId: string) {
+    const nextNotes = notes.filter((note) => note.id !== noteId);
+    await saveNotes(nextNotes);
+    setNotes(nextNotes);
+  }
+
   async function handleExport() {
     const backup = await collectBackup();
     downloadBackupFile(backup, backupFileName());
@@ -967,7 +987,13 @@ export default function App() {
         ) : route === "assignments" ? (
           <AssignmentsPage data={assignments} onSave={handleSaveAssignments} />
         ) : route === "experiences" ? (
-          <ExperiencesPage data={experiences} onSave={handleSaveExperiences} />
+          <ExperiencesPage
+            data={experiences}
+            notes={notes}
+            onSave={handleSaveExperiences}
+            onArchiveNote={handleArchiveNote}
+            onDiscardNote={handleDiscardNote}
+          />
         ) : route === "resume" ? (
           <ResumePage
             experiences={experiences}
@@ -1074,7 +1100,10 @@ export default function App() {
           >
             <ExperiencesPage
               data={experiences}
+              notes={notes}
               onSave={handleSaveExperiences}
+              onArchiveNote={handleArchiveNote}
+              onDiscardNote={handleDiscardNote}
             />
           </WindowLayer>
         </Suspense>

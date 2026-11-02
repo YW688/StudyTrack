@@ -40,6 +40,24 @@
   min-width: 0;
 }
 
+.resume-head-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5em;
+  flex-shrink: 0;
+  max-width: 48%;
+}
+
+.resume-photo {
+  width: 3.4em;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border: 1px solid var(--doc-rule);
+  border-radius: 2px;
+  background: #f2efe8;
+}
+
 .resume-name {
   font-family: var(--font-serif);
   font-size: 1.74em;
@@ -55,8 +73,6 @@
 }
 
 .resume-contact {
-  flex-shrink: 0;
-  max-width: 46%;
   text-align: right;
   font-size: 0.82em;
   line-height: 1.5;
@@ -182,6 +198,167 @@
   color: color-mix(in srgb, var(--color-accent) 85%, var(--color-ink));
 }
 
+.resume-section-body {
+  min-width: 0;
+}
+
+/* 证件照：照片更大 标题用左侧粗线分段 */
+.resume-paper[data-template="photo"] .resume-head {
+  align-items: center;
+  padding-bottom: 0.8em;
+  border-bottom-width: 1px;
+}
+
+.resume-paper[data-template="photo"] .resume-head-side {
+  flex-direction: column-reverse;
+}
+
+.resume-paper[data-template="photo"] .resume-name {
+  font-size: 1.95em;
+  letter-spacing: 0.06em;
+}
+
+.resume-paper[data-template="photo"] .resume-photo {
+  width: 4.6em;
+  border-radius: 0;
+}
+
+.resume-paper[data-template="photo"] .resume-section-title {
+  padding: 0.05em 0 0.05em 0.55em;
+  border-bottom: 0;
+  border-left: 2px solid var(--doc-ink);
+  letter-spacing: 0.18em;
+}
+
+/* 双栏分区：左栏教育 技能 链接 右栏经历 */
+.resume-paper[data-template="split"] .resume-body {
+  display: grid;
+  grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr);
+  column-gap: 5%;
+  align-items: start;
+}
+
+.resume-paper[data-template="split"] .resume-head {
+  grid-column: 1 / -1;
+}
+
+.resume-paper[data-template="split"] .resume-section--education {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.resume-paper[data-template="split"] .resume-section--skills {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.resume-paper[data-template="split"] .resume-section--links {
+  grid-column: 1;
+  grid-row: 4;
+}
+
+.resume-paper[data-template="split"] .resume-section--experience {
+  grid-column: 2;
+  grid-row: 2 / span 3;
+  padding-left: 5%;
+  border-left: 1px solid var(--doc-rule);
+}
+
+.resume-paper[data-template="split"] .resume-section-title {
+  letter-spacing: 0.12em;
+}
+
+/* 时间年表：日期独占左列 右列放标题与要点 */
+.resume-paper[data-template="timeline"] .resume-entry-head {
+  display: grid;
+  grid-template-columns: 5.2em minmax(0, 1fr);
+  column-gap: 1em;
+  align-items: start;
+}
+
+.resume-paper[data-template="timeline"] .resume-date {
+  grid-column: 1;
+  grid-row: 1;
+  padding: 0.1em 0.8em 0 0;
+  border-right: 1px solid var(--doc-rule);
+  text-align: right;
+  white-space: normal;
+}
+
+.resume-paper[data-template="timeline"] .resume-entry-title-wrap {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.resume-paper[data-template="timeline"] .resume-bullets {
+  margin-left: 6.2em;
+}
+
+/* 栏签：栏目名固定在左侧 内容成块排右 */
+.resume-paper[data-template="labels"] .resume-section {
+  display: grid;
+  grid-template-columns: 5em minmax(0, 1fr);
+  column-gap: 1.4em;
+}
+
+.resume-paper[data-template="labels"] .resume-section-title {
+  grid-column: 1;
+  align-self: start;
+  padding: 0.15em 0 0;
+  border-bottom: 0;
+  font-size: 0.95em;
+  letter-spacing: 0.1em;
+  color: color-mix(in srgb, var(--doc-ink) 72%, transparent);
+}
+
+.resume-paper[data-template="labels"] .resume-section-body {
+  grid-column: 2;
+}
+
+/* 紧凑一页：缩小间距 头像更小 标题更贴近正文 */
+.resume-paper[data-template="compact"] .resume-head {
+  align-items: center;
+  padding-bottom: 0.5em;
+  border-bottom-width: 1px;
+}
+
+.resume-paper[data-template="compact"] .resume-name {
+  font-family: inherit;
+  font-size: 1.5em;
+  letter-spacing: 0.02em;
+}
+
+.resume-paper[data-template="compact"] .resume-head-side {
+  gap: 0.35em;
+}
+
+.resume-paper[data-template="compact"] .resume-photo {
+  width: 2.8em;
+}
+
+.resume-paper[data-template="compact"] .resume-section {
+  margin-top: 0.95em;
+}
+
+.resume-paper[data-template="compact"] .resume-section-title {
+  padding-bottom: 0.22em;
+  font-size: 0.95em;
+  letter-spacing: 0.1em;
+}
+
+.resume-paper[data-template="compact"] .resume-entry {
+  margin-top: 0.65em;
+}
+
+.resume-paper[data-template="compact"] .resume-bullets {
+  margin-top: 0.24em;
+}
+
+.resume-paper[data-template="compact"] .resume-bullet {
+  margin-top: 0.1em;
+  line-height: 1.42;
+}
+
 @media print {
   @page {
     size: A4;
@@ -217,6 +394,7 @@
   .resume-toolbar,
   .resume-banner,
   .resume-basics,
+  .resume-templates,
   .resume-pool-pane,
   .resume-mobile-bar,
   .resume-bullet-manager,
@@ -252,13 +430,68 @@
 
   .resume-body {
     color: #000000 !important;
-    font-size: 10.5pt !important;
+    font-size: 10pt !important;
     line-height: 1.45 !important;
   }
 
   .resume-name {
     color: #000000 !important;
     font-size: 18pt !important;
+  }
+
+  .resume-photo {
+    border-color: #999999 !important;
+  }
+
+  .resume-paper[data-template="photo"] .resume-name {
+    font-size: 18pt !important;
+  }
+
+  .resume-paper[data-template="compact"] .resume-name {
+    font-size: 16pt !important;
+  }
+
+  .resume-paper[data-template="classic"] .resume-photo {
+    width: 18mm !important;
+  }
+
+  .resume-paper[data-template="photo"] .resume-photo {
+    width: 20mm !important;
+  }
+
+  .resume-paper[data-template="split"] .resume-photo,
+  .resume-paper[data-template="timeline"] .resume-photo,
+  .resume-paper[data-template="labels"] .resume-photo {
+    width: 17mm !important;
+  }
+
+  .resume-paper[data-template="compact"] .resume-photo {
+    width: 15mm !important;
+  }
+
+  .resume-head {
+    padding-bottom: 0.6em !important;
+  }
+
+  .resume-paper:not([data-template="compact"]) .resume-section {
+    margin-top: 1.05em !important;
+  }
+
+  .resume-paper:not([data-template="compact"]) .resume-entry {
+    margin-top: 0.7em !important;
+    break-inside: avoid;
+  }
+
+  .resume-paper[data-template="photo"] .resume-section-title {
+    border-left-color: #000000 !important;
+  }
+
+  .resume-paper[data-template="split"] .resume-section--experience {
+    border-left-color: #999999 !important;
+  }
+
+  .resume-paper[data-template="timeline"] .resume-date {
+    border-right-color: #999999 !important;
   }
 
   .resume-target,
@@ -274,6 +507,10 @@
     border-bottom-color: #999999 !important;
     font-size: 12pt !important;
     break-after: avoid;
+  }
+
+  .resume-paper[data-template="labels"] .resume-section-title {
+    font-size: 10.5pt !important;
   }
 
   .resume-entry {

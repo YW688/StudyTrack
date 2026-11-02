@@ -33,6 +33,7 @@ export interface ExperienceFormValue {
 interface ExperienceEditorProps {
   initial: Experience | null;
   defaultStart?: string;
+  initialMethod?: string;
   onClose: () => void;
   onSave: (value: ExperienceFormValue) => Promise<void>;
 }
@@ -72,6 +73,7 @@ const PARTS = [
 export default function ExperienceEditor({
   initial,
   defaultStart,
+  initialMethod,
   onClose,
   onSave,
 }: ExperienceEditorProps) {
@@ -87,7 +89,7 @@ export default function ExperienceEditor({
   const [end, setEnd] = useState(initial?.end ?? "");
   const [parts, setParts] = useState({
     problem: initial?.problem ?? "",
-    method: initial?.method ?? "",
+    method: initial?.method ?? initialMethod ?? "",
     contribution: initial?.contribution ?? "",
     result: initial?.result ?? "",
   });

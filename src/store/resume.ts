@@ -7,6 +7,7 @@ import type {
   ResumeData,
   ResumeSnapshot,
 } from "../types";
+import { RESUME_TEMPLATES } from "../types";
 import { experienceSchema } from "./experiences";
 
 export const RESUME_KEY = "studytrack:v1:resume";
@@ -41,11 +42,18 @@ const bulletCacheSchema = z.object({
   note: z.string().max(200).optional(),
 });
 
+const photoSchema = z
+  .string()
+  .max(400_000)
+  .regex(/^data:image\/(?:jpeg|png);base64,[A-Za-z0-9+/=]+$/);
+
 export const resumeSchema = z.object({
   basics: basicsSchema,
   selectedExperienceIds: z.array(z.string()).max(60),
   conciseIds: z.array(z.string()).max(60),
   bullets: z.record(z.string(), bulletCacheSchema),
+  photo: photoSchema.optional(),
+  template: z.enum(RESUME_TEMPLATES).optional(),
   updatedAt: z.string(),
 });
 
@@ -136,6 +144,7 @@ export function createEmptyResume(): ResumeData {
     selectedExperienceIds: [],
     conciseIds: [],
     bullets: {},
+    template: "classic",
     updatedAt: new Date().toISOString(),
   };
 }

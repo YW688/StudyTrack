@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react";
+import dayjs from "dayjs";
 import type {
   Experience,
   ExperienceData,
   ExperienceKind,
+  Note,
 } from "../../types";
 import {
   EXPERIENCE_KINDS,
@@ -16,6 +18,7 @@ import {
 } from "../../lib/experience";
 import ActivityFeed from "../../components/ActivityFeed";
 import Timeline, { type TimelineVariant } from "../../components/Timeline";
+import { Segmented } from "../../components/Controls";
 import { createSampleExperiences } from "../../store/fixtures/experiences";
 import ExperienceEditor, {
   type ExperienceFormValue,
@@ -23,7 +26,10 @@ import ExperienceEditor, {
 
 interface ExperiencesPageProps {
   data: ExperienceData | null;
+  notes: Note[];
   onSave: (data: ExperienceData) => Promise<void>;
+  onArchiveNote: (noteId: string, experienceId: string) => Promise<void>;
+  onDiscardNote: (noteId: string) => Promise<void>;
 }
 
 type KindFilter = ExperienceKind | "all";
@@ -36,6 +42,10 @@ const BTN_PRIMARY =
   "bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-5 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-40";
 const BTN_SECONDARY =
   "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border px-4 text-sm disabled:cursor-not-allowed disabled:opacity-40";
+const BTN_LINK =
+  "hover:text-ink inline-flex min-h-11 items-center text-[11px] text-ink-3 underline-offset-2 hover:underline disabled:cursor-not-allowed disabled:opacity-40";
+const BTN_DANGER =
+  "inline-flex min-h-11 items-center text-[11px] font-medium text-red-800 underline underline-offset-2 disabled:cursor-not-allowed disabled:opacity-40";
 
 function makeId(): string {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -44,12 +54,28 @@ function makeId(): string {
   return `experience-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
+function noteTimeLabel(value: string): string {
+  const at = dayjs(value);
+  if (!at.isValid()) return "";
+  return at.isAfter(dayjs().startOf("day"))
+    ? `今天 ${at.format("HH:mm")}`
+    : at.format("M月D日 HH:mm");
+}
+
 export default function ExperiencesPage({
   data,
+  notes,
   onSave,
+  onArchiveNote,
+  onDiscardNote,
 }: ExperiencesPageProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Experience | null>(null);
+  const [fromNote, setFromNote] = useState<Note | null>(null);
+  const [discardConfirmId, setDiscardConfirmId] = useState<string | null>(
+    null,
+  );
+  const [discardBusyId, setDiscardBusyId] = useState<string | null>(null);
   const [defaultStart, setDefaultStart] = useState<string | undefined>();
   const [filter, setFilter] = useState<KindFilter>("all");
   const [view, setView] = useState<FeedView>("feed");
@@ -86,6 +112,13 @@ export default function ExperiencesPage({
   );
   const readyCount = useMemo(() => countResumeReady(filtered), [filtered]);
   const undatedCount = timeline.undated.length;
+  const inboxNotes = useMemo(
+    () =>
+      notes
+        .filter((note) => note.status === "inbox")
+        .sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+    [notes],
+  );
 
   async function persist(nextItems: Experience[], label?: string) {
     const next: ExperienceData = {
@@ -98,23 +131,49 @@ export default function ExperiencesPage({
 
   function openCreate(start?: string) {
     setEditing(null);
+    setFromNote(null);
     setDefaultStart(start);
     setDialogOpen(true);
   }
 
   function openEdit(experience: Experience) {
     setEditing(experience);
+    setFromNote(null);
     setDefaultStart(undefined);
     setDialogOpen(true);
+  }
+
+  function startFromNote(note: Note) {
+    setEditing(null);
+    setDefaultStart(undefined);
+    setFromNote(note);
+    setDiscardConfirmId(null);
+    setDialogOpen(true);
+  }
+
+  async function handleDiscard(note: Note) {
+    setDiscardBusyId(note.id);
+    try {
+      await onDiscardNote(note.id);
+      setDiscardConfirmId(null);
+      setNotice("已丢弃一条碎片");
+      setSaveError(null);
+    } catch {
+      setSaveError("丢弃没写进本机。请检查浏览器存储权限后重试。");
+    } finally {
+      setDiscardBusyId(null);
+    }
   }
 
   function closeEditor() {
     setDialogOpen(false);
     setEditing(null);
+    setFromNote(null);
     setDefaultStart(undefined);
   }
 
   async function handleSave(value: ExperienceFormValue) {
+    setSaveError(null);
     const now = new Date().toISOString();
     if (editing) {
       const nextItem: Experience = { ...editing, ...value, updatedAt: now };
@@ -132,9 +191,17 @@ export default function ExperiencesPage({
         updatedAt: now,
       };
       await persist([created, ...items]);
-      setNotice(`已记录《${value.title}》`);
+      if (fromNote) {
+        try {
+          await onArchiveNote(fromNote.id, created.id);
+          setNotice(`已把碎片并进《${value.title}》`);
+        } catch {
+          setSaveError("战绩已保存，但碎片没能归档。刷新后可以再转一次。");
+        }
+      } else {
+        setNotice(`已记录《${value.title}》`);
+      }
     }
-    setSaveError(null);
     closeEditor();
   }
 
@@ -244,6 +311,89 @@ export default function ExperiencesPage({
             {saveError}
           </p>
         )}
+
+        <section
+          aria-label="征途碎片收件箱"
+          className="border-rule bg-surface mt-5 rounded-xl border"
+        >
+          <div className="border-rule flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3">
+            <div className="flex items-center gap-2">
+              <h2 className="text-sm font-medium">征途碎片收件箱</h2>
+              <span className="bg-accent/15 rounded-full px-2 py-0.5 font-mono text-micro text-ink">
+                {inboxNotes.length} 条
+              </span>
+            </div>
+            <p className="hidden text-micro text-ink-4 sm:block">
+              补齐四段式和证据才算战绩
+            </p>
+          </div>
+          {inboxNotes.length === 0 ? (
+            <p className="px-4 py-4 text-xs leading-5 text-ink-3">
+              还没有待整理的碎片 在今日记一句就会到这里
+            </p>
+          ) : (
+            <ul>
+              {inboxNotes.map((note, index) => (
+                <li
+                  key={note.id}
+                  className={[
+                    "flex flex-wrap items-start justify-between gap-3 px-4 py-3",
+                    index > 0 ? "border-rule border-t" : "",
+                  ].join(" ")}
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="line-clamp-2 text-sm leading-6 text-ink-2">
+                      {note.text}
+                    </p>
+                    <p className="mt-1 font-mono text-micro tabular-nums text-ink-4">
+                      {noteTimeLabel(note.createdAt)}
+                    </p>
+                  </div>
+                  {discardConfirmId === note.id ? (
+                    <div className="flex shrink-0 items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => void handleDiscard(note)}
+                        disabled={discardBusyId === note.id}
+                        aria-label={`确认丢弃「${note.text.slice(0, 24)}」`}
+                        className={BTN_DANGER}
+                      >
+                        {discardBusyId === note.id ? "丢弃中…" : "确认丢弃"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDiscardConfirmId(null)}
+                        disabled={discardBusyId === note.id}
+                        className={BTN_LINK}
+                      >
+                        取消
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex shrink-0 items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setDiscardConfirmId(note.id)}
+                        aria-label={`丢弃「${note.text.slice(0, 24)}」`}
+                        className={BTN_LINK}
+                      >
+                        丢弃
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => startFromNote(note)}
+                        aria-label={`把「${note.text.slice(0, 24)}」转成战绩`}
+                        className={BTN_SECONDARY}
+                      >
+                        转成战绩
+                      </button>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
 
         {items.length === 0 ? (
           <>
@@ -415,22 +565,15 @@ export default function ExperiencesPage({
                       ? `${filtered.length} 条 ${readyCount} 条简历就绪`
                       : `按学期倒序 ${filtered.length} 条`}
                   </span>
-                  <div
-                    role="group"
-                    aria-label="切换征途视图"
-                    className="border-rule flex items-center gap-0.5 rounded-lg border p-0.5"
-                  >
-                    <ViewButton
-                      active={view === "feed"}
-                      label="动态"
-                      onClick={() => setView("feed")}
-                    />
-                    <ViewButton
-                      active={view === "timeline"}
-                      label="时间线"
-                      onClick={() => setView("timeline")}
-                    />
-                  </div>
+                  <Segmented
+                    label="切换征途视图"
+                    value={view}
+                    options={[
+                      { id: "feed", label: "动态" },
+                      { id: "timeline", label: "时间线" },
+                    ]}
+                    onChange={setView}
+                  />
                 </div>
               </div>
 
@@ -489,37 +632,12 @@ export default function ExperiencesPage({
         <ExperienceEditor
           initial={editing}
           defaultStart={defaultStart}
+          initialMethod={fromNote?.text}
           onClose={closeEditor}
           onSave={handleSave}
         />
       )}
     </div>
-  );
-}
-
-function ViewButton({
-  active,
-  label,
-  onClick,
-}: {
-  active: boolean;
-  label: string;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      aria-pressed={active}
-      onClick={onClick}
-      className={[
-        "inline-flex min-h-11 items-center rounded-md px-2.5 text-xs transition-colors sm:min-h-8",
-        active
-          ? "bg-ink text-paper font-medium"
-          : "text-ink-3 hover:bg-ink/[0.05]",
-      ].join(" ")}
-    >
-      {label}
-    </button>
   );
 }
 
