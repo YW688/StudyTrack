@@ -85,6 +85,67 @@ export function weekGreenCells(
   });
 }
 
+export interface GreenMatrixDay {
+  dateKey: string;
+  level: GreenLevel;
+  isToday: boolean;
+  isFuture: boolean;
+}
+
+export interface GreenMatrixWeek {
+  key: string;
+  days: GreenMatrixDay[];
+  monthLabel: string | null;
+}
+
+export interface GreenMatrix {
+  weeks: GreenMatrixWeek[];
+  activeDays: number;
+  startKey: string;
+  endKey: string;
+}
+
+export function greenMatrix(
+  events: LedgerEvent[],
+  now: Dayjs = dayjs(),
+  weekCount = 16,
+): GreenMatrix {
+  const today = studyDate(now);
+  const todayKey = today.format("YYYY-MM-DD");
+  const monday = today.subtract((today.day() + 6) % 7, "day");
+  const start = monday.subtract(weekCount - 1, "week");
+  let activeDays = 0;
+
+  const weeks = Array.from({ length: weekCount }, (_, weekIndex) => {
+    const weekStart = start.add(weekIndex, "week");
+    let monthLabel =
+      weekIndex === 0 ? `${weekStart.month() + 1}月` : null;
+    const days = Array.from({ length: 7 }, (_, dayIndex) => {
+      const date = weekStart.add(dayIndex, "day");
+      const dateKey = date.format("YYYY-MM-DD");
+      const level = greenLevelForDay(events, dateKey);
+      if (level > 0) activeDays += 1;
+      if (weekIndex > 0 && date.date() === 1) {
+        monthLabel = `${date.month() + 1}月`;
+      }
+      return {
+        dateKey,
+        level,
+        isToday: dateKey === todayKey,
+        isFuture: date.isAfter(today, "day"),
+      };
+    });
+    return { key: weekStart.format("YYYY-MM-DD"), days, monthLabel };
+  });
+
+  return {
+    weeks,
+    activeDays,
+    startKey: start.format("YYYY-MM-DD"),
+    endKey: todayKey,
+  };
+}
+
 export function weekGreenDayCount(
   events: LedgerEvent[],
   now: Dayjs = dayjs(),
@@ -218,7 +279,7 @@ export function computeReadiness(
       hint:
         experiences.length >= 3
           ? "已经有 3 条以上战绩。"
-          : `再写 ${3 - experiences.length} 条战绩，账本才有厚度。`,
+          : `再写 ${3 - experiences.length} 条战绩，征途才有厚度。`,
     },
     {
       key: "evidence",
@@ -257,7 +318,7 @@ export function computeReadiness(
           : "从今天开始";
   const next =
     items.find((item) => item.earned < item.weight)?.hint ??
-    "档案已经能出征，去悬赏看看。";
+    "档案已经能出征，去征召看看。";
 
   return { score, label, next, items };
 }

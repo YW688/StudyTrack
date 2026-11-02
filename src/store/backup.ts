@@ -63,6 +63,12 @@ import {
   saveAgentMessages,
   agentMessageSchema,
 } from "./agent";
+import {
+  AVATAR_KEY,
+  loadAvatar,
+  saveAvatar,
+  avatarSchema,
+} from "./avatar";
 
 export const BACKUP_APP = "studytrack";
 export const BACKUP_VERSION = 1;
@@ -80,6 +86,7 @@ const backupSchema = z.object({
   ledger: z.array(ledgerEventSchema).optional(),
   notes: z.array(noteSchema).optional(),
   agentMessages: z.array(agentMessageSchema).optional(),
+  avatar: avatarSchema.nullable().optional(),
 });
 
 export type BackupFile = z.infer<typeof backupSchema>;
@@ -94,6 +101,7 @@ export interface BackupSnapshot {
   ledger: LedgerEvent[];
   notes: Note[];
   agentMessages: AgentMessage[];
+  avatar: string | null;
 }
 
 export async function collectBackup(): Promise<BackupFile> {
@@ -107,6 +115,7 @@ export async function collectBackup(): Promise<BackupFile> {
     ledger,
     notes,
     agentMessages,
+    avatar,
   ] = await Promise.all([
     loadProfile(),
     loadTimetable(),
@@ -117,6 +126,7 @@ export async function collectBackup(): Promise<BackupFile> {
     loadLedger(),
     loadNotes(),
     loadAgentMessages(),
+    loadAvatar(),
   ]);
 
   return {
@@ -132,6 +142,7 @@ export async function collectBackup(): Promise<BackupFile> {
     ledger,
     notes,
     agentMessages,
+    avatar,
   };
 }
 
@@ -185,6 +196,7 @@ export async function applyBackup(
     backup.agentMessages
       ? saveAgentMessages(backup.agentMessages)
       : del(AGENT_KEY),
+    backup.avatar ? saveAvatar(backup.avatar) : del(AVATAR_KEY),
   ]);
 
   return {
@@ -197,5 +209,6 @@ export async function applyBackup(
     ledger: backup.ledger ?? [],
     notes: backup.notes ?? [],
     agentMessages: backup.agentMessages ?? [],
+    avatar: backup.avatar ?? null,
   };
 }

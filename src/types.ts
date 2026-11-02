@@ -335,7 +335,7 @@ export const MATCH_TIER_LABELS: Record<MatchTier, string> = {
   low: "缺口较大",
 };
 
-/* ---------- 四年账本 / 今日 ---------- */
+/* ---------- 四年征途 / 今日 ---------- */
 
 export type Grade = (typeof RESUME_GRADES)[number];
 

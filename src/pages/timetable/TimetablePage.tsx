@@ -275,7 +275,7 @@ export default function TimetablePage({
         <header className="border-rule flex flex-col gap-4 border-b py-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="font-mono text-micro tracking-[0.2em] text-ink-3">
-              工具箱 · 课表 / 04
+              工具箱
             </p>
             <div className="mt-2 flex items-baseline gap-3">
               <h1 className="font-serif text-2xl tracking-tight sm:text-3xl">
@@ -501,7 +501,7 @@ function EmptyHeader() {
   return (
     <div className="mb-5">
       <p className="font-mono text-micro tracking-[0.2em] text-ink-3">
-        工具箱 · 课表 / 04
+        工具箱
       </p>
       <h1 className="mt-2 font-serif text-2xl tracking-tight sm:text-3xl">
         课表

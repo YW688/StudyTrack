@@ -9,8 +9,12 @@ import {
 import dayjs from "dayjs";
 import { DAY_LABELS } from "./types";
 import { currentWeekOf } from "./parse/schedule";
-import { experienceKindLabel } from "./lib/experience";
-import { streakInfo, weekGreenDayCount } from "./lib/ledger";
+import {
+  experienceKindLabel,
+  newlyReadyIds,
+} from "./lib/experience";
+import { greenMatrix, streakInfo, weekGreenDayCount } from "./lib/ledger";
+import { characterLevel } from "./lib/level";
 import type {
   AgentMessage,
   Assignment,
@@ -29,6 +33,7 @@ import AppShell from "./components/AppShell";
 import EntryRitual from "./components/EntryRitual";
 import WindowLayer from "./components/WindowLayer";
 import LandingPage from "./pages/landing/LandingPage";
+import GuidePage, { type GuideValues } from "./pages/guide/GuidePage";
 import TodayPage from "./pages/today/TodayPage";
 import type { DockMode } from "./components/AgentPanel";
 
@@ -60,6 +65,7 @@ import {
 } from "./store/resume";
 import {
   createOnboardedProfile,
+  isOnboarded,
   loadProfile,
   saveProfile,
 } from "./store/profile";
@@ -70,6 +76,7 @@ import {
 } from "./store/ledger";
 import { createNote, loadNotes, saveNotes } from "./store/notes";
 import { loadAgentMessages, saveAgentMessages } from "./store/agent";
+import { deleteAvatar, loadAvatar, saveAvatar } from "./store/avatar";
 import {
   applyBackup,
   collectBackup,
@@ -87,7 +94,6 @@ import { applyTheme, readStoredTheme, type ThemeId } from "./lib/theme";
 import { backupFileName, downloadBackupFile } from "./lib/backup";
 import { newId } from "./lib/id";
 import { GUIDE_OPPORTUNITIES_KEY } from "./lib/guide";
-import type { OnboardingValues } from "./components/TodayOnboarding";
 import type {
   AgentExperienceDraft,
   AgentProfileDraft,
@@ -129,7 +135,7 @@ type PageWindowId =
 function readDockMode(): DockMode {
   try {
     const stored = window.localStorage.getItem(DOCK_KEY);
-    if (stored === "collapsed" || stored === "docked" || stored === "floating") {
+    if (stored === "closed" || stored === "docked" || stored === "floating") {
       return stored;
     }
   } catch {
@@ -139,9 +145,9 @@ function readDockMode(): DockMode {
     // 停靠后主栏仍需 ≥900px，否则 1440 屏比 1280 屏更窄
     return window.matchMedia("(min-width: 1680px)").matches
       ? "docked"
-      : "collapsed";
+      : "closed";
   } catch {
-    return "collapsed";
+    return "closed";
   }
 }
 
@@ -195,6 +201,7 @@ export default function App() {
   const [ledger, setLedger] = useState<LedgerEvent[]>([]);
   const [notes, setNotes] = useState<Note[]>([]);
   const [agentMessages, setAgentMessages] = useState<AgentMessage[]>([]);
+  const [avatar, setAvatar] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState<ThemeId>(readStoredTheme);
   const [demoMode, setDemoMode] = useState(readDemoMode);
@@ -202,6 +209,7 @@ export default function App() {
   const [openWindows, setOpenWindows] = useState<PageWindowId[]>([]);
   const [ritual, setRitual] = useState<{ theme: ThemeId } | null>(null);
   const [ritualReady, setRitualReady] = useState(false);
+  const [unlockedHint, setUnlockedHint] = useState(false);
   const resumeWriteRef = useRef<Promise<void>>(Promise.resolve());
   const agentWriteRef = useRef<Promise<void>>(Promise.resolve());
   const loadedRef = useRef(false);
@@ -221,6 +229,7 @@ export default function App() {
       loadLedger(),
       loadNotes(),
       loadAgentMessages(),
+      loadAvatar(),
     ]).then(
       ([
         storedTimetable,
@@ -231,6 +240,7 @@ export default function App() {
         storedLedger,
         storedNotes,
         storedAgentMessages,
+        storedAvatar,
       ]) => {
         if (!alive || loadedRef.current) return;
         loadedRef.current = true;
@@ -242,6 +252,7 @@ export default function App() {
         setLedger(storedLedger);
         setNotes(storedNotes);
         setAgentMessages(storedAgentMessages);
+        setAvatar(storedAvatar);
         const hasStoredData =
           storedTimetable !== null ||
           storedAssignments !== null ||
@@ -389,12 +400,6 @@ export default function App() {
     try {
       if (mode === "demo") {
         await seedDemoData();
-      } else {
-        try {
-          window.sessionStorage.removeItem("studytrack:onboarding-hidden");
-        } catch {
-          // UI-only preference; storage may be disabled.
-        }
       }
       navigate("today");
       if (playRitual) setRitualReady(true);
@@ -414,9 +419,33 @@ export default function App() {
     setAssignments(next);
   }
 
+  /** 战绩补完到「简历就绪」时自动选入简历草稿；只处理本次新达成就绪的条目。 */
+  function readyDraftSelection(
+    previous: Experience[],
+    next: Experience[],
+  ): ResumeData | null {
+    const added = newlyReadyIds(previous, next).filter(
+      (id) => !resume.selectedExperienceIds.includes(id),
+    );
+    if (added.length === 0) return null;
+    return {
+      ...resume,
+      selectedExperienceIds: [...resume.selectedExperienceIds, ...added],
+      updatedAt: new Date().toISOString(),
+    };
+  }
+
   async function handleSaveExperiences(next: ExperienceData) {
     await saveExperiences(next);
     setExperiences(next);
+    const nextResume = readyDraftSelection(
+      experiences?.experiences ?? [],
+      next.experiences,
+    );
+    if (nextResume) {
+      await saveResume(nextResume);
+      setResume(nextResume);
+    }
   }
 
   async function handleAgentSaveProfile(draft: AgentProfileDraft) {
@@ -505,55 +534,72 @@ export default function App() {
     setLedger(nextLedger);
   }
 
-  async function handleOnboard(
-    values: OnboardingValues,
-    recentWork: string,
-  ) {
-    const nextProfile = createOnboardedProfile(values);
+  async function handleGuideComplete(values: GuideValues) {
     const now = new Date().toISOString();
+    const nextProfile = createOnboardedProfile({
+      grade: values.grade,
+      major: values.major,
+      goal: values.goal,
+      targetRoles: values.targetRoles,
+    });
+    const record = values.firstRecord;
+    const firstExperience: Experience = {
+      id: newId("experience"),
+      kind: record.kind,
+      kindLabel: record.kindLabel,
+      title: record.title.slice(0, 120),
+      problem: record.detail.slice(0, 500),
+      method: "",
+      contribution: "",
+      result: "",
+      metrics: [],
+      evidence: [],
+      skills: [],
+      tags: ["建档"],
+      confidence: "high",
+      source: "manual",
+      createdAt: now,
+      updatedAt: now,
+    };
+    const nextExperiences: ExperienceData = {
+      experiences: [firstExperience, ...(experiences?.experiences ?? [])],
+      updatedAt: now,
+      sourceLabel: experiences?.sourceLabel,
+    };
+    const nextLedger = [
+      ...ledger,
+      createLedgerEvent({
+        type: "experience_added",
+        title: `记下「${firstExperience.title}」`,
+        detail: firstExperience.problem.slice(0, 80),
+        refId: firstExperience.id,
+      }),
+    ];
     const nextResume: ResumeData = {
       ...resume,
       basics: {
         ...resume.basics,
-        grade: resume.basics.grade || nextProfile.grade,
-        major: resume.basics.major || nextProfile.major,
+        grade: values.grade,
+        major: values.major || resume.basics.major,
+        target:
+          values.targetRoles.slice(0, 2).join(" / ") || resume.basics.target,
       },
       updatedAt: now,
     };
-    await saveProfile(nextProfile);
-    await saveResume(nextResume);
-    setResume(nextResume);
 
-    let nextNotes = notes;
-    let nextLedger = ledger;
-    const firstRecord = recentWork.trim();
-    if (firstRecord) {
-      const note = createNote({
-        text: firstRecord.slice(0, 1000),
-        tags: ["建档"],
-      });
-      nextNotes = [...notes, note];
-      await saveNotes(nextNotes);
-      nextLedger = [
-        ...ledger,
-        createLedgerEvent({
-          type: "note_added",
-          title: "写下第一条记录",
-          detail: firstRecord.slice(0, 80),
-          refId: note.id,
-        }),
-      ];
-      await saveLedger(nextLedger);
-    }
+    await Promise.all([
+      saveProfile(nextProfile),
+      saveExperiences(nextExperiences),
+      saveLedger(nextLedger),
+      saveResume(nextResume),
+    ]);
 
     setProfile(nextProfile);
-    setNotes(nextNotes);
+    setExperiences(nextExperiences);
     setLedger(nextLedger);
-    try {
-      window.sessionStorage.removeItem("studytrack:onboarding-hidden");
-    } catch {
-      // UI-only preference; storage may be disabled.
-    }
+    setResume(nextResume);
+    setUnlockedHint(true);
+    navigate("today");
   }
 
   async function handleToggleAssignment(item: Assignment) {
@@ -644,6 +690,15 @@ export default function App() {
     downloadBackupFile(backup, backupFileName());
   }
 
+  async function handleAvatarChange(next: string | null) {
+    if (next) {
+      await saveAvatar(next);
+    } else {
+      await deleteAvatar();
+    }
+    setAvatar(next);
+  }
+
   async function handleImport(
     text: string,
   ): Promise<{ ok: boolean; message: string }> {
@@ -662,6 +717,7 @@ export default function App() {
       setLedger(snapshot.ledger);
       setNotes(snapshot.notes);
       setAgentMessages(snapshot.agentMessages);
+      setAvatar(snapshot.avatar);
       writeDemoMode(false);
       setDemoMode(false);
       try {
@@ -669,10 +725,11 @@ export default function App() {
       } catch {
         // UI-only preference; storage may be disabled.
       }
+      setOpenWindows([]);
       navigate("today");
       return {
         ok: true,
-        message: `已导入 ${snapshot.experiences?.experiences.length ?? 0} 条战绩、${snapshot.ledger.length} 条账本记录、${snapshot.notes.length} 条记录。`,
+        message: `已导入 ${snapshot.experiences?.experiences.length ?? 0} 条战绩、${snapshot.ledger.length} 条留痕记录、${snapshot.notes.length} 条记录。`,
       };
     } catch {
       return {
@@ -707,6 +764,7 @@ export default function App() {
     setLedger([]);
     setNotes([]);
     setAgentMessages([]);
+    setAvatar(null);
     writeDemoMode(false);
     setDemoMode(false);
     try {
@@ -714,11 +772,8 @@ export default function App() {
     } catch {
       // UI-only preference; storage may be disabled.
     }
-    try {
-      window.sessionStorage.removeItem("studytrack:onboarding-hidden");
-    } catch {
-      // UI-only preference; storage may be disabled.
-    }
+    setOpenWindows([]);
+    setUnlockedHint(false);
     navigate("landing");
   }
 
@@ -764,6 +819,7 @@ export default function App() {
   }
 
   const active = navIdForRoute(route);
+  const locked = !loading && !isOnboarded(profile);
   const assignmentCount =
     assignments?.items.filter((item) => item.status !== "done").length ?? 0;
   const now = dayjs();
@@ -775,7 +831,7 @@ export default function App() {
       )
     : null;
   const statusWeek = `${
-    weekNumber !== null ? `第 ${weekNumber} 周 · ` : ""
+    weekNumber !== null ? `第 ${weekNumber} 周 ` : ""
   }${DAY_LABELS[(now.day() + 6) % 7]}`;
   const recentExperiences = [...(experiences?.experiences ?? [])]
     .sort((a, b) =>
@@ -790,23 +846,27 @@ export default function App() {
         item.start ? item.start.slice(0, 7) : null,
       ]
         .filter(Boolean)
-        .join(" · "),
+        .join(" "),
     }));
-  const sidebarScope = profile
-    ? `${profile.grade || "年级未填"} · ${
-        profile.major || "专业未填"
-      } · ${GOAL_LABELS[profile.goal]}`
-    : "未建档 · 去今日建档";
   const weekLine = `本周 ${weekGreenDayCount(
     ledger,
     now,
-  )} 天有结果 · 连续 ${streakInfo(ledger, now).days} 天`;
+  )} 天有结果 连续 ${streakInfo(ledger, now).days} 天`;
+  const islandLevel = characterLevel(experiences?.experiences ?? []);
+  const islandCheckin = greenMatrix(ledger, now);
+  const archiveTitle =
+    locked || !profile
+      ? "新存档 待建档"
+      : [profile.grade, profile.major, GOAL_LABELS[profile.goal]]
+          .filter(Boolean)
+          .join(" ");
 
   return (
     <>
       <AppShell
         active={active}
         routeKey={route}
+        locked={locked}
         theme={theme}
         onThemeChange={setTheme}
         hasData={
@@ -831,36 +891,58 @@ export default function App() {
         onHome={() => navigate("landing")}
         onNavigate={(id) => navigate(id)}
         onOpenWindow={openWindow}
-        onOpenAgent={() => handleDockModeChange("docked")}
-        scope={sidebarScope}
+        onOpenAgent={() => handleDockModeChange("floating")}
+        grade={profile?.grade ?? ""}
+        major={profile?.major ?? ""}
+        goal={profile?.goal ?? null}
+        avatar={avatar}
+        onAvatarChange={handleAvatarChange}
         recents={recentExperiences}
         weekLine={weekLine}
         week={statusWeek}
-        dockWidth={dockMode === "docked" ? 360 : dockMode === "collapsed" ? 48 : 0}
+        level={islandLevel.level}
+        levelPercent={islandLevel.percent}
+        ready={islandLevel.ready}
+        total={islandLevel.total}
+        comboDays={streakInfo(ledger, now).days}
+        checkin={islandCheckin}
+        archiveTitle={archiveTitle}
+        dockWidth={
+          locked || dockMode !== "docked"
+            ? 0
+            : 360
+        }
         dock={
-          <Suspense fallback={null}>
-            <AgentPanel
-              profile={profile}
-              experiences={experiences?.experiences ?? []}
-              ledger={ledger}
-              notes={notes}
-              resume={resume}
-              messages={agentMessages}
-              raised={route === "resume"}
-              dockMode={dockMode}
-              onDockModeChange={handleDockModeChange}
-              onMessagesChange={handleAgentMessages}
-              onSaveProfile={handleAgentSaveProfile}
-              onSaveExperience={handleAgentSaveExperience}
-              onAddNote={handleAddNote}
-              onNavigate={(id) => navigate(id)}
-            />
-          </Suspense>
+          locked || dockMode === "closed" ? null : (
+            <Suspense fallback={null}>
+              <AgentPanel
+                profile={profile}
+                experiences={experiences?.experiences ?? []}
+                ledger={ledger}
+                notes={notes}
+                resume={resume}
+                messages={agentMessages}
+                raised={route === "resume"}
+                dockMode={dockMode}
+                onDockModeChange={handleDockModeChange}
+                onMessagesChange={handleAgentMessages}
+                onSaveProfile={handleAgentSaveProfile}
+                onSaveExperience={handleAgentSaveExperience}
+                onAddNote={handleAddNote}
+                onNavigate={(id) => navigate(id)}
+              />
+            </Suspense>
+          )
         }
       >
         <Suspense fallback={<PageLoading />}>
           {loading ? (
             <LoadingState module={route} />
+          ) : locked ? (
+            <GuidePage
+              onComplete={handleGuideComplete}
+              onUseDemo={handleUseSample}
+            />
           ) : route === "today" ? (
           <TodayPage
             timetable={timetable}
@@ -869,10 +951,10 @@ export default function App() {
             profile={profile}
             ledger={ledger}
             notes={notes}
-            onOnboard={handleOnboard}
+            unlockedHint={unlockedHint}
+            onDismissUnlockHint={() => setUnlockedHint(false)}
             onToggleAssignment={handleToggleAssignment}
             onAddNote={handleAddNote}
-            onUseSample={() => handleUseSample()}
             demoMode={demoMode}
             onOpenWindow={openWindow}
             onExitDemo={() => void handleExitDemo()}
@@ -972,15 +1054,15 @@ export default function App() {
         <Suspense
           fallback={
             <WindowLoading
-              title="账本"
+              title="征途"
               onClose={() => closeWindow("experiences")}
             />
           }
         >
           <WindowLayer
             id="experiences"
-            title="账本"
-            subtitle="战绩 · 证据 · 时间线"
+            title="征途"
+            subtitle="战绩 证据 时间线"
             width={1080}
             height={800}
             onClose={() => closeWindow("experiences")}
@@ -997,15 +1079,15 @@ export default function App() {
         <Suspense
           fallback={
             <WindowLoading
-              title="悬赏"
+              title="征召"
               onClose={() => closeWindow("opportunities")}
             />
           }
         >
           <WindowLayer
             id="opportunities"
-            title="悬赏"
-            subtitle="岗位入口 · 匹配与缺口"
+            title="征召"
+            subtitle="岗位入口 匹配与缺口"
             width={1120}
             height={820}
             onClose={() => closeWindow("opportunities")}
@@ -1137,14 +1219,14 @@ function WindowLoading({
 
 function LoadingState({ module }: { module: ModuleRoute }) {
   const meta = {
-    today: { code: "今日 / 01", title: "今天" },
-    timetable: { code: "工具箱 · 课表 / 04", title: "课表" },
-    assignments: { code: "工具箱 · 作业 / 04", title: "作业与待办" },
-    experiences: { code: "账本 / 02", title: "经历库" },
-    resume: { code: "工具箱 · 简历 / 04", title: "简历工作台" },
-    opportunities: { code: "悬赏 / 03", title: "机会仪表盘" },
-    toolbox: { code: "工具箱 / 04", title: "工具箱" },
-    calendar: { code: "工具箱 · 日历 / 04", title: "日历" },
+    today: { code: "今日", title: "今天" },
+    timetable: { code: "工具箱", title: "课表" },
+    assignments: { code: "工具箱", title: "作业与待办" },
+    experiences: { code: "征途", title: "经历库" },
+    resume: { code: "工具箱", title: "简历工作台" },
+    opportunities: { code: "征召", title: "机会仪表盘" },
+    toolbox: { code: "工具箱", title: "工具箱" },
+    calendar: { code: "工具箱", title: "日历" },
   }[module];
   return (
     <div className="px-4 py-8 sm:px-6 lg:px-8 lg:py-12">

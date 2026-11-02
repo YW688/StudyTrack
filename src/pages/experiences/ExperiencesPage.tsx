@@ -8,12 +8,14 @@ import {
   EXPERIENCE_KINDS,
   EXPERIENCE_KIND_META,
   buildTermAxis,
+  countResumeReady,
   groupExperiencesByTerm,
   relativeDaysLabel,
   summarizeExperienceActivity,
   termStartMonth,
 } from "../../lib/experience";
-import Timeline from "../../components/Timeline";
+import ActivityFeed from "../../components/ActivityFeed";
+import Timeline, { type TimelineVariant } from "../../components/Timeline";
 import { createSampleExperiences } from "../../store/fixtures/experiences";
 import ExperienceEditor, {
   type ExperienceFormValue,
@@ -25,6 +27,8 @@ interface ExperiencesPageProps {
 }
 
 type KindFilter = ExperienceKind | "all";
+
+type FeedView = "feed" | "timeline";
 
 const EMPTY: Experience[] = [];
 
@@ -48,6 +52,8 @@ export default function ExperiencesPage({
   const [editing, setEditing] = useState<Experience | null>(null);
   const [defaultStart, setDefaultStart] = useState<string | undefined>();
   const [filter, setFilter] = useState<KindFilter>("all");
+  const [view, setView] = useState<FeedView>("feed");
+  const [timelineStyle, setTimelineStyle] = useState<TimelineVariant>("rope");
   const [notice, setNotice] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [sampleBusy, setSampleBusy] = useState(false);
@@ -78,6 +84,7 @@ export default function ExperiencesPage({
     () => groupExperiencesByTerm(filtered),
     [filtered],
   );
+  const readyCount = useMemo(() => countResumeReady(filtered), [filtered]);
   const undatedCount = timeline.undated.length;
 
   async function persist(nextItems: Experience[], label?: string) {
@@ -179,7 +186,7 @@ export default function ExperiencesPage({
         <header className="border-rule flex flex-col gap-4 border-b py-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="font-mono text-micro tracking-[0.2em] text-ink-3">
-              账本 / 02
+              征途
             </p>
             <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <h1 className="font-serif text-2xl tracking-tight sm:text-3xl">
@@ -196,10 +203,10 @@ export default function ExperiencesPage({
             </p>
             {items.length > 0 && (
               <p className="mt-1 font-mono text-micro tabular-nums text-ink-4">
-                覆盖 {availableKinds.length} 类 · 最近记录{" "}
+                覆盖 {availableKinds.length} 类 最近记录{" "}
                 {relativeDaysLabel(activity.daysSinceLatest)}
                 {activity.stale && (
-                  <span className="text-amber-ink"> · 已超过 30 天</span>
+                  <span className="text-amber-ink"> 已超过 30 天</span>
                 )}
               </p>
             )}
@@ -320,14 +327,15 @@ export default function ExperiencesPage({
               </header>
 
               <div className="px-4 py-3 sm:px-5">
-                <div className="flex gap-2 overflow-x-auto pb-1">
+                <div className="grid grid-cols-3 gap-2 sm:flex sm:overflow-x-auto sm:pb-1">
                   {axis.map((cell) => {
                     const empty = cell.count === 0;
                     return (
                       <div
                         key={cell.term.key}
                         className={[
-                          "min-w-[88px] flex-1 rounded-lg border px-3 py-2.5",
+                          "rounded-lg border px-3 py-2.5",
+                          "sm:min-w-[88px] sm:flex-1",
                           empty
                             ? "border-rule border-dashed bg-paper"
                             : "border-rule bg-paper",
@@ -395,25 +403,61 @@ export default function ExperiencesPage({
             </section>
 
             <section className="mt-5">
-              <div className="flex items-baseline justify-between gap-3">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <h2 className="text-sm font-medium">
                   {effectiveFilter === "all"
                     ? "全部经历"
                     : EXPERIENCE_KIND_META[effectiveFilter].label}
                 </h2>
-                <span className="font-mono text-micro text-ink-4">
-                  按学期倒序 · {filtered.length} 条
-                </span>
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="font-mono text-micro tabular-nums text-ink-4">
+                    {view === "feed"
+                      ? `${filtered.length} 条 ${readyCount} 条简历就绪`
+                      : `按学期倒序 ${filtered.length} 条`}
+                  </span>
+                  <div
+                    role="group"
+                    aria-label="切换征途视图"
+                    className="border-rule flex items-center gap-0.5 rounded-lg border p-0.5"
+                  >
+                    <ViewButton
+                      active={view === "feed"}
+                      label="动态"
+                      onClick={() => setView("feed")}
+                    />
+                    <ViewButton
+                      active={view === "timeline"}
+                      label="时间线"
+                      onClick={() => setView("timeline")}
+                    />
+                  </div>
+                </div>
               </div>
 
               {filtered.length > 0 ? (
-                <Timeline
-                  groups={filteredTimeline.groups}
-                  undated={filteredTimeline.undated}
-                  onEdit={openEdit}
-                  onDelete={handleDelete}
-                  onConfirm={(id) => void handleConfirm(id)}
-                />
+                view === "feed" ? (
+                  <>
+                    <ActivityFeed
+                      experiences={filtered}
+                      onEdit={openEdit}
+                      onDelete={handleDelete}
+                      onConfirm={(id) => void handleConfirm(id)}
+                    />
+                    <p className="mt-3 text-[11px] leading-5 text-ink-4">
+                      动态只在本机浏览器生成与可见，不上传、不分享；「本机可见」表示这条记录没有离开这台电脑。
+                    </p>
+                  </>
+                ) : (
+                  <Timeline
+                    groups={filteredTimeline.groups}
+                    undated={filteredTimeline.undated}
+                    variant={timelineStyle}
+                    onVariantChange={setTimelineStyle}
+                    onEdit={openEdit}
+                    onDelete={handleDelete}
+                    onConfirm={(id) => void handleConfirm(id)}
+                  />
+                )
               ) : (
                 <p className="border-rule mt-2 rounded-xl border border-dashed px-4 py-6 text-center text-xs text-ink-3">
                   这一学期还没有经历。
@@ -436,7 +480,7 @@ export default function ExperiencesPage({
               aria-hidden="true"
               className="h-1.5 w-1.5 rounded-full bg-accent"
             />
-            数据只存在你的浏览器 · 四段式与证据都可在简历阶段复用
+            数据只存在你的浏览器 四段式与证据都可在简历阶段复用
           </p>
         </div>
       </div>
@@ -450,6 +494,32 @@ export default function ExperiencesPage({
         />
       )}
     </div>
+  );
+}
+
+function ViewButton({
+  active,
+  label,
+  onClick,
+}: {
+  active: boolean;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onClick}
+      className={[
+        "inline-flex min-h-11 items-center rounded-md px-2.5 text-xs transition-colors sm:min-h-8",
+        active
+          ? "bg-ink text-paper font-medium"
+          : "text-ink-3 hover:bg-ink/[0.05]",
+      ].join(" ")}
+    >
+      {label}
+    </button>
   );
 }
 

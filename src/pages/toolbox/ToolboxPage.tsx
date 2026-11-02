@@ -64,7 +64,7 @@ export default function ToolboxPage({
         <header className="border-rule flex flex-col gap-4 border-b py-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="font-mono text-micro tracking-[0.2em] text-ink-3">
-              工具箱 / 04
+              工具箱
             </p>
             <h1 className="mt-2 font-serif text-2xl tracking-tight sm:text-3xl">
               工具箱

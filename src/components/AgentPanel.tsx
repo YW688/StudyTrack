@@ -25,7 +25,7 @@ import {
   type AgentReply,
 } from "../ai/tasks/agent";
 
-export type DockMode = "collapsed" | "docked" | "floating";
+export type DockMode = "closed" | "docked" | "floating";
 
 function useWideLayout(): boolean {
   const [wide, setWide] = useState(
@@ -115,8 +115,8 @@ function makeMessage(role: "user" | "agent", text: string): AgentMessage {
 }
 
 function navigateLabel(id: NonNullable<AgentReply["navigate"]>): string {
-  if (id === "opportunities") return "打开悬赏";
-  if (id === "experiences") return "打开账本";
+  if (id === "opportunities") return "打开征召";
+  if (id === "experiences") return "打开征途";
   if (id === "resume") return "打开简历";
   return "回到今日";
 }
@@ -274,7 +274,7 @@ export default function AgentPanel({
             draft.data.grade || "年级未填",
             draft.data.major || "专业未填",
             GOAL_LABELS[draft.data.goal],
-          ].join(" · ")}。去悬赏可以按这份档案对照岗位。`,
+          ].join(" · ")}。去征召可以按这份档案对照岗位。`,
         );
         setNavigateTarget("opportunities");
       } else if (draft.kind === "experience") {
@@ -291,10 +291,10 @@ export default function AgentPanel({
         }
         await onSaveExperience(draft.data);
         appendAgent(
-          `已写入账本：「${draft.data.title}」。${
+          `已写入征途：「${draft.data.title}」。${
             missing.length > 0
               ? `还缺 ${missing.join("、")}，可以在经历页继续补。`
-              : "四段已齐，可以去悬赏看匹配。"
+              : "四段已齐，可以去征召看匹配。"
           }`,
         );
         setNavigateTarget("experiences");
@@ -366,26 +366,15 @@ export default function AgentPanel({
               </div>
               <div className="-mt-1 flex shrink-0 items-center gap-0.5">
                 {isWide && dockMode === "docked" && (
-                  <>
-                    <button
-                      type="button"
-                      onClick={() => onDockModeChange("floating")}
-                      aria-label="浮出为独立窗口"
-                      title="浮出为独立窗口"
-                      className="hover:bg-ink/[0.04] inline-flex h-11 w-11 items-center justify-center rounded-lg text-base text-ink-3 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
-                    >
-                      ↗
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => onDockModeChange("collapsed")}
-                      aria-label="收起记录官"
-                      title="收起记录官"
-                      className="hover:bg-ink/[0.04] inline-flex h-11 w-11 items-center justify-center rounded-lg text-base text-ink-3 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
-                    >
-                      »
-                    </button>
-                  </>
+                  <button
+                    type="button"
+                    onClick={() => onDockModeChange("floating")}
+                    aria-label="浮出为独立窗口"
+                    title="浮出为独立窗口"
+                    className="hover:bg-ink/[0.04] inline-flex h-11 w-11 items-center justify-center rounded-lg text-base text-ink-3 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+                  >
+                    ↗
+                  </button>
                 )}
                 {isWide && dockMode === "floating" && (
                   <button
@@ -573,23 +562,8 @@ export default function AgentPanel({
   );
 
   if (isWide) {
-    if (dockMode === "collapsed") {
-      return (
-        <button
-          type="button"
-          onClick={() => onDockModeChange("docked")}
-          aria-label="展开记录官"
-          title="展开记录官"
-          className="border-rule bg-surface hover:bg-ink/[0.03] hidden h-dvh w-full flex-col items-center gap-4 border-l pt-6 text-ink-3 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none lg:flex"
-        >
-          <span className="border-rule inline-flex h-9 w-9 items-center justify-center rounded-full border font-serif text-[13px]">
-            记
-          </span>
-          <span className="font-mono text-micro tracking-[0.24em] [writing-mode:vertical-rl]">
-            记录官
-          </span>
-        </button>
-      );
+    if (dockMode === "closed") {
+      return null;
     }
 
     if (dockMode === "docked") {
@@ -610,7 +584,7 @@ export default function AgentPanel({
         subtitle="本地建档 · 写账 · 查账"
         width={424}
         height={680}
-        onClose={() => onDockModeChange("collapsed")}
+        onClose={() => onDockModeChange("closed")}
         actions={
           <button
             type="button"
@@ -946,7 +920,7 @@ function ExperienceDraftCard({
       </div>
 
       <p className="mt-2 text-micro leading-4 text-ink-4">
-        确认后写入账本；四段不全会标为待确认，不会自动进简历。
+        确认后写入征途；四段不全会标为待确认，不会自动进简历。
       </p>
       {error && (
         <p role="alert" className="mt-2 text-micro text-red-800">
@@ -961,7 +935,7 @@ function ExperienceDraftCard({
           disabled={busy}
           className={BTN_PRIMARY}
         >
-          {busy ? "正在写入…" : "确认写入账本"}
+          {busy ? "正在写入…" : "确认写入征途"}
         </button>
         <button
           type="button"
@@ -1013,7 +987,7 @@ function NoteDraftCard({
         className={`${FIELD} resize-y py-2 leading-5`}
       />
       <p className="mt-2 text-micro leading-4 text-ink-4">
-        确认后记进账本；不会当作完整经历。
+        确认后记进征途；不会当作完整经历。
       </p>
       {error && (
         <p role="alert" className="mt-2 text-micro text-red-800">

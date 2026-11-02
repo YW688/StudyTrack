@@ -8,40 +8,44 @@ import {
 import BrandMark from "./BrandMark";
 import DataBackup from "./DataBackup";
 import PanelIcon from "./PanelIcon";
+import ProfileSigil from "./ProfileSigil";
 import Topbar from "./Topbar";
+import TopbarIsland from "./TopbarIsland";
 import type { CommandItem } from "./CommandPalette";
+import { GOAL_LABELS, type Goal } from "../types";
 import { THEMES, nextTheme, type ThemeId } from "../lib/theme";
+import type { GreenMatrix } from "../lib/ledger";
 
 const NAV = [
   {
     id: "today",
-    no: "01",
     label: "今日",
     short: "今",
+    unit: "项待办",
     tone: "#d4ece4",
     ink: "#2f6b60",
   },
   {
     id: "experiences",
-    no: "02",
-    label: "账本",
-    short: "账",
+    label: "征途",
+    short: "途",
+    unit: "条战绩",
     tone: "#dde6f5",
     ink: "#3d5478",
   },
   {
     id: "opportunities",
-    no: "03",
-    label: "悬赏",
-    short: "悬",
+    label: "征召",
+    short: "征",
+    unit: "条线索",
     tone: "#f7dce7",
     ink: "#7c3b58",
   },
   {
     id: "toolbox",
-    no: "04",
     label: "工具箱",
     short: "箱",
+    unit: "项",
     tone: "#f5e7cd",
     ink: "#6f5323",
   },
@@ -82,6 +86,7 @@ interface AppShellProps {
   theme: ThemeId;
   onThemeChange: (theme: ThemeId) => void;
   hasData: boolean;
+  locked: boolean;
   counts: Record<NavId, number>;
   demoMode: boolean;
   onClear: () => Promise<void>;
@@ -91,10 +96,21 @@ interface AppShellProps {
   onNavigate: (id: NavId) => void;
   onOpenWindow: (id: ShellWindowId) => void;
   onOpenAgent: () => void;
-  scope: string;
+  grade: string;
+  major: string;
+  goal: Goal | null;
+  avatar: string | null;
+  onAvatarChange: (next: string | null) => Promise<void>;
   recents: { id: string; title: string; meta: string }[];
   weekLine: string;
   week: string;
+  level: number;
+  levelPercent: number;
+  ready: number;
+  total: number;
+  comboDays: number;
+  checkin: GreenMatrix;
+  archiveTitle: string;
   dock?: ReactNode;
   dockWidth: number;
   children: ReactNode;
@@ -106,6 +122,7 @@ export default function AppShell({
   theme,
   onThemeChange,
   hasData,
+  locked,
   counts,
   demoMode,
   onClear,
@@ -115,16 +132,29 @@ export default function AppShell({
   onNavigate,
   onOpenWindow,
   onOpenAgent,
-  scope,
+  grade,
+  major,
+  goal,
+  avatar,
+  onAvatarChange,
   recents,
   weekLine,
   week,
+  level,
+  levelPercent,
+  ready,
+  total,
+  comboDays,
+  checkin,
+  archiveTitle,
   dock,
   dockWidth,
   children,
 }: AppShellProps) {
   const [collapsed, setCollapsed] = useState(readRailCollapsed);
   const [statusCollapsed, setStatusCollapsed] = useState(readStatusCollapsed);
+  const [islandOpen, setIslandOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const currentTheme = THEMES.find((item) => item.id === theme) ?? THEMES[0];
   const upcomingTheme =
     THEMES.find((item) => item.id === nextTheme(theme)) ?? THEMES[0];
@@ -133,7 +163,13 @@ export default function AppShell({
 
   useEffect(() => {
     sheetRef.current?.scrollTo({ top: 0 });
+    setIslandOpen(false);
+    setMenuOpen(false);
   }, [routeKey]);
+
+  useEffect(() => {
+    if (collapsed) setMenuOpen(false);
+  }, [collapsed]);
 
   useEffect(() => {
     try {
@@ -173,7 +209,7 @@ export default function AppShell({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  const commands: CommandItem[] = [
+  const allCommands: CommandItem[] = [
     ...NAV.map((item) => ({
       id: `page-${item.id}`,
       label: item.label,
@@ -230,6 +266,9 @@ export default function AppShell({
       run: () => void onExport(),
     },
   ];
+  const commands = locked
+    ? allCommands.filter((item) => item.group === "设置")
+    : allCommands;
 
   return (
     <div
@@ -270,45 +309,56 @@ export default function AppShell({
           >
             <PanelIcon collapsed={collapsed} />
           </button>
-
-          <button
-            type="button"
-            className="app-sidebar-theme"
-            onClick={() => onThemeChange(nextTheme(theme))}
-            aria-label={`切换配色 当前${currentTheme.name}`}
-            title={`切换到${upcomingTheme.name}`}
-          >
-            <span
-              aria-hidden="true"
-              className="app-sidebar-theme-dot"
-              style={{ backgroundImage: currentTheme.swatch }}
-            />
-            <span>{currentTheme.name}</span>
-          </button>
         </div>
 
-        {!collapsed && (
-          <div className="app-scope">
-            <span aria-hidden="true" className="app-scope-dot" />
-            <strong>{scope}</strong>
-          </div>
-        )}
+        <button
+          type="button"
+          onClick={() => setIslandOpen(true)}
+          aria-label="打开本机存档卡"
+          title="打开本机存档卡"
+          className="app-profile"
+        >
+          <ProfileSigil
+            grade={locked ? "" : grade}
+            level={level}
+            progress={levelPercent}
+            goal={goal}
+            avatar={locked ? null : avatar}
+            size={42}
+          />
+          <span className="app-profile-text">
+            <span className="app-profile-name">
+              {locked ? "待建档" : major || "专业未填"}
+            </span>
+            <span className="app-profile-meta">
+              {locked
+                ? "填完 4 步开启四个面"
+                : goal
+                  ? GOAL_LABELS[goal]
+                  : "目标未填"}
+            </span>
+          </span>
+          <span aria-hidden="true" className="app-profile-chev" />
+        </button>
 
         <nav className="app-nav" aria-label="四个面导航">
           {NAV.map((item) => {
-            const isActive = item.id === active;
-            const count = counts[item.id] ?? 0;
+            const isActive = !locked && item.id === active;
+            const count = locked ? 0 : (counts[item.id] ?? 0);
             return (
               <button
                 key={item.id}
                 type="button"
+                disabled={locked}
                 onClick={() => onNavigate(item.id)}
                 aria-current={isActive ? "page" : undefined}
-                title={item.label}
+                title={locked ? `${item.label} 完成建档后开启` : item.label}
                 className={[
                   "app-nav-item",
                   isActive ? "is-active" : "",
+                  locked ? "is-locked" : "",
                 ].join(" ")}
+                style={{ "--nav-ink": item.ink } as CSSProperties}
               >
                 <span
                   aria-hidden="true"
@@ -321,14 +371,12 @@ export default function AppShell({
                 >
                   {item.short}
                 </span>
-                <span className="app-nav-label">
-                  {item.label}
-                  <span className="app-nav-no">{item.no}</span>
-                </span>
+                <span className="app-nav-label">{item.label}</span>
                 {count > 0 && (
                   <span
-                    className="app-nav-count"
-                    aria-label={`${count} 项待处理`}
+                    className="app-nav-badge"
+                    style={{ background: item.ink, color: item.tone }}
+                    aria-label={`${count} ${item.unit}`}
                   >
                     {count}
                   </span>
@@ -337,6 +385,13 @@ export default function AppShell({
             );
           })}
         </nav>
+
+        {locked && !collapsed && (
+          <p className="app-nav-lock-note">
+            <span aria-hidden="true" className="app-nav-lock-dot" />
+            四个面在建档完成后开启
+          </p>
+        )}
 
         <details className="app-mobile-data lg:hidden">
           <summary>
@@ -353,81 +408,35 @@ export default function AppShell({
           </div>
         </details>
 
-        {!collapsed && (
-          <div className="app-sidebar-recents">
-            <div className="app-sidebar-section-head">
-              <span>最近战绩</span>
-              <button
-                type="button"
-                onClick={() => onOpenWindow("experiences")}
-              >
-                全部
-              </button>
-            </div>
-            {recents.length > 0 ? (
-              <ul className="app-recent-list">
-                {recents.map((item) => (
-                  <li key={item.id}>
-                    <button
-                      type="button"
-                      className="app-recent"
-                      onClick={() => onOpenWindow("experiences")}
-                    >
-                      <span className="app-recent-title">{item.title}</span>
-                      <span className="app-recent-meta">{item.meta}</span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="app-recent-empty">
-                还没有战绩。今天在今日页记一条，会出现在这里。
-              </p>
-            )}
-            <p className="app-sidebar-week">{weekLine}</p>
-          </div>
-        )}
-
         <div className="app-sidebar-foot">
-          {collapsed ? (
-            <span className="app-sidebar-mini">
-              <span aria-hidden="true" className="app-sidebar-mini-dot" />
-              本机
-            </span>
-          ) : (
-            <>
-              <div>
-                <p className="app-sidebar-label">界面配色</p>
-                <div
-                  role="group"
-                  aria-label="界面配色"
-                  className="app-theme-grid"
-                >
-                  {THEMES.map((item) => {
-                    const selected = item.id === theme;
-                    return (
-                      <button
-                        key={item.id}
-                        type="button"
-                        aria-pressed={selected}
-                        onClick={() => onThemeChange(item.id)}
-                        className={selected ? "is-active" : ""}
-                      >
-                        <span
-                          aria-hidden="true"
-                          className="app-theme-dot"
-                          style={{ backgroundImage: item.swatch }}
-                        />
-                        {item.name}
-                      </button>
-                    );
-                  })}
-                </div>
+          {!collapsed && menuOpen && (
+            <div className="app-side-menu-panel" aria-label="本机设置">
+              <p className="app-sidebar-label">界面配色</p>
+              <div
+                role="group"
+                aria-label="界面配色"
+                className="app-theme-grid"
+              >
+                {THEMES.map((item) => {
+                  const selected = item.id === theme;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      aria-pressed={selected}
+                      onClick={() => onThemeChange(item.id)}
+                      className={selected ? "is-active" : ""}
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="app-theme-dot"
+                        style={{ backgroundImage: item.swatch }}
+                      />
+                      {item.name}
+                    </button>
+                  );
+                })}
               </div>
-              <p className="app-sidebar-note">
-                <span aria-hidden="true" />
-                数据只存在你的浏览器
-              </p>
               <div className="app-sidebar-backup">
                 <DataBackup
                   hasData={hasData}
@@ -436,19 +445,85 @@ export default function AppShell({
                   onClear={onClear}
                 />
               </div>
-            </>
+            </div>
+          )}
+
+          {collapsed ? (
+            <span className="app-sidebar-mini">
+              <span aria-hidden="true" className="app-sidebar-mini-dot" />
+              本机
+            </span>
+          ) : (
+            <div className="app-sidebar-footer-row">
+              <p className="app-sidebar-saved">
+                <span aria-hidden="true" />
+                本机 已保存
+              </p>
+              <button
+                type="button"
+                onClick={() => setMenuOpen((value) => !value)}
+                aria-expanded={menuOpen}
+                aria-label="本机设置"
+                title="本机设置"
+                className={[
+                  "app-side-menu-trigger",
+                  menuOpen ? "is-open" : "",
+                ].join(" ")}
+              >
+                ⋯
+              </button>
+            </div>
           )}
         </div>
       </aside>
 
       <div className="app-main">
         <Topbar
-          crumb={activeItem.label}
+          crumb={locked ? "建档" : activeItem.label}
           week={week}
-          todo={counts.today}
+          todo={locked ? 0 : counts.today}
           demoMode={demoMode}
           collapsed={statusCollapsed}
           commands={commands}
+          agentHidden={locked}
+          island={
+            <TopbarIsland
+              open={islandOpen}
+              onOpenChange={setIslandOpen}
+              level={level}
+              progress={levelPercent}
+              grade={locked ? "" : grade}
+              goal={goal}
+              avatar={locked ? null : avatar}
+              onAvatarChange={onAvatarChange}
+              ready={ready}
+              total={total}
+              comboDays={comboDays}
+              checkin={checkin}
+              recentTitle={recents[0]?.title ?? null}
+              archiveTitle={archiveTitle}
+              weekLabel={week}
+              weekLine={weekLine}
+              nav={NAV.map((item) => ({
+                id: item.id,
+                label: item.label,
+                count: locked ? 0 : (counts[item.id] ?? 0),
+                tone: item.tone,
+                ink: item.ink,
+              }))}
+              activeId={active}
+              locked={locked}
+              onNavigate={(id) => onNavigate(id as NavId)}
+              agentHidden={locked}
+              onOpenAgent={onOpenAgent}
+              themeName={currentTheme.name}
+              onNextTheme={() => onThemeChange(nextTheme(theme))}
+              hasData={hasData}
+              onExport={onExport}
+              onImport={onImport}
+              onClear={onClear}
+            />
+          }
           onToggle={() => setStatusCollapsed((value) => !value)}
           onHome={onHome}
           onOpenAgent={onOpenAgent}

@@ -62,6 +62,29 @@ export interface TodayJudgment {
   detail: string;
 }
 
+export type BriefingSegment = "晨间简报" | "午间简报" | "夜间简报";
+
+export function briefingSegment(now: Dayjs = dayjs()): BriefingSegment {
+  const hour = now.hour();
+  if (hour >= 5 && hour < 11) return "晨间简报";
+  if (hour >= 11 && hour < 17) return "午间简报";
+  return "夜间简报";
+}
+
+export function briefingAside(input: {
+  intel: { title: string; timing: string } | null;
+  readyCount: number;
+  pendingCount: number;
+}): string | null {
+  if (input.intel) {
+    return `${input.intel.title} ${input.intel.timing} 顺手记进今日`;
+  }
+  if (input.pendingCount === 0 && input.readyCount > 0) {
+    return `就绪战绩 ${input.readyCount} 条 去征召看匹配`;
+  }
+  return null;
+}
+
 export interface JudgmentInput {
   now?: Dayjs;
   profile: Profile | null;
@@ -76,8 +99,8 @@ export function buildTodayJudgment(input: JudgmentInput): TodayJudgment {
 
   if (!profile) {
     return {
-      line: "先用一分钟，把这学期放上桌。",
-      detail: "只问年级、专业和想去哪。每一步都能跳过，之后随时能改。",
+      line: "先用一分钟把这学期放上桌",
+      detail: "只问年级专业和想去哪，每一步都能跳过",
     };
   }
 
@@ -87,8 +110,8 @@ export function buildTodayJudgment(input: JudgmentInput): TodayJudgment {
   );
   if (overdue.length > 0) {
     return {
-      line: `先清掉 ${overdue.length} 个逾期项。`,
-      detail: "在今日委托里划掉，完成会记进账本；不用一次清完。",
+      line: `先清掉 ${overdue.length} 个逾期项`,
+      detail: "在委托里划掉，完成会记进征途",
     };
   }
 
@@ -97,16 +120,16 @@ export function buildTodayJudgment(input: JudgmentInput): TodayJudgment {
   );
   if (urgent) {
     return {
-      line: "今天有个截止在等你。",
-      detail: `${urgent.title} · ${formatDue(urgent.due)}`,
+      line: "今天有个截止在等你",
+      detail: `${urgent.title} ${formatDue(urgent.due)}`,
     };
   }
 
   if (courses.length > 0) {
     const first = courses[0];
     return {
-      line: `今天 ${courses.length} 节课，先上完再说。`,
-      detail: `${first.course.name} · 第 ${first.startPeriod}-${first.endPeriod} 节${first.location ? ` · ${first.location}` : ""}`,
+      line: `今天 ${courses.length} 节课，先上完再说`,
+      detail: `${first.course.name} 第 ${first.startPeriod}-${first.endPeriod} 节${first.location ? ` ${first.location}` : ""}`,
     };
   }
 
@@ -121,14 +144,14 @@ export function buildTodayJudgment(input: JudgmentInput): TodayJudgment {
   ).size;
   if (yesterdayGreen > 0) {
     return {
-      line: `昨天留下 ${yesterdayGreen} 条记录，今天别断。`,
-      detail: "补一条就够，不必写长；绿格只记产生结果的动作。",
+      line: `昨天留下 ${yesterdayGreen} 条记录，今天别断`,
+      detail: "补一条就够，绿格只记产生结果的动作",
     };
   }
 
   return {
-    line: "今天没有硬性截止，适合补一条战绩。",
-    detail: "写下今天推进的一件事，之后写简历时它会派上用场。",
+    line: "今天没有硬性截止，适合补一条战绩",
+    detail: "写下今天推进的一件事，之后写简历时它会派上用场",
   };
 }
 
@@ -185,10 +208,10 @@ export function buildCapturePrompts(
 ): string[] {
   const prompts: string[] = [];
   if (courses[0]) {
-    prompts.push(`今天「${courses[0].course.name}」讲了什么？`);
+    prompts.push(`今天「${courses[0].course.name}」讲了什么`);
   }
   if (pending[0]) {
-    prompts.push(`「${pending[0].title}」推进到哪一步了？`);
+    prompts.push(`「${pending[0].title}」推进到哪一步了`);
   }
   prompts.push("今天最有成就感的一件事");
   prompts.push("遇到的问题和解决办法");

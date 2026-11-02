@@ -116,7 +116,7 @@ export default function DataBackup({
             确认覆盖本机数据？
           </p>
           <p className="mt-1 text-micro leading-5 text-ink-3">
-            备份含 {pendingImport.experiences} 条战绩、{pendingImport.ledger} 条账本记录、
+            备份含 {pendingImport.experiences} 条战绩、{pendingImport.ledger} 条留痕记录、
             {pendingImport.notes} 条记录。导入后当前数据会被替换。
           </p>
           <div className="mt-2 flex gap-2">

@@ -213,7 +213,7 @@ export default function ExperienceEditor({
         <header className="border-rule flex items-start justify-between gap-4 border-b px-5 py-4">
           <div>
             <p className="font-mono text-micro tracking-[0.18em] text-ink-4">
-              账本 · 经历 / {initial ? "编辑" : "新记录"}
+              征途 经历 {initial ? "编辑" : "新记录"}
             </p>
             <h2
               id="experience-editor-title"
@@ -338,7 +338,7 @@ export default function ExperienceEditor({
                   value={org}
                   onChange={(event) => setOrg(event.target.value)}
                   maxLength={80}
-                  placeholder="例如：《数据库原理》课程 · 计算机学院"
+                  placeholder="例如：《数据库原理》课程 计算机学院"
                   className={FIELD}
                 />
               </div>

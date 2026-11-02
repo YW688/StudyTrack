@@ -95,7 +95,7 @@ export default function MatchDetail({
 
   async function handleCopy() {
     const lines = [
-      `${job.company} · ${job.title}`,
+      `${job.company} ${job.title}`,
       `匹配分 ${match.score}/100（${MATCH_TIER_LABELS[match.tier]}）`,
       ...(matchableCount > 0
         ? [`命中 ${match.hits.length}/${matchableCount} 项可匹配要求`]
@@ -149,7 +149,6 @@ export default function MatchDetail({
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-micro tracking-[0.12em] text-ink-3">
               <span>{job.company}</span>
-              <span aria-hidden="true">·</span>
               <span>{job.cohort}</span>
               {job.custom && (
                 <span className="border-ink/15 bg-ink/[0.05] rounded-full border px-1.5 py-0.5 tracking-[0.06em] text-ink-3">
@@ -167,7 +166,7 @@ export default function MatchDetail({
               <MetaChip>
                 {job.family}
                 {job.track !== "自定义" && job.track !== job.family
-                  ? ` · ${job.track}`
+                  ? ` ${job.track}`
                   : ""}
               </MetaChip>
             </div>
@@ -208,12 +207,12 @@ export default function MatchDetail({
 
         {job.custom ? (
           <p className="mt-2 text-micro leading-5 text-ink-4">
-            粘贴的 JD · 只在当前页面有效，刷新后消失
+            粘贴的 JD 只在当前页面有效，刷新后消失
           </p>
         ) : (
           <div className="border-rule mt-3 border-t pt-2.5">
             <p className="text-micro leading-5 text-ink-3">
-              来源：{job.sourceName} · 官方招聘页 · 核对{" "}
+              来源：{job.sourceName} 官方招聘页 核对{" "}
               {formatCollectedAt(job.verifiedAt)}
             </p>
             {job.sourceUrl && (
@@ -279,7 +278,7 @@ export default function MatchDetail({
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h3 className="text-xs font-medium">要求对照</h3>
           <span className="font-mono text-micro tabular-nums text-ink-4">
-            命中 {match.hits.length} · 待补 {match.gaps.length} · 资格{" "}
+            命中 {match.hits.length} 待补 {match.gaps.length} 资格{" "}
             {match.eligibility.length}
           </span>
         </div>
@@ -328,23 +327,12 @@ export default function MatchDetail({
                           <span className="font-medium text-ink-3">
                             {hitExperience?.title ?? "已删除的经历"}
                           </span>
-                          <span aria-hidden="true" className="text-ink-4">
-                            ·
-                          </span>
                           <span>{SOURCE_LABELS[hit.source]}</span>
                           {hit.source !== "tag" &&
                             hit.skills.length > 0 && (
-                              <>
-                                <span
-                                  aria-hidden="true"
-                                  className="text-ink-4"
-                                >
-                                  ·
-                                </span>
-                                <span>
-                                  技能：{hit.skills.join("、")}
-                                </span>
-                              </>
+                              <span>
+                                技能：{hit.skills.join("、")}
+                              </span>
                             )}
                         </p>
                       </div>

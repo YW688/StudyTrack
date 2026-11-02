@@ -1,11 +1,13 @@
 import { useState } from "react";
 import type { Experience } from "../types";
+import TierPips from "./TierPips";
 import {
   EXPERIENCE_KIND_META,
   experienceKindLabel,
   formatExperienceRange,
   fourPartCount,
   isSafeHttpUrl,
+  resumeReadiness,
 } from "../lib/experience";
 
 interface ExperienceCardProps {
@@ -42,6 +44,7 @@ export default function ExperienceCard({
   const range = formatExperienceRange(experience.start, experience.end);
   const ongoing = Boolean(experience.start) && !experience.end;
   const completeness = fourPartCount(experience);
+  const ready = resumeReadiness(experience).ready;
   const summary = experience.result.trim() || experience.problem.trim();
   const filledSections = SECTION_META.filter(
     (section) => experience[section.key].trim().length > 0,
@@ -324,14 +327,25 @@ export default function ExperienceCard({
               删除
             </button>
           )}
-          <span
-            className={[
-              "ml-auto font-mono text-micro tabular-nums",
-              completeness === 4 ? "text-ink-4" : "text-amber/80",
-            ].join(" ")}
-            title="已填写的四段式段落数"
-          >
-            四段式 {completeness}/4
+          <span className="ml-auto flex items-center gap-2">
+            <TierPips
+              units={completeness}
+              total={4}
+              label={`四段式已写 ${completeness}/4 段`}
+            />
+            <span
+              title={
+                ready
+                  ? "四段式齐 有证据或量化 置信已确认"
+                  : "补齐四段式、证据与确认，才算就绪"
+              }
+              className={[
+                "font-mono text-micro tabular-nums",
+                ready ? "text-accent-ink" : "text-ink-4",
+              ].join(" ")}
+            >
+              {ready ? "品质 4/4 已就绪" : `品质 ${completeness}/4`}
+            </span>
           </span>
         </div>
       </div>

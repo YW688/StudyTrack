@@ -62,7 +62,7 @@ export default function PortfolioPage({ hash }: PortfolioPageProps) {
       <div className="flex min-h-dvh flex-col items-center justify-center px-4">
         <div className="max-w-md text-center">
           <p className="font-mono text-micro tracking-[0.2em] text-ink-3">
-            作品集 · 链接
+            作品集 链接
           </p>
           <h1 className="mt-3 font-serif text-3xl tracking-tight">
             链接无效或数据已损坏
@@ -116,7 +116,7 @@ export default function PortfolioPage({ hash }: PortfolioPageProps) {
 
       <header className="portfolio-cover mx-auto max-w-4xl px-4 pt-10 sm:px-6 sm:pt-16">
         <p className="font-mono text-micro tracking-[0.2em] text-ink-3">
-          作品集 · {year}
+          作品集 {year}
         </p>
         <h1 className="mt-4 font-serif text-[clamp(2rem,6vw,3.5rem)] leading-[1.2] tracking-tight">
           {payload.title}

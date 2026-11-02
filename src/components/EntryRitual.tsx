@@ -15,13 +15,14 @@ const POEMS = [
 ] as const;
 
 const POEM_STORAGE_KEY = "studytrack:ritual-poem";
-const POEM_MS = 1100;
-const MARK_HOLD_MS = 600;
-const FLY_MS = 420;
-const REVEAL_MS = 240;
-const POEM_CHAR_START = 0.24;
-const POEM_CHAR_STEP = 0.034;
-const POEM_LINE_STEP = 0.06;
+const POEM_MS = 820;
+const MARK_HOLD_MS = 320;
+const FLY_MS = 360;
+const REVEAL_MS = 160;
+const HANDOFF_FALLBACK_MS = 1100;
+const POEM_CHAR_START = 0.14;
+const POEM_CHAR_STEP = 0.026;
+const POEM_LINE_STEP = 0.045;
 
 type Phase = "poem" | "mark" | "handoff" | "exit";
 
@@ -107,6 +108,9 @@ export default function EntryRitual({
     let landedTimer = 0;
     const startedAt = performance.now();
 
+    // 后台标签页里 requestAnimationFrame 不触发，用定时器兜底，避免卡在 handoff。
+    const fallback = window.setTimeout(() => setPhase("exit"), HANDOFF_FALLBACK_MS);
+
     const fly = () => {
       const mark = markRef.current;
       const target = document.querySelector<HTMLElement>("[data-brand-mark]");
@@ -132,6 +136,7 @@ export default function EntryRitual({
     return () => {
       window.cancelAnimationFrame(frame);
       window.clearTimeout(landedTimer);
+      window.clearTimeout(fallback);
     };
   }, [phase]);
 

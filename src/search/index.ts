@@ -981,6 +981,55 @@ export function rankJobs(
     );
 }
 
+export type QualificationTier = "qualified" | "near" | "far";
+
+export const QUALIFICATION_LABELS: Record<QualificationTier, string> = {
+  qualified: "够格",
+  near: "差一步",
+  far: "差得多",
+};
+
+export interface JobQualification {
+  tier: QualificationTier;
+  readyHits: number;
+  blockers: string[];
+}
+
+/**
+ * 资格判定只认「简历就绪」的经历命中的要求：
+ * 全部可匹配要求都由就绪经历命中 = 够格；只差 1 项 = 差一步；其余 = 差得多。
+ */
+export function qualifyJob(
+  match: JobMatch,
+  readyIds: Set<string>,
+): JobQualification {
+  const readyHits = match.hits.filter((hit) =>
+    readyIds.has(hit.experienceId),
+  ).length;
+  const blockers: string[] = [];
+
+  if (readyHits === 0) {
+    blockers.push("没有简历就绪的经历对上要求");
+  }
+  for (const gap of match.gaps.slice(0, 2)) {
+    blockers.push(gap.requirement.slice(0, 40));
+  }
+  if (match.gaps.length > 2) {
+    blockers.push(`另有 ${match.gaps.length - 2} 项要求`);
+  }
+
+  const tier: QualificationTier =
+    readyHits === 0
+      ? "far"
+      : match.gaps.length === 0
+        ? "qualified"
+        : match.gaps.length === 1
+          ? "near"
+          : "far";
+
+  return { tier, readyHits, blockers };
+}
+
 export interface PastedJdInput {
   raw: string;
   title: string;

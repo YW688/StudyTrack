@@ -30,10 +30,14 @@ import {
   JOB_LIBRARY_ISSUE,
   JOB_LIBRARY_NOTE,
   JOB_POSTINGS,
+  QUALIFICATION_LABELS,
   buildMatchContext,
+  qualifyJob,
   rankJobs,
+  type QualificationTier,
 } from "../../search";
 import { createJobIndex, searchJobScores } from "../../search/bm25";
+import { readyExperienceIds } from "../../lib/experience";
 import MatchDetail from "./MatchDetail";
 import PasteJdDialog from "./PasteJdDialog";
 import SourceCheckBadge from "../../components/SourceCheckBadge";
@@ -73,6 +77,12 @@ const TYPE_TABS: { id: "all" | JobType; label: string }[] = [
   { id: "intern", label: "实习" },
 ];
 
+const QUALIFICATION_CHIP_CLASS: Record<QualificationTier, string> = {
+  qualified: "border-[#2F5A3C]/25 bg-[#E8EFE8] text-[#2F5A3C]",
+  near: "border-amber/40 bg-amber/10 text-amber-ink",
+  far: "border-rule bg-ink/[0.04] text-ink-4",
+};
+
 export default function OpportunitiesPage({
   experiences,
   resume,
@@ -85,6 +95,7 @@ export default function OpportunitiesPage({
   const [typeFilter, setTypeFilter] = useState<"all" | JobType>("all");
   const [cityFilter, setCityFilter] = useState("all");
   const [familyFilter, setFamilyFilter] = useState<"all" | JobFamily>("all");
+  const [qualFilter, setQualFilter] = useState<"all" | QualificationTier>("all");
   const [channelType, setChannelType] = useState<"all" | ChannelType>("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [view, setView] = useState<"list" | "detail">("list");
@@ -112,6 +123,12 @@ export default function OpportunitiesPage({
     () => rankJobs(allJobs, context),
     [allJobs, context],
   );
+  const readyIds = useMemo(() => readyExperienceIds(items), [items]);
+  const qualifications = useMemo(
+    () =>
+      new Map(matches.map((match) => [match.jobId, qualifyJob(match, readyIds)])),
+    [matches, readyIds],
+  );
   const jobById = useMemo(
     () => new Map(allJobs.map((job) => [job.id, job])),
     [allJobs],
@@ -133,10 +150,25 @@ export default function OpportunitiesPage({
         if (familyFilter !== "all" && job.family !== familyFilter) {
           return false;
         }
+        if (
+          qualFilter !== "all" &&
+          qualifications.get(match.jobId)?.tier !== qualFilter
+        ) {
+          return false;
+        }
         if (searchScores && !searchScores.has(job.id)) return false;
         return true;
       }),
-    [matches, jobById, typeFilter, cityFilter, familyFilter, searchScores],
+    [
+      matches,
+      jobById,
+      typeFilter,
+      cityFilter,
+      familyFilter,
+      qualFilter,
+      qualifications,
+      searchScores,
+    ],
   );
 
   const selectedMatch =
@@ -171,7 +203,16 @@ export default function OpportunitiesPage({
     query.trim().length > 0 ||
     typeFilter !== "all" ||
     cityFilter !== "all" ||
-    familyFilter !== "all";
+    familyFilter !== "all" ||
+    qualFilter !== "all";
+
+  const qualifiedCount = matches.filter(
+    (match) => qualifications.get(match.jobId)?.tier === "qualified",
+  ).length;
+  const nearCount = matches.filter(
+    (match) => qualifications.get(match.jobId)?.tier === "near",
+  ).length;
+  const farCount = matches.length - qualifiedCount - nearCount;
 
   const profile = context.profile;
   const incomplete = profile.completeness.filter((item) => !item.done);
@@ -224,7 +265,7 @@ export default function OpportunitiesPage({
     {
       label: "岗位库",
       value: allJobs.length,
-      note: `${campusCount} 校招 · ${internCount} 实习`,
+      note: `${campusCount} 校招 ${internCount} 实习`,
     },
     {
       label: "高匹配",
@@ -254,7 +295,7 @@ export default function OpportunitiesPage({
     },
     {
       label: "年级 / 专业",
-      value: [profile.grade, profile.major].filter(Boolean).join(" · "),
+      value: [profile.grade, profile.major].filter(Boolean).join(" "),
       done: Boolean(profile.grade && profile.major),
     },
     {
@@ -278,6 +319,7 @@ export default function OpportunitiesPage({
     setTypeFilter("all");
     setCityFilter("all");
     setFamilyFilter("all");
+    setQualFilter("all");
   }
 
   function selectJob(id: string) {
@@ -341,11 +383,11 @@ export default function OpportunitiesPage({
         <header className="border-rule flex flex-col gap-4 border-b py-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="font-mono text-micro tracking-[0.2em] text-ink-3">
-              悬赏 / 03
+              征召
             </p>
             <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <h1 className="font-serif text-2xl tracking-tight sm:text-3xl">
-                悬赏
+                征召
               </h1>
               <span className="bg-ink/[0.05] rounded-full px-2 py-0.5 font-mono text-micro text-ink-3">
                 {profile.usesSelected
@@ -356,13 +398,13 @@ export default function OpportunitiesPage({
               </span>
             </div>
             <p className="mt-2 text-xs leading-5 text-ink-3">
-              {CHANNELS.length} 个官方入口 + {JOB_POSTINGS.length} 张演示岗位卡。把经历对到要求上：命中指回原文，缺口给出下一步。
+              {CHANNELS.length} 个官方入口 + {JOB_POSTINGS.length} 张演示岗位卡 把经历对到要求上：命中指回原文，缺口给出下一步
             </p>
             <p className="mt-1 font-mono text-micro leading-5 text-ink-4">
-              来源核验：官方入口 {channelOk}/{CHANNELS.length} 可达 · 演示卡来源{" "}
+              来源核验：官方入口 {channelOk}/{CHANNELS.length} 可达 演示卡来源{" "}
               {jobOk}/{JOB_POSTINGS.length} 可达
               {SOURCE_CHECKED_AT
-                ? ` · 核验于 ${dayjs(SOURCE_CHECKED_AT).format("M月D日 HH:mm")}`
+                ? ` 核验于 ${dayjs(SOURCE_CHECKED_AT).format("M月D日 HH:mm")}`
                 : ""}
             </p>
           </div>
@@ -660,6 +702,52 @@ export default function OpportunitiesPage({
             </select>
           </div>
 
+          <div
+            role="group"
+            aria-label="按应聘资格筛选"
+            className="mt-2 flex flex-wrap items-center gap-1.5 px-3 pb-1"
+          >
+            <span className="font-mono text-micro tracking-[0.14em] text-ink-4">
+              应聘资格
+            </span>
+            <QualPill
+              active={qualFilter === "all"}
+              label="全部"
+              count={matches.length}
+              onClick={() => setQualFilter("all")}
+            />
+            <QualPill
+              active={qualFilter === "qualified"}
+              label={QUALIFICATION_LABELS.qualified}
+              count={qualifiedCount}
+              onClick={() => setQualFilter("qualified")}
+            />
+            <QualPill
+              active={qualFilter === "near"}
+              label={QUALIFICATION_LABELS.near}
+              count={nearCount}
+              onClick={() => setQualFilter("near")}
+            />
+            <QualPill
+              active={qualFilter === "far"}
+              label={QUALIFICATION_LABELS.far}
+              count={farCount}
+              onClick={() => setQualFilter("far")}
+            />
+            <span className="text-micro ml-auto text-ink-4">
+              按 {readyIds.size} 条简历就绪的战绩判定
+              {readyIds.size === 0 && (
+                <button
+                  type="button"
+                  onClick={onNavigateExperiences}
+                  className="text-ink-3 ml-1 underline underline-offset-2 hover:text-ink"
+                >
+                  去补战绩
+                </button>
+              )}
+            </span>
+          </div>
+
           <div className="border-rule flex flex-wrap items-center justify-between gap-2 border-t px-3 py-2">
             <p className="max-w-2xl text-micro leading-4 text-ink-4">
               {JOB_LIBRARY_NOTE}
@@ -723,7 +811,7 @@ export default function OpportunitiesPage({
             <div className="mb-2 flex items-baseline justify-between gap-2 px-1">
               <h2 className="text-xs font-medium">推荐结果</h2>
               <span className="font-mono text-micro tracking-[0.08em] text-ink-4">
-                按匹配分降序 · 附官网
+                按匹配分降序 附官网
               </span>
             </div>
 
@@ -733,6 +821,7 @@ export default function OpportunitiesPage({
                 if (!job) return null;
                 const selected = selectedMatch?.jobId === job.id;
                 const tone = companyTone(job.company);
+                const qual = qualifications.get(job.id);
                 const requirementTotal =
                   match.hits.length + match.gaps.length;
                 const filled = Math.max(
@@ -771,7 +860,7 @@ export default function OpportunitiesPage({
                         <span className="min-w-0 flex-1">
                           <span className="flex items-center justify-between gap-2">
                             <span className="truncate font-mono text-micro tracking-[0.08em] text-ink-3">
-                              {job.company} · {job.cohort}
+                              {job.company} {job.cohort}
                             </span>
                             {job.custom && (
                               <span className="border-ink/15 bg-ink/[0.05] shrink-0 rounded-full border px-1.5 py-0.5 text-micro text-ink-3">
@@ -789,10 +878,22 @@ export default function OpportunitiesPage({
                           </span>
                           <span className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-micro text-ink-3">
                             <span>{JOB_TYPE_LABELS[job.type]}</span>
-                            <span aria-hidden="true">·</span>
                             <span>{job.city}</span>
-                            <span aria-hidden="true">·</span>
                             <span>{formatGradeFit(job.gradeFit)}</span>
+                            {qual && (
+                              <>
+                                <span
+                                  className={`inline-flex min-h-5 items-center rounded-full border px-1.5 ${QUALIFICATION_CHIP_CLASS[qual.tier]}`}
+                                  title={
+                                    qual.blockers.length > 0
+                                      ? `差什么：${qual.blockers.join("；")}`
+                                      : "可匹配要求全部由就绪战绩命中"
+                                  }
+                                >
+                                  {QUALIFICATION_LABELS[qual.tier]}
+                                </span>
+                              </>
+                            )}
                           </span>
                           <span className="mt-2 flex items-center gap-2">
                             <span
@@ -833,7 +934,7 @@ export default function OpportunitiesPage({
                       <span className="flex min-w-0 items-center gap-1.5">
                         <span className="min-w-0 truncate font-mono text-micro text-ink-4">
                           {job.custom
-                            ? "粘贴 JD · 仅当前页面"
+                            ? "粘贴 JD 仅当前页面"
                             : `来源：${job.sourceName}`}
                         </span>
                         {!job.custom && (
@@ -974,7 +1075,7 @@ export default function OpportunitiesPage({
               </p>
             </div>
             <p className="font-mono text-micro tabular-nums text-ink-4">
-              {CHANNELS.length} 个入口 · 不抓取内容
+              {CHANNELS.length} 个入口 不抓取内容
             </p>
           </div>
 
@@ -1113,5 +1214,41 @@ export default function OpportunitiesPage({
         />
       )}
     </div>
+  );
+}
+
+function QualPill({
+  active,
+  label,
+  count,
+  onClick,
+}: {
+  active: boolean;
+  label: string;
+  count: number;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onClick}
+      className={[
+        "inline-flex min-h-9 items-center gap-1.5 rounded-full border px-2.5 text-micro transition-colors",
+        active
+          ? "border-ink bg-ink text-paper"
+          : "border-rule bg-surface text-ink-3 hover:bg-ink/[0.03]",
+      ].join(" ")}
+    >
+      {label}
+      <span
+        className={[
+          "font-mono tabular-nums",
+          active ? "text-paper/55" : "text-ink-4",
+        ].join(" ")}
+      >
+        {count}
+      </span>
+    </button>
   );
 }

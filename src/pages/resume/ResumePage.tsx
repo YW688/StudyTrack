@@ -239,6 +239,15 @@ export default function ResumePage({
     setError(null);
   }
 
+  function selectMany(ids: string[]) {
+    const merged = [
+      ...new Set([...resume.selectedExperienceIds, ...ids]),
+    ].filter((id) => experienceMap.has(id));
+    commit({ ...resume, selectedExperienceIds: merged });
+    setNotice(`已选入 ${ids.length} 条就绪战绩，可继续排序或精简。`);
+    setError(null);
+  }
+
   function toggleKind(kind: ExperienceKind) {
     setKindFilter((prev) =>
       prev.includes(kind)
@@ -489,7 +498,7 @@ export default function ResumePage({
         <header className="resume-page-header border-rule flex flex-col gap-4 border-b py-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="font-mono text-micro tracking-[0.2em] text-ink-3">
-              工具箱 · 简历 / 04
+              工具箱
             </p>
             <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <h1 className="font-serif text-2xl tracking-tight sm:text-3xl">
@@ -712,6 +721,7 @@ export default function ResumePage({
                   onToggleKind={toggleKind}
                   onResetFilters={resetFilters}
                   onToggleSelect={toggleSelect}
+                  onSelectMany={selectMany}
                   onMove={moveSelected}
                   onToggleConcise={toggleConcise}
                   onClear={clearSelected}

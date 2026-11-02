@@ -3,6 +3,7 @@ import {
   type CSSProperties,
   type KeyboardEvent,
 } from "react";
+import { briefingSegment } from "../../lib/today";
 
 export const DEMO_FACES = [
   {
@@ -16,16 +17,16 @@ export const DEMO_FACES = [
   {
     id: "ledger",
     no: "02",
-    char: "账",
-    name: "账本",
+    char: "途",
+    name: "征途",
     hint: "课程设计 比赛 实习",
     tone: "var(--lp-tone-4)",
   },
   {
     id: "bounty",
     no: "03",
-    char: "悬",
-    name: "悬赏",
+    char: "征",
+    name: "征召",
     hint: "按经历找实习",
     tone: "var(--lp-tone-6)",
   },
@@ -80,7 +81,7 @@ export default function WorkbenchDemo({
           <span className="demo-dot" style={{ background: "var(--lp-tone-2)" }} />
           <span className="demo-dot" style={{ background: "var(--lp-tone-4)" }} />
         </span>
-        <p className="demo-titlebar-title">学径 · 第 8 周 · 周日</p>
+        <p className="demo-titlebar-title">学径 第 8 周 周日</p>
         <span className="demo-titlebar-chip">示例数据</span>
       </div>
 
@@ -142,9 +143,7 @@ export default function WorkbenchDemo({
 
         <div className="demo-main">
           <div className="demo-toolbar">
-            <p className="demo-crumb">
-              {activeFace.name} / {activeFace.no}
-            </p>
+            <p className="demo-crumb">{activeFace.name}</p>
             <div className="flex items-center gap-2">
               <span className="demo-agent">记录官</span>
               <span className="demo-meta">2026 年 11 月 1 日</span>
@@ -177,22 +176,22 @@ export default function WorkbenchDemo({
 
 const TODAY_TASKS = [
   {
-    title: "外部中断指示灯 · 实验报告",
-    meta: "实验课 · 明天 23:59",
+    title: "外部中断指示灯 实验报告",
+    meta: "实验课 明天 23:59",
     tag: "待交",
     done: false,
     alert: true,
   },
   {
-    title: "智能机器人 · 第 3 次实验预习",
-    meta: "课程 · 今天 18:00",
+    title: "智能机器人 第 3 次实验预习",
+    meta: "课程 今天 18:00",
     tag: "在做",
     done: false,
     alert: false,
   },
   {
-    title: "大学英语 · 作文二稿",
-    meta: "已提交 · 昨天 22:14",
+    title: "大学英语 作文二稿",
+    meta: "已提交 昨天 22:14",
     tag: "完成",
     done: true,
     alert: false,
@@ -217,68 +216,79 @@ const WEEK_CELLS = [
 ];
 
 function TodayPanel() {
+  const segment = briefingSegment();
   return (
     <div className="grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
-      <div className="min-w-0">
-        <div className="flex items-baseline justify-between gap-2">
-          <p className="demo-label">01 · 今日判词</p>
-          <p className="demo-label">11 月 1 日 · 周日</p>
-        </div>
-        <p className="mt-2 max-w-[26rem] font-serif text-[clamp(1.1rem,2.1vw,1.5rem)] leading-[1.45]">
-          今天只差一件事：把外部中断指示灯的实验报告写完。
-        </p>
-        <p className="lp-soft mt-1.5 max-w-[27rem] text-[12px] leading-6">
-          上午两节智能机器人，下午空出来写报告。写完，这一周就算收好了。
-        </p>
-
-        <div className="lp-hairline mt-3 flex items-baseline justify-between border-t pt-2">
-          <p className="demo-label">02 · 今日委托</p>
-          <span className="demo-label">3 项</span>
-        </div>
-
-        <ul className="mt-0.5">
-          {TODAY_TASKS.map((task) => (
-            <li
-              key={task.title}
-              className="lp-hairline-soft flex items-start gap-2.5 border-b py-2 last:border-b-0"
-            >
-              <span
-                aria-hidden="true"
-                className={`demo-square ${task.done ? "is-done" : ""}`}
-              />
-              <span className="min-w-0 flex-1">
-                <span
-                  className={`block text-[12.5px] leading-5 ${task.done ? "lp-faint line-through" : ""}`}
-                >
-                  {task.title}
-                </span>
-                <span className="lp-faint mt-0.5 block text-[10.5px] leading-4">
-                  {task.meta}
-                </span>
-              </span>
-              <span
-                className={`demo-tag shrink-0 ${task.alert ? "demo-tag--alert" : ""}`}
-              >
-                {task.tag}
-              </span>
-            </li>
-          ))}
-        </ul>
-
-        <div className="demo-capture mt-3">
-          <span aria-hidden="true" className="demo-capture-dot" />
-          <p className="lp-faint min-w-0 flex-1 truncate text-[12px]">
-            今天做了什么？一句话也行
+      <div className="flex min-w-0 flex-col gap-2.5">
+        <section className="demo-subpanel">
+          <div className="flex items-baseline justify-between gap-2">
+            <p className="demo-label">{segment}</p>
+            <p className="demo-label">11 月 1 日 周日</p>
+          </div>
+          <p className="mt-2 max-w-[26rem] font-serif text-[clamp(1.1rem,2.1vw,1.5rem)] leading-[1.45]">
+            把外部中断指示灯的实验报告写完
           </p>
-          <span className="demo-capture-key">Enter 记一条</span>
-        </div>
+          <p className="lp-soft mt-1.5 max-w-[27rem] text-[12px] leading-6">
+            上午两节智能机器人 下午空出来写报告 写完这一周就收好了
+          </p>
+          <p className="mt-2 text-[11.5px] leading-5 text-[color:var(--lp-accent)]">
+            教师资格面试 截止 11 月 9 日 顺手记进今日
+          </p>
+
+          <div className="lp-hairline mt-3 flex items-baseline justify-between border-t pt-2">
+            <p className="demo-label">留痕</p>
+            <span className="demo-label">今天 0 条</span>
+          </div>
+          <div className="demo-capture mt-1.5">
+            <span aria-hidden="true" className="demo-capture-dot" />
+            <p className="lp-faint min-w-0 flex-1 truncate text-[12px]">
+              今天做了什么 一句话也行
+            </p>
+            <span className="demo-capture-key">Enter 记一条</span>
+          </div>
+        </section>
+
+        <section className="demo-subpanel">
+          <div className="lp-hairline-soft flex items-baseline justify-between border-b pb-2">
+            <p className="demo-label">委托</p>
+            <span className="demo-label">3 项</span>
+          </div>
+          <ul className="mt-0.5">
+            {TODAY_TASKS.map((task) => (
+              <li
+                key={task.title}
+                className="lp-hairline-soft flex items-start gap-2.5 border-b py-2 last:border-b-0"
+              >
+                <span
+                  aria-hidden="true"
+                  className={`demo-square ${task.done ? "is-done" : ""}`}
+                />
+                <span className="min-w-0 flex-1">
+                  <span
+                    className={`block text-[12.5px] leading-5 ${task.done ? "lp-faint line-through" : ""}`}
+                  >
+                    {task.title}
+                  </span>
+                  <span className="lp-faint mt-0.5 block text-[10.5px] leading-4">
+                    {task.meta}
+                  </span>
+                </span>
+                <span
+                  className={`demo-tag shrink-0 ${task.alert ? "demo-tag--alert" : ""}`}
+                >
+                  {task.tag}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
       </div>
 
       <div className="flex flex-col gap-2.5">
         <section className="demo-subpanel">
           <div className="flex items-baseline justify-between gap-2">
-            <p className="demo-label">03 · 昨日结算</p>
-            <p className="demo-label">10 月 31 日</p>
+            <p className="demo-label">节奏</p>
+            <p className="demo-label">5 / 7</p>
           </div>
           <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1.5">
             {SETTLEMENT.map((item) => (
@@ -293,15 +303,7 @@ function TodayPanel() {
               </div>
             ))}
           </div>
-          <p className="demo-meta mt-2">产生结果 5 件 · 连续 6 天</p>
-        </section>
-
-        <section className="demo-subpanel">
-          <div className="flex items-baseline justify-between gap-2">
-            <p className="demo-label">本周绿格</p>
-            <p className="demo-label">5 / 7</p>
-          </div>
-          <div className="mt-2 flex gap-1.5">
+          <div className="mt-2.5 flex gap-1.5">
             {WEEK_CELLS.map((cell) => (
               <span
                 key={cell.day}
@@ -312,17 +314,40 @@ function TodayPanel() {
               </span>
             ))}
           </div>
-          <p className="demo-meta mt-2">只算产生结果的动作</p>
+          <p className="demo-meta mt-2">
+            本周 5/7 天有记录 连击 6 天 只算产生结果的动作
+          </p>
         </section>
 
         <section className="demo-subpanel">
           <p className="demo-label">回声</p>
           <p className="mt-1.5 font-serif text-[13px] leading-6">
-            去年今天 · 数学建模校赛
+            去年今天 数学建模校赛
           </p>
           <p className="lp-faint mt-0.5 text-[11px] leading-5">
             “22 页论文，3 人队，校赛二等奖。”
           </p>
+        </section>
+
+        <section className="demo-subpanel">
+          <div className="flex items-baseline justify-between gap-2">
+            <p className="demo-label">情报</p>
+            <p className="demo-label">2 条</p>
+          </div>
+          <ul className="mt-1.5 space-y-1.5">
+            <li className="flex items-baseline justify-between gap-2 text-[11.5px] leading-5">
+              <span className="min-w-0 truncate">教师资格考试 面试</span>
+              <span className="lp-faint shrink-0 font-mono text-[10px]">
+                截止 11 月 9 日
+              </span>
+            </li>
+            <li className="flex items-baseline justify-between gap-2 text-[11.5px] leading-5">
+              <span className="min-w-0 truncate">全国大学生数学竞赛初赛</span>
+              <span className="lp-faint shrink-0 font-mono text-[10px]">
+                11 月 14 日
+              </span>
+            </li>
+          </ul>
         </section>
       </div>
     </div>
@@ -331,17 +356,17 @@ function TodayPanel() {
 
 const LEDGER_PARTS = [
   { label: "问题", text: "选课高峰易超选" },
-  { label: "方法", text: "E-R 建模 · 事务控制" },
-  { label: "贡献", text: "12 张表 · 6 个页面" },
+  { label: "方法", text: "E-R 建模 事务控制" },
+  { label: "贡献", text: "12 张表 6 个页面" },
   { label: "结果", text: "200 人并发无超选" },
 ];
 
 const LEDGER_SKILLS = ["MySQL", "Java", "事务"];
 
 const TIMELINE = [
-  { date: "2026.10", title: "数学建模校赛 · 校二等奖", kind: "竞赛" },
-  { date: "2026.06", title: "校园选课系统 · 课程设计", kind: "课程" },
-  { date: "2025.09", title: "院学生会技术组 · 现场组", kind: "志愿" },
+  { date: "2026.10", title: "数学建模校赛 校二等奖", kind: "竞赛" },
+  { date: "2026.06", title: "校园选课系统 课程设计", kind: "课程" },
+  { date: "2025.09", title: "院学生会技术组 现场组", kind: "志愿" },
 ];
 
 const HEAT = [
@@ -357,7 +382,7 @@ function LedgerPanel() {
     <div className="grid gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
       <article className="demo-subpanel flex min-w-0 flex-col">
         <div className="flex items-start justify-between gap-2">
-          <span className="demo-tag">课程设计 · 2026 年 6 月</span>
+          <span className="demo-tag">课程设计 2026 年 6 月</span>
           <span className="demo-meta flex shrink-0 items-center gap-1.5">
             <span aria-hidden="true" className="demo-capture-dot" />
             已确认
@@ -367,7 +392,7 @@ function LedgerPanel() {
           校园选课系统
         </h3>
         <p className="lp-faint mt-0.5 text-[11px] leading-5">
-          数据库原理 · 个人项目 · 12 张表
+          数据库原理 个人项目 12 张表
         </p>
 
         <dl className="lp-hairline mt-3 grid grid-cols-2 overflow-hidden rounded-lg border">
@@ -397,11 +422,11 @@ function LedgerPanel() {
               </span>
             ))}
           </div>
-          <span className="demo-meta">证据 2 · 量化 3</span>
+          <span className="demo-meta">证据 2 量化 3</span>
         </div>
 
         <p className="lp-faint mt-auto border-t border-[color:var(--lp-line-soft)] pt-3 text-[10.5px] leading-5">
-          想改哪一段就点开哪一段，原文和证据都留在这一条里。
+          想改哪一段就点开哪一段，原文和证据都留在这一条里
         </p>
       </article>
 
@@ -423,7 +448,7 @@ function LedgerPanel() {
                     {item.title}
                   </span>
                   <span className="lp-faint block font-mono text-[9.5px] leading-4">
-                    {item.date} · {item.kind}
+                    {item.date} {item.kind}
                   </span>
                 </span>
               </li>
@@ -464,9 +489,9 @@ function LedgerPanel() {
 }
 
 const JOBS = [
-  { title: "数据分析实习生", meta: "杭州 · 2027 届", score: 86 },
-  { title: "数据运营实习生", meta: "上海 · 2027 届", score: 78 },
-  { title: "后端开发实习生", meta: "杭州 · 2027 届", score: 71 },
+  { title: "数据分析实习生", meta: "杭州 2027 届", score: 86 },
+  { title: "数据运营实习生", meta: "上海 2027 届", score: 78 },
+  { title: "后端开发实习生", meta: "杭州 2027 届", score: 71 },
 ];
 
 const MATCH_HITS = [
@@ -480,7 +505,7 @@ function BountyPanel() {
       <div className="lp-hairline flex flex-wrap items-center gap-2 rounded-full border px-3 py-1.5">
         <span className="demo-label shrink-0">检索</span>
         <span className="text-[12px] leading-5 font-medium">
-          数据分析 · 杭州 · 2027 届
+          数据分析 杭州 2027 届
         </span>
         <span className="demo-meta ml-auto shrink-0">42 条</span>
       </div>
@@ -528,7 +553,7 @@ function BountyPanel() {
                 数据分析实习生
               </p>
               <p className="lp-faint text-[10.5px] leading-4">
-                杭州 · 2027 届 · 官方校招入口
+                杭州 2027 届 官方校招入口
               </p>
             </div>
             <p className="shrink-0 text-right">
@@ -566,14 +591,14 @@ function BountyPanel() {
               <div className="min-w-0">
                 <p className="truncate text-[11.5px] leading-4">SQL 窗口函数</p>
                 <p className="lp-faint truncate text-[10px] leading-4">
-                  下学期补 · 匹配依据指回经历原文
+                  下学期补 匹配依据指回经历原文
                 </p>
               </div>
             </div>
           </div>
 
           <p className="demo-meta mt-auto border-t border-[color:var(--lp-line-soft)] pt-2">
-            来源人工核对 · 不代投 · 每条命中指回原文
+            来源人工核对 不代投 每条命中指回原文
           </p>
         </div>
       </div>
@@ -585,7 +610,7 @@ const TOOLS = [
   {
     no: "01",
     name: "课表",
-    hint: "Excel 导入 · 单双周展开",
+    hint: "Excel 导入 单双周展开",
     meta: "12 门课",
     tone: "var(--lp-tone-2)",
   },
@@ -599,14 +624,14 @@ const TOOLS = [
   {
     no: "03",
     name: "简历",
-    hint: "勾选经历 · 浏览器打印 A4",
+    hint: "勾选经历 浏览器打印 A4",
     meta: "快照 v3",
     tone: "var(--lp-tone-5)",
   },
   {
     no: "04",
     name: "日历",
-    hint: "竞赛 · 考试 · 校内节点",
+    hint: "竞赛 考试 校内节点",
     meta: "15 条",
     tone: "var(--lp-tone-1)",
   },
@@ -669,10 +694,10 @@ function ToolboxPanel() {
           <section className="demo-subpanel">
             <p className="demo-label">最近截止</p>
             <p className="mt-1.5 text-[12px] leading-5">
-              外部中断指示灯 · 实验报告
+              外部中断指示灯 实验报告
             </p>
             <p className="lp-alert mt-0.5 font-mono text-[10px]">
-              明天 23:59 · 待交
+              明天 23:59 待交
             </p>
           </section>
 
@@ -689,7 +714,7 @@ function ToolboxPanel() {
       </div>
 
       <p className="lp-faint mt-3 text-[10.5px] leading-5">
-        课表、作业、简历、日历都不占今日的注意力，需要时再打开。
+        课表、作业、简历、日历都不占今日的注意力，需要时再打开
       </p>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import CommandPalette, { type CommandItem } from "./CommandPalette";
 
 interface TopbarProps {
@@ -8,6 +8,8 @@ interface TopbarProps {
   demoMode: boolean;
   collapsed: boolean;
   commands: CommandItem[];
+  agentHidden?: boolean;
+  island?: ReactNode;
   onToggle: () => void;
   onHome: () => void;
   onOpenAgent: () => void;
@@ -58,6 +60,8 @@ export default function Topbar({
   demoMode,
   collapsed,
   commands,
+  agentHidden = false,
+  island,
   onToggle,
   onHome,
   onOpenAgent,
@@ -78,7 +82,7 @@ export default function Topbar({
   return (
     <>
       <header className="app-topbar" data-collapsed={collapsed}>
-        <div className="app-topbar-left">
+        <div className="app-topbar-left max-lg:hidden">
           <button type="button" className="app-topbar-home" onClick={onHome}>
             学径
           </button>
@@ -88,10 +92,12 @@ export default function Topbar({
           <strong className="app-topbar-crumb">{crumb}</strong>
         </div>
 
+        {island}
+
         {!collapsed && (
           <button
             type="button"
-            className="app-topbar-search"
+            className="app-topbar-search max-lg:hidden"
             onClick={() => setPaletteOpen(true)}
             aria-label="搜索页面、工具或动作"
           >
@@ -103,7 +109,7 @@ export default function Topbar({
           </button>
         )}
 
-        <div className="app-topbar-actions">
+        <div className="app-topbar-actions max-lg:hidden">
           {!collapsed && (
             <>
               <span className="app-topbar-chip">{week}</span>
@@ -113,17 +119,19 @@ export default function Topbar({
               {demoMode && (
                 <span className="app-topbar-chip is-demo">示例</span>
               )}
-              <button
-                type="button"
-                className="app-topbar-agent"
-                onClick={onOpenAgent}
-                aria-label="打开记录官"
-              >
-                <span aria-hidden="true" className="app-topbar-agent-mark">
-                  记
-                </span>
-                <span className="app-topbar-agent-label">记录官</span>
-              </button>
+              {!agentHidden && (
+                <button
+                  type="button"
+                  className="app-topbar-agent"
+                  onClick={onOpenAgent}
+                  aria-label="打开记录官"
+                >
+                  <span aria-hidden="true" className="app-topbar-agent-mark">
+                    记
+                  </span>
+                  <span className="app-topbar-agent-label">记录官</span>
+                </button>
+              )}
             </>
           )}
           <button

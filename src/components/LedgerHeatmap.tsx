@@ -74,7 +74,7 @@ export default function LedgerHeatmap({
                   aria-label={`${cell.label} ${dayjs(cell.dateKey).format("M月D日")}，${
                     cell.level > 0 ? `${cell.level} 格记录` : "没有记录"
                   }${cell.isToday ? "，今天" : ""}`}
-                  title={`${cell.dateKey} · ${cell.level > 0 ? `${cell.level} 格` : "空"}`}
+                  title={`${cell.dateKey} ${cell.level > 0 ? `${cell.level} 格` : "空"}`}
                   className={[
                     "mt-1 flex aspect-square items-center justify-center rounded-md border font-mono text-micro tabular-nums transition-colors",
                     LEVEL_BG[cell.level],
@@ -95,7 +95,7 @@ export default function LedgerHeatmap({
             <p className="text-[11px] leading-5 text-ink-3">
               本周 <span className="font-mono tabular-nums">{activeDays}/7</span>{" "}
               天留下结果
-              {streak.days > 0 ? ` · 连续 ${streak.days} 天` : ""}
+              {streak.days > 0 ? ` 连续 ${streak.days} 天` : ""}
             </p>
             <p className="font-mono text-micro text-ink-4">
               每天 1–3 格，只记产生结果的动作
@@ -146,7 +146,7 @@ export default function LedgerHeatmap({
                 onClick={onOpenExperiences}
                 className="border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center rounded-lg border px-3 text-[11px]"
               >
-                去账本
+                去征途
               </button>
               <button
                 type="button"
@@ -173,7 +173,7 @@ export default function LedgerHeatmap({
           </div>
 
           <p className="mt-2 text-[11px] leading-5 text-ink-3">
-            <span className="text-ink-4">下一步 · </span>
+            <span className="text-ink-4">下一步 </span>
             {readiness.next}
           </p>
 

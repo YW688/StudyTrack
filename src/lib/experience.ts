@@ -236,6 +236,49 @@ export function fourPartCount(experience: Experience): number {
   ].filter((part) => part.trim().length > 0).length;
 }
 
+export interface ResumeReadiness {
+  ready: boolean;
+  missing: string[];
+}
+
+/** 就绪 = 四段式齐 + 有证据或量化数据 + 已确认置信；只有就绪的战绩才自动进简历草稿。 */
+export function resumeReadiness(experience: Experience): ResumeReadiness {
+  const missing: string[] = [];
+  if (fourPartCount(experience) < 4) {
+    missing.push(`四段式还差 ${4 - fourPartCount(experience)} 段`);
+  }
+  if (experience.evidence.length === 0 && experience.metrics.length === 0) {
+    missing.push("证据或量化数据");
+  }
+  if (experience.confidence !== "high") {
+    missing.push("低置信待确认");
+  }
+  return { ready: missing.length === 0, missing };
+}
+
+export function countResumeReady(items: Experience[]): number {
+  return items.filter((item) => resumeReadiness(item).ready).length;
+}
+
+export function readyExperienceIds(items: Experience[]): Set<string> {
+  return new Set(
+    items
+      .filter((item) => resumeReadiness(item).ready)
+      .map((item) => item.id),
+  );
+}
+
+/** 本次保存里「刚变成就绪」的经历：这些才自动进简历草稿，避免反复覆盖用户手动取消的选择。 */
+export function newlyReadyIds(
+  previous: Experience[],
+  next: Experience[],
+): string[] {
+  const wasReady = readyExperienceIds(previous);
+  return next
+    .filter((item) => !wasReady.has(item.id) && resumeReadiness(item).ready)
+    .map((item) => item.id);
+}
+
 export interface ExperienceActivitySummary {
   total: number;
   latest: Experience | null;

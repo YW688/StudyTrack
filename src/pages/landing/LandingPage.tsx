@@ -50,7 +50,7 @@ const STAGES: Stage[] = [
     year: "大二",
     title: "开始攒",
     hint: "课程设计、比赛、实习，做完就记一条。",
-    label: "账本 · 经历",
+    label: "征途 · 经历",
     tone: "tone-4",
     preview: <ExperienceShowcase />,
   },
@@ -66,7 +66,7 @@ const STAGES: Stage[] = [
     year: "大四",
     title: "找对机会",
     hint: "按经历检索岗位，命中与缺口一目了然。",
-    label: "悬赏 · 岗位匹配",
+    label: "征召 · 岗位匹配",
     tone: "tone-1",
     preview: <MatchShowcase />,
   },
@@ -112,7 +112,7 @@ const FAQS = [
 
 const STEPS = [
   { no: "01", title: "建档", text: "年级、专业、目标，30 秒。" },
-  { no: "02", title: "记一条", text: "截图、粘贴或一句话，落进账本。" },
+  { no: "02", title: "记一条", text: "截图、粘贴或一句话，落进征途。" },
   { no: "03", title: "看匹配", text: "命中指回原文，缺口给下一步。" },
 ];
 
@@ -312,7 +312,7 @@ export default function LandingPage({
                 <span className="hero-float-unit">件待办</span>
               </div>
               <div aria-hidden="true" className="hero-float hero-float--b">
-                <span className="hero-float-label">账本</span>
+                <span className="hero-float-label">征途</span>
                 <strong className="hero-float-value">6</strong>
                 <span className="hero-float-unit">条战绩</span>
               </div>
@@ -355,7 +355,7 @@ export default function LandingPage({
                 ))}
               </div>
               <p className="lp-faint mt-3 text-center font-mono text-[10px] tracking-[0.14em]">
-                四个面并列 · 点开任意一面跳到工作台
+                四个面并列 · 点开任意一面看工作台预览
               </p>
             </div>
           </div>

@@ -95,7 +95,7 @@ export default function PasteJdDialog({
         <header className="border-rule sticky top-0 z-10 flex items-start justify-between gap-3 border-b bg-surface px-4 py-3 sm:px-5">
           <div>
             <p className="font-mono text-micro tracking-[0.16em] text-ink-3">
-              粘贴 JD · 本地解析
+              粘贴 JD 本地解析
             </p>
             <h2
               id="paste-jd-title"

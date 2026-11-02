@@ -288,7 +288,7 @@ function experienceReply(text: string): AgentReply {
   return {
     text:
       missing.length === 0
-        ? "四段都齐了。确认后写入账本，之后可以再补证据和数字。"
+        ? "四段都齐了。确认后写入征途，之后可以再补证据和数字。"
         : `我先填了能识别的部分。还缺：${missing.join("、")}，可以直接在下面补。`,
     draft: { kind: "experience", data: draft },
   };
@@ -296,7 +296,7 @@ function experienceReply(text: string): AgentReply {
 
 function noteReply(text: string): AgentReply {
   return {
-    text: "这条更像一条记录。确认后记进账本，不会当作完整经历。",
+    text: "这条更像一条记录。确认后记进征途，不会当作完整经历。",
     draft: { kind: "note", text: text.slice(0, 1000) },
   };
 }
@@ -334,7 +334,7 @@ function weekReply(context: AgentContext): AgentReply {
 function experienceListReply(context: AgentContext): AgentReply {
   if (context.experiences.length === 0) {
     return {
-      text: "账本还是空的。先记一条课程设计、比赛或实习；四段不用一次写全。",
+      text: "征途还是空的。先记一条课程设计、比赛或实习；四段不用一次写全。",
     };
   }
   const shown = context.experiences.slice(0, 5).map((experience) => {
@@ -345,9 +345,9 @@ function experienceListReply(context: AgentContext): AgentReply {
     )} · ${range}）`;
   });
   return {
-    text: `账本里有 ${context.experiences.length} 条战绩：\n${shown.join("\n")}${
+    text: `征途里有 ${context.experiences.length} 条战绩：\n${shown.join("\n")}${
       context.experiences.length > 5 ? "\n……" : ""
-    }\n要补证据或改四段式，去账本页。`,
+    }\n要补证据或改四段式，去征途页。`,
     navigate: "experiences",
   };
 }
@@ -362,7 +362,7 @@ function readinessReply(context: AgentContext): AgentReply {
   const readiness = computeReadiness(profile, context.experiences);
   if (context.experiences.length === 0) {
     return {
-      text: `档案厚度 ${readiness.score}/100（${readiness.label}）。\n下一步：${readiness.next}\n账本还没有战绩，先记一条再判断岗位差距。`,
+      text: `档案厚度 ${readiness.score}/100（${readiness.label}）。\n下一步：${readiness.next}\n征途还没有战绩，先记一条再判断岗位差距。`,
     };
   }
   const matches = rankJobs(
@@ -389,7 +389,7 @@ function readinessReply(context: AgentContext): AgentReply {
 function jobReply(context: AgentContext): AgentReply {
   if (JOB_POSTINGS.length === 0) {
     return {
-      text: "岗位库暂时不可用。可以到悬赏页粘贴一份 JD 做本地对照。",
+      text: "岗位库暂时不可用。可以到征召页粘贴一份 JD 做本地对照。",
     };
   }
   if (context.experiences.length === 0) {
@@ -416,7 +416,7 @@ function jobReply(context: AgentContext): AgentReply {
   return {
     text: `先看这 ${lines.length} 张演示岗位卡：\n${lines.join(
       "\n",
-    )}\n详情在悬赏页，命中会指回经历原文。`,
+    )}\n详情在征召页，命中会指回经历原文。`,
     navigate: "opportunities",
   };
 }
@@ -443,14 +443,14 @@ export function runAgent(
     return weekReply(context);
   }
   if (
-    /(我有哪些|查.*经历|战绩|账本里|经历库|做过什么|做了什么)/.test(text)
+    /(我有哪些|查.*经历|战绩|征途里|账本里|经历库|做过什么|做了什么)/.test(text)
   ) {
     return experienceListReply(context);
   }
   if (/(差什么|差距|离实习|准备得|还缺|下一步)/.test(text)) {
     return readinessReply(context);
   }
-  if (/(岗位|机会|悬赏|匹配|投递)/.test(text)) {
+  if (/(岗位|机会|征召|悬赏|匹配|投递)/.test(text)) {
     return jobReply(context);
   }
   if (

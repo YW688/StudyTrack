@@ -48,6 +48,7 @@ export interface OnboardingInput {
   major?: string;
   goal?: Goal;
   school?: string;
+  targetRoles?: string[];
 }
 
 export function createOnboardedProfile(input: OnboardingInput): Profile {
@@ -58,7 +59,7 @@ export function createOnboardedProfile(input: OnboardingInput): Profile {
     major: input.major?.trim() ?? "",
     school: input.school?.trim() || undefined,
     goal: input.goal ?? "undecided",
-    targetRoles: [],
+    targetRoles: [...new Set(input.targetRoles ?? [])].slice(0, 20),
     skills: [],
     interests: [],
     onboardedAt: now,

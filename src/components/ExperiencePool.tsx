@@ -9,6 +9,7 @@ import {
   EXPERIENCE_KIND_META,
   experienceKindLabel,
   formatExperienceRange,
+  resumeReadiness,
 } from "../lib/experience";
 import { bulletCacheNote, sortByEndDesc } from "../lib/resume";
 
@@ -25,6 +26,7 @@ interface ExperiencePoolProps {
   onToggleKind: (kind: ExperienceKind) => void;
   onResetFilters: () => void;
   onToggleSelect: (id: string) => void;
+  onSelectMany: (ids: string[]) => void;
   onMove: (id: string, direction: -1 | 1) => void;
   onToggleConcise: (id: string) => void;
   onClear: () => void;
@@ -49,6 +51,7 @@ export default function ExperiencePool({
   onToggleKind,
   onResetFilters,
   onToggleSelect,
+  onSelectMany,
   onMove,
   onToggleConcise,
   onClear,
@@ -75,6 +78,9 @@ export default function ExperiencePool({
     (kind) => kindCounts[kind] > 0,
   );
   const selectedCount = sorted.filter((item) => selectedSet.has(item.id)).length;
+  const readyUnselected = sorted.filter(
+    (item) => !selectedSet.has(item.id) && resumeReadiness(item).ready,
+  );
 
   const filtered = sorted.filter((item) => {
     if (filter === "selected" && !selectedSet.has(item.id)) return false;
@@ -163,6 +169,18 @@ export default function ExperiencePool({
             )}
           </div>
         )}
+        {readyUnselected.length > 0 && (
+          <button
+            type="button"
+            onClick={() =>
+              onSelectMany(readyUnselected.map((item) => item.id))
+            }
+            className="border-rule bg-ink/[0.03] hover:bg-ink/[0.07] inline-flex min-h-11 items-center gap-1.5 rounded-lg border px-3 text-[11px] font-medium text-ink-2"
+          >
+            选入 {readyUnselected.length} 条就绪战绩
+            <span aria-hidden="true">↘</span>
+          </button>
+        )}
       </div>
 
       <div className="mt-3 flex flex-wrap gap-1.5" aria-label="按加入状态筛选">
@@ -235,6 +253,7 @@ export default function ExperiencePool({
             const order = selectedIds.indexOf(item.id) + 1;
             const cache = bullets[item.id];
             const low = item.confidence === "low";
+            const ready = resumeReadiness(item).ready;
             const meta = EXPERIENCE_KIND_META[item.kind];
             const range = formatExperienceRange(item.start, item.end);
             const skills = item.skills.slice(0, 3);
@@ -290,6 +309,11 @@ export default function ExperiencePool({
                         {selected && (
                           <span className="bg-ink/[0.06] rounded-full px-1.5 py-0.5 font-mono text-micro tabular-nums text-ink-3">
                             简历第 {order} 条
+                          </span>
+                        )}
+                        {!selected && ready && (
+                          <span className="rounded-full bg-[#E8EFE8] px-1.5 py-0.5 font-mono text-micro text-[#2F5A3C]">
+                            简历就绪
                           </span>
                         )}
                       </span>
