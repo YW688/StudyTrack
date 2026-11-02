@@ -19,7 +19,7 @@ interface PortfolioDialogProps {
 }
 
 const FIELD =
-  "border-rule focus:border-ink/35 focus:ring-2 focus:ring-accent/25 min-h-11 w-full rounded-lg border bg-surface px-3 text-sm text-ink outline-none transition-colors placeholder:text-ink/25";
+  "border-rule focus-visible:border-accent-ink focus:ring-2 focus:ring-accent/45 min-h-11 w-full rounded-lg border bg-surface px-3 text-sm text-ink outline-none transition-colors placeholder:text-ink-4";
 const BTN_PRIMARY =
   "bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-5 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-40";
 const BTN_SECONDARY =
@@ -141,7 +141,7 @@ export default function PortfolioDialog({
       >
         <header className="border-rule sticky top-0 z-10 flex items-start justify-between gap-3 border-b bg-surface px-4 py-3 sm:px-5">
           <div>
-            <p className="font-mono text-[9px] tracking-[0.16em] text-ink/40">
+            <p className="font-mono text-micro tracking-[0.16em] text-ink-3">
               作品集 · 无后端
             </p>
             <h2
@@ -155,7 +155,7 @@ export default function PortfolioDialog({
             type="button"
             onClick={onClose}
             aria-label="关闭作品集生成"
-            className="hover:bg-ink/[0.04] -mr-1 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-ink/45"
+            className="hover:bg-ink/[0.04] -mr-1 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-ink-3"
           >
             ×
           </button>
@@ -165,7 +165,7 @@ export default function PortfolioDialog({
           {!enoughExperiences ? (
             <div className="border-amber/50 bg-amber/[0.07] rounded-lg border-l-2 px-3 py-3">
               <p className="text-sm font-medium">还差一点素材</p>
-              <p className="mt-1 text-xs leading-5 text-ink/65">
+              <p className="mt-1 text-xs leading-5 text-ink-3">
                 作品集需要从已加入简历的经历里精选 3–6 条。当前只有{" "}
                 {experiences.length} 条，请先在左侧勾选更多经历。
               </p>
@@ -176,7 +176,7 @@ export default function PortfolioDialog({
                 <div>
                   <label
                     htmlFor="portfolio-title"
-                    className="mb-1.5 block font-mono text-[9px] tracking-[0.14em] text-ink/40"
+                    className="mb-1.5 block font-mono text-micro tracking-[0.14em] text-ink-3"
                   >
                     封面标题
                   </label>
@@ -194,7 +194,7 @@ export default function PortfolioDialog({
                 <div>
                   <label
                     htmlFor="portfolio-tagline"
-                    className="mb-1.5 block font-mono text-[9px] tracking-[0.14em] text-ink/40"
+                    className="mb-1.5 block font-mono text-micro tracking-[0.14em] text-ink-3"
                   >
                     一句话介绍（选填）
                   </label>
@@ -214,11 +214,11 @@ export default function PortfolioDialog({
                 <div className="flex items-baseline justify-between gap-3">
                   <p className="text-xs font-medium">
                     选择经历
-                    <span className="ml-2 font-mono text-[10px] font-normal tabular-nums text-ink/40">
+                    <span className="ml-2 font-mono text-micro font-normal tabular-nums text-ink-3">
                       已选 {chosen.length} / 6
                     </span>
                   </p>
-                  <p className="text-[10px] text-ink/35">
+                  <p className="text-micro text-ink-4">
                     至少 3 条，最多 6 条
                   </p>
                 </div>
@@ -244,13 +244,13 @@ export default function PortfolioDialog({
                           />
                           <span className="min-w-0 flex-1">
                             <span className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                              <span className="text-[10px] text-ink/40">
+                              <span className="text-micro text-ink-3">
                                 {experienceKindLabel(
                                   experience.kind,
                                   experience.kindLabel,
                                 )}
                               </span>
-                              <span className="font-mono text-[9px] tabular-nums text-ink/35">
+                              <span className="font-mono text-micro tabular-nums text-ink-4">
                                 {formatExperienceRange(
                                   experience.start,
                                   experience.end,
@@ -261,7 +261,7 @@ export default function PortfolioDialog({
                               {experience.title}
                             </span>
                             {experience.org && (
-                              <span className="mt-0.5 block text-[10px] leading-4 text-ink/40">
+                              <span className="mt-0.5 block text-micro leading-4 text-ink-3">
                                 {experience.org}
                               </span>
                             )}
@@ -274,7 +274,7 @@ export default function PortfolioDialog({
               </div>
 
               <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-                <p className="max-w-sm text-[10px] leading-5 text-ink/40">
+                <p className="max-w-sm text-micro leading-5 text-ink-3">
                   链接里会包含姓名、联系方式与所选经历；任何人打开都能看到，不会上传到服务器。
                 </p>
                 <button
@@ -288,7 +288,7 @@ export default function PortfolioDialog({
               </div>
 
               {!canGenerate && chosen.length > 0 && chosen.length < 3 && (
-                <p className="text-amber mt-2 text-[10px] leading-5">
+                <p className="text-amber-ink mt-2 text-micro leading-5">
                   再选 {3 - chosen.length} 条即可生成。
                 </p>
               )}
@@ -297,7 +297,7 @@ export default function PortfolioDialog({
                 <div className="border-rule bg-paper mt-4 rounded-xl border px-3 py-3">
                   <div className="flex items-baseline justify-between gap-2">
                     <p className="text-xs font-medium">链接已生成</p>
-                    <p className="font-mono text-[9px] tabular-nums text-ink/35">
+                    <p className="font-mono text-micro tabular-nums text-ink-4">
                       {(link.length / 1024).toFixed(1)} KB
                     </p>
                   </div>
@@ -307,7 +307,7 @@ export default function PortfolioDialog({
                     value={link}
                     onFocus={(event) => event.currentTarget.select()}
                     aria-label="作品集分享链接"
-                    className="border-rule mt-2 min-h-11 w-full rounded-lg border bg-surface px-2 font-mono text-[10px] text-ink/60"
+                    className="border-rule mt-2 min-h-11 w-full rounded-lg border bg-surface px-2 font-mono text-micro text-ink-3"
                   />
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     <button
@@ -327,12 +327,12 @@ export default function PortfolioDialog({
                     </a>
                   </div>
                   {copyError && (
-                    <p className="text-amber mt-2 text-[10px] leading-5">
+                    <p className="text-amber-ink mt-2 text-micro leading-5">
                       {copyError}
                     </p>
                   )}
                   {sizeWarning && (
-                    <p className="text-amber mt-2 text-[10px] leading-5">
+                    <p className="text-amber-ink mt-2 text-micro leading-5">
                       链接超过 8KB，部分聊天工具可能截断。建议减少条目或缩短介绍。
                     </p>
                   )}

@@ -187,7 +187,7 @@ export default function AssignmentsPage({
       <div className="mx-auto w-full max-w-4xl">
         <header className="border-rule flex flex-col gap-4 border-b py-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="font-mono text-[10px] tracking-[0.2em] text-ink/40">
+            <p className="font-mono text-micro tracking-[0.2em] text-ink-3">
               工具箱 · 作业 / 04
             </p>
             <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
@@ -196,16 +196,16 @@ export default function AssignmentsPage({
               </h1>
               <span
                 className={[
-                  "rounded-full px-2 py-0.5 font-mono text-[10px]",
+                  "rounded-full px-2 py-0.5 font-mono text-micro",
                   pending.length > 0
                     ? "bg-accent/15 text-ink"
-                    : "bg-ink/[0.05] text-ink/45",
+                    : "bg-ink/[0.05] text-ink-3",
                 ].join(" ")}
               >
                 未完成 {pending.length} 项
               </span>
             </div>
-            <p className="mt-2 text-xs leading-5 text-ink/55">
+            <p className="mt-2 text-xs leading-5 text-ink-3">
               作业、竞赛报名、实习投递的截止时间都放这里，按 DDL 从近到远排。
             </p>
           </div>
@@ -237,10 +237,10 @@ export default function AssignmentsPage({
 
         <section className="border-rule mt-5 rounded-xl border bg-surface px-4 py-4">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <p className="font-mono text-[10px] tracking-[0.14em] text-ink/40">
+            <p className="font-mono text-micro tracking-[0.14em] text-ink-3">
               本周 · {summary.start} – {summary.end}
             </p>
-            <p className="font-mono text-[10px] text-ink/35">
+            <p className="font-mono text-micro text-ink-4">
               {summary.ddlCount > 0
                 ? `${summary.courseCount > 0 ? `${summary.courseCount} 门课 · ` : ""}${summary.ddlCount} 个 DDL`
                 : "本周暂无 DDL"}
@@ -257,7 +257,7 @@ export default function AssignmentsPage({
               </span>
             )}
           </p>
-          <p className="mt-1 text-[11px] leading-5 text-ink/40">
+          <p className="mt-1 text-[11px] leading-5 text-ink-3">
             24 小时内截止标红，72 小时内标琥珀；没有截止时间的排在最后。提醒只看本机数据，不会推送。
           </p>
         </section>
@@ -265,7 +265,7 @@ export default function AssignmentsPage({
         {notice && (
           <p
             role="status"
-            className="border-rule mt-4 flex items-center gap-2 rounded-lg border bg-surface px-3 py-2 text-xs text-ink/60"
+            className="border-rule mt-4 flex items-center gap-2 rounded-lg border bg-surface px-3 py-2 text-xs text-ink-3"
           >
             <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
             {notice}
@@ -275,7 +275,7 @@ export default function AssignmentsPage({
         {saveError && (
           <p
             role="alert"
-            className="border-amber/50 bg-amber/[0.07] mt-4 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink/75"
+            className="border-amber/50 bg-amber/[0.07] mt-4 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink-2"
           >
             {saveError}
           </p>
@@ -286,7 +286,7 @@ export default function AssignmentsPage({
             <h2 className="text-lg font-medium tracking-tight">
               先把这周的作业收进来
             </h2>
-            <p className="mt-2 max-w-lg text-sm leading-6 text-ink/60">
+            <p className="mt-2 max-w-lg text-sm leading-6 text-ink-3">
               从学习通截图、复制通知或手动添加。解析后先核对，再写入本机；
               DDL 读不到就留空，不会替你猜时间。
             </p>
@@ -318,7 +318,7 @@ export default function AssignmentsPage({
               </button>
             </div>
 
-            <p className="mt-5 text-[11px] leading-5 text-ink/40">
+            <p className="mt-5 text-[11px] leading-5 text-ink-3">
               合规说明：不登录学习通、不调用其接口、不抓取页面；只处理你主动上传的截图或粘贴的文本。
               附图识别不到时，可以随时改用粘贴或手动录入。
             </p>
@@ -328,7 +328,7 @@ export default function AssignmentsPage({
             <section className="mt-5">
               <div className="mb-2 flex items-baseline justify-between">
                 <h2 className="text-sm font-medium">待办 · {pending.length}</h2>
-                <span className="font-mono text-[10px] text-ink/35">
+                <span className="font-mono text-micro text-ink-4">
                   按截止时间升序
                 </span>
               </div>
@@ -356,7 +356,7 @@ export default function AssignmentsPage({
                   ))}
                 </div>
               ) : (
-                <p className="border-rule rounded-xl border border-dashed px-4 py-6 text-center text-xs text-ink/45">
+                <p className="border-rule rounded-xl border border-dashed px-4 py-6 text-center text-xs text-ink-3">
                   没有未完成的待办。可以导入新作业，或勾选已完成的条目恢复。
                 </p>
               )}
@@ -365,10 +365,10 @@ export default function AssignmentsPage({
             {completed.length > 0 && (
               <section className="mt-5">
                 <div className="mb-2 flex items-baseline justify-between">
-                  <h2 className="text-sm font-medium text-ink/60">
+                  <h2 className="text-sm font-medium text-ink-3">
                     已完成 · {completed.length}
                   </h2>
-                  <span className="font-mono text-[10px] text-ink/30">
+                  <span className="font-mono text-micro text-ink-4">
                     勾选可恢复
                   </span>
                 </div>
@@ -399,7 +399,7 @@ export default function AssignmentsPage({
         )}
 
         <div className="border-rule mt-6 border-t pt-4">
-          <p className="flex items-center gap-2 text-[11px] text-ink/35">
+          <p className="flex items-center gap-2 text-[11px] text-ink-4">
             <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
             数据只存在你的浏览器 · 支持作业、竞赛报名、实习投递等截止事项
           </p>

@@ -10,7 +10,7 @@ interface PasteJdDialogProps {
 }
 
 const FIELD =
-  "border-rule focus:border-ink/35 focus:ring-2 focus:ring-accent/25 min-h-11 w-full rounded-lg border bg-surface px-3 text-sm text-ink outline-none transition-colors placeholder:text-ink/25";
+  "border-rule focus-visible:border-accent-ink focus:ring-2 focus:ring-accent/45 min-h-11 w-full rounded-lg border bg-surface px-3 text-sm text-ink outline-none transition-colors placeholder:text-ink-4";
 const BTN_PRIMARY =
   "bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-5 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-40";
 const BTN_SECONDARY =
@@ -94,7 +94,7 @@ export default function PasteJdDialog({
       >
         <header className="border-rule sticky top-0 z-10 flex items-start justify-between gap-3 border-b bg-surface px-4 py-3 sm:px-5">
           <div>
-            <p className="font-mono text-[9px] tracking-[0.16em] text-ink/40">
+            <p className="font-mono text-micro tracking-[0.16em] text-ink-3">
               粘贴 JD · 本地解析
             </p>
             <h2
@@ -108,7 +108,7 @@ export default function PasteJdDialog({
             type="button"
             onClick={onClose}
             aria-label="关闭粘贴 JD"
-            className="hover:bg-ink/[0.04] -mr-1 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-xl text-ink/45"
+            className="hover:bg-ink/[0.04] -mr-1 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-xl text-ink-3"
           >
             ×
           </button>
@@ -119,7 +119,7 @@ export default function PasteJdDialog({
             <div>
               <label
                 htmlFor="jd-title"
-                className="mb-1.5 block font-mono text-[9px] tracking-[0.14em] text-ink/40"
+                className="mb-1.5 block font-mono text-micro tracking-[0.14em] text-ink-3"
               >
                 岗位名称（选填）
               </label>
@@ -137,7 +137,7 @@ export default function PasteJdDialog({
             <div>
               <label
                 htmlFor="jd-company"
-                className="mb-1.5 block font-mono text-[9px] tracking-[0.14em] text-ink/40"
+                className="mb-1.5 block font-mono text-micro tracking-[0.14em] text-ink-3"
               >
                 公司 / 来源（选填）
               </label>
@@ -154,7 +154,7 @@ export default function PasteJdDialog({
             <div>
               <label
                 htmlFor="jd-city"
-                className="mb-1.5 block font-mono text-[9px] tracking-[0.14em] text-ink/40"
+                className="mb-1.5 block font-mono text-micro tracking-[0.14em] text-ink-3"
               >
                 城市（选填）
               </label>
@@ -169,7 +169,7 @@ export default function PasteJdDialog({
               />
             </div>
             <div>
-              <p className="mb-1.5 font-mono text-[9px] tracking-[0.14em] text-ink/40">
+              <p className="mb-1.5 font-mono text-micro tracking-[0.14em] text-ink-3">
                 岗位类型
               </p>
               <div
@@ -185,7 +185,7 @@ export default function PasteJdDialog({
                     onClick={() => setType(item)}
                     className={[
                       "min-h-10 flex-1 rounded-md px-3 text-xs",
-                      type === item ? "bg-ink text-paper" : "text-ink/55",
+                      type === item ? "bg-ink text-paper" : "text-ink-3",
                     ].join(" ")}
                   >
                     {JOB_TYPE_LABELS[item]}
@@ -199,11 +199,11 @@ export default function PasteJdDialog({
             <div className="flex items-baseline justify-between gap-2">
               <label
                 htmlFor="jd-raw"
-                className="font-mono text-[9px] tracking-[0.14em] text-ink/40"
+                className="font-mono text-micro tracking-[0.14em] text-ink-3"
               >
                 JD 原文
               </label>
-              <span className="font-mono text-[9px] tabular-nums text-ink/30">
+              <span className="font-mono text-micro tabular-nums text-ink-4">
                 {raw.length.toLocaleString("en-US")} / 12,000
               </span>
             </div>
@@ -214,12 +214,12 @@ export default function PasteJdDialog({
               rows={9}
               onChange={(event) => setRaw(event.target.value)}
               aria-describedby="jd-hint"
-              className="border-rule focus:border-ink/35 focus:ring-2 focus:ring-accent/25 mt-1.5 w-full resize-y rounded-lg border bg-surface px-3 py-2.5 text-xs leading-6 text-ink outline-none transition-colors placeholder:text-ink/25"
+              className="border-rule focus-visible:border-accent-ink focus:ring-2 focus:ring-accent/45 mt-1.5 w-full resize-y rounded-lg border bg-surface px-3 py-2.5 text-xs leading-6 text-ink outline-none transition-colors placeholder:text-ink-4"
               placeholder={
                 "粘贴岗位职责与任职要求，每行一条效果最好。\n例如：\n- 熟悉 React 与 TypeScript，能独立完成页面开发\n- 了解前端性能优化\n- 每周到岗 4 天以上"
               }
             />
-            <p id="jd-hint" className="mt-1.5 text-[10px] leading-5 text-ink/40">
+            <p id="jd-hint" className="mt-1.5 text-micro leading-5 text-ink-3">
               最多拆出 8 条要求，只在本地识别技能关键词；不会上传，也不保存到浏览器。
             </p>
           </div>
@@ -227,14 +227,14 @@ export default function PasteJdDialog({
           {error && (
             <p
               role="alert"
-              className="border-amber/50 bg-amber/[0.07] mt-3 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink/75"
+              className="border-amber/50 bg-amber/[0.07] mt-3 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink-2"
             >
               {error}
             </p>
           )}
 
           <div className="border-rule mt-4 flex flex-wrap items-center justify-between gap-3 border-t pt-4">
-            <p className="max-w-xs text-[10px] leading-5 text-ink/35">
+            <p className="max-w-xs text-micro leading-5 text-ink-4">
               岗位信息以企业官网为准；学径不代投、不抓取招聘平台。
             </p>
             <div className="flex items-center gap-2">

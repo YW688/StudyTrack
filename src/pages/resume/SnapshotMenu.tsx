@@ -40,7 +40,7 @@ export default function SnapshotMenu({
       <div className="border-rule flex items-center justify-between border-b px-3 py-2">
         <div>
           <p className="text-xs font-medium">版本快照</p>
-          <p className="mt-0.5 font-mono text-[9px] text-ink/35">
+          <p className="mt-0.5 font-mono text-micro text-ink-4">
             最多保留 20 个
           </p>
         </div>
@@ -48,7 +48,7 @@ export default function SnapshotMenu({
           type="button"
           onClick={onClose}
           aria-label="关闭版本列表"
-          className="hover:bg-ink/[0.04] inline-flex h-11 w-11 items-center justify-center rounded-md text-ink/45"
+          className="hover:bg-ink/[0.04] inline-flex h-11 w-11 items-center justify-center rounded-md text-ink-3"
         >
           ×
         </button>
@@ -56,7 +56,7 @@ export default function SnapshotMenu({
 
       {snapshots.length === 0 ? (
         <div className="px-3 py-5">
-          <p className="text-[11px] leading-5 text-ink/45">
+          <p className="text-[11px] leading-5 text-ink-3">
             还没有版本。点击「保存快照」记录当前简历，打印前也会自动保存一次。
           </p>
         </div>
@@ -70,15 +70,15 @@ export default function SnapshotMenu({
               <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
                 <p className="text-xs font-medium">
                   v{snapshot.version}
-                  <span className="ml-2 font-mono text-[9px] font-normal text-ink/40">
+                  <span className="ml-2 font-mono text-micro font-normal text-ink-3">
                     {snapshot.selectedExperienceIds.length} 条经历
                   </span>
                 </p>
-                <p className="font-mono text-[9px] tabular-nums text-ink/35">
+                <p className="font-mono text-micro tabular-nums text-ink-4">
                   {formatSnapshotTime(snapshot.createdAt)}
                 </p>
               </div>
-              <p className="mt-0.5 font-mono text-[9px] text-ink/35">
+              <p className="mt-0.5 font-mono text-micro text-ink-4">
                 {relativeTimeLabel(snapshot.createdAt)}
                 {snapshot.basics.name.trim()
                   ? ` · ${snapshot.basics.name.trim()}`
@@ -88,14 +88,14 @@ export default function SnapshotMenu({
                 <button
                   type="button"
                   onClick={() => onPreview(snapshot)}
-                  className="text-ink/60 hover:text-ink inline-flex min-h-11 items-center text-[10px] underline underline-offset-2 sm:min-h-8"
+                  className="text-ink-3 hover:text-ink inline-flex min-h-11 items-center text-micro underline underline-offset-2 sm:min-h-8"
                 >
                   预览
                 </button>
                 <button
                   type="button"
                   onClick={() => onRestore(snapshot)}
-                  className="text-accent-ink inline-flex min-h-11 items-center text-[10px] font-medium underline underline-offset-2 sm:min-h-8"
+                  className="text-accent-ink inline-flex min-h-11 items-center text-micro font-medium underline underline-offset-2 sm:min-h-8"
                 >
                   恢复
                 </button>

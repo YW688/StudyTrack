@@ -12,9 +12,9 @@ interface BulletManagerProps {
 }
 
 const BTN =
-  "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-md border bg-surface px-2.5 text-[10px] text-ink/65 disabled:cursor-wait disabled:opacity-40 sm:min-h-8";
+  "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-md border bg-surface px-2.5 text-micro text-ink-3 disabled:cursor-wait disabled:opacity-40 sm:min-h-8";
 const BTN_TEXT =
-  "hover:text-ink inline-flex min-h-11 items-center text-[10px] text-ink/45 underline-offset-2 hover:underline sm:min-h-8";
+  "hover:text-ink inline-flex min-h-11 items-center text-micro text-ink-3 underline-offset-2 hover:underline sm:min-h-8";
 
 export default function BulletManager({
   entries,
@@ -39,18 +39,18 @@ export default function BulletManager({
       >
         <span className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
           <span className="text-sm font-medium">要点与依据</span>
-          <span className="font-mono text-[10px] tabular-nums text-ink/40">
+          <span className="font-mono text-micro tabular-nums text-ink-3">
             {withBullets}/{entries.length} 条已生成
           </span>
         </span>
         <span className="flex items-center gap-3">
-          <span className="hidden text-[10px] text-ink/35 sm:inline">
+          <span className="hidden text-micro text-ink-4 sm:inline">
             每条要点都能展开原文依据
           </span>
           <span
             aria-hidden="true"
             className={[
-              "text-ink/40 transition-transform",
+              "text-ink-3 transition-transform",
               open ? "rotate-180" : "",
             ].join(" ")}
           >
@@ -62,7 +62,7 @@ export default function BulletManager({
       {open && (
         <div className="border-rule border-t px-4 py-3">
           {entries.length === 0 ? (
-            <p className="text-[11px] leading-5 text-ink/40">
+            <p className="text-[11px] leading-5 text-ink-3">
               先从左侧选择经历加入简历，再生成要点。
             </p>
           ) : (
@@ -79,7 +79,7 @@ export default function BulletManager({
                         <p className="text-[12px] leading-5 font-medium break-words">
                           {experience.title}
                         </p>
-                        <p className="mt-0.5 text-[10px] leading-4 text-ink/40">
+                        <p className="mt-0.5 text-micro leading-4 text-ink-3">
                           {cache
                             ? bulletCacheNote(cache)
                             : "当前简历显示原文；生成后可逐条核对。"}
@@ -109,19 +109,19 @@ export default function BulletManager({
                             key={bullet.id}
                             className="bg-paper border-rule rounded-lg border px-3 py-2"
                           >
-                            <p className="text-[11px] leading-5 text-ink/75">
+                            <p className="text-[11px] leading-5 text-ink-2">
                               {bullet.text}
                             </p>
                             <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
                               <details className="min-w-0 flex-1">
-                                <summary className="hover:text-ink inline-flex min-h-8 cursor-pointer items-center text-[10px] text-ink/45">
+                                <summary className="hover:text-ink inline-flex min-h-8 cursor-pointer items-center text-micro text-ink-3">
                                   依据：原文片段
                                 </summary>
                                 <ul className="mt-1 space-y-1 border-l border-rule pl-2">
                                   {bullet.evidence.map((quote, index) => (
                                     <li
                                       key={`${bullet.id}-${index}`}
-                                      className="text-[10px] leading-4 text-ink/45"
+                                      className="text-micro leading-4 text-ink-3"
                                     >
                                       {quote}
                                     </li>
@@ -143,7 +143,7 @@ export default function BulletManager({
                                 onClick={() =>
                                   onDeleteBullet(experience.id, bullet.id)
                                 }
-                                className="inline-flex min-h-11 items-center text-[10px] text-ink/40 underline-offset-2 hover:text-red-800 hover:underline sm:min-h-8"
+                                className="inline-flex min-h-11 items-center text-micro text-ink-3 underline-offset-2 hover:text-red-800 hover:underline sm:min-h-8"
                               >
                                 删除
                               </button>
@@ -152,7 +152,7 @@ export default function BulletManager({
                         ))}
                       </ul>
                     ) : (
-                      <p className="mt-2 text-[10px] leading-5 text-ink/40">
+                      <p className="mt-2 text-micro leading-5 text-ink-3">
                         {experience.problem.trim() ||
                         experience.method.trim() ||
                         experience.contribution.trim() ||
@@ -166,7 +166,7 @@ export default function BulletManager({
               })}
             </ul>
           )}
-          <p className="mt-3 text-[10px] leading-5 text-ink/35">
+          <p className="mt-3 text-micro leading-5 text-ink-4">
             要点只从经历原文提炼；数字必须有原文或量化数据支撑，缺少依据的条目会被丢弃。
           </p>
         </div>

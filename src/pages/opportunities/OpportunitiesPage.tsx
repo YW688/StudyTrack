@@ -58,7 +58,7 @@ const BTN_PRIMARY =
 const BTN_SECONDARY =
   "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-surface px-3 text-xs disabled:cursor-not-allowed disabled:opacity-40";
 const LINK_ACTION =
-  "text-accent-ink inline-flex min-h-8 items-center text-[10px] font-medium underline underline-offset-2 hover:text-ink";
+  "text-accent-ink inline-flex min-h-8 items-center text-micro font-medium underline underline-offset-2 hover:text-ink";
 
 const CHANNEL_TABS: { id: "all" | ChannelType; label: string }[] = [
   { id: "all", label: "全部" },
@@ -340,14 +340,14 @@ export default function OpportunitiesPage({
       <div className="mx-auto w-full max-w-[1440px]">
         <header className="border-rule flex flex-col gap-4 border-b py-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="font-mono text-[10px] tracking-[0.2em] text-ink/40">
+            <p className="font-mono text-micro tracking-[0.2em] text-ink-3">
               悬赏 / 03
             </p>
             <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <h1 className="font-serif text-2xl tracking-tight sm:text-3xl">
                 悬赏
               </h1>
-              <span className="bg-ink/[0.05] rounded-full px-2 py-0.5 font-mono text-[10px] text-ink/55">
+              <span className="bg-ink/[0.05] rounded-full px-2 py-0.5 font-mono text-micro text-ink-3">
                 {profile.usesSelected
                   ? `简历 ${profile.selectedCount} 条经历`
                   : profile.experienceCount > 0
@@ -355,10 +355,10 @@ export default function OpportunitiesPage({
                     : "尚无经历"}
               </span>
             </div>
-            <p className="mt-2 text-xs leading-5 text-ink/55">
+            <p className="mt-2 text-xs leading-5 text-ink-3">
               {CHANNELS.length} 个官方入口 + {JOB_POSTINGS.length} 张演示岗位卡。把经历对到要求上：命中指回原文，缺口给出下一步。
             </p>
-            <p className="mt-1 font-mono text-[10px] leading-5 text-ink/35">
+            <p className="mt-1 font-mono text-micro leading-5 text-ink-4">
               来源核验：官方入口 {channelOk}/{CHANNELS.length} 可达 · 演示卡来源{" "}
               {jobOk}/{JOB_POSTINGS.length} 可达
               {SOURCE_CHECKED_AT
@@ -387,7 +387,7 @@ export default function OpportunitiesPage({
         {notice && (
           <p
             role="status"
-            className="border-rule mt-4 flex items-start gap-2 rounded-lg border bg-surface px-3 py-2 text-xs leading-5 text-ink/60"
+            className="border-rule mt-4 flex items-start gap-2 rounded-lg border bg-surface px-3 py-2 text-xs leading-5 text-ink-3"
           >
             <span
               aria-hidden="true"
@@ -400,7 +400,7 @@ export default function OpportunitiesPage({
         {seedError && (
           <p
             role="alert"
-            className="border-amber/50 bg-amber/[0.07] mt-4 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink/75"
+            className="border-amber/50 bg-amber/[0.07] mt-4 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink-2"
           >
             {seedError}
           </p>
@@ -409,7 +409,7 @@ export default function OpportunitiesPage({
         {JOB_LIBRARY_ISSUE && (
           <p
             role="alert"
-            className="border-amber/50 bg-amber/[0.07] mt-4 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink/75"
+            className="border-amber/50 bg-amber/[0.07] mt-4 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink-2"
           >
             {JOB_LIBRARY_ISSUE}。仍可粘贴一份 JD 做本地匹配。
           </p>
@@ -418,7 +418,7 @@ export default function OpportunitiesPage({
         {items.length === 0 && (
           <section className="border-accent/50 bg-accent/[0.06] mt-4 rounded-lg border-l-2 px-4 py-3">
             <p className="text-sm font-medium">还没有可匹配的经历</p>
-            <p className="mt-1 text-[11px] leading-5 text-ink/60">
+            <p className="mt-1 text-[11px] leading-5 text-ink-3">
               命中项必须引用经历原文。先用示例经历走一遍，或去经历库写第一条。
             </p>
             <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -447,13 +447,13 @@ export default function OpportunitiesPage({
         >
           {stats.map((stat) => (
             <div key={stat.label} className="bg-surface px-4 py-3.5">
-              <p className="font-mono text-[9px] tracking-[0.14em] text-ink/40">
+              <p className="font-mono text-micro tracking-[0.14em] text-ink-3">
                 {stat.label}
               </p>
               <p className="mt-1.5 font-mono text-2xl leading-none tabular-nums">
                 {stat.value}
               </p>
-              <p className="mt-1.5 text-[10px] leading-4 text-ink/40">
+              <p className="mt-1.5 text-micro leading-4 text-ink-3">
                 {stat.note}
               </p>
             </div>
@@ -467,14 +467,14 @@ export default function OpportunitiesPage({
           <div className="border-rule flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3">
             <div className="flex items-center gap-2">
               <p className="text-xs font-medium">匹配依据</p>
-              <span className="bg-ink/[0.05] rounded-full px-2 py-0.5 font-mono text-[9px] text-ink/45">
+              <span className="bg-ink/[0.05] rounded-full px-2 py-0.5 font-mono text-micro text-ink-3">
                 {profile.usesSelected ? "来自简历" : "全部经历"}
               </span>
             </div>
             <button
               type="button"
               onClick={onNavigateResume}
-              className="inline-flex min-h-8 items-center text-[10px] text-ink/45 underline underline-offset-2 hover:text-ink"
+              className="inline-flex min-h-8 items-center text-micro text-ink-3 underline underline-offset-2 hover:text-ink"
             >
               修改意向与勾选
             </button>
@@ -482,7 +482,7 @@ export default function OpportunitiesPage({
           <dl className="bg-rule grid grid-cols-2 gap-px sm:grid-cols-4">
             {profileFields.map((field) => (
               <div key={field.label} className="bg-surface px-4 py-3">
-                <dt className="flex items-center gap-1.5 font-mono text-[9px] tracking-[0.12em] text-ink/40">
+                <dt className="flex items-center gap-1.5 font-mono text-micro tracking-[0.12em] text-ink-3">
                   {field.label}
                   {!field.done && (
                     <span
@@ -493,7 +493,7 @@ export default function OpportunitiesPage({
                 </dt>
                 <dd
                   className={`mt-1 text-xs leading-5 break-words ${
-                    field.done ? "text-ink/75" : "text-ink/35"
+                    field.done ? "text-ink-2" : "text-ink-4"
                   }`}
                 >
                   {field.value || "未填写"}
@@ -502,7 +502,7 @@ export default function OpportunitiesPage({
             ))}
           </dl>
           <div className="border-rule flex flex-wrap items-center gap-1.5 border-t px-4 py-2.5">
-            <span className="font-mono text-[9px] tracking-[0.1em] text-ink/35">
+            <span className="font-mono text-micro tracking-[0.1em] text-ink-4">
               技能底稿
             </span>
             {profile.skills.length > 0 ? (
@@ -510,29 +510,29 @@ export default function OpportunitiesPage({
                 {profile.skills.slice(0, 10).map((skill) => (
                   <span
                     key={skill}
-                    className="border-rule rounded-full border px-1.5 py-0.5 text-[10px] text-ink/55"
+                    className="border-rule rounded-full border px-1.5 py-0.5 text-micro text-ink-3"
                   >
                     {skill}
                   </span>
                 ))}
                 {profile.skills.length > 10 && (
-                  <span className="font-mono text-[9px] text-ink/30">
+                  <span className="font-mono text-micro text-ink-4">
                     +{profile.skills.length - 10}
                   </span>
                 )}
               </>
             ) : (
-              <span className="text-[10px] text-ink/35">
+              <span className="text-micro text-ink-4">
                 在经历里填写技能标签，匹配会更准
               </span>
             )}
-            <span className="ml-auto text-[9px] text-ink/30">
+            <span className="ml-auto text-micro text-ink-4">
               来自{profile.usesSelected ? "简历已选经历" : "全部经历"}
             </span>
           </div>
           {incomplete.length > 0 ? (
             <div className="border-rule bg-amber/[0.05] flex flex-wrap items-center justify-between gap-2 border-t px-4 py-2.5">
-              <p className="text-[10px] leading-5 text-ink/55">
+              <p className="text-micro leading-5 text-ink-3">
                 补全后可提高排序准确度：
                 {incomplete.map((item) => item.label).join("、")}
               </p>
@@ -545,7 +545,7 @@ export default function OpportunitiesPage({
               </button>
             </div>
           ) : (
-            <p className="border-rule border-t px-4 py-2.5 text-[10px] leading-5 text-ink/35">
+            <p className="border-rule border-t px-4 py-2.5 text-micro leading-5 text-ink-4">
               匹配依据齐全，排序已按求职意向、城市与年级加权。
             </p>
           )}
@@ -564,7 +564,7 @@ export default function OpportunitiesPage({
                 aria-hidden="true"
                 viewBox="0 0 16 16"
                 fill="none"
-                className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-ink/30"
+                className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-ink-4"
               >
                 <circle
                   cx="7"
@@ -586,14 +586,14 @@ export default function OpportunitiesPage({
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="检索岗位、公司、城市或技能，如 React / 数据 / 杭州"
-                className="border-rule focus:border-ink/35 focus:ring-2 focus:ring-accent/25 min-h-11 w-full rounded-lg border bg-surface pr-11 pl-9 text-xs text-ink outline-none transition-colors placeholder:text-ink/25"
+                className="border-rule focus-visible:border-accent-ink focus:ring-2 focus:ring-accent/45 min-h-11 w-full rounded-lg border bg-surface pr-11 pl-9 text-xs text-ink outline-none transition-colors placeholder:text-ink-4"
               />
               {query && (
                 <button
                   type="button"
                   onClick={() => setQuery("")}
                   aria-label="清空检索"
-                  className="hover:bg-ink/[0.04] absolute top-0 right-0 inline-flex h-11 w-11 items-center justify-center rounded-lg text-lg text-ink/35 hover:text-ink"
+                  className="hover:bg-ink/[0.04] absolute top-0 right-0 inline-flex h-11 w-11 items-center justify-center rounded-lg text-lg text-ink-4 hover:text-ink"
                 >
                   ×
                 </button>
@@ -615,7 +615,7 @@ export default function OpportunitiesPage({
                     "min-h-10 rounded-md px-3 text-xs whitespace-nowrap",
                     typeFilter === tab.id
                       ? "bg-ink text-paper"
-                      : "text-ink/55",
+                      : "text-ink-3",
                   ].join(" ")}
                 >
                   {tab.label}
@@ -630,7 +630,7 @@ export default function OpportunitiesPage({
               id="job-city"
               value={cityFilter}
               onChange={(event) => setCityFilter(event.target.value)}
-              className="border-rule focus:border-ink/35 focus:ring-2 focus:ring-accent/25 min-h-11 rounded-lg border bg-surface px-2 text-xs text-ink/65 outline-none"
+              className="border-rule focus-visible:border-accent-ink focus:ring-2 focus:ring-accent/45 min-h-11 rounded-lg border bg-surface px-2 text-xs text-ink-3 outline-none"
             >
               <option value="all">全部城市</option>
               {cityOptions.map((city) => (
@@ -649,7 +649,7 @@ export default function OpportunitiesPage({
               onChange={(event) =>
                 setFamilyFilter(event.target.value as "all" | JobFamily)
               }
-              className="border-rule focus:border-ink/35 focus:ring-2 focus:ring-accent/25 min-h-11 rounded-lg border bg-surface px-2 text-xs text-ink/65 outline-none"
+              className="border-rule focus-visible:border-accent-ink focus:ring-2 focus:ring-accent/45 min-h-11 rounded-lg border bg-surface px-2 text-xs text-ink-3 outline-none"
             >
               <option value="all">全部方向</option>
               {familyOptions.map((family) => (
@@ -661,18 +661,18 @@ export default function OpportunitiesPage({
           </div>
 
           <div className="border-rule flex flex-wrap items-center justify-between gap-2 border-t px-3 py-2">
-            <p className="max-w-2xl text-[10px] leading-4 text-ink/35">
+            <p className="max-w-2xl text-micro leading-4 text-ink-4">
               {JOB_LIBRARY_NOTE}
             </p>
             <div className="flex items-center gap-3">
-              <span className="font-mono text-[9px] tabular-nums text-ink/40">
+              <span className="font-mono text-micro tabular-nums text-ink-3">
                 显示 {visible.length} / {allJobs.length}
               </span>
               {filtersActive && (
                 <button
                   type="button"
                   onClick={resetFilters}
-                  className="text-ink/50 inline-flex min-h-8 items-center text-[10px] underline underline-offset-2 hover:text-ink"
+                  className="text-ink-3 inline-flex min-h-8 items-center text-micro underline underline-offset-2 hover:text-ink"
                 >
                   重置筛选
                 </button>
@@ -692,7 +692,7 @@ export default function OpportunitiesPage({
               onClick={() => setView("list")}
               className={[
                 "min-h-10 rounded-md px-3 text-xs",
-                view === "list" ? "bg-ink text-paper" : "text-ink/55",
+                view === "list" ? "bg-ink text-paper" : "text-ink-3",
               ].join(" ")}
             >
               岗位列表
@@ -703,13 +703,13 @@ export default function OpportunitiesPage({
               onClick={() => setView("detail")}
               className={[
                 "min-h-10 rounded-md px-3 text-xs",
-                view === "detail" ? "bg-ink text-paper" : "text-ink/55",
+                view === "detail" ? "bg-ink text-paper" : "text-ink-3",
               ].join(" ")}
             >
               匹配详情
             </button>
           </div>
-          <span className="font-mono text-[10px] tabular-nums text-ink/40">
+          <span className="font-mono text-micro tabular-nums text-ink-3">
             显示 {visible.length}
           </span>
         </div>
@@ -722,7 +722,7 @@ export default function OpportunitiesPage({
           >
             <div className="mb-2 flex items-baseline justify-between gap-2 px-1">
               <h2 className="text-xs font-medium">推荐结果</h2>
-              <span className="font-mono text-[9px] tracking-[0.08em] text-ink/35">
+              <span className="font-mono text-micro tracking-[0.08em] text-ink-4">
                 按匹配分降序 · 附官网
               </span>
             </div>
@@ -770,11 +770,11 @@ export default function OpportunitiesPage({
                         </span>
                         <span className="min-w-0 flex-1">
                           <span className="flex items-center justify-between gap-2">
-                            <span className="truncate font-mono text-[9px] tracking-[0.08em] text-ink/40">
+                            <span className="truncate font-mono text-micro tracking-[0.08em] text-ink-3">
                               {job.company} · {job.cohort}
                             </span>
                             {job.custom && (
-                              <span className="border-ink/15 bg-ink/[0.05] shrink-0 rounded-full border px-1.5 py-0.5 text-[9px] text-ink/55">
+                              <span className="border-ink/15 bg-ink/[0.05] shrink-0 rounded-full border px-1.5 py-0.5 text-micro text-ink-3">
                                 粘贴
                               </span>
                             )}
@@ -787,7 +787,7 @@ export default function OpportunitiesPage({
                               {match.score}
                             </span>
                           </span>
-                          <span className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[10px] text-ink/45">
+                          <span className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-micro text-ink-3">
                             <span>{JOB_TYPE_LABELS[job.type]}</span>
                             <span aria-hidden="true">·</span>
                             <span>{job.city}</span>
@@ -796,16 +796,16 @@ export default function OpportunitiesPage({
                           </span>
                           <span className="mt-2 flex items-center gap-2">
                             <span
-                              className={`inline-flex min-h-5 items-center rounded-full border px-1.5 text-[9px] ${MATCH_TIER_CHIP[match.tier]}`}
+                              className={`inline-flex min-h-5 items-center rounded-full border px-1.5 text-micro ${MATCH_TIER_CHIP[match.tier]}`}
                             >
                               {MATCH_TIER_LABELS[match.tier]}
                             </span>
-                            <span className="text-[10px] text-ink/40">
+                            <span className="text-micro text-ink-3">
                               {requirementTotal > 0
                                 ? `命中 ${match.hits.length}/${requirementTotal}`
                                 : "待对照"}
                             </span>
-                            <span className="ml-auto font-mono text-[9px] text-ink/30">
+                            <span className="ml-auto font-mono text-micro text-ink-4">
                               {job.skills.length > 0
                                 ? `${match.matchedSkills.length}/${job.skills.length} 技能`
                                 : "未识别技能"}
@@ -831,7 +831,7 @@ export default function OpportunitiesPage({
                     </button>
                     <div className="border-rule flex items-center justify-between gap-2 border-t pr-1.5 pl-3.5">
                       <span className="flex min-w-0 items-center gap-1.5">
-                        <span className="min-w-0 truncate font-mono text-[9px] text-ink/35">
+                        <span className="min-w-0 truncate font-mono text-micro text-ink-4">
                           {job.custom
                             ? "粘贴 JD · 仅当前页面"
                             : `来源：${job.sourceName}`}
@@ -848,7 +848,7 @@ export default function OpportunitiesPage({
                           href={job.sourceUrl}
                           target="_blank"
                           rel="noreferrer noopener"
-                          className="text-ink/55 hover:text-ink inline-flex min-h-11 shrink-0 items-center gap-1 text-[10px] font-medium underline decoration-ink/20 underline-offset-2 xl:min-h-8"
+                          className="text-ink-3 hover:text-ink inline-flex min-h-11 shrink-0 items-center gap-1 text-micro font-medium underline decoration-ink/20 underline-offset-2 xl:min-h-8"
                         >
                           查看官网
                           <svg
@@ -867,7 +867,7 @@ export default function OpportunitiesPage({
                           </svg>
                         </a>
                       ) : (
-                        <span className="font-mono text-[9px] text-ink/30">
+                        <span className="font-mono text-micro text-ink-4">
                           本地匹配
                         </span>
                       )}
@@ -884,7 +884,7 @@ export default function OpportunitiesPage({
                     ? "岗位库暂不可用"
                     : "没有符合条件的岗位"}
                 </p>
-                <p className="mx-auto mt-1.5 max-w-sm text-[11px] leading-5 text-ink/45">
+                <p className="mx-auto mt-1.5 max-w-sm text-[11px] leading-5 text-ink-3">
                   {allJobs.length === 0
                     ? "仍可粘贴一份 JD，在本地对照经历。"
                     : "换个关键词或重置筛选。岗位方向库只收录已核对的官方校招与实习方向。"}
@@ -937,7 +937,7 @@ export default function OpportunitiesPage({
                       ? "当前筛选下没有结果"
                       : "选择一个岗位"}
                 </p>
-                <p className="mx-auto mt-1.5 max-w-sm text-[11px] leading-5 text-ink/45">
+                <p className="mx-auto mt-1.5 max-w-sm text-[11px] leading-5 text-ink-3">
                   {visible.length === 0
                     ? "调整检索词或筛选条件，再查看匹配详情。"
                     : "选中岗位后，这里会逐条展示命中依据与待补缺口。"}
@@ -960,7 +960,7 @@ export default function OpportunitiesPage({
         >
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="font-mono text-[9px] tracking-[0.18em] text-ink/35">
+              <p className="font-mono text-micro tracking-[0.18em] text-ink-4">
                 渠道入口 / CHANNELS
               </p>
               <h2
@@ -969,11 +969,11 @@ export default function OpportunitiesPage({
               >
                 {CHANNELS.length} 个官方入口，自己去投
               </h2>
-              <p className="mt-1 max-w-2xl text-[11px] leading-5 text-ink/45">
+              <p className="mt-1 max-w-2xl text-[11px] leading-5 text-ink-3">
                 {CHANNEL_LIBRARY_NOTE}
               </p>
             </div>
-            <p className="font-mono text-[9px] tabular-nums text-ink/30">
+            <p className="font-mono text-micro tabular-nums text-ink-4">
               {CHANNELS.length} 个入口 · 不抓取内容
             </p>
           </div>
@@ -981,7 +981,7 @@ export default function OpportunitiesPage({
           {CHANNEL_LIBRARY_ISSUE && (
             <p
               role="alert"
-              className="border-amber/50 bg-amber/[0.07] mt-3 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink/75"
+              className="border-amber/50 bg-amber/[0.07] mt-3 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink-2"
             >
               {CHANNEL_LIBRARY_ISSUE}
             </p>
@@ -1005,13 +1005,13 @@ export default function OpportunitiesPage({
                     "inline-flex min-h-10 items-center gap-1.5 rounded-full border px-3 text-[11px] transition-colors",
                     active
                       ? "border-ink bg-ink text-paper"
-                      : "border-rule hover:bg-ink/[0.03] bg-surface text-ink/55",
+                      : "border-rule hover:bg-ink/[0.03] bg-surface text-ink-3",
                   ].join(" ")}
                 >
                   {tab.label}
                   <span
-                    className={`font-mono text-[9px] tabular-nums ${
-                      active ? "text-paper/55" : "text-ink/30"
+                    className={`font-mono text-micro tabular-nums ${
+                      active ? "text-paper/55" : "text-ink-4"
                     }`}
                   >
                     {count}
@@ -1037,12 +1037,12 @@ export default function OpportunitiesPage({
                         <span className="block text-sm font-medium">
                           {channel.name}
                         </span>
-                        <span className="mt-0.5 block font-mono text-[9px] tracking-[0.1em] text-ink/35">
+                        <span className="mt-0.5 block font-mono text-micro tracking-[0.1em] text-ink-4">
                           {CHANNEL_TYPE_LABELS[channel.type]}
                         </span>
                       </span>
                       {openNow && (
-                        <span className="border-accent/40 bg-accent/[0.08] text-accent-ink inline-flex shrink-0 items-center gap-1 rounded-full border px-1.5 py-0.5 text-[9px]">
+                        <span className="border-accent/40 bg-accent/[0.08] text-accent-ink inline-flex shrink-0 items-center gap-1 rounded-full border px-1.5 py-0.5 text-micro">
                           <span
                             aria-hidden="true"
                             className="h-1 w-1 rounded-full bg-accent"
@@ -1051,17 +1051,17 @@ export default function OpportunitiesPage({
                         </span>
                       )}
                     </span>
-                    <span className="mt-2 text-[11px] leading-5 text-ink/50">
+                    <span className="mt-2 text-[11px] leading-5 text-ink-3">
                       开放：{formatMonthRanges(channel.openMonths)}
                     </span>
                     {channel.note && (
-                      <span className="mt-1 text-[10px] leading-4 text-ink/40">
+                      <span className="mt-1 text-micro leading-4 text-ink-3">
                         {channel.note}
                       </span>
                     )}
                     <span className="border-rule mt-3 flex items-center justify-between gap-2 border-t pt-2.5">
                       <span className="flex min-w-0 flex-wrap items-center gap-1.5">
-                        <span className="text-[10px] text-ink/40">
+                        <span className="text-micro text-ink-3">
                           适合 {formatGradeFit(channel.fitGrade)}
                         </span>
                         <SourceCheckBadge
@@ -1069,7 +1069,7 @@ export default function OpportunitiesPage({
                           compact
                         />
                       </span>
-                      <span className="inline-flex shrink-0 items-center gap-1 text-[10px] text-ink/55 group-hover:text-ink">
+                      <span className="inline-flex shrink-0 items-center gap-1 text-micro text-ink-3 group-hover:text-ink">
                         打开官网
                         <svg
                           aria-hidden="true"
@@ -1093,13 +1093,13 @@ export default function OpportunitiesPage({
             })}
           </ul>
 
-          <p className="mt-3 text-[10px] leading-5 text-ink/35">
+          <p className="mt-3 text-micro leading-5 text-ink-4">
             {SOURCE_CHECK_POLICY}
           </p>
         </section>
 
         <footer className="border-rule mt-8 border-t py-5">
-          <p className="text-[10px] leading-5 text-ink/35">
+          <p className="text-micro leading-5 text-ink-4">
             匹配、检索与数据存储均在本机浏览器完成；来源核验在构建期完成，只检查官方公开入口可达性；岗位方向仍为人工整理，具体在招职位与截止时间以官网为准；学径不代投、不抓取招聘平台职位内容。
           </p>
         </footer>

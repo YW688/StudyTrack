@@ -10,13 +10,13 @@ function metaFor(check?: SourceCheck): { label: string; tone: string } {
   if (!check) {
     return {
       label: "未核验",
-      tone: "border-ink/15 bg-ink/[0.03] text-ink/35",
+      tone: "border-ink/15 bg-ink/[0.03] text-ink-4",
     };
   }
   if (check.status === "skipped" || check.status === "blocked") {
     return {
       label: "未抓取",
-      tone: "border-ink/15 bg-ink/[0.03] text-ink/35",
+      tone: "border-ink/15 bg-ink/[0.03] text-ink-4",
     };
   }
   if (check.status === "unreachable") {
@@ -40,12 +40,12 @@ function metaFor(check?: SourceCheck): { label: string; tone: string } {
   if (check.mode === "fetch") {
     return {
       label: "正文已读取",
-      tone: "border-ink/20 bg-ink/[0.05] text-ink/55",
+      tone: "border-ink/20 bg-ink/[0.05] text-ink-3",
     };
   }
   return {
     label: "来源可访问",
-    tone: "border-ink/15 bg-ink/[0.04] text-ink/50",
+    tone: "border-ink/15 bg-ink/[0.04] text-ink-3",
   };
 }
 
@@ -67,7 +67,7 @@ export default function SourceCheckBadge({
       aria-label={`来源核验：${meta.label}`}
       className={[
         "inline-flex shrink-0 items-center rounded-full border font-mono whitespace-nowrap",
-        compact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-0.5 text-[10px]",
+        compact ? "px-1.5 py-0.5 text-micro" : "px-2 py-0.5 text-micro",
         meta.tone,
       ].join(" ")}
     >

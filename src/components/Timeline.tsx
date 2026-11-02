@@ -27,11 +27,11 @@ export default function Timeline({
           className="mt-5 first:mt-0"
         >
           <header className="flex items-center gap-3">
-            <p className="font-mono text-[11px] tracking-[0.08em] text-ink/55">
+            <p className="font-mono text-[11px] tracking-[0.08em] text-ink-3">
               {group.term.label}
             </p>
             <span aria-hidden="true" className="h-px flex-1 bg-rule" />
-            <p className="font-mono text-[9px] tabular-nums text-ink/30">
+            <p className="font-mono text-micro tabular-nums text-ink-4">
               {group.items.length} 段
             </p>
           </header>
@@ -59,11 +59,11 @@ export default function Timeline({
       {undated.length > 0 && (
         <section aria-label="未标时间的经历" className="mt-5">
           <header className="flex items-center gap-3">
-            <p className="font-mono text-[11px] tracking-[0.08em] text-ink/55">
+            <p className="font-mono text-[11px] tracking-[0.08em] text-ink-3">
               未标时间
             </p>
             <span aria-hidden="true" className="h-px flex-1 bg-rule" />
-            <p className="font-mono text-[9px] tabular-nums text-ink/30">
+            <p className="font-mono text-micro tabular-nums text-ink-4">
               {undated.length} 段
             </p>
           </header>

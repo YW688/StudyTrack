@@ -24,7 +24,7 @@ export const BTN_PRIMARY =
 export const BTN_SECONDARY =
   "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border px-4 text-sm";
 const FIELD =
-  "border-rule focus:border-ink/40 h-10 w-full rounded-md border bg-surface px-2 text-sm outline-none";
+  "border-rule focus-visible:border-accent-ink focus-visible:ring-2 focus-visible:ring-accent/45 h-10 w-full rounded-md border bg-surface px-2 text-sm outline-none";
 
 export interface ReviewPayload {
   items: ParsedAssignment[];
@@ -79,14 +79,14 @@ export function Dialog({
           <div>
             <h2 className="text-base font-medium">{title}</h2>
             {subtitle && (
-              <p className="mt-1 text-xs leading-5 text-ink/50">{subtitle}</p>
+              <p className="mt-1 text-xs leading-5 text-ink-3">{subtitle}</p>
             )}
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="关闭"
-            className="hover:bg-ink/[0.04] flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg text-ink/45"
+            className="hover:bg-ink/[0.04] flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg text-ink-3"
           >
             ×
           </button>
@@ -172,7 +172,7 @@ export function PasteDialog({
       }
     >
       <label className="block">
-        <span className="mb-1 block text-[11px] text-ink/50">
+        <span className="mb-1 block text-[11px] text-ink-3">
           从学习通复制作业通知，或按下面格式手写
         </span>
         <textarea
@@ -184,7 +184,7 @@ export function PasteDialog({
           rows={7}
           autoFocus
           placeholder={SAMPLE_TEXT}
-          className="border-rule focus:border-ink/40 w-full resize-y rounded-lg border bg-surface px-3 py-2 text-sm leading-6 outline-none"
+          className="border-rule focus-visible:border-accent-ink focus-visible:ring-2 focus-visible:ring-accent/45 w-full resize-y rounded-lg border bg-surface px-3 py-2 text-sm leading-6 outline-none"
         />
       </label>
 
@@ -195,11 +195,11 @@ export function PasteDialog({
             setText(SAMPLE_TEXT);
             setError(null);
           }}
-          className="text-[11px] text-ink/45 underline underline-offset-2 hover:text-ink"
+          className="text-[11px] text-ink-3 underline underline-offset-2 hover:text-ink"
         >
           填入示例
         </button>
-        <span className="font-mono text-[10px] text-ink/30">
+        <span className="font-mono text-micro text-ink-4">
           截止时间读不到时留空
         </span>
       </div>
@@ -207,13 +207,13 @@ export function PasteDialog({
       {error && (
         <p
           role="alert"
-          className="border-amber/50 bg-amber/[0.06] mt-3 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink/75"
+          className="border-amber/50 bg-amber/[0.06] mt-3 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink-2"
         >
           {error}
         </p>
       )}
 
-      <p className="mt-4 text-[11px] leading-5 text-ink/40">
+      <p className="mt-4 text-[11px] leading-5 text-ink-3">
         只处理你主动粘贴的文本，不登录学习通、不调用其接口。粘贴后先核对再入库。
       </p>
     </Dialog>
@@ -317,7 +317,7 @@ export function ScreenshotDialog({
       {phase === "working" && (
         <p
           role="status"
-          className="flex items-center gap-2 text-sm text-ink/60"
+          className="flex items-center gap-2 text-sm text-ink-3"
         >
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
           正在识别截图，最长等待 45 秒…
@@ -327,7 +327,7 @@ export function ScreenshotDialog({
       {phase !== "working" && (
         <>
           <div className="border-rule rounded-xl border bg-surface p-4">
-            <p className="text-sm leading-6 text-ink/70">
+            <p className="text-sm leading-6 text-ink-2">
               识别标题与截止时间，结果会先给你核对。截图里的课程名、教师等
               信息若没有出现，不会凭空补全。
             </p>
@@ -339,11 +339,11 @@ export function ScreenshotDialog({
               >
                 选择截图
               </button>
-              <span className="font-mono text-[10px] text-ink/35">
+              <span className="font-mono text-micro text-ink-4">
                 PNG / JPG · ≤ 8MB
               </span>
             </div>
-            <p className="mt-3 text-[11px] leading-5 text-ink/40">
+            <p className="mt-3 text-[11px] leading-5 text-ink-3">
               图片只用于本次识别：配置代理时发给解析代理，不经过学习通。
             </p>
           </div>
@@ -369,8 +369,8 @@ export function ScreenshotDialog({
           )}
 
           {message && (
-            <div className="border-amber/50 bg-amber/[0.06] mt-3 rounded-lg border-l-2 px-3 py-3 text-xs leading-5 text-ink/75">
-              <p className="font-medium text-ink/80">
+            <div className="border-amber/50 bg-amber/[0.06] mt-3 rounded-lg border-l-2 px-3 py-3 text-xs leading-5 text-ink-2">
+              <p className="font-medium text-ink">
                 {preview ? "暂不能识别这张截图" : "截图识别暂未启用"}
               </p>
               <p className="mt-1">{message}</p>
@@ -378,7 +378,7 @@ export function ScreenshotDialog({
           )}
 
           <div className="mt-4">
-            <p className="mb-2 font-mono text-[9px] tracking-[0.12em] text-ink/35">
+            <p className="mb-2 font-mono text-micro tracking-[0.12em] text-ink-4">
               其他可用方式
             </p>
             <div className="grid gap-2">
@@ -494,7 +494,7 @@ export function ReviewDialog({
       }
     >
       {payload.warnings.length > 0 && (
-        <ul className="border-amber/50 bg-amber/[0.06] mb-3 space-y-1 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink/70">
+        <ul className="border-amber/50 bg-amber/[0.06] mb-3 space-y-1 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink-2">
           {payload.warnings.map((warning) => (
             <li key={warning}>{warning}</li>
           ))}
@@ -502,7 +502,7 @@ export function ReviewDialog({
       )}
 
       {lowCount > 0 && (
-        <p className="mb-3 text-[11px] leading-5 text-amber">
+        <p className="mb-3 text-[11px] leading-5 text-amber-ink">
           {lowCount} 条需要你核对：补上标题或截止时间后自动转为高置信。
         </p>
       )}
@@ -519,20 +519,20 @@ export function ReviewDialog({
             ].join(" ")}
           >
             <div className="flex items-center justify-between gap-2">
-              <span className="font-mono text-[9px] tracking-[0.12em] text-ink/35">
+              <span className="font-mono text-micro tracking-[0.12em] text-ink-4">
                 第 {index + 1} 条
               </span>
               <button
                 type="button"
                 onClick={() => remove(index)}
-                className="text-ink/45 inline-flex min-h-9 items-center text-[11px] underline underline-offset-2 hover:text-red-800"
+                className="text-ink-3 inline-flex min-h-9 items-center text-[11px] underline underline-offset-2 hover:text-red-800"
               >
                 移除
               </button>
             </div>
 
             <label className="mt-1 block">
-              <span className="mb-1 block font-mono text-[9px] tracking-[0.12em] text-ink/35">
+              <span className="mb-1 block font-mono text-micro tracking-[0.12em] text-ink-4">
                 标题
               </span>
               <input
@@ -546,7 +546,7 @@ export function ReviewDialog({
 
             <div className="mt-2 grid grid-cols-2 gap-2">
               <label className="block">
-                <span className="mb-1 block text-[10px] text-ink/45">
+                <span className="mb-1 block text-micro text-ink-3">
                   课程（可空）
                 </span>
                 <input
@@ -559,7 +559,7 @@ export function ReviewDialog({
                 />
               </label>
               <label className="block">
-                <span className="mb-1 block text-[10px] text-ink/45">类型</span>
+                <span className="mb-1 block text-micro text-ink-3">类型</span>
                 <select
                   value={row.kind}
                   onChange={(event) =>
@@ -581,7 +581,7 @@ export function ReviewDialog({
             </div>
 
             <label className="mt-2 block">
-              <span className="mb-1 block text-[10px] text-ink/45">
+              <span className="mb-1 block text-micro text-ink-3">
                 截止时间（读不到就留空）
               </span>
               <input
@@ -595,7 +595,7 @@ export function ReviewDialog({
             </label>
 
             {row.detail && (
-              <p className="mt-2 text-[11px] leading-5 text-ink/40">
+              <p className="mt-2 text-[11px] leading-5 text-ink-3">
                 {row.detail}
               </p>
             )}
@@ -675,7 +675,7 @@ export function AssignmentFormDialog({
     >
       <div className="space-y-3">
         <label className="block">
-          <span className="mb-1 block text-[11px] text-ink/50">标题</span>
+          <span className="mb-1 block text-[11px] text-ink-3">标题</span>
           <input
             value={form.title}
             onChange={(event) => {
@@ -690,7 +690,7 @@ export function AssignmentFormDialog({
 
         <div className="grid grid-cols-2 gap-3">
           <label className="block">
-            <span className="mb-1 block text-[11px] text-ink/50">
+            <span className="mb-1 block text-[11px] text-ink-3">
               课程（可空）
             </span>
             <input
@@ -703,7 +703,7 @@ export function AssignmentFormDialog({
             />
           </label>
           <label className="block">
-            <span className="mb-1 block text-[11px] text-ink/50">类型</span>
+            <span className="mb-1 block text-[11px] text-ink-3">类型</span>
             <select
               value={form.kind}
               onChange={(event) =>
@@ -726,7 +726,7 @@ export function AssignmentFormDialog({
         </div>
 
         <label className="block">
-          <span className="mb-1 block text-[11px] text-ink/50">
+          <span className="mb-1 block text-[11px] text-ink-3">
             截止时间（可空）
           </span>
           <input
@@ -738,7 +738,7 @@ export function AssignmentFormDialog({
         </label>
 
         <label className="block">
-          <span className="mb-1 block text-[11px] text-ink/50">
+          <span className="mb-1 block text-[11px] text-ink-3">
             备注（可空）
           </span>
           <textarea
@@ -747,13 +747,13 @@ export function AssignmentFormDialog({
               setForm({ ...form, detail: event.target.value })
             }
             rows={3}
-            className="border-rule focus:border-ink/40 w-full resize-y rounded-md border bg-surface px-2 py-2 text-sm leading-6 outline-none"
+            className="border-rule focus-visible:border-accent-ink focus-visible:ring-2 focus-visible:ring-accent/45 w-full resize-y rounded-md border bg-surface px-2 py-2 text-sm leading-6 outline-none"
             placeholder="链接、附件名或提交要求"
           />
         </label>
 
         {error && (
-          <p role="alert" className="text-[11px] leading-5 text-amber">
+          <p role="alert" className="text-[11px] leading-5 text-amber-ink">
             {error}
           </p>
         )}

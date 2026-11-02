@@ -3,7 +3,7 @@ import type { JobFamily, MatchTier } from "../types";
 export const MATCH_TIER_CHIP: Record<MatchTier, string> = {
   high: "border-ink/25 bg-ink/[0.06] text-ink",
   medium: "border-amber/40 bg-amber/[0.08] text-amber-ink",
-  low: "border-rule bg-white text-ink/45",
+  low: "border-rule bg-white text-ink-3",
 };
 
 export const MATCH_TIER_BAR: Record<MatchTier, string> = {

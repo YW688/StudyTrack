@@ -178,7 +178,7 @@ export default function ExperiencesPage({
       <div className="mx-auto w-full max-w-5xl">
         <header className="border-rule flex flex-col gap-4 border-b py-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="font-mono text-[10px] tracking-[0.2em] text-ink/40">
+            <p className="font-mono text-micro tracking-[0.2em] text-ink-3">
               账本 / 02
             </p>
             <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
@@ -186,20 +186,20 @@ export default function ExperiencesPage({
                 经历库
               </h1>
               {items.length > 0 && (
-                <span className="bg-ink/[0.05] rounded-full px-2 py-0.5 font-mono text-[10px] text-ink/55">
+                <span className="bg-ink/[0.05] rounded-full px-2 py-0.5 font-mono text-micro text-ink-3">
                   {items.length} 条
                 </span>
               )}
             </div>
-            <p className="mt-2 text-xs leading-5 text-ink/55">
+            <p className="mt-2 text-xs leading-5 text-ink-3">
               一条经历 = 一份可复用的简历素材。按学期沉淀，空白的学期就是待补的缺口。
             </p>
             {items.length > 0 && (
-              <p className="mt-1 font-mono text-[10px] tabular-nums text-ink/35">
+              <p className="mt-1 font-mono text-micro tabular-nums text-ink-4">
                 覆盖 {availableKinds.length} 类 · 最近记录{" "}
                 {relativeDaysLabel(activity.daysSinceLatest)}
                 {activity.stale && (
-                  <span className="text-amber"> · 已超过 30 天</span>
+                  <span className="text-amber-ink"> · 已超过 30 天</span>
                 )}
               </p>
             )}
@@ -219,7 +219,7 @@ export default function ExperiencesPage({
         {notice && (
           <p
             role="status"
-            className="border-rule mt-4 flex items-center gap-2 rounded-lg border bg-surface px-3 py-2 text-xs text-ink/60"
+            className="border-rule mt-4 flex items-center gap-2 rounded-lg border bg-surface px-3 py-2 text-xs text-ink-3"
           >
             <span
               aria-hidden="true"
@@ -232,7 +232,7 @@ export default function ExperiencesPage({
         {saveError && (
           <p
             role="alert"
-            className="border-amber/50 bg-amber/[0.07] mt-4 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink/75"
+            className="border-amber/50 bg-amber/[0.07] mt-4 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink-2"
           >
             {saveError}
           </p>
@@ -241,13 +241,13 @@ export default function ExperiencesPage({
         {items.length === 0 ? (
           <>
             <section className="border-rule mt-5 rounded-xl border bg-surface p-5 sm:p-8">
-              <p className="font-mono text-[10px] tracking-[0.16em] text-ink/40">
+              <p className="font-mono text-micro tracking-[0.16em] text-ink-3">
                 本机还没有经历
               </p>
               <h2 className="mt-2 text-lg font-medium tracking-tight">
                 从一件已经做完的事开始
               </h2>
-              <p className="mt-2 max-w-xl text-sm leading-6 text-ink/60">
+              <p className="mt-2 max-w-xl text-sm leading-6 text-ink-3">
                 课程设计、比赛、科研、实习、作品、志愿，或其他类型。先写标题和时间，
                 四段式可以慢慢补；没有数字就留空，不会替你编。
               </p>
@@ -270,7 +270,7 @@ export default function ExperiencesPage({
                 </button>
               </div>
 
-              <p className="mt-4 text-[11px] leading-5 text-ink/40">
+              <p className="mt-4 text-[11px] leading-5 text-ink-3">
                 示例只写入本机浏览器，可随时编辑或删除；不会上传任何内容。
               </p>
             </section>
@@ -295,7 +295,7 @@ export default function ExperiencesPage({
                   className="border-rule rounded-xl border border-dashed px-4 py-3"
                 >
                   <p className="text-xs font-medium">{feature.title}</p>
-                  <p className="mt-1 text-[11px] leading-5 text-ink/45">
+                  <p className="mt-1 text-[11px] leading-5 text-ink-3">
                     {feature.text}
                   </p>
                 </div>
@@ -307,12 +307,12 @@ export default function ExperiencesPage({
             <section className="border-rule mt-5 overflow-hidden rounded-xl border bg-surface">
               <header className="border-rule flex items-center justify-between gap-3 border-b px-4 py-3 sm:px-5">
                 <div>
-                  <p className="font-mono text-[9px] tracking-[0.16em] text-ink/40">
+                  <p className="font-mono text-micro tracking-[0.16em] text-ink-3">
                     学期轴
                   </p>
                   <h2 className="mt-0.5 text-sm font-medium">四年经历分布</h2>
                 </div>
-                <p className="text-right text-[10px] leading-4 text-ink/40">
+                <p className="text-right text-micro leading-4 text-ink-3">
                   空白学期
                   <br />
                   就是简历缺口
@@ -333,30 +333,30 @@ export default function ExperiencesPage({
                             : "border-rule bg-paper",
                         ].join(" ")}
                       >
-                        <p className="font-mono text-[10px] tracking-[0.04em] text-ink/45">
+                        <p className="font-mono text-micro tracking-[0.04em] text-ink-3">
                           {cell.term.label}
                         </p>
                         <p className="mt-1 flex items-baseline gap-1">
                           <span
                             className={[
                               "font-serif text-xl leading-none tabular-nums",
-                              empty ? "text-ink/25" : "text-ink",
+                              empty ? "text-ink-4" : "text-ink",
                             ].join(" ")}
                           >
                             {cell.count}
                           </span>
-                          <span className="text-[9px] text-ink/35">条</span>
+                          <span className="text-micro text-ink-4">条</span>
                         </p>
                         {empty ? (
                           <button
                             type="button"
                             onClick={() => openCreate(termStartMonth(cell.term))}
-                            className="text-accent-ink -ml-2 mt-0.5 inline-flex min-h-11 min-w-11 items-center px-2 text-[10px] underline underline-offset-2"
+                            className="text-accent-ink -ml-2 mt-0.5 inline-flex min-h-11 min-w-11 items-center px-2 text-micro underline underline-offset-2"
                           >
                             补记
                           </button>
                         ) : (
-                          <p className="mt-1 font-mono text-[9px] text-ink/30">
+                          <p className="mt-1 font-mono text-micro text-ink-4">
                             有记录
                           </p>
                         )}
@@ -365,7 +365,7 @@ export default function ExperiencesPage({
                   })}
                 </div>
 
-                <p className="mt-2 text-[10px] leading-5 text-ink/35">
+                <p className="mt-2 text-micro leading-5 text-ink-4">
                   秋季按 8 月至次年 1 月归档，春季按 2 至 7 月归档。
                   {undatedCount > 0 &&
                     ` 另有 ${undatedCount} 条未标时间，排在时间线末尾。`}
@@ -401,7 +401,7 @@ export default function ExperiencesPage({
                     ? "全部经历"
                     : EXPERIENCE_KIND_META[effectiveFilter].label}
                 </h2>
-                <span className="font-mono text-[10px] text-ink/35">
+                <span className="font-mono text-micro text-ink-4">
                   按学期倒序 · {filtered.length} 条
                 </span>
               </div>
@@ -415,12 +415,12 @@ export default function ExperiencesPage({
                   onConfirm={(id) => void handleConfirm(id)}
                 />
               ) : (
-                <p className="border-rule mt-2 rounded-xl border border-dashed px-4 py-6 text-center text-xs text-ink/45">
+                <p className="border-rule mt-2 rounded-xl border border-dashed px-4 py-6 text-center text-xs text-ink-3">
                   这一学期还没有经历。
                   <button
                     type="button"
                     onClick={() => openCreate()}
-                    className="text-ink/60 ml-1 underline underline-offset-2 hover:text-ink"
+                    className="text-ink-3 ml-1 underline underline-offset-2 hover:text-ink"
                   >
                     补一条
                   </button>
@@ -431,7 +431,7 @@ export default function ExperiencesPage({
         )}
 
         <div className="border-rule mt-6 border-t pt-4">
-          <p className="flex items-center gap-2 text-[11px] text-ink/35">
+          <p className="flex items-center gap-2 text-[11px] text-ink-4">
             <span
               aria-hidden="true"
               className="h-1.5 w-1.5 rounded-full bg-accent"
@@ -473,14 +473,14 @@ function FilterButton({
         "inline-flex min-h-11 items-center gap-1.5 rounded-full border px-3 text-xs transition-colors sm:min-h-9",
         active
           ? "bg-ink border-ink text-paper"
-          : "border-rule bg-surface text-ink/55 hover:bg-ink/[0.03]",
+          : "border-rule bg-surface text-ink-3 hover:bg-ink/[0.03]",
       ].join(" ")}
     >
       {label}
       <span
         className={[
-          "font-mono text-[9px] tabular-nums",
-          active ? "text-paper/60" : "text-ink/30",
+          "font-mono text-micro tabular-nums",
+          active ? "text-paper/60" : "text-ink-4",
         ].join(" ")}
       >
         {count}

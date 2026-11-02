@@ -38,9 +38,9 @@ interface ExperienceEditorProps {
 }
 
 const FIELD =
-  "border-rule focus:border-ink/40 h-11 w-full rounded-md border bg-surface px-2.5 text-sm outline-none";
+  "border-rule focus-visible:border-accent-ink focus-visible:ring-2 focus-visible:ring-accent/45 h-11 w-full rounded-md border bg-surface px-2.5 text-sm outline-none";
 const TEXTAREA =
-  "border-rule focus:border-ink/40 min-h-24 w-full resize-y rounded-md border bg-surface px-2.5 py-2 text-sm leading-6 outline-none";
+  "border-rule focus-visible:border-accent-ink focus-visible:ring-2 focus-visible:ring-accent/45 min-h-24 w-full resize-y rounded-md border bg-surface px-2.5 py-2 text-sm leading-6 outline-none";
 const BTN_PRIMARY =
   "bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-5 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-40";
 const BTN_SECONDARY =
@@ -212,7 +212,7 @@ export default function ExperienceEditor({
       >
         <header className="border-rule flex items-start justify-between gap-4 border-b px-5 py-4">
           <div>
-            <p className="font-mono text-[9px] tracking-[0.18em] text-ink/35">
+            <p className="font-mono text-micro tracking-[0.18em] text-ink-4">
               账本 · 经历 / {initial ? "编辑" : "新记录"}
             </p>
             <h2
@@ -221,7 +221,7 @@ export default function ExperienceEditor({
             >
               {initial ? "编辑经历" : "记录一段经历"}
             </h2>
-            <p className="mt-1 text-xs leading-5 text-ink/50">
+            <p className="mt-1 text-xs leading-5 text-ink-3">
               只写真实发生的事；没有数字就留空，不猜。
             </p>
           </div>
@@ -230,7 +230,7 @@ export default function ExperienceEditor({
             onClick={onClose}
             aria-label="关闭"
             disabled={saving}
-            className="hover:bg-ink/[0.04] flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg text-ink/45 disabled:opacity-40"
+            className="hover:bg-ink/[0.04] flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg text-ink-3 disabled:opacity-40"
           >
             ×
           </button>
@@ -246,7 +246,7 @@ export default function ExperienceEditor({
             <SectionLabel index="01" id="experience-basics" label="基本信息" />
             <div className="mt-3 space-y-3">
               <div>
-                <span className="mb-1.5 block text-xs text-ink/55">类型</span>
+                <span className="mb-1.5 block text-xs text-ink-3">类型</span>
                 <div
                   role="group"
                   aria-label="经历类型"
@@ -263,7 +263,7 @@ export default function ExperienceEditor({
                         onClick={() => setKind(item)}
                         className={[
                           "min-h-11 rounded-lg border px-2 text-xs transition-colors",
-                          active ? "font-medium" : "border-rule bg-surface text-ink/60 hover:bg-ink/[0.03]",
+                          active ? "font-medium" : "border-rule bg-surface text-ink-3 hover:bg-ink/[0.03]",
                         ].join(" ")}
                         style={
                           active
@@ -280,7 +280,7 @@ export default function ExperienceEditor({
                     );
                   })}
                 </div>
-                <p className="mt-1.5 text-[10px] leading-4 text-ink/35">
+                <p className="mt-1.5 text-micro leading-4 text-ink-4">
                   {EXPERIENCE_KIND_META[kind].hint}
                 </p>
 
@@ -288,7 +288,7 @@ export default function ExperienceEditor({
                   <div className="mt-2">
                     <label
                       htmlFor="experience-kind-label"
-                      className="mb-1.5 block text-xs text-ink/55"
+                      className="mb-1.5 block text-xs text-ink-3"
                     >
                       自定义类型
                     </label>
@@ -300,7 +300,7 @@ export default function ExperienceEditor({
                       placeholder="例如：军训、社团、交换学习"
                       className={FIELD}
                     />
-                    <p className="mt-1 text-[10px] leading-4 text-ink/35">
+                    <p className="mt-1 text-micro leading-4 text-ink-4">
                       会显示在经历卡片上；留空则显示「其他」。
                     </p>
                   </div>
@@ -310,9 +310,9 @@ export default function ExperienceEditor({
               <div>
                 <label
                   htmlFor="experience-title"
-                  className="mb-1.5 block text-xs text-ink/55"
+                  className="mb-1.5 block text-xs text-ink-3"
                 >
-                  标题 <span className="text-amber">*</span>
+                  标题 <span className="text-amber-ink">*</span>
                 </label>
                 <input
                   id="experience-title"
@@ -329,7 +329,7 @@ export default function ExperienceEditor({
               <div>
                 <label
                   htmlFor="experience-org"
-                  className="mb-1.5 block text-xs text-ink/55"
+                  className="mb-1.5 block text-xs text-ink-3"
                 >
                   组织 / 课程 / 赛事
                 </label>
@@ -347,7 +347,7 @@ export default function ExperienceEditor({
                 <div>
                   <label
                     htmlFor="experience-start"
-                    className="mb-1.5 block text-xs text-ink/55"
+                    className="mb-1.5 block text-xs text-ink-3"
                   >
                     开始月份
                   </label>
@@ -362,7 +362,7 @@ export default function ExperienceEditor({
                 <div>
                   <label
                     htmlFor="experience-end"
-                    className="mb-1.5 block text-xs text-ink/55"
+                    className="mb-1.5 block text-xs text-ink-3"
                   >
                     结束月份
                   </label>
@@ -373,7 +373,7 @@ export default function ExperienceEditor({
                     onChange={(event) => setEnd(event.target.value)}
                     className={FIELD}
                   />
-                  <p className="mt-1 text-[10px] leading-4 text-ink/35">
+                  <p className="mt-1 text-micro leading-4 text-ink-4">
                     留空表示仍然进行中。
                   </p>
                 </div>
@@ -383,7 +383,7 @@ export default function ExperienceEditor({
 
           <section aria-labelledby="experience-parts" className="mt-6">
             <SectionLabel index="02" id="experience-parts" label="四段式" />
-            <p className="mt-1 text-[11px] leading-5 text-ink/40">
+            <p className="mt-1 text-[11px] leading-5 text-ink-3">
               问题 → 方法 → 我的贡献 → 结果。每段一到两句，简历会从这里取素材。
             </p>
             <div className="mt-3 space-y-3">
@@ -391,7 +391,7 @@ export default function ExperienceEditor({
                 <div key={part.key}>
                   <label
                     htmlFor={`experience-${part.key}`}
-                    className="mb-1.5 block text-xs text-ink/55"
+                    className="mb-1.5 block text-xs text-ink-3"
                   >
                     {part.label}
                   </label>
@@ -413,14 +413,14 @@ export default function ExperienceEditor({
 
           <section aria-labelledby="experience-proof" className="mt-6">
             <SectionLabel index="03" id="experience-proof" label="证据与标签" />
-            <p className="mt-1 text-[11px] leading-5 text-ink/40">
+            <p className="mt-1 text-[11px] leading-5 text-ink-3">
               没有量化数据就留空；证据可以是报告、截图、作品链接或公开页面。
             </p>
 
             <div className="mt-3">
               <div className="flex items-baseline justify-between gap-2">
-                <p className="text-xs text-ink/55">量化数据</p>
-                <p className="text-[10px] text-ink/30">名称 + 数值</p>
+                <p className="text-xs text-ink-3">量化数据</p>
+                <p className="text-micro text-ink-4">名称 + 数值</p>
               </div>
               <div className="mt-1.5 space-y-1.5">
                 {metrics.map((metric, index) => (
@@ -456,7 +456,7 @@ export default function ExperienceEditor({
                         )
                       }
                       aria-label={`删除第 ${index + 1} 条量化数据`}
-                      className="border-rule hover:bg-ink/[0.03] flex h-11 w-11 items-center justify-center rounded-md border text-sm text-ink/40"
+                      className="border-rule hover:bg-ink/[0.03] flex h-11 w-11 items-center justify-center rounded-md border text-sm text-ink-3"
                     >
                       ×
                     </button>
@@ -469,7 +469,7 @@ export default function ExperienceEditor({
                   setMetrics((current) => [...current, { label: "", value: "" }])
                 }
                 disabled={metrics.length >= 20}
-                className="border-rule hover:bg-ink/[0.03] mt-1.5 inline-flex min-h-11 items-center rounded-lg border border-dashed px-3 text-[11px] text-ink/50 disabled:opacity-40 sm:min-h-9"
+                className="border-rule hover:bg-ink/[0.03] mt-1.5 inline-flex min-h-11 items-center rounded-lg border border-dashed px-3 text-[11px] text-ink-3 disabled:opacity-40 sm:min-h-9"
               >
                 + 添加量化数据
               </button>
@@ -477,8 +477,8 @@ export default function ExperienceEditor({
 
             <div className="mt-4">
               <div className="flex items-baseline justify-between gap-2">
-                <p className="text-xs text-ink/55">证据</p>
-                <p className="text-[10px] text-ink/30">名称 + 链接（可空）</p>
+                <p className="text-xs text-ink-3">证据</p>
+                <p className="text-micro text-ink-4">名称 + 链接（可空）</p>
               </div>
               <div className="mt-1.5 space-y-1.5">
                 {evidence.map((item, index) => (
@@ -516,7 +516,7 @@ export default function ExperienceEditor({
                         )
                       }
                       aria-label={`删除第 ${index + 1} 条证据`}
-                      className="border-rule hover:bg-ink/[0.03] flex h-11 w-11 items-center justify-center rounded-md border text-sm text-ink/40"
+                      className="border-rule hover:bg-ink/[0.03] flex h-11 w-11 items-center justify-center rounded-md border text-sm text-ink-3"
                     >
                       ×
                     </button>
@@ -529,7 +529,7 @@ export default function ExperienceEditor({
                   setEvidence((current) => [...current, { label: "" }])
                 }
                 disabled={evidence.length >= 20}
-                className="border-rule hover:bg-ink/[0.03] mt-1.5 inline-flex min-h-11 items-center rounded-lg border border-dashed px-3 text-[11px] text-ink/50 disabled:opacity-40 sm:min-h-9"
+                className="border-rule hover:bg-ink/[0.03] mt-1.5 inline-flex min-h-11 items-center rounded-lg border border-dashed px-3 text-[11px] text-ink-3 disabled:opacity-40 sm:min-h-9"
               >
                 + 添加证据
               </button>
@@ -539,7 +539,7 @@ export default function ExperienceEditor({
               <div>
                 <label
                   htmlFor="experience-skills"
-                  className="mb-1.5 block text-xs text-ink/55"
+                  className="mb-1.5 block text-xs text-ink-3"
                 >
                   技能标签
                 </label>
@@ -550,14 +550,14 @@ export default function ExperienceEditor({
                   placeholder="Python，MySQL，Figma"
                   className={FIELD}
                 />
-                <p className="mt-1 text-[10px] leading-4 text-ink/35">
+                <p className="mt-1 text-micro leading-4 text-ink-4">
                   用逗号分隔，简历与岗位匹配会用到。
                 </p>
               </div>
               <div>
                 <label
                   htmlFor="experience-tags"
-                  className="mb-1.5 block text-xs text-ink/55"
+                  className="mb-1.5 block text-xs text-ink-3"
                 >
                   关键词标签
                 </label>
@@ -568,7 +568,7 @@ export default function ExperienceEditor({
                   placeholder="课程设计，团队协作"
                   className={FIELD}
                 />
-                <p className="mt-1 text-[10px] leading-4 text-ink/35">
+                <p className="mt-1 text-micro leading-4 text-ink-4">
                   用于时间线筛选和后续检索。
                 </p>
               </div>
@@ -580,7 +580,7 @@ export default function ExperienceEditor({
           {error && (
             <p
               role="alert"
-              className="border-amber/50 bg-amber/[0.07] mb-2 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink/75"
+              className="border-amber/50 bg-amber/[0.07] mb-2 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink-2"
             >
               {error}
             </p>
@@ -620,7 +620,7 @@ function SectionLabel({
 }) {
   return (
     <div className="flex items-baseline gap-2.5">
-      <span className="font-mono text-[10px] tracking-[0.12em] text-accent-ink">
+      <span className="font-mono text-micro tracking-[0.12em] text-accent-ink">
         {index}
       </span>
       <h3 id={id} className="text-sm font-medium">

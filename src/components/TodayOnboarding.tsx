@@ -66,13 +66,13 @@ export default function TodayOnboarding({
       <div className="border-rule border-b px-5 py-4 sm:px-6">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <p className="font-mono text-[10px] tracking-[0.18em] text-accent-ink">
+            <p className="font-mono text-micro tracking-[0.18em] text-accent-ink">
               建档 · {String(step + 1).padStart(2, "0")} / 03
             </p>
             <h2 className="mt-1.5 font-serif text-xl tracking-tight sm:text-2xl">
               只问三件事，随时能跳过。
             </h2>
-            <p className="mt-1 text-[11px] leading-5 text-ink/45">
+            <p className="mt-1 text-[11px] leading-5 text-ink-3">
               只用来筛情报和找方向，不写姓名学号；每一步都能跳过。
             </p>
           </div>
@@ -80,7 +80,7 @@ export default function TodayOnboarding({
             type="button"
             onClick={onDismiss}
             aria-label="暂时不建档"
-            className="hover:bg-ink/[0.04] -mt-1 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-lg text-ink/35"
+            className="hover:bg-ink/[0.04] -mt-1 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-lg text-ink-4"
           >
             ×
           </button>
@@ -97,8 +97,8 @@ export default function TodayOnboarding({
               />
               <span
                 className={[
-                  "mt-1 block font-mono text-[9px]",
-                  index === step ? "text-ink/60" : "text-ink/25",
+                  "mt-1 block font-mono text-micro",
+                  index === step ? "text-ink-3" : "text-ink-4",
                 ].join(" ")}
               >
                 {label}
@@ -122,9 +122,9 @@ export default function TodayOnboarding({
               value={major}
               onChange={(event) => setMajor(event.target.value.slice(0, 60))}
               placeholder="如：人工智能"
-              className="border-rule focus:border-accent/60 focus:ring-accent/15 mt-2 min-h-11 w-full max-w-md rounded-lg border bg-paper/40 px-3 text-sm outline-none placeholder:text-ink/30 focus:ring-2"
+              className="border-rule focus:border-accent/60 focus:ring-accent/15 mt-2 min-h-11 w-full max-w-md rounded-lg border bg-paper/40 px-3 text-sm outline-none placeholder:text-ink-4 focus:ring-2"
             />
-            <p className="mt-1 text-[10px] leading-5 text-ink/35">
+            <p className="mt-1 text-micro leading-5 text-ink-4">
               不知道写什么也可以空着，之后随时能改。
             </p>
 
@@ -143,7 +143,7 @@ export default function TodayOnboarding({
                         "inline-flex min-h-11 items-center rounded-lg border px-4 text-xs transition-colors",
                         selected
                           ? "border-accent/50 bg-accent/10 text-ink"
-                          : "border-rule text-ink/55 hover:bg-ink/[0.03]",
+                          : "border-rule text-ink-3 hover:bg-ink/[0.03]",
                       ].join(" ")}
                     >
                       {item}
@@ -160,7 +160,7 @@ export default function TodayOnboarding({
             <legend className="text-sm font-medium">
               这四年更想往哪走？
             </legend>
-            <p className="mt-1 text-[10px] leading-5 text-ink/35">
+            <p className="mt-1 text-micro leading-5 text-ink-4">
               只影响情报筛选和之后的匹配，不决定任何事。
             </p>
             <div className="mt-3 grid gap-1.5 sm:grid-cols-2">
@@ -176,7 +176,7 @@ export default function TodayOnboarding({
                       "flex min-h-11 items-center justify-between gap-3 rounded-lg border px-4 text-left text-xs transition-colors",
                       selected
                         ? "border-accent/50 bg-accent/10 text-ink"
-                        : "border-rule text-ink/55 hover:bg-ink/[0.03]",
+                        : "border-rule text-ink-3 hover:bg-ink/[0.03]",
                     ].join(" ")}
                   >
                     {GOAL_LABELS[item]}
@@ -204,7 +204,7 @@ export default function TodayOnboarding({
             >
               最近在做什么？
             </label>
-            <p className="mt-1 text-[10px] leading-5 text-ink/35">
+            <p className="mt-1 text-micro leading-5 text-ink-4">
               一节课、一个项目、一件正在推进的事都行。会作为第一条记录进入账本。
             </p>
             <textarea
@@ -213,9 +213,9 @@ export default function TodayOnboarding({
               onChange={(event) => setRecent(event.target.value.slice(0, 500))}
               rows={3}
               placeholder="如：在做数据库课程设计，刚把选课事务跑通。"
-              className="border-rule focus:border-accent/60 focus:ring-accent/15 mt-2 min-h-[92px] w-full resize-y rounded-lg border bg-paper/40 px-3 py-2.5 text-sm leading-6 outline-none placeholder:text-ink/30 focus:ring-2"
+              className="border-rule focus:border-accent/60 focus:ring-accent/15 mt-2 min-h-[92px] w-full resize-y rounded-lg border bg-paper/40 px-3 py-2.5 text-sm leading-6 outline-none placeholder:text-ink-4 focus:ring-2"
             />
-            <p className="mt-2 font-mono text-[10px] text-ink/35">
+            <p className="mt-2 font-mono text-micro text-ink-4">
               {[major || "专业未填", grade || "年级未填", GOAL_LABELS[goal]].join(
                 " · ",
               )}
@@ -234,7 +234,7 @@ export default function TodayOnboarding({
         <button
           type="button"
           onClick={step === 2 ? onDismiss : next}
-          className="inline-flex min-h-11 items-center text-[11px] text-ink/45 underline underline-offset-4 hover:text-ink"
+          className="inline-flex min-h-11 items-center text-[11px] text-ink-3 underline underline-offset-4 hover:text-ink"
         >
           {step === 2 ? "先不建档" : "跳过这步"}
         </button>

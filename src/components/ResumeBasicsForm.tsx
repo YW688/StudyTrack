@@ -9,9 +9,9 @@ interface ResumeBasicsFormProps {
 }
 
 const FIELD =
-  "border-rule focus:border-ink/35 focus:ring-2 focus:ring-accent/25 min-h-11 w-full rounded-lg border bg-surface px-3 text-sm text-ink outline-none transition-colors placeholder:text-ink/25";
+  "border-rule focus-visible:border-accent-ink focus:ring-2 focus:ring-accent/45 min-h-11 w-full rounded-lg border bg-surface px-3 text-sm text-ink outline-none transition-colors placeholder:text-ink-4";
 const LABEL =
-  "mb-1.5 block font-mono text-[9px] tracking-[0.14em] text-ink/40";
+  "mb-1.5 block font-mono text-micro tracking-[0.14em] text-ink-3";
 
 export default function ResumeBasicsForm({
   basics,
@@ -37,18 +37,18 @@ export default function ResumeBasicsForm({
       >
         <span className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
           <span className="text-sm font-medium">基本信息</span>
-          <span className="font-mono text-[10px] tabular-nums text-ink/40">
+          <span className="font-mono text-micro tabular-nums text-ink-3">
             {filled}/8 已填
           </span>
         </span>
         <span className="flex items-center gap-3">
-          <span className="hidden text-[10px] text-ink/35 sm:inline">
+          <span className="hidden text-micro text-ink-4 sm:inline">
             全部可留空，空字段不打印
           </span>
           <span
             aria-hidden="true"
             className={[
-              "text-ink/40 transition-transform",
+              "text-ink-3 transition-transform",
               open ? "rotate-180" : "",
             ].join(" ")}
           >
@@ -179,7 +179,7 @@ export default function ResumeBasicsForm({
             </div>
           </div>
 
-          <p className="mt-3 text-[10px] leading-5 text-ink/35">
+          <p className="mt-3 text-micro leading-5 text-ink-4">
             技能由所选经历的标签自动汇总；作品集链接会包含你填写的姓名与联系方式，分享前请确认。
           </p>
         </div>

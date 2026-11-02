@@ -14,6 +14,7 @@ import {
   EXPERIENCE_KIND_META,
 } from "../lib/experience";
 import { newId } from "../lib/id";
+import WindowLayer from "./WindowLayer";
 import {
   missingExperienceParts,
   runAgent,
@@ -24,6 +25,21 @@ import {
   type AgentReply,
 } from "../ai/tasks/agent";
 
+export type DockMode = "collapsed" | "docked" | "floating";
+
+function useWideLayout(): boolean {
+  const [wide, setWide] = useState(
+    () => window.matchMedia("(min-width: 1024px)").matches,
+  );
+  useEffect(() => {
+    const query = window.matchMedia("(min-width: 1024px)");
+    const onChange = () => setWide(query.matches);
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
+  return wide;
+}
+
 interface AgentPanelProps {
   profile: Profile | null;
   experiences: Experience[];
@@ -32,6 +48,8 @@ interface AgentPanelProps {
   resume: ResumeData;
   messages: AgentMessage[];
   raised?: boolean;
+  dockMode: DockMode;
+  onDockModeChange: (mode: DockMode) => void;
   onMessagesChange: (messages: AgentMessage[]) => void;
   onSaveProfile: (draft: AgentProfileDraft) => Promise<void>;
   onSaveExperience: (draft: AgentExperienceDraft) => Promise<void>;
@@ -42,13 +60,13 @@ interface AgentPanelProps {
 }
 
 const FIELD =
-  "mt-1 min-h-11 w-full rounded-lg border border-rule bg-surface px-3 text-xs text-ink outline-none focus:border-ink/35 focus:ring-2 focus:ring-accent/25";
+  "mt-1 min-h-11 w-full rounded-lg border border-rule bg-surface px-3 text-xs text-ink outline-none focus-visible:border-accent-ink focus:ring-2 focus:ring-accent/45";
 const BTN_PRIMARY =
   "bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-4 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-50";
 const BTN_SECONDARY =
   "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-surface px-3 text-xs disabled:cursor-not-allowed disabled:opacity-50";
 const BTN_GHOST =
-  "inline-flex min-h-11 items-center px-2 text-xs text-ink/45 underline underline-offset-4 hover:text-ink disabled:opacity-40";
+  "inline-flex min-h-11 items-center px-2 text-xs text-ink-3 underline underline-offset-4 hover:text-ink disabled:opacity-40";
 
 const QUICK_ACTIONS = [
   { id: "profile", label: "帮我建档" },
@@ -111,12 +129,15 @@ export default function AgentPanel({
   resume,
   messages,
   raised = false,
+  dockMode,
+  onDockModeChange,
   onMessagesChange,
   onSaveProfile,
   onSaveExperience,
   onAddNote,
   onNavigate,
 }: AgentPanelProps) {
+  const isWide = useWideLayout();
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<AgentMode>("auto");
   const [input, setInput] = useState("");
@@ -326,45 +347,11 @@ export default function AgentPanel({
     setOpen(false);
   }
 
-  return (
-    <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        aria-controls="agent-panel"
-        className={[
-          "no-print bg-ink text-paper fixed right-4 z-[80] inline-flex min-h-12 items-center gap-2 rounded-full px-4 text-sm shadow-lg transition-transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:outline-none sm:right-6",
-          raised ? "bottom-24 lg:bottom-6" : "bottom-4 sm:bottom-6",
-        ].join(" ")}
-      >
-        <span
-          aria-hidden="true"
-          className="border-paper/35 flex h-6 w-6 items-center justify-center rounded-full border font-serif text-[13px]"
-        >
-          记
-        </span>
-        记录官
-      </button>
-
-      {open && (
-        <>
-          <div
-            aria-hidden="true"
-            onClick={() => setOpen(false)}
-            className="no-print bg-ink/30 fixed inset-0 z-[90]"
-          />
-          <section
-            id="agent-panel"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="agent-title"
-            className="no-print border-rule bg-surface fixed inset-x-0 bottom-0 z-[100] flex max-h-[90dvh] flex-col rounded-t-2xl border-t shadow-2xl sm:inset-y-0 sm:right-0 sm:left-auto sm:w-[430px] sm:max-h-none sm:rounded-none sm:border-t-0 sm:border-l"
-          >
+  const panelBody = (
+    <div className="flex h-full min-h-0 w-full flex-col">
             <header className="border-rule flex items-start justify-between gap-3 border-b px-4 py-3.5">
               <div className="min-w-0">
-                <p className="text-accent-ink font-mono text-[9px] tracking-[0.18em]">
+                <p className="text-accent-ink font-mono text-micro tracking-[0.18em]">
                   记录官 / 本地规则
                 </p>
                 <h2
@@ -373,18 +360,55 @@ export default function AgentPanel({
                 >
                   记录官
                 </h2>
-                <p className="mt-1 text-[10px] leading-5 text-ink/45">
+                <p className="mt-1 text-micro leading-5 text-ink-3">
                   建档、写账、查账、解读。写入前先给你草稿；不闲聊、不编造、不联网。
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                aria-label="关闭记录官"
-                className="hover:bg-ink/[0.04] -mt-1 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-lg text-ink/35"
-              >
-                ×
-              </button>
+              <div className="-mt-1 flex shrink-0 items-center gap-0.5">
+                {isWide && dockMode === "docked" && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => onDockModeChange("floating")}
+                      aria-label="浮出为独立窗口"
+                      title="浮出为独立窗口"
+                      className="hover:bg-ink/[0.04] inline-flex h-11 w-11 items-center justify-center rounded-lg text-base text-ink-3 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+                    >
+                      ↗
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onDockModeChange("collapsed")}
+                      aria-label="收起记录官"
+                      title="收起记录官"
+                      className="hover:bg-ink/[0.04] inline-flex h-11 w-11 items-center justify-center rounded-lg text-base text-ink-3 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+                    >
+                      »
+                    </button>
+                  </>
+                )}
+                {isWide && dockMode === "floating" && (
+                  <button
+                    type="button"
+                    onClick={() => onDockModeChange("docked")}
+                    aria-label="停靠到右侧"
+                    title="停靠到右侧"
+                    className="hover:bg-ink/[0.04] inline-flex h-11 w-11 items-center justify-center rounded-lg text-base text-ink-3 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+                  >
+                    ⇤
+                  </button>
+                )}
+                {!isWide && (
+                  <button
+                    type="button"
+                    onClick={() => setOpen(false)}
+                    aria-label="关闭记录官"
+                    className="hover:bg-ink/[0.04] inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-lg text-ink-4"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
             </header>
 
             <div
@@ -396,7 +420,7 @@ export default function AgentPanel({
                   <p className="font-serif text-lg tracking-tight">
                     我是记录官。
                   </p>
-                  <p className="mt-1 text-[11px] leading-5 text-ink/55">
+                  <p className="mt-1 text-[11px] leading-5 text-ink-3">
                     先告诉我你在读什么、想往哪走，或者把今天推进的一件事丢给我。写入前我会先给你草稿。
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
@@ -478,7 +502,7 @@ export default function AgentPanel({
               {error && !draft && (
                 <p
                   role="alert"
-                  className="border-amber/50 bg-amber/[0.06] mt-3 rounded-lg border-l-2 px-3 py-2 text-[11px] leading-5 text-ink/70"
+                  className="border-amber/50 bg-amber/[0.06] mt-3 rounded-lg border-l-2 px-3 py-2 text-[11px] leading-5 text-ink-2"
                 >
                   {error}
                 </p>
@@ -492,7 +516,7 @@ export default function AgentPanel({
                     key={action.id}
                     type="button"
                     onClick={() => runQuick(action.id)}
-                    className="border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center rounded-full border bg-surface px-3 text-[10px] text-ink/55"
+                    className="border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center rounded-full border bg-surface px-3 text-micro text-ink-3"
                   >
                     {action.label}
                   </button>
@@ -500,7 +524,7 @@ export default function AgentPanel({
               </div>
 
               <div className="mt-2 flex items-center justify-between gap-2">
-                <p className="font-mono text-[9px] text-ink/35">
+                <p className="font-mono text-micro text-ink-4">
                   {mode === "auto"
                     ? "自由提问"
                     : `正在${MODE_LABELS[mode]}`}
@@ -509,7 +533,7 @@ export default function AgentPanel({
                   <button
                     type="button"
                     onClick={() => setMode("auto")}
-                    className="text-[10px] text-ink/40 underline underline-offset-2 hover:text-ink"
+                    className="text-micro text-ink-3 underline underline-offset-2 hover:text-ink"
                   >
                     退出当前模式
                   </button>
@@ -529,7 +553,7 @@ export default function AgentPanel({
                   }}
                   rows={2}
                   placeholder={PLACEHOLDERS[mode]}
-                  className="border-rule focus:border-ink/35 focus:ring-accent/25 min-h-12 flex-1 resize-none rounded-lg border bg-surface px-3 py-2 text-xs leading-5 text-ink outline-none placeholder:text-ink/25 focus:ring-2"
+                  className="border-rule focus-visible:border-accent-ink focus:ring-accent/45 min-h-12 flex-1 resize-none rounded-lg border bg-surface px-3 py-2 text-xs leading-5 text-ink outline-none placeholder:text-ink-4 focus:ring-2"
                 />
                 <button
                   type="button"
@@ -541,10 +565,108 @@ export default function AgentPanel({
                 </button>
               </div>
 
-              <p className="mt-2 text-[9px] leading-4 text-ink/30">
+              <p className="mt-2 text-micro leading-4 text-ink-4">
                 记录官只处理建档、写账、查账和解读；写入前必须确认。
               </p>
             </footer>
+    </div>
+  );
+
+  if (isWide) {
+    if (dockMode === "collapsed") {
+      return (
+        <button
+          type="button"
+          onClick={() => onDockModeChange("docked")}
+          aria-label="展开记录官"
+          title="展开记录官"
+          className="border-rule bg-surface hover:bg-ink/[0.03] hidden h-dvh w-full flex-col items-center gap-4 border-l pt-6 text-ink-3 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none lg:flex"
+        >
+          <span className="border-rule inline-flex h-9 w-9 items-center justify-center rounded-full border font-serif text-[13px]">
+            记
+          </span>
+          <span className="font-mono text-micro tracking-[0.24em] [writing-mode:vertical-rl]">
+            记录官
+          </span>
+        </button>
+      );
+    }
+
+    if (dockMode === "docked") {
+      return (
+        <section
+          aria-label="记录官"
+          className="border-rule bg-surface hidden h-dvh w-full border-l lg:flex lg:flex-col"
+        >
+          {panelBody}
+        </section>
+      );
+    }
+
+    return (
+      <WindowLayer
+        id="agent"
+        title="记录官"
+        subtitle="本地建档 · 写账 · 查账"
+        width={424}
+        height={680}
+        onClose={() => onDockModeChange("collapsed")}
+        actions={
+          <button
+            type="button"
+            onClick={() => onDockModeChange("docked")}
+            aria-label="停靠到右侧"
+            className="hover:bg-ink/[0.05] inline-flex min-h-9 items-center rounded-md px-2 text-micro text-ink-3 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+          >
+            停靠
+          </button>
+        }
+      >
+        <div className="h-full min-h-0 [&>div>header]:hidden">
+          {panelBody}
+        </div>
+      </WindowLayer>
+    );
+  }
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        aria-controls="agent-panel"
+        aria-label="打开记录官"
+        className={[
+          "agent-launcher no-print bg-ink text-paper fixed right-4 z-[80] inline-flex h-12 w-12 items-center justify-center rounded-full shadow-lg transition-[transform,opacity] hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:outline-none sm:right-6 sm:w-auto sm:justify-start sm:gap-2 sm:px-4",
+          raised ? "bottom-24 lg:bottom-6" : "bottom-4 sm:bottom-6",
+        ].join(" ")}
+      >
+        <span
+          aria-hidden="true"
+          className="border-paper/35 flex h-6 w-6 items-center justify-center rounded-full border font-serif text-[13px]"
+        >
+          记
+        </span>
+        <span className="hidden text-sm sm:inline">记录官</span>
+      </button>
+
+      {open && (
+        <>
+          <div
+            aria-hidden="true"
+            onClick={() => setOpen(false)}
+            className="no-print bg-ink/30 fixed inset-0 z-[90]"
+          />
+          <section
+            id="agent-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="agent-title"
+            className="no-print border-rule bg-surface fixed inset-x-0 bottom-0 z-[100] flex max-h-[90dvh] flex-col rounded-t-2xl border-t shadow-2xl sm:inset-y-0 sm:right-0 sm:left-auto sm:w-[430px] sm:max-h-none sm:rounded-none sm:border-t-0 sm:border-l"
+          >
+            {panelBody}
           </section>
         </>
       )}
@@ -561,11 +683,11 @@ function MessageBubble({ message }: { message: AgentMessage }) {
           "max-w-[92%] whitespace-pre-wrap",
           isUser
             ? "bg-ink text-paper rounded-2xl rounded-br-md px-3 py-2 text-[12px] leading-5"
-            : "border-rule bg-paper/50 rounded-2xl rounded-bl-md border px-3 py-2 text-[12px] leading-5 text-ink/75",
+            : "border-rule bg-paper/50 rounded-2xl rounded-bl-md border px-3 py-2 text-[12px] leading-5 text-ink-2",
         ].join(" ")}
       >
         {!isUser && (
-          <p className="mb-1 font-mono text-[8px] tracking-[0.12em] text-ink/30">
+          <p className="mb-1 font-mono text-micro tracking-[0.12em] text-ink-4">
             记录官
           </p>
         )}
@@ -606,11 +728,11 @@ function ProfileDraftCard({
     <div className="border-accent/30 bg-accent/[0.04] rounded-xl border p-3">
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs font-medium">档案草稿</p>
-        <span className="font-mono text-[9px] text-ink/35">写入前确认</span>
+        <span className="font-mono text-micro text-ink-4">写入前确认</span>
       </div>
 
       <div className="mt-3 grid gap-2 sm:grid-cols-2">
-        <label className="text-[10px] text-ink/45">
+        <label className="text-micro text-ink-3">
           年级
           <select
             value={data.grade}
@@ -627,7 +749,7 @@ function ProfileDraftCard({
             ))}
           </select>
         </label>
-        <label className="text-[10px] text-ink/45">
+        <label className="text-micro text-ink-3">
           专业
           <input
             value={data.major}
@@ -636,7 +758,7 @@ function ProfileDraftCard({
             className={FIELD}
           />
         </label>
-        <label className="text-[10px] text-ink/45">
+        <label className="text-micro text-ink-3">
           方向
           <select
             value={data.goal}
@@ -652,7 +774,7 @@ function ProfileDraftCard({
             ))}
           </select>
         </label>
-        <label className="text-[10px] text-ink/45">
+        <label className="text-micro text-ink-3">
           目标岗位
           <input
             value={targetText}
@@ -666,7 +788,7 @@ function ProfileDraftCard({
         </label>
       </div>
 
-      <label className="mt-2 block text-[10px] text-ink/45">
+      <label className="mt-2 block text-micro text-ink-3">
         技能
         <input
           value={skillsText}
@@ -679,11 +801,11 @@ function ProfileDraftCard({
         />
       </label>
 
-      <p className="mt-2 text-[9px] leading-4 text-ink/35">
+      <p className="mt-2 text-micro leading-4 text-ink-4">
         只写年级、专业、方向和技能，不写姓名学号。
       </p>
       {error && (
-        <p role="alert" className="mt-2 text-[10px] text-red-800">
+        <p role="alert" className="mt-2 text-micro text-red-800">
           {error}
         </p>
       )}
@@ -754,7 +876,7 @@ function ExperienceDraftCard({
         <p className="text-xs font-medium">经历草稿</p>
         <span
           className={[
-            "rounded-full border px-2 py-0.5 font-mono text-[9px]",
+            "rounded-full border px-2 py-0.5 font-mono text-micro",
             data.confidence === "high"
               ? "border-accent/40 bg-accent/[0.08] text-accent-ink"
               : "border-amber/40 bg-amber/[0.08] text-amber-ink",
@@ -767,7 +889,7 @@ function ExperienceDraftCard({
       </div>
 
       <div className="mt-3 grid gap-2">
-        <label className="text-[10px] text-ink/45">
+        <label className="text-micro text-ink-3">
           标题
           <input
             value={data.title}
@@ -776,7 +898,7 @@ function ExperienceDraftCard({
             className={FIELD}
           />
         </label>
-        <label className="text-[10px] text-ink/45">
+        <label className="text-micro text-ink-3">
           类型
           <select
             value={data.kind}
@@ -794,7 +916,7 @@ function ExperienceDraftCard({
         </label>
 
         {EXPERIENCE_PARTS.map((part) => (
-          <label key={part.key} className="text-[10px] text-ink/45">
+          <label key={part.key} className="text-micro text-ink-3">
             {part.label}
             <textarea
               value={data[part.key]}
@@ -809,7 +931,7 @@ function ExperienceDraftCard({
           </label>
         ))}
 
-        <label className="text-[10px] text-ink/45">
+        <label className="text-micro text-ink-3">
           技能
           <input
             value={skillsText}
@@ -823,11 +945,11 @@ function ExperienceDraftCard({
         </label>
       </div>
 
-      <p className="mt-2 text-[9px] leading-4 text-ink/35">
+      <p className="mt-2 text-micro leading-4 text-ink-4">
         确认后写入账本；四段不全会标为待确认，不会自动进简历。
       </p>
       {error && (
-        <p role="alert" className="mt-2 text-[10px] text-red-800">
+        <p role="alert" className="mt-2 text-micro text-red-800">
           {error}
         </p>
       )}
@@ -881,7 +1003,7 @@ function NoteDraftCard({
     <div className="border-rule bg-paper/40 rounded-xl border p-3">
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs font-medium">记录草稿</p>
-        <span className="font-mono text-[9px] text-ink/35">写入前确认</span>
+        <span className="font-mono text-micro text-ink-4">写入前确认</span>
       </div>
       <textarea
         value={text}
@@ -890,11 +1012,11 @@ function NoteDraftCard({
         maxLength={1000}
         className={`${FIELD} resize-y py-2 leading-5`}
       />
-      <p className="mt-2 text-[9px] leading-4 text-ink/35">
+      <p className="mt-2 text-micro leading-4 text-ink-4">
         确认后记进账本；不会当作完整经历。
       </p>
       {error && (
-        <p role="alert" className="mt-2 text-[10px] text-red-800">
+        <p role="alert" className="mt-2 text-micro text-red-800">
           {error}
         </p>
       )}

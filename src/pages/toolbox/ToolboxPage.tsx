@@ -63,13 +63,13 @@ export default function ToolboxPage({
       <div className="mx-auto w-full max-w-5xl">
         <header className="border-rule flex flex-col gap-4 border-b py-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="font-mono text-[10px] tracking-[0.2em] text-ink/40">
+            <p className="font-mono text-micro tracking-[0.2em] text-ink-3">
               工具箱 / 04
             </p>
             <h1 className="mt-2 font-serif text-2xl tracking-tight sm:text-3xl">
               工具箱
             </h1>
-            <p className="mt-2 max-w-2xl text-xs leading-5 text-ink/55">
+            <p className="mt-2 max-w-2xl text-xs leading-5 text-ink-3">
               课表、作业、简历、日历。需要时打开，不占今日的注意力。
             </p>
           </div>
@@ -90,7 +90,7 @@ export default function ToolboxPage({
               onClick={() => onNavigate(tool.id)}
               className="border-rule hover:bg-ink/[0.025] group flex min-h-32 flex-col rounded-xl border bg-surface p-4 text-left transition-colors focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none sm:p-5"
             >
-              <span className="font-mono text-[10px] tracking-[0.14em] text-accent-ink">
+              <span className="font-mono text-micro tracking-[0.14em] text-accent-ink">
                 {tool.no}
               </span>
               <span className="mt-2 flex items-baseline justify-between gap-3">
@@ -99,15 +99,15 @@ export default function ToolboxPage({
                 </span>
                 <span
                   aria-hidden="true"
-                  className="text-ink/25 transition-transform group-hover:translate-x-0.5"
+                  className="text-ink-4 transition-transform group-hover:translate-x-0.5"
                 >
                   →
                 </span>
               </span>
-              <span className="mt-2 text-[13px] leading-6 text-ink/60">
+              <span className="mt-2 text-[13px] leading-6 text-ink-3">
                 {tool.hint}
               </span>
-              <span className="border-rule mt-auto border-t pt-2.5 text-[10px] leading-4 text-ink/40">
+              <span className="border-rule mt-auto border-t pt-2.5 text-micro leading-4 text-ink-3">
                 {tool.meta}
               </span>
             </button>
@@ -116,7 +116,7 @@ export default function ToolboxPage({
 
         <section className="border-rule mt-4 rounded-xl border bg-surface px-4 py-3.5 sm:px-5">
           <p className="text-xs font-medium">数据与备份</p>
-          <p className="mt-1 text-[11px] leading-5 text-ink/50">
+          <p className="mt-1 text-[11px] leading-5 text-ink-3">
             导出、导入与清除本机数据在左侧导航底部；手机端在「数据与备份」里。所有数据只存在这台设备。
           </p>
         </section>

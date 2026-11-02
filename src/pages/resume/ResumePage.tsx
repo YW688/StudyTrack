@@ -47,7 +47,7 @@ interface ResumePageProps {
 }
 
 const BTN_PRIMARY =
-  "bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-4 text-xs font-medium disabled:cursor-not-allowed disabled:bg-ink/10 disabled:text-ink/40";
+  "bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-4 text-xs font-medium disabled:cursor-not-allowed disabled:bg-ink/10 disabled:text-ink-3";
 const BTN_SECONDARY =
   "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-surface px-3 text-xs disabled:cursor-not-allowed disabled:opacity-40";
 
@@ -488,22 +488,22 @@ export default function ResumePage({
       <div className="mx-auto w-full max-w-[1440px]">
         <header className="resume-page-header border-rule flex flex-col gap-4 border-b py-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="font-mono text-[10px] tracking-[0.2em] text-ink/40">
+            <p className="font-mono text-micro tracking-[0.2em] text-ink-3">
               工具箱 · 简历 / 04
             </p>
             <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <h1 className="font-serif text-2xl tracking-tight sm:text-3xl">
                 简历工作台
               </h1>
-              <span className="bg-ink/[0.05] rounded-full px-2 py-0.5 font-mono text-[10px] text-ink/55">
+              <span className="bg-ink/[0.05] rounded-full px-2 py-0.5 font-mono text-micro text-ink-3">
                 已选 {entries.length} 条
               </span>
             </div>
-            <p className="mt-2 text-xs leading-5 text-ink/55">
+            <p className="mt-2 text-xs leading-5 text-ink-3">
               勾选经历 → 核对要点 → 打印 A4。内容只在本机，作品集分享靠链接本身。
             </p>
             {latestSnapshot && (
-              <p className="mt-1 font-mono text-[10px] tabular-nums text-ink/35">
+              <p className="mt-1 font-mono text-micro tabular-nums text-ink-4">
                 共 {snapshots.length} 个版本 · 最近一次{" "}
                 {relativeTimeLabel(latestSnapshot.createdAt)}
               </p>
@@ -565,7 +565,7 @@ export default function ResumePage({
         {notice && (
           <p
             role="status"
-            className="resume-banner border-rule mt-4 flex items-center gap-2 rounded-lg border bg-surface px-3 py-2 text-xs text-ink/60"
+            className="resume-banner border-rule mt-4 flex items-center gap-2 rounded-lg border bg-surface px-3 py-2 text-xs text-ink-3"
           >
             <span
               aria-hidden="true"
@@ -578,7 +578,7 @@ export default function ResumePage({
         {error && (
           <p
             role="alert"
-            className="resume-banner border-amber/50 bg-amber/[0.07] mt-4 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink/75"
+            className="resume-banner border-amber/50 bg-amber/[0.07] mt-4 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink-2"
           >
             {error}
           </p>
@@ -586,13 +586,13 @@ export default function ResumePage({
 
         {nameMissing && !previewSnapshot && (
           <div className="resume-banner border-amber/50 bg-amber/[0.07] mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border-l-2 px-3 py-2">
-            <p className="text-xs leading-5 text-ink/75">
+            <p className="text-xs leading-5 text-ink-2">
               填写姓名后导出的简历更完整。
             </p>
             <button
               type="button"
               onClick={openNameField}
-              className="text-amber inline-flex min-h-11 items-center text-xs font-medium underline underline-offset-2 sm:min-h-8"
+              className="text-amber-ink inline-flex min-h-11 items-center text-xs font-medium underline underline-offset-2 sm:min-h-8"
             >
               去填写
             </button>
@@ -605,12 +605,12 @@ export default function ResumePage({
               <div>
                 <p className="text-sm font-medium">
                   正在预览 v{previewSnapshot.version}
-                  <span className="ml-2 font-mono text-[10px] font-normal text-ink/40">
+                  <span className="ml-2 font-mono text-micro font-normal text-ink-3">
                     只读 · {formatSnapshotTime(previewSnapshot.createdAt)} ·{" "}
                     {previewEntries.length} 条经历
                   </span>
                 </p>
-                <p className="mt-1 text-[11px] leading-5 text-ink/45">
+                <p className="mt-1 text-[11px] leading-5 text-ink-3">
                   预览不会修改当前简历。
                 </p>
               </div>
@@ -641,7 +641,7 @@ export default function ResumePage({
             </div>
 
             {overflow && (
-              <p className="resume-banner border-amber/50 bg-amber/[0.07] mt-3 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink/75">
+              <p className="resume-banner border-amber/50 bg-amber/[0.07] mt-3 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink-2">
                 内容超过一页 A4，建议精简或减少条目。仍可继续打印。
               </p>
             )}
@@ -670,7 +670,7 @@ export default function ResumePage({
                     "min-h-10 rounded-md px-3 text-xs",
                     view === "pool"
                       ? "bg-ink text-paper"
-                      : "text-ink/55",
+                      : "text-ink-3",
                   ].join(" ")}
                 >
                   经历池
@@ -683,13 +683,13 @@ export default function ResumePage({
                     "min-h-10 rounded-md px-3 text-xs",
                     view === "paper"
                       ? "bg-ink text-paper"
-                      : "text-ink/55",
+                      : "text-ink-3",
                   ].join(" ")}
                 >
                   预览
                 </button>
               </div>
-              <span className="font-mono text-[10px] tabular-nums text-ink/40">
+              <span className="font-mono text-micro tabular-nums text-ink-3">
                 已选 {entries.length} 条
               </span>
             </div>
@@ -728,17 +728,17 @@ export default function ResumePage({
                 ].join(" ")}
               >
                 <div className="screen-only mb-2 flex flex-wrap items-center justify-between gap-2">
-                  <p className="font-mono text-[10px] tabular-nums text-ink/40">
+                  <p className="font-mono text-micro tabular-nums text-ink-3">
                     已选 {entries.length} 条 ·{" "}
                     {overflow ? "预计超过 1 页" : "1 页内"}
                   </p>
-                  <p className="text-[10px] text-ink/35">
+                  <p className="text-micro text-ink-4">
                     移动端为缩略预览，打印以 A4 为准
                   </p>
                 </div>
 
                 {overflow && (
-                  <p className="resume-banner border-amber/50 bg-amber/[0.07] mb-3 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink/75">
+                  <p className="resume-banner border-amber/50 bg-amber/[0.07] mb-3 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink-2">
                     内容超过一页 A4，建议精简或减少条目。仍可继续打印。
                   </p>
                 )}
@@ -778,7 +778,7 @@ export default function ResumePage({
 
       <div className="resume-mobile-bar no-print border-rule fixed inset-x-0 bottom-0 z-30 border-t bg-paper px-4 py-3 lg:hidden">
         <div className="mx-auto flex max-w-3xl items-center gap-3">
-          <span className="shrink-0 font-mono text-[10px] tabular-nums text-ink/45">
+          <span className="shrink-0 font-mono text-micro tabular-nums text-ink-3">
             {selectedCount} 条
           </span>
           <button

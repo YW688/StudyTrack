@@ -18,9 +18,9 @@ interface AssignmentItemProps {
 const TIER_CLASS: Record<string, string> = {
   overdue: "border-red-800/30 bg-red-800/[0.07] text-red-800",
   urgent: "border-red-800/30 bg-red-800/[0.07] text-red-800",
-  soon: "border-amber/40 bg-amber/[0.08] text-amber",
-  later: "border-rule bg-ink/[0.03] text-ink/55",
-  none: "border-rule border-dashed text-ink/40",
+  soon: "border-amber/40 bg-amber/[0.08] text-amber-ink",
+  later: "border-rule bg-ink/[0.03] text-ink-3",
+  none: "border-rule border-dashed text-ink-3",
 };
 
 const TIER_TEXT: Record<string, string> = {
@@ -73,26 +73,26 @@ export default function AssignmentItem({
           <p
             className={[
               "text-sm leading-5 font-medium break-words",
-              done ? "text-ink/45 line-through" : "",
+              done ? "text-ink-3 line-through" : "",
             ].join(" ")}
           >
             {item.title}
           </p>
           {item.status === "doing" && (
-            <span className="bg-ink/[0.07] rounded-full px-1.5 py-0.5 font-mono text-[9px] text-ink/60">
+            <span className="bg-ink/[0.07] rounded-full px-1.5 py-0.5 font-mono text-micro text-ink-3">
               进行中
             </span>
           )}
           {!done && item.confidence === "low" && (
-            <span className="bg-amber/15 rounded-full px-1.5 py-0.5 font-mono text-[9px] text-amber">
+            <span className="bg-amber/15 rounded-full px-1.5 py-0.5 font-mono text-micro text-amber-ink">
               待确认
             </span>
           )}
         </div>
 
-        <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] leading-5 text-ink/45">
+        <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] leading-5 text-ink-3">
           {item.courseName && (
-            <span className="text-ink/65">{item.courseName}</span>
+            <span className="text-ink-3">{item.courseName}</span>
           )}
           <span>{ASSIGNMENT_KIND_LABELS[item.kind]}</span>
           <span aria-hidden="true">·</span>
@@ -100,12 +100,12 @@ export default function AssignmentItem({
         </p>
 
         {item.detail && (
-          <p className="mt-1 line-clamp-2 text-[11px] leading-5 text-ink/40">
+          <p className="mt-1 line-clamp-2 text-[11px] leading-5 text-ink-3">
             {item.detail}
           </p>
         )}
 
-        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-ink/45">
+        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-ink-3">
           {!done && (
             <button
               type="button"
@@ -121,7 +121,7 @@ export default function AssignmentItem({
             <button
               type="button"
               onClick={onConfirm}
-              className="text-amber inline-flex min-h-11 items-center sm:min-h-9 font-medium underline-offset-2 hover:underline"
+              className="text-amber-ink inline-flex min-h-11 items-center sm:min-h-9 font-medium underline-offset-2 hover:underline"
             >
               确认无误
             </button>
@@ -166,7 +166,7 @@ export default function AssignmentItem({
         <span
           title={formatDueFull(item.due)}
           className={[
-            "inline-flex items-center gap-1 rounded-md border px-1.5 py-1 font-mono text-[10px] whitespace-nowrap",
+            "inline-flex items-center gap-1 rounded-md border px-1.5 py-1 font-mono text-micro whitespace-nowrap",
             TIER_CLASS[tier],
           ].join(" ")}
         >
@@ -175,12 +175,12 @@ export default function AssignmentItem({
         {TIER_TEXT[tier] && (
           <span
             className={[
-              "font-mono text-[9px] whitespace-nowrap",
+              "font-mono text-micro whitespace-nowrap",
               tier === "overdue" || tier === "urgent"
                 ? "text-red-800"
                 : tier === "soon"
-                  ? "text-amber"
-                  : "text-ink/35",
+                  ? "text-amber-ink"
+                  : "text-ink-4",
             ].join(" ")}
           >
             {TIER_TEXT[tier]}

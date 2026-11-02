@@ -37,7 +37,7 @@ interface MatchDetailProps {
 
 function MetaChip({ children }: { children: ReactNode }) {
   return (
-    <span className="border-rule inline-flex min-h-6 items-center rounded border px-1.5 text-[10px] text-ink/50">
+    <span className="border-rule inline-flex min-h-6 items-center rounded border px-1.5 text-micro text-ink-3">
       {children}
     </span>
   );
@@ -47,7 +47,7 @@ function StatusChip({ kind }: { kind: "hit" | "gap" | "eligibility" }) {
   const meta = {
     hit: {
       label: "命中",
-      className: "border-ink/20 bg-ink/[0.05] text-ink/65",
+      className: "border-ink/20 bg-ink/[0.05] text-ink-3",
     },
     gap: {
       label: "待补",
@@ -55,12 +55,12 @@ function StatusChip({ kind }: { kind: "hit" | "gap" | "eligibility" }) {
     },
     eligibility: {
       label: "资格",
-      className: "border-rule bg-surface text-ink/40",
+      className: "border-rule bg-surface text-ink-3",
     },
   }[kind];
   return (
     <span
-      className={`inline-flex min-h-6 shrink-0 items-center rounded-full border px-2 text-[9px] ${meta.className}`}
+      className={`inline-flex min-h-6 shrink-0 items-center rounded-full border px-2 text-micro ${meta.className}`}
     >
       {meta.label}
     </span>
@@ -124,7 +124,7 @@ export default function MatchDetail({
           <button
             type="button"
             onClick={onBack}
-            className="-ml-1 mb-3 inline-flex min-h-9 items-center rounded px-1 text-[11px] text-ink/50 hover:text-ink xl:hidden"
+            className="-ml-1 mb-3 inline-flex min-h-9 items-center rounded px-1 text-[11px] text-ink-3 hover:text-ink xl:hidden"
           >
             <span aria-hidden="true" className="mr-1">
               ←
@@ -147,12 +147,12 @@ export default function MatchDetail({
           </span>
 
           <div className="min-w-0 flex-1">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[9px] tracking-[0.12em] text-ink/40">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-micro tracking-[0.12em] text-ink-3">
               <span>{job.company}</span>
               <span aria-hidden="true">·</span>
               <span>{job.cohort}</span>
               {job.custom && (
-                <span className="border-ink/15 bg-ink/[0.05] rounded-full border px-1.5 py-0.5 tracking-[0.06em] text-ink/55">
+                <span className="border-ink/15 bg-ink/[0.05] rounded-full border px-1.5 py-0.5 tracking-[0.06em] text-ink-3">
                   粘贴 JD
                 </span>
               )}
@@ -176,12 +176,12 @@ export default function MatchDetail({
           <div className="shrink-0 text-right">
             <p className="font-mono text-2xl leading-none tabular-nums sm:text-3xl">
               {match.score}
-              <span className="ml-0.5 text-[10px] font-normal text-ink/35">
+              <span className="ml-0.5 text-micro font-normal text-ink-4">
                 /100
               </span>
             </p>
             <span
-              className={`mt-1.5 inline-flex min-h-6 items-center rounded-full border px-2 text-[10px] ${MATCH_TIER_CHIP[match.tier]}`}
+              className={`mt-1.5 inline-flex min-h-6 items-center rounded-full border px-2 text-micro ${MATCH_TIER_CHIP[match.tier]}`}
             >
               {MATCH_TIER_LABELS[match.tier]}
             </span>
@@ -199,7 +199,7 @@ export default function MatchDetail({
               />
             ))}
           </div>
-          <span className="shrink-0 font-mono text-[9px] tabular-nums text-ink/35">
+          <span className="shrink-0 font-mono text-micro tabular-nums text-ink-4">
             {matchableCount > 0
               ? `命中 ${match.hits.length}/${matchableCount}`
               : "无可匹配要求"}
@@ -207,12 +207,12 @@ export default function MatchDetail({
         </div>
 
         {job.custom ? (
-          <p className="mt-2 text-[10px] leading-5 text-ink/35">
+          <p className="mt-2 text-micro leading-5 text-ink-4">
             粘贴的 JD · 只在当前页面有效，刷新后消失
           </p>
         ) : (
           <div className="border-rule mt-3 border-t pt-2.5">
-            <p className="text-[10px] leading-5 text-ink/45">
+            <p className="text-micro leading-5 text-ink-3">
               来源：{job.sourceName} · 官方招聘页 · 核对{" "}
               {formatCollectedAt(job.verifiedAt)}
             </p>
@@ -222,7 +222,7 @@ export default function MatchDetail({
                 target="_blank"
                 rel="noreferrer noopener"
                 title={job.sourceUrl}
-                className="mt-0.5 block truncate font-mono text-[9px] leading-4 text-ink/35 underline decoration-ink/20 underline-offset-2 hover:text-ink"
+                className="mt-0.5 block truncate font-mono text-micro leading-4 text-ink-4 underline decoration-ink/20 underline-offset-2 hover:text-ink"
               >
                 {job.sourceUrl}
               </a>
@@ -234,7 +234,7 @@ export default function MatchDetail({
       <div className="border-rule border-b px-4 py-4 sm:px-5">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h3 className="text-xs font-medium">为什么推荐</h3>
-          <span className="font-mono text-[9px] tracking-[0.08em] text-ink/35">
+          <span className="font-mono text-micro tracking-[0.08em] text-ink-4">
             只依据简历与经历
           </span>
         </div>
@@ -243,9 +243,9 @@ export default function MatchDetail({
             {match.reasons.map((reason, index) => (
               <li
                 key={reason}
-                className="flex gap-2 text-[11px] leading-5 text-ink/65"
+                className="flex gap-2 text-[11px] leading-5 text-ink-3"
               >
-                <span className="mt-0.5 font-mono text-[9px] tabular-nums text-accent-ink">
+                <span className="mt-0.5 font-mono text-micro tabular-nums text-accent-ink">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <span>{reason}</span>
@@ -253,19 +253,19 @@ export default function MatchDetail({
             ))}
           </ul>
         ) : (
-          <p className="mt-2 text-[11px] leading-5 text-ink/45">
+          <p className="mt-2 text-[11px] leading-5 text-ink-3">
             暂无推荐理由。先补全求职意向与经历，再重新查看。
           </p>
         )}
 
         {match.warnings.length > 0 && (
           <div className="border-amber/50 bg-amber/[0.06] mt-3 rounded-lg border-l-2 px-3 py-2.5">
-            <p className="text-[10px] font-medium text-amber-ink">需要注意</p>
+            <p className="text-micro font-medium text-amber-ink">需要注意</p>
             <ul className="mt-1 space-y-0.5">
               {match.warnings.map((warning) => (
                 <li
                   key={warning}
-                  className="text-[11px] leading-5 text-ink/65"
+                  className="text-[11px] leading-5 text-ink-3"
                 >
                   {warning}
                 </li>
@@ -278,12 +278,12 @@ export default function MatchDetail({
       <section className="border-rule border-b px-4 py-4 sm:px-5">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h3 className="text-xs font-medium">要求对照</h3>
-          <span className="font-mono text-[9px] tabular-nums text-ink/35">
+          <span className="font-mono text-micro tabular-nums text-ink-4">
             命中 {match.hits.length} · 待补 {match.gaps.length} · 资格{" "}
             {match.eligibility.length}
           </span>
         </div>
-        <p className="mt-1 text-[10px] leading-5 text-ink/35">
+        <p className="mt-1 text-micro leading-5 text-ink-4">
           方向级要求，供自查使用；投递前以官网职位说明为准。
         </p>
 
@@ -306,7 +306,7 @@ export default function MatchDetail({
             return (
               <li key={index} className="py-3.5">
                 <div className="flex items-start gap-2.5">
-                  <span className="mt-0.5 shrink-0 font-mono text-[9px] tabular-nums text-ink/30">
+                  <span className="mt-0.5 shrink-0 font-mono text-micro tabular-nums text-ink-4">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <div className="min-w-0 flex-1">
@@ -321,14 +321,14 @@ export default function MatchDetail({
 
                     {hit && (
                       <div className="border-ink/15 mt-2 border-l-2 pl-3">
-                        <blockquote className="text-[11px] leading-5 text-ink/65">
+                        <blockquote className="text-[11px] leading-5 text-ink-3">
                           「{hit.quote}」
                         </blockquote>
-                        <p className="mt-1.5 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[10px] text-ink/40">
-                          <span className="font-medium text-ink/65">
+                        <p className="mt-1.5 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-micro text-ink-3">
+                          <span className="font-medium text-ink-3">
                             {hitExperience?.title ?? "已删除的经历"}
                           </span>
-                          <span aria-hidden="true" className="text-ink/25">
+                          <span aria-hidden="true" className="text-ink-4">
                             ·
                           </span>
                           <span>{SOURCE_LABELS[hit.source]}</span>
@@ -337,7 +337,7 @@ export default function MatchDetail({
                               <>
                                 <span
                                   aria-hidden="true"
-                                  className="text-ink/25"
+                                  className="text-ink-4"
                                 >
                                   ·
                                 </span>
@@ -352,26 +352,26 @@ export default function MatchDetail({
 
                     {gap && (
                       <div className="mt-1.5">
-                        <p className="text-[11px] leading-5 text-ink/55">
+                        <p className="text-[11px] leading-5 text-ink-3">
                           {gap.advice}
                         </p>
                         {archiveExperience && (
                           <div className="border-accent/30 bg-accent/[0.05] mt-2 rounded-lg border px-3 py-2.5">
-                            <p className="text-[10px] leading-5 text-accent-ink">
+                            <p className="text-micro leading-5 text-accent-ink">
                               这条经历还没进简历，勾选后可提升命中。
                             </p>
                             <p className="mt-1 text-[11px] font-medium leading-5">
                               {archiveExperience.title}
                             </p>
                             {gap.archiveQuote && (
-                              <p className="mt-0.5 text-[10px] leading-5 text-ink/50">
+                              <p className="mt-0.5 text-micro leading-5 text-ink-3">
                                 「{gap.archiveQuote}」
                               </p>
                             )}
                             <button
                               type="button"
                               onClick={onNavigateResume}
-                              className="mt-1.5 inline-flex min-h-8 items-center text-[10px] font-medium text-ink/65 underline underline-offset-2 hover:text-ink"
+                              className="mt-1.5 inline-flex min-h-8 items-center text-micro font-medium text-ink-3 underline underline-offset-2 hover:text-ink"
                             >
                               去简历勾选
                             </button>
@@ -381,7 +381,7 @@ export default function MatchDetail({
                     )}
 
                     {eligibility && (
-                      <p className="mt-1 text-[10px] leading-5 text-ink/40">
+                      <p className="mt-1 text-micro leading-5 text-ink-3">
                         {eligibility.note}
                       </p>
                     )}
@@ -396,12 +396,12 @@ export default function MatchDetail({
       <section className="border-rule border-b px-4 py-4 sm:px-5">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h3 className="text-xs font-medium">技能覆盖</h3>
-          <span className="font-mono text-[9px] tabular-nums text-ink/35">
+          <span className="font-mono text-micro tabular-nums text-ink-4">
             {match.matchedSkills.length}/{job.skills.length}
           </span>
         </div>
         {job.skills.length === 0 ? (
-          <p className="mt-2 text-[11px] leading-5 text-ink/45">
+          <p className="mt-2 text-[11px] leading-5 text-ink-3">
             这条 JD 没有识别出技能关键词，请直接对照上方要求清单。
           </p>
         ) : (
@@ -409,7 +409,7 @@ export default function MatchDetail({
             {match.matchedSkills.map((skill) => (
               <span
                 key={skill}
-                className="border-ink/20 bg-ink/[0.05] inline-flex min-h-6 items-center rounded-full border px-2 text-[10px] text-ink/70"
+                className="border-ink/20 bg-ink/[0.05] inline-flex min-h-6 items-center rounded-full border px-2 text-micro text-ink-2"
               >
                 {skill}
               </span>
@@ -417,15 +417,15 @@ export default function MatchDetail({
             {match.missingSkills.map((skill) => (
               <span
                 key={skill}
-                className="border-amber/45 text-amber-ink inline-flex min-h-6 items-center gap-1 rounded-full border border-dashed px-2 text-[10px]"
+                className="border-amber/45 text-amber-ink inline-flex min-h-6 items-center gap-1 rounded-full border border-dashed px-2 text-micro"
               >
                 {skill}
-                <span className="text-[8px] text-ink/35">待补</span>
+                <span className="text-micro text-ink-4">待补</span>
               </span>
             ))}
           </div>
         )}
-        <p className="mt-2 text-[10px] leading-5 text-ink/35">
+        <p className="mt-2 text-micro leading-5 text-ink-4">
           技能只按经历原文与技能标签核对，不做推测。
         </p>
       </section>
@@ -433,14 +433,14 @@ export default function MatchDetail({
       <footer className="bg-paper/60 px-4 py-4 sm:px-5">
         {referenced.length > 0 && (
           <div className="mb-3">
-            <p className="text-[10px] font-medium text-ink/55">
+            <p className="text-micro font-medium text-ink-3">
               本次匹配引用了 {referenced.length} 条经历
             </p>
             <ul className="mt-1.5 flex flex-wrap items-center gap-1.5">
               {referenced.map((experience) => (
                 <li
                   key={experience.id}
-                  className="border-rule inline-flex min-h-7 items-center rounded-md border bg-surface px-2 text-[10px] text-ink/60"
+                  className="border-rule inline-flex min-h-7 items-center rounded-md border bg-surface px-2 text-micro text-ink-3"
                 >
                   {experience.title}
                 </li>
@@ -449,7 +449,7 @@ export default function MatchDetail({
                 <button
                   type="button"
                   onClick={onNavigateExperiences}
-                  className="inline-flex min-h-7 items-center px-1 text-[10px] text-ink/45 underline underline-offset-2 hover:text-ink"
+                  className="inline-flex min-h-7 items-center px-1 text-micro text-ink-3 underline underline-offset-2 hover:text-ink"
                 >
                   打开经历库
                 </button>
@@ -499,12 +499,12 @@ export default function MatchDetail({
               编辑简历
             </button>
           </div>
-          <p className="max-w-xs text-[10px] leading-5 text-ink/35">
+          <p className="max-w-xs text-micro leading-5 text-ink-4">
             匹配分由本机经历计算，不代表企业筛选结果；岗位以官网为准，学径不代投。
           </p>
         </div>
         {copyError && (
-          <p className="text-amber mt-2 text-[10px] leading-5">{copyError}</p>
+          <p className="text-amber-ink mt-2 text-micro leading-5">{copyError}</p>
         )}
       </footer>
     </article>

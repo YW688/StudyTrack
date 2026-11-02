@@ -26,7 +26,7 @@ const SECTION_META: {
 ];
 
 const BTN_ACTION =
-  "hover:text-ink inline-flex min-h-11 items-center text-[11px] text-ink/50 underline-offset-2 hover:underline sm:min-h-8";
+  "hover:text-ink inline-flex min-h-11 items-center text-[11px] text-ink-3 underline-offset-2 hover:underline sm:min-h-8";
 
 export default function ExperienceCard({
   experience,
@@ -72,7 +72,7 @@ export default function ExperienceCard({
       <div className="px-4 py-3.5 sm:px-5">
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
           <span
-            className="rounded-full px-2 py-0.5 font-mono text-[9px] tracking-[0.04em]"
+            className="rounded-full px-2 py-0.5 font-mono text-micro tracking-[0.04em]"
             style={{
               color: meta.color,
               backgroundColor: meta.pale,
@@ -80,21 +80,21 @@ export default function ExperienceCard({
           >
             {experienceKindLabel(experience.kind, experience.kindLabel)}
           </span>
-          <span className="font-mono text-[10px] tabular-nums text-ink/45">
+          <span className="font-mono text-micro tabular-nums text-ink-3">
             {range}
           </span>
           {ongoing && (
-            <span className="bg-ink/[0.06] rounded-full px-1.5 py-0.5 font-mono text-[9px] text-ink/55">
+            <span className="bg-ink/[0.06] rounded-full px-1.5 py-0.5 font-mono text-micro text-ink-3">
               进行中
             </span>
           )}
           {experience.confidence === "low" && (
-            <span className="bg-amber/15 rounded-full px-1.5 py-0.5 font-mono text-[9px] text-amber">
+            <span className="bg-amber/15 rounded-full px-1.5 py-0.5 font-mono text-micro text-amber-ink">
               待确认
             </span>
           )}
           {experience.source === "sample" && (
-            <span className="border-rule rounded-full border px-1.5 py-0.5 font-mono text-[9px] text-ink/35">
+            <span className="border-rule rounded-full border px-1.5 py-0.5 font-mono text-micro text-ink-4">
               示例
             </span>
           )}
@@ -104,7 +104,7 @@ export default function ExperienceCard({
           {experience.title}
         </h3>
         {experience.org && (
-          <p className="mt-0.5 text-[11px] leading-5 text-ink/50">
+          <p className="mt-0.5 text-[11px] leading-5 text-ink-3">
             {experience.org}
           </p>
         )}
@@ -113,7 +113,7 @@ export default function ExperienceCard({
           <p
             className={[
               "mt-2 text-xs leading-5",
-              summary ? "line-clamp-2 text-ink/60" : "text-ink/35",
+              summary ? "line-clamp-2 text-ink-3" : "text-ink-4",
             ].join(" ")}
           >
             {summary || "四段式待补：问题 → 方法 → 贡献 → 结果"}
@@ -125,13 +125,13 @@ export default function ExperienceCard({
             {skillPreview.map((skill) => (
               <li
                 key={skill}
-                className="bg-ink/[0.05] rounded-full px-2 py-0.5 text-[10px] text-ink/60"
+                className="bg-ink/[0.05] rounded-full px-2 py-0.5 text-micro text-ink-3"
               >
                 {skill}
               </li>
             ))}
             {hiddenSkills > 0 && (
-              <li className="px-1 py-0.5 font-mono text-[9px] text-ink/35">
+              <li className="px-1 py-0.5 font-mono text-micro text-ink-4">
                 +{hiddenSkills}
               </li>
             )}
@@ -144,24 +144,24 @@ export default function ExperienceCard({
               <div className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
                 {filledSections.map((section) => (
                   <div key={section.key}>
-                    <p className="font-mono text-[9px] tracking-[0.14em] text-ink/35">
+                    <p className="font-mono text-micro tracking-[0.14em] text-ink-4">
                       {section.label}
                     </p>
-                    <p className="mt-1 whitespace-pre-line text-xs leading-5 text-ink/70">
+                    <p className="mt-1 whitespace-pre-line text-xs leading-5 text-ink-2">
                       {experience[section.key]}
                     </p>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-xs leading-5 text-ink/40">
+              <p className="text-xs leading-5 text-ink-3">
                 四段式还没填。补齐问题、方法、贡献和结果，简历与岗位匹配才有素材。
               </p>
             )}
 
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <div>
-                <p className="font-mono text-[9px] tracking-[0.14em] text-ink/35">
+                <p className="font-mono text-micro tracking-[0.14em] text-ink-4">
                   量化数据
                 </p>
                 {experience.metrics.length > 0 ? (
@@ -171,22 +171,22 @@ export default function ExperienceCard({
                         key={`${metric.label}-${metric.value}`}
                         className="border-rule/70 flex items-baseline justify-between gap-3 border-b py-1 last:border-b-0"
                       >
-                        <dt className="text-[10px] text-ink/45">{metric.label}</dt>
-                        <dd className="font-mono text-[11px] tabular-nums text-ink/75">
+                        <dt className="text-micro text-ink-3">{metric.label}</dt>
+                        <dd className="font-mono text-[11px] tabular-nums text-ink-2">
                           {metric.value}
                         </dd>
                       </div>
                     ))}
                   </dl>
                 ) : (
-                  <p className="mt-1 text-[10px] leading-5 text-ink/35">
+                  <p className="mt-1 text-micro leading-5 text-ink-4">
                     原文未提供量化数据，不做推测。
                   </p>
                 )}
               </div>
 
               <div>
-                <p className="font-mono text-[9px] tracking-[0.14em] text-ink/35">
+                <p className="font-mono text-micro tracking-[0.14em] text-ink-4">
                   证据
                 </p>
                 {experience.evidence.length > 0 ? (
@@ -198,10 +198,10 @@ export default function ExperienceCard({
                             href={item.url}
                             target="_blank"
                             rel="noreferrer noopener"
-                            className="border-rule hover:bg-ink/[0.03] inline-flex min-h-8 items-center gap-1 rounded-md border px-2 text-[10px] text-ink/65"
+                            className="border-rule hover:bg-ink/[0.03] inline-flex min-h-8 items-center gap-1 rounded-md border px-2 text-micro text-ink-3"
                           >
                             {item.label}
-                            <span aria-hidden="true" className="text-ink/30">
+                            <span aria-hidden="true" className="text-ink-4">
                               ↗
                             </span>
                           </a>
@@ -209,7 +209,7 @@ export default function ExperienceCard({
                       ) : (
                         <li
                           key={`${item.label}-${index}`}
-                          className="border-rule inline-flex min-h-8 items-center rounded-md border px-2 text-[10px] text-ink/55"
+                          className="border-rule inline-flex min-h-8 items-center rounded-md border px-2 text-micro text-ink-3"
                         >
                           {item.label}
                         </li>
@@ -217,7 +217,7 @@ export default function ExperienceCard({
                     )}
                   </ul>
                 ) : (
-                  <p className="mt-1 text-[10px] leading-5 text-ink/35">
+                  <p className="mt-1 text-micro leading-5 text-ink-4">
                     暂无证据，可补报告、截图或链接。
                   </p>
                 )}
@@ -228,14 +228,14 @@ export default function ExperienceCard({
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 {experience.skills.length > 0 && (
                   <div>
-                    <p className="font-mono text-[9px] tracking-[0.14em] text-ink/35">
+                    <p className="font-mono text-micro tracking-[0.14em] text-ink-4">
                       技能
                     </p>
                     <ul className="mt-1.5 flex flex-wrap gap-1.5">
                       {experience.skills.map((skill) => (
                         <li
                           key={skill}
-                          className="bg-ink/[0.05] rounded-full px-2 py-0.5 text-[10px] text-ink/65"
+                          className="bg-ink/[0.05] rounded-full px-2 py-0.5 text-micro text-ink-3"
                         >
                           {skill}
                         </li>
@@ -245,14 +245,14 @@ export default function ExperienceCard({
                 )}
                 {experience.tags.length > 0 && (
                   <div>
-                    <p className="font-mono text-[9px] tracking-[0.14em] text-ink/35">
+                    <p className="font-mono text-micro tracking-[0.14em] text-ink-4">
                       标签
                     </p>
                     <ul className="mt-1.5 flex flex-wrap gap-1.5">
                       {experience.tags.map((tag) => (
                         <li
                           key={tag}
-                          className="border-rule rounded-full border px-2 py-0.5 text-[10px] text-ink/45"
+                          className="border-rule rounded-full border px-2 py-0.5 text-micro text-ink-3"
                         >
                           {tag}
                         </li>
@@ -274,7 +274,7 @@ export default function ExperienceCard({
           >
             {expanded ? "收起" : "查看四段式"}
           </button>
-          <span aria-hidden="true" className="text-ink/20">
+          <span aria-hidden="true" className="text-ink-4">
             /
           </span>
           <button type="button" onClick={onEdit} className={BTN_ACTION}>
@@ -282,19 +282,19 @@ export default function ExperienceCard({
           </button>
           {experience.confidence === "low" && (
             <>
-              <span aria-hidden="true" className="text-ink/20">
+              <span aria-hidden="true" className="text-ink-4">
                 /
               </span>
               <button
                 type="button"
                 onClick={onConfirm}
-                className="text-amber inline-flex min-h-11 items-center text-[11px] font-medium underline-offset-2 hover:underline sm:min-h-8"
+                className="text-amber-ink inline-flex min-h-11 items-center text-[11px] font-medium underline-offset-2 hover:underline sm:min-h-8"
               >
                 确认无误
               </button>
             </>
           )}
-          <span aria-hidden="true" className="text-ink/20">
+          <span aria-hidden="true" className="text-ink-4">
             /
           </span>
           {confirmingDelete ? (
@@ -326,8 +326,8 @@ export default function ExperienceCard({
           )}
           <span
             className={[
-              "ml-auto font-mono text-[9px] tabular-nums",
-              completeness === 4 ? "text-ink/30" : "text-amber/80",
+              "ml-auto font-mono text-micro tabular-nums",
+              completeness === 4 ? "text-ink-4" : "text-amber/80",
             ].join(" ")}
             title="已填写的四段式段落数"
           >

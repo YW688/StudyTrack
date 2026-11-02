@@ -102,20 +102,20 @@ export default function DataBackup({
   }
 
   const buttonClass =
-    "border-rule hover:bg-ink/[0.03] inline-flex min-h-9 items-center justify-center rounded-md border bg-surface px-2.5 text-[10px] text-ink/60 disabled:opacity-40";
+    "border-rule hover:bg-ink/[0.03] inline-flex min-h-9 items-center justify-center rounded-md border bg-surface px-2.5 text-micro text-ink-3 disabled:opacity-40";
 
   return (
     <div>
-      <p className="font-mono text-[9px] tracking-[0.2em] text-ink/30">
+      <p className="font-mono text-micro tracking-[0.2em] text-ink-4">
         本机数据
       </p>
 
       {pendingImport ? (
         <div className="border-amber/40 bg-amber/[0.05] mt-2 rounded-lg border px-3 py-2.5">
-          <p className="text-[11px] font-medium leading-5 text-ink/70">
+          <p className="text-[11px] font-medium leading-5 text-ink-2">
             确认覆盖本机数据？
           </p>
-          <p className="mt-1 text-[10px] leading-5 text-ink/50">
+          <p className="mt-1 text-micro leading-5 text-ink-3">
             备份含 {pendingImport.experiences} 条战绩、{pendingImport.ledger} 条账本记录、
             {pendingImport.notes} 条记录。导入后当前数据会被替换。
           </p>
@@ -124,14 +124,14 @@ export default function DataBackup({
               type="button"
               onClick={() => void handleImport()}
               disabled={busy === "import"}
-              className="bg-ink text-paper inline-flex min-h-9 items-center rounded-md px-3 text-[10px] disabled:opacity-50"
+              className="bg-ink text-paper inline-flex min-h-9 items-center rounded-md px-3 text-micro disabled:opacity-50"
             >
               {busy === "import" ? "导入中…" : "覆盖导入"}
             </button>
             <button
               type="button"
               onClick={() => setPendingImport(null)}
-              className="text-ink/50 inline-flex min-h-9 items-center px-2 text-[10px] underline underline-offset-2"
+              className="text-ink-3 inline-flex min-h-9 items-center px-2 text-micro underline underline-offset-2"
             >
               取消
             </button>
@@ -169,8 +169,8 @@ export default function DataBackup({
       <p
         aria-live="polite"
         className={[
-          "mt-1.5 min-h-4 text-[10px] leading-4",
-          message?.tone === "error" ? "text-red-800" : "text-ink/40",
+          "mt-1.5 min-h-4 text-micro leading-4",
+          message?.tone === "error" ? "text-red-800" : "text-ink-3",
         ].join(" ")}
       >
         {message?.text ?? ""}
@@ -179,20 +179,22 @@ export default function DataBackup({
       {hasData && (
         <div className="border-rule mt-2 border-t pt-2">
           {confirmingClear ? (
-            <div className="flex items-center gap-2 text-[10px]">
+            <div className="flex items-center gap-2 text-[12px]">
               <button
                 type="button"
                 disabled={busy === "clear"}
                 onClick={() => void handleClear()}
-                className="text-red-800 underline underline-offset-2 disabled:opacity-50"
+                className="text-red-800 inline-flex min-h-11 items-center rounded-lg px-1 underline underline-offset-4 disabled:opacity-50"
               >
                 {busy === "clear" ? "清除中…" : "确认清除"}
               </button>
-              <span className="text-ink/20">/</span>
+              <span aria-hidden="true" className="text-ink-4">
+                /
+              </span>
               <button
                 type="button"
                 onClick={() => setConfirmingClear(false)}
-                className="text-ink/45 underline underline-offset-2"
+                className="hover:bg-ink/[0.04] text-ink-3 inline-flex min-h-11 items-center rounded-lg px-1 underline underline-offset-4"
               >
                 取消
               </button>
@@ -201,7 +203,7 @@ export default function DataBackup({
             <button
               type="button"
               onClick={() => setConfirmingClear(true)}
-              className="text-[10px] text-ink/35 underline underline-offset-2 hover:text-ink/60"
+              className="hover:bg-ink/[0.04] inline-flex min-h-11 items-center rounded-lg px-1 text-[12px] text-ink-3 underline underline-offset-4 hover:text-ink"
             >
               清除本机数据
             </button>

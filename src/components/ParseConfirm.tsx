@@ -80,11 +80,11 @@ function WeeksInput({
           "h-8 w-full rounded-md border bg-surface px-2 font-mono text-[11px] outline-none",
           invalid
             ? "border-amber bg-amber/[0.04] text-ink"
-            : "border-rule focus:border-ink/40",
+            : "border-rule focus-visible:border-accent-ink focus-visible:ring-2 focus-visible:ring-accent/45",
         ].join(" ")}
       />
       {invalid && (
-        <span className="mt-0.5 block text-[10px] text-amber">
+        <span className="mt-0.5 block text-[12px] leading-4 text-amber-ink">
           周次写法无法识别，如「1-16」「1-8,10-16」「2-16双」
         </span>
       )}
@@ -231,13 +231,13 @@ export default function ParseConfirm({
       <header className="border-rule bg-paper/95 sticky top-0 z-10 border-b backdrop-blur">
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="font-mono text-[10px] tracking-[0.18em] text-ink/40">
+            <p className="font-mono text-micro tracking-[0.18em] text-ink-3">
               导入课表 · 第 2 步 / 共 3 步
             </p>
             <h1 className="mt-1 text-lg font-medium tracking-tight">
               核对解析结果
             </h1>
-            <p className="mt-1 text-xs text-ink/55">
+            <p className="mt-1 text-xs text-ink-3">
               {result.semester.name ?? "未识别学期"} · 共读取 {draft.length} 门课、
               {sessionCount} 个时段
               {result.semester.startDate
@@ -272,7 +272,7 @@ export default function ParseConfirm({
               <h2 id="raw-title" className="text-sm font-medium">
                 原始表格
               </h2>
-              <span className="font-mono text-[10px] text-ink/35">只作对照</span>
+              <span className="font-mono text-micro text-ink-4">只作对照</span>
             </div>
 
             {result.sheets.length > 1 && (
@@ -286,7 +286,7 @@ export default function ParseConfirm({
                       "rounded-md border px-2.5 py-1 text-[11px]",
                       index === sheetIndex
                         ? "border-ink/30 bg-ink/[0.06]"
-                        : "border-rule text-ink/50",
+                        : "border-rule text-ink-3",
                     ].join(" ")}
                   >
                     {item.name}
@@ -298,13 +298,13 @@ export default function ParseConfirm({
             {sheet ? (
               <RawTable sheet={sheet} />
             ) : (
-              <p className="border-rule rounded-lg border p-4 text-sm text-ink/55">
+              <p className="border-rule rounded-lg border p-4 text-sm text-ink-3">
                 原始表格不可用，请以右侧结构化结果为准。
               </p>
             )}
 
             {result.warnings.length > 0 && (
-              <ul className="border-amber/50 bg-amber/[0.06] mt-4 space-y-1 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink/70">
+              <ul className="border-amber/50 bg-amber/[0.06] mt-4 space-y-1 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink-2">
                 {result.warnings.map((warning) => (
                   <li key={warning}>{warning}</li>
                 ))}
@@ -317,7 +317,7 @@ export default function ParseConfirm({
               <h2 id="parsed-title" className="text-sm font-medium">
                 结构化结果
               </h2>
-              <span className="font-mono text-[10px] text-ink/35">
+              <span className="font-mono text-micro text-ink-4">
                 {invalidCount > 0 ? `${invalidCount} 个时段待修正` : "全部可识别"}
               </span>
             </div>
@@ -336,7 +336,7 @@ export default function ParseConfirm({
                   <div className="flex items-start gap-2">
                     <div className="min-w-0 flex-1">
                       <label className="block">
-                        <span className="mb-1 block font-mono text-[9px] tracking-[0.12em] text-ink/35">
+                        <span className="mb-1 block font-mono text-micro tracking-[0.12em] text-ink-4">
                           课程名
                         </span>
                         <input
@@ -344,12 +344,12 @@ export default function ParseConfirm({
                           onChange={(event) =>
                             updateCourse(course.id, { name: event.target.value })
                           }
-                          className="border-rule focus:border-ink/40 h-9 w-full rounded-md border bg-surface px-2 text-sm font-medium outline-none"
+                          className="border-rule focus-visible:border-accent-ink focus-visible:ring-2 focus-visible:ring-accent/45 h-9 w-full rounded-md border bg-surface px-2 text-sm font-medium outline-none"
                         />
                       </label>
                       <div className="mt-2 grid grid-cols-2 gap-2">
                         <label className="block">
-                          <span className="mb-1 block font-mono text-[9px] tracking-[0.12em] text-ink/35">
+                          <span className="mb-1 block font-mono text-micro tracking-[0.12em] text-ink-4">
                             教师
                           </span>
                           <input
@@ -359,11 +359,11 @@ export default function ParseConfirm({
                                 teacher: event.target.value,
                               })
                             }
-                            className="border-rule focus:border-ink/40 h-8 w-full rounded-md border bg-surface px-2 text-xs outline-none"
+                            className="border-rule focus-visible:border-accent-ink focus-visible:ring-2 focus-visible:ring-accent/45 h-8 w-full rounded-md border bg-surface px-2 text-xs outline-none"
                           />
                         </label>
                         <label className="block">
-                          <span className="mb-1 block font-mono text-[9px] tracking-[0.12em] text-ink/35">
+                          <span className="mb-1 block font-mono text-micro tracking-[0.12em] text-ink-4">
                             地点
                           </span>
                           <input
@@ -373,7 +373,7 @@ export default function ParseConfirm({
                                 location: event.target.value,
                               })
                             }
-                            className="border-rule focus:border-ink/40 h-8 w-full rounded-md border bg-surface px-2 text-xs outline-none"
+                            className="border-rule focus-visible:border-accent-ink focus-visible:ring-2 focus-visible:ring-accent/45 h-8 w-full rounded-md border bg-surface px-2 text-xs outline-none"
                           />
                         </label>
                       </div>
@@ -381,10 +381,10 @@ export default function ParseConfirm({
                     <div className="flex shrink-0 flex-col items-end gap-2">
                       <span
                         className={[
-                          "rounded-full px-2 py-0.5 font-mono text-[9px]",
+                          "rounded-full px-2 py-0.5 font-mono text-micro",
                           course.confidence === "low"
                             ? "bg-amber/15 text-ink"
-                            : "bg-ink/[0.06] text-ink/50",
+                            : "bg-ink/[0.06] text-ink-3",
                         ].join(" ")}
                       >
                         {course.confidence === "low" ? "待核对" : "已识别"}
@@ -392,7 +392,7 @@ export default function ParseConfirm({
                       <button
                         type="button"
                         onClick={() => removeCourse(course.id)}
-                        className="text-[11px] text-ink/40 underline underline-offset-2 hover:text-red-800"
+                        className="text-[11px] text-ink-3 underline underline-offset-2 hover:text-red-800"
                       >
                         删除整门
                       </button>
@@ -445,7 +445,7 @@ export default function ParseConfirm({
                                 className="border-rule h-8 w-full rounded-md border bg-surface px-1 text-center font-mono text-[11px] outline-none"
                               />
                             </label>
-                            <span className="pt-1.5 text-center text-[10px] text-ink/30">
+                            <span className="pt-1.5 text-center text-micro text-ink-4">
                               –
                             </span>
                             <label>
@@ -476,7 +476,7 @@ export default function ParseConfirm({
                               type="button"
                               onClick={() => removeSession(course.id, session.uid)}
                               aria-label="删除该时段"
-                              className="mt-1 flex h-6 w-6 items-center justify-center rounded text-ink/35 hover:bg-ink/[0.05] hover:text-ink/70"
+                              className="mt-1 flex h-6 w-6 items-center justify-center rounded text-ink-4 hover:bg-ink/[0.05] hover:text-ink-2"
                             >
                               ×
                             </button>
@@ -487,7 +487,7 @@ export default function ParseConfirm({
                     <button
                       type="button"
                       onClick={() => addSession(course.id)}
-                      className="mt-2 text-[11px] text-ink/45 underline underline-offset-2 hover:text-ink/75"
+                      className="mt-2 text-[11px] text-ink-3 underline underline-offset-2 hover:text-ink-2"
                     >
                       ＋ 添加时段
                     </button>
@@ -496,13 +496,13 @@ export default function ParseConfirm({
               ))}
 
               {draft.length === 0 && (
-                <p className="border-rule rounded-lg border p-4 text-sm text-ink/55">
+                <p className="border-rule rounded-lg border p-4 text-sm text-ink-3">
                   没有可导入的课程。返回后可改用手动建课表。
                 </p>
               )}
             </div>
 
-            <p className="mt-4 text-[11px] leading-5 text-ink/40">
+            <p className="mt-4 text-[11px] leading-5 text-ink-3">
               确认后写入本机 IndexedDB，刷新不丢；随时可重新导入或清除。
               标黄的课程请核对周次与节次。
             </p>
@@ -530,7 +530,7 @@ function RawTable({ sheet }: { sheet: RawSheet }) {
 
   return (
     <div className="border-rule max-h-[60vh] overflow-auto rounded-lg border bg-surface">
-      <table className="w-max min-w-full border-collapse text-[10px]">
+      <table className="w-max min-w-full border-collapse text-micro">
         <tbody>
           {sheet.rows.map((row, r) => {
             if (row.every((cell) => !cell)) return null;
@@ -549,7 +549,7 @@ function RawTable({ sheet }: { sheet: RawSheet }) {
                         "border-rule max-w-[220px] border px-1.5 py-1 align-top",
                         isHeader
                           ? "bg-ink/[0.04] text-center font-medium"
-                          : "text-ink/70",
+                          : "text-ink-2",
                       ].join(" ")}
                     >
                       <span className="line-clamp-6 whitespace-pre-wrap">

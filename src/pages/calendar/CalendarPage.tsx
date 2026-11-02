@@ -41,7 +41,7 @@ const FILTERS: { id: CalendarFilter; label: string }[] = [
 const CATEGORY_CHIP: Record<CalendarCategory, string> = {
   contest: "bg-accent/10 text-accent-ink",
   exam: "bg-amber/15 text-amber-ink",
-  campus: "bg-ink/[0.06] text-ink/60",
+  campus: "bg-ink/[0.06] text-ink-3",
 };
 
 const BTN_SECONDARY =
@@ -107,28 +107,28 @@ export default function CalendarPage({
       <div className="mx-auto w-full max-w-5xl">
         <header className="border-rule flex flex-col gap-4 border-b py-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="font-mono text-[10px] tracking-[0.2em] text-ink/40">
+            <p className="font-mono text-micro tracking-[0.2em] text-ink-3">
               工具箱 · 日历 / 04
             </p>
             <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <h1 className="font-serif text-2xl tracking-tight sm:text-3xl">
                 日历
               </h1>
-              <span className="bg-ink/[0.05] rounded-full px-2 py-0.5 font-mono text-[10px] text-ink/55">
+              <span className="bg-ink/[0.05] rounded-full px-2 py-0.5 font-mono text-micro text-ink-3">
                 {items.length} 条
               </span>
             </div>
-            <p className="mt-2 max-w-2xl text-xs leading-5 text-ink/55">
+            <p className="mt-2 max-w-2xl text-xs leading-5 text-ink-3">
               竞赛、考试报名、校内节点。只写官方已公布的时间；未公布就留空，不猜日期。
             </p>
-            <p className="mt-1 font-mono text-[10px] leading-5 text-ink/35">
+            <p className="mt-1 font-mono text-micro leading-5 text-ink-4">
               {updatedAt
                 ? `更新于 ${formatCalendarDate(updatedAt)}`
                 : "更新日期待补"}{" "}
               · 官方 {officialCount} 条 · 示例 {sampleCount} 条
             </p>
             {calendarChecks.length > 0 && (
-              <p className="mt-1 font-mono text-[10px] leading-5 text-ink/35">
+              <p className="mt-1 font-mono text-micro leading-5 text-ink-4">
                 来源核验：{reachableCount}/{calendarChecks.length} 可达 · 正文读取{" "}
                 {fetchedCount} 条 · 日期匹配 {dateMatchedCount} 条
                 {SOURCE_CHECKED_AT
@@ -174,14 +174,14 @@ export default function CalendarPage({
                   "inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-xs transition-colors",
                   selected
                     ? "bg-ink text-paper"
-                    : "border-rule text-ink/55 hover:bg-ink/[0.03] border",
+                    : "border-rule text-ink-3 hover:bg-ink/[0.03] border",
                 ].join(" ")}
               >
                 {entry.label}
                 <span
                   className={[
-                    "font-mono text-[9px] tabular-nums",
-                    selected ? "text-paper/55" : "text-ink/30",
+                    "font-mono text-micro tabular-nums",
+                    selected ? "text-paper/55" : "text-ink-4",
                   ].join(" ")}
                 >
                   {count}
@@ -194,7 +194,7 @@ export default function CalendarPage({
         {issue && (
           <p
             role="alert"
-            className="border-amber/50 bg-amber/[0.06] mt-4 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink/75"
+            className="border-amber/50 bg-amber/[0.06] mt-4 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink-2"
           >
             {issue}
           </p>
@@ -202,8 +202,8 @@ export default function CalendarPage({
 
         {items.length === 0 ? (
           <div className="border-rule mt-6 rounded-xl border bg-surface px-5 py-6">
-            <p className="text-sm text-ink/60">日历数据还没读进来。</p>
-            <p className="mt-1 text-[11px] leading-5 text-ink/40">
+            <p className="text-sm text-ink-3">日历数据还没读进来。</p>
+            <p className="mt-1 text-[11px] leading-5 text-ink-3">
               检查 data/calendar.json 的格式，或回到工具箱重新生成示例。
             </p>
           </div>
@@ -218,7 +218,7 @@ export default function CalendarPage({
                   >
                     接下来
                   </h2>
-                  <span className="font-mono text-[9px] text-ink/30">
+                  <span className="font-mono text-micro text-ink-4">
                     {upcoming.length} 条
                   </span>
                 </div>
@@ -227,7 +227,7 @@ export default function CalendarPage({
                     <div key={group.key}>
                       <p
                         data-calendar-month={group.key}
-                        className="font-mono text-[10px] tracking-[0.12em] text-ink/35"
+                        className="font-mono text-micro tracking-[0.12em] text-ink-4"
                       >
                         {group.key}
                       </p>
@@ -242,10 +242,10 @@ export default function CalendarPage({
               </section>
             ) : (
               <div className="border-rule mt-5 rounded-xl border bg-surface px-5 py-5">
-                <p className="text-sm text-ink/55">
+                <p className="text-sm text-ink-3">
                   近期没有已公布日期的条目。
                 </p>
-                <p className="mt-1 text-[11px] leading-5 text-ink/40">
+                <p className="mt-1 text-[11px] leading-5 text-ink-3">
                   日期未定的条目在下面，未公布的不猜。
                 </p>
               </div>
@@ -257,7 +257,7 @@ export default function CalendarPage({
                   <h2 id="calendar-tbd" className="text-sm font-medium">
                     日期待定
                   </h2>
-                  <span className="font-mono text-[9px] text-ink/30">
+                  <span className="font-mono text-micro text-ink-4">
                     {tbd.length} 条
                   </span>
                 </div>
@@ -271,12 +271,12 @@ export default function CalendarPage({
 
             {past.length > 0 && (
               <details className="border-rule group mt-8 rounded-xl border bg-surface">
-                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 text-xs text-ink/50 [&::-webkit-details-marker]:hidden sm:px-5">
+                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 text-xs text-ink-3 [&::-webkit-details-marker]:hidden sm:px-5">
                   已结束 · {past.length} 条
-                  <span className="font-mono text-[9px] text-ink/30 group-open:hidden">
+                  <span className="font-mono text-micro text-ink-4 group-open:hidden">
                     展开
                   </span>
-                  <span className="hidden font-mono text-[9px] text-ink/30 group-open:inline">
+                  <span className="hidden font-mono text-micro text-ink-4 group-open:inline">
                     收起
                   </span>
                 </summary>
@@ -292,17 +292,17 @@ export default function CalendarPage({
 
         {calendarChecks.length > 0 && (
           <details className="border-rule group mt-8 rounded-xl border bg-surface">
-            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 text-xs text-ink/50 [&::-webkit-details-marker]:hidden sm:px-5">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 text-xs text-ink-3 [&::-webkit-details-marker]:hidden sm:px-5">
               来源核验明细 · {calendarChecks.length} 条
-              <span className="font-mono text-[9px] text-ink/30 group-open:hidden">
+              <span className="font-mono text-micro text-ink-4 group-open:hidden">
                 展开
               </span>
-              <span className="hidden font-mono text-[9px] text-ink/30 group-open:inline">
+              <span className="hidden font-mono text-micro text-ink-4 group-open:inline">
                 收起
               </span>
             </summary>
             <div className="border-rule border-t px-4 py-3 sm:px-5">
-              <p className="text-[10px] leading-5 text-ink/40">
+              <p className="text-micro leading-5 text-ink-3">
                 {SOURCE_CHECK_POLICY}
               </p>
               <ul className="mt-3 space-y-3">
@@ -312,34 +312,34 @@ export default function CalendarPage({
                     className="border-rule border-t pt-3 first:border-t-0 first:pt-0"
                   >
                     <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                      <span className="min-w-0 text-[11px] leading-5 font-medium text-ink/65">
+                      <span className="min-w-0 text-[11px] leading-5 font-medium text-ink-3">
                         {check.label}
                       </span>
                       <SourceCheckBadge check={check} compact />
-                      <span className="font-mono text-[9px] text-ink/30">
+                      <span className="font-mono text-micro text-ink-4">
                         {dayjs(check.checkedAt).format("M月D日 HH:mm")}
                       </span>
                       <a
                         href={check.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex min-h-9 items-center text-[10px] text-ink/45 underline underline-offset-2 hover:text-ink"
+                        className="inline-flex min-h-9 items-center text-micro text-ink-3 underline underline-offset-2 hover:text-ink"
                       >
                         来源 ↗
                       </a>
                     </div>
                     {check.title && (
-                      <p className="mt-1 text-[10px] leading-5 text-ink/40">
+                      <p className="mt-1 text-micro leading-5 text-ink-3">
                         页面标题：{check.title}
                       </p>
                     )}
                     {check.excerpt && (
-                      <p className="mt-1 text-[10px] leading-5 text-ink/45">
+                      <p className="mt-1 text-micro leading-5 text-ink-3">
                         「{check.excerpt}」
                       </p>
                     )}
                     {check.note && (
-                      <p className="mt-0.5 text-[9px] leading-4 text-ink/35">
+                      <p className="mt-0.5 text-micro leading-4 text-ink-4">
                         {check.note}
                       </p>
                     )}
@@ -351,10 +351,10 @@ export default function CalendarPage({
         )}
 
         <div className="border-rule mt-8 border-t pt-4">
-          <p className="text-[11px] leading-5 text-ink/40">
+          <p className="text-[11px] leading-5 text-ink-3">
             日期以官方公告为准；未公布日期的条目只保留名称与来源，不写推测日期。
           </p>
-          <p className="mt-1 text-[11px] leading-5 text-ink/40">
+          <p className="mt-1 text-[11px] leading-5 text-ink-3">
             来源核验在构建期完成：只检查公开页面可达性，正文只保留标题与短片段；不在浏览器运行时抓取、不代报名。
           </p>
         </div>
@@ -398,7 +398,7 @@ function CalendarRow({
           <div className="flex flex-wrap items-center gap-1.5">
             <span
               className={[
-                "rounded-full px-1.5 py-0.5 font-mono text-[9px]",
+                "rounded-full px-1.5 py-0.5 font-mono text-micro",
                 CATEGORY_CHIP[item.category],
               ].join(" ")}
             >
@@ -406,16 +406,16 @@ function CalendarRow({
             </span>
             <span
               className={[
-                "rounded-full px-1.5 py-0.5 font-mono text-[9px]",
+                "rounded-full px-1.5 py-0.5 font-mono text-micro",
                 official
-                  ? "bg-ink/[0.05] text-ink/55"
-                  : "bg-ink/[0.04] text-ink/40",
+                  ? "bg-ink/[0.05] text-ink-3"
+                  : "bg-ink/[0.04] text-ink-3",
               ].join(" ")}
             >
               {official ? "官方" : "示例"}
             </span>
             {today && (
-              <span className="bg-accent/15 text-accent-ink rounded-full px-1.5 py-0.5 font-mono text-[9px]">
+              <span className="bg-accent/15 text-accent-ink rounded-full px-1.5 py-0.5 font-mono text-micro">
                 今天
               </span>
             )}
@@ -423,9 +423,9 @@ function CalendarRow({
           <p className="mt-1.5 text-sm leading-5 font-medium break-words">
             {item.title}
           </p>
-          <p className="mt-0.5 text-[10px] leading-5 text-ink/45">{meta}</p>
+          <p className="mt-0.5 text-micro leading-5 text-ink-3">{meta}</p>
           {item.note && (
-            <p className="mt-1 text-[11px] leading-5 text-ink/50">
+            <p className="mt-1 text-[11px] leading-5 text-ink-3">
               {item.note}
             </p>
           )}
@@ -435,7 +435,7 @@ function CalendarRow({
           {schedule.map((line) => (
             <p
               key={line}
-              className="font-mono text-[10px] leading-5 tabular-nums text-ink/55"
+              className="font-mono text-micro leading-5 tabular-nums text-ink-3"
             >
               {line}
             </p>
@@ -446,18 +446,18 @@ function CalendarRow({
                 href={item.sourceUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex min-h-9 items-center text-[10px] text-ink/45 underline underline-offset-2 hover:text-ink"
+                className="inline-flex min-h-9 items-center text-micro text-ink-3 underline underline-offset-2 hover:text-ink"
               >
                 来源 ↗
               </a>
             ) : (
-              <span className="text-[10px] text-ink/30">
+              <span className="text-micro text-ink-4">
                 以本校通知为准
               </span>
             )}
             {official && <SourceCheckBadge check={sourceCheck} compact />}
             {official && item.verifiedAt && (
-              <span className="font-mono text-[9px] text-ink/30">
+              <span className="font-mono text-micro text-ink-4">
                 核对于 {formatCalendarDate(item.verifiedAt)}
               </span>
             )}

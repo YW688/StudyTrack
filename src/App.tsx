@@ -6,6 +6,11 @@ import {
   useRef,
   useState,
 } from "react";
+import dayjs from "dayjs";
+import { DAY_LABELS } from "./types";
+import { currentWeekOf } from "./parse/schedule";
+import { experienceKindLabel } from "./lib/experience";
+import { streakInfo, weekGreenDayCount } from "./lib/ledger";
 import type {
   AgentMessage,
   Assignment,
@@ -19,11 +24,13 @@ import type {
   ResumeData,
   TimetableData,
 } from "./types";
-import { RESUME_GRADES } from "./types";
+import { GOAL_LABELS, RESUME_GRADES } from "./types";
 import AppShell from "./components/AppShell";
 import EntryRitual from "./components/EntryRitual";
+import WindowLayer from "./components/WindowLayer";
 import LandingPage from "./pages/landing/LandingPage";
 import TodayPage from "./pages/today/TodayPage";
+import type { DockMode } from "./components/AgentPanel";
 
 const AgentPanel = lazy(() => import("./components/AgentPanel"));
 const TimetablePage = lazy(() => import("./pages/timetable/TimetablePage"));
@@ -109,6 +116,34 @@ function navIdForRoute(route: Route): SurfaceId {
 }
 
 const DEMO_KEY = "studytrack:demo";
+const DOCK_KEY = "studytrack:dock";
+
+type PageWindowId =
+  | "timetable"
+  | "assignments"
+  | "experiences"
+  | "opportunities"
+  | "resume"
+  | "calendar";
+
+function readDockMode(): DockMode {
+  try {
+    const stored = window.localStorage.getItem(DOCK_KEY);
+    if (stored === "collapsed" || stored === "docked" || stored === "floating") {
+      return stored;
+    }
+  } catch {
+    // UI-only preference; storage may be disabled.
+  }
+  try {
+    // 停靠后主栏仍需 ≥900px，否则 1440 屏比 1280 屏更窄
+    return window.matchMedia("(min-width: 1680px)").matches
+      ? "docked"
+      : "collapsed";
+  } catch {
+    return "collapsed";
+  }
+}
 
 function readDemoMode(): boolean {
   try {
@@ -163,6 +198,8 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState<ThemeId>(readStoredTheme);
   const [demoMode, setDemoMode] = useState(readDemoMode);
+  const [dockMode, setDockMode] = useState<DockMode>(readDockMode);
+  const [openWindows, setOpenWindows] = useState<PageWindowId[]>([]);
   const [ritual, setRitual] = useState<{ theme: ThemeId } | null>(null);
   const [ritualReady, setRitualReady] = useState(false);
   const resumeWriteRef = useRef<Promise<void>>(Promise.resolve());
@@ -244,7 +281,32 @@ export default function App() {
     }
     setRoute(next);
     setHash(nextHash);
+    setOpenWindows((prev) => prev.filter((id) => id !== next));
     window.scrollTo({ top: 0 });
+  }, []);
+
+  const handleDockModeChange = useCallback((mode: DockMode) => {
+    setDockMode(mode);
+    try {
+      window.localStorage.setItem(DOCK_KEY, mode);
+    } catch {
+      // UI-only preference; storage may be disabled.
+    }
+  }, []);
+
+  const openWindow = useCallback(
+    (id: PageWindowId) => {
+      if (window.innerWidth < 640) {
+        navigate(id);
+        return;
+      }
+      setOpenWindows((prev) => (prev.includes(id) ? prev : [...prev, id]));
+    },
+    [navigate],
+  );
+
+  const closeWindow = useCallback((id: PageWindowId) => {
+    setOpenWindows((prev) => prev.filter((item) => item !== id));
   }, []);
 
   const handleSaveResume = useCallback((next: ResumeData) => {
@@ -318,7 +380,7 @@ export default function App() {
   }
 
   async function handleStart(mode: "fresh" | "demo") {
-    const playRitual = mode === "demo" && shouldPlayEntryRitual();
+    const playRitual = shouldPlayEntryRitual();
     if (playRitual) {
       setRitualReady(false);
       setRitual({ theme });
@@ -704,11 +766,47 @@ export default function App() {
   const active = navIdForRoute(route);
   const assignmentCount =
     assignments?.items.filter((item) => item.status !== "done").length ?? 0;
+  const now = dayjs();
+  const weekNumber = timetable
+    ? currentWeekOf(
+        timetable.semester.startDate,
+        timetable.semester.totalWeeks,
+        now,
+      )
+    : null;
+  const statusWeek = `${
+    weekNumber !== null ? `第 ${weekNumber} 周 · ` : ""
+  }${DAY_LABELS[(now.day() + 6) % 7]}`;
+  const recentExperiences = [...(experiences?.experiences ?? [])]
+    .sort((a, b) =>
+      (b.updatedAt ?? b.createdAt).localeCompare(a.updatedAt ?? a.createdAt),
+    )
+    .slice(0, 3)
+    .map((item) => ({
+      id: item.id,
+      title: item.title,
+      meta: [
+        experienceKindLabel(item.kind, item.kindLabel),
+        item.start ? item.start.slice(0, 7) : null,
+      ]
+        .filter(Boolean)
+        .join(" · "),
+    }));
+  const sidebarScope = profile
+    ? `${profile.grade || "年级未填"} · ${
+        profile.major || "专业未填"
+      } · ${GOAL_LABELS[profile.goal]}`
+    : "未建档 · 去今日建档";
+  const weekLine = `本周 ${weekGreenDayCount(
+    ledger,
+    now,
+  )} 天有结果 · 连续 ${streakInfo(ledger, now).days} 天`;
 
   return (
     <>
       <AppShell
         active={active}
+        routeKey={route}
         theme={theme}
         onThemeChange={setTheme}
         hasData={
@@ -720,14 +818,45 @@ export default function App() {
           notes.length > 0 ||
           resumeHasContent(resume)
         }
-        assignmentCount={assignmentCount}
+        counts={{
+          today: assignmentCount,
+          experiences: experiences?.experiences.length ?? 0,
+          opportunities: 0,
+          toolbox: 0,
+        }}
         demoMode={demoMode}
-        onExitDemo={() => void handleExitDemo()}
         onClear={handleClear}
         onExport={handleExport}
         onImport={handleImport}
         onHome={() => navigate("landing")}
         onNavigate={(id) => navigate(id)}
+        onOpenWindow={openWindow}
+        onOpenAgent={() => handleDockModeChange("docked")}
+        scope={sidebarScope}
+        recents={recentExperiences}
+        weekLine={weekLine}
+        week={statusWeek}
+        dockWidth={dockMode === "docked" ? 360 : dockMode === "collapsed" ? 48 : 0}
+        dock={
+          <Suspense fallback={null}>
+            <AgentPanel
+              profile={profile}
+              experiences={experiences?.experiences ?? []}
+              ledger={ledger}
+              notes={notes}
+              resume={resume}
+              messages={agentMessages}
+              raised={route === "resume"}
+              dockMode={dockMode}
+              onDockModeChange={handleDockModeChange}
+              onMessagesChange={handleAgentMessages}
+              onSaveProfile={handleAgentSaveProfile}
+              onSaveExperience={handleAgentSaveExperience}
+              onAddNote={handleAddNote}
+              onNavigate={(id) => navigate(id)}
+            />
+          </Suspense>
+        }
       >
         <Suspense fallback={<PageLoading />}>
           {loading ? (
@@ -745,7 +874,8 @@ export default function App() {
             onAddNote={handleAddNote}
             onUseSample={() => handleUseSample()}
             demoMode={demoMode}
-            onNavigate={(id) => navigate(id)}
+            onOpenWindow={openWindow}
+            onExitDemo={() => void handleExitDemo()}
           />
         ) : route === "assignments" ? (
           <AssignmentsPage data={assignments} onSave={handleSaveAssignments} />
@@ -771,7 +901,7 @@ export default function App() {
           <ToolboxPage
             calendarCount={CALENDAR_ITEMS.length}
             calendarUpdatedAt={CALENDAR_UPDATED_AT}
-            onNavigate={(id) => navigate(id)}
+            onNavigate={(id) => openWindow(id)}
           />
         ) : route === "calendar" ? (
           <CalendarPage
@@ -789,22 +919,169 @@ export default function App() {
           )}
         </Suspense>
       </AppShell>
-      <Suspense fallback={null}>
-        <AgentPanel
-          profile={profile}
-          experiences={experiences?.experiences ?? []}
-          ledger={ledger}
-          notes={notes}
-          resume={resume}
-          messages={agentMessages}
-          raised={route === "resume"}
-          onMessagesChange={handleAgentMessages}
-          onSaveProfile={handleAgentSaveProfile}
-          onSaveExperience={handleAgentSaveExperience}
-          onAddNote={handleAddNote}
-          onNavigate={(id) => navigate(id)}
-        />
-      </Suspense>
+
+      {openWindows.includes("timetable") && (
+        <Suspense
+          fallback={
+            <WindowLoading title="课表" onClose={() => closeWindow("timetable")} />
+          }
+        >
+          <WindowLayer
+            id="timetable"
+            title="课表"
+            subtitle="工具箱 · 导入与周视图"
+            width={880}
+            height={760}
+            onClose={() => closeWindow("timetable")}
+          >
+            <TimetablePage
+              data={timetable}
+              onSave={handleSaveTimetable}
+              onUseSample={handleUseSampleTimetable}
+            />
+          </WindowLayer>
+        </Suspense>
+      )}
+
+      {openWindows.includes("assignments") && (
+        <Suspense
+          fallback={
+            <WindowLoading
+              title="作业"
+              onClose={() => closeWindow("assignments")}
+            />
+          }
+        >
+          <WindowLayer
+            id="assignments"
+            title="作业"
+            subtitle="粘贴、截图或手动添加"
+            width={640}
+            height={720}
+            onClose={() => closeWindow("assignments")}
+          >
+            <AssignmentsPage
+              data={assignments}
+              onSave={handleSaveAssignments}
+            />
+          </WindowLayer>
+        </Suspense>
+      )}
+
+      {openWindows.includes("experiences") && (
+        <Suspense
+          fallback={
+            <WindowLoading
+              title="账本"
+              onClose={() => closeWindow("experiences")}
+            />
+          }
+        >
+          <WindowLayer
+            id="experiences"
+            title="账本"
+            subtitle="战绩 · 证据 · 时间线"
+            width={1080}
+            height={800}
+            onClose={() => closeWindow("experiences")}
+          >
+            <ExperiencesPage
+              data={experiences}
+              onSave={handleSaveExperiences}
+            />
+          </WindowLayer>
+        </Suspense>
+      )}
+
+      {openWindows.includes("opportunities") && (
+        <Suspense
+          fallback={
+            <WindowLoading
+              title="悬赏"
+              onClose={() => closeWindow("opportunities")}
+            />
+          }
+        >
+          <WindowLayer
+            id="opportunities"
+            title="悬赏"
+            subtitle="岗位入口 · 匹配与缺口"
+            width={1120}
+            height={820}
+            onClose={() => closeWindow("opportunities")}
+          >
+            <OpportunitiesPage
+              experiences={experiences}
+              resume={resume}
+              onNavigateResume={() => openWindow("resume")}
+              onNavigateExperiences={() => openWindow("experiences")}
+              onUseSample={async () => {
+                await seedDemoData();
+              }}
+            />
+          </WindowLayer>
+        </Suspense>
+      )}
+
+      {openWindows.includes("resume") && (
+        <Suspense
+          fallback={
+            <WindowLoading
+              title="简历"
+              onClose={() => closeWindow("resume")}
+            />
+          }
+        >
+          <WindowLayer
+            id="resume"
+            title="简历"
+            subtitle="勾选经历 · A4 打印"
+            width={1180}
+            height={860}
+            printable
+            onClose={() => closeWindow("resume")}
+          >
+            <ResumePage
+              experiences={experiences}
+              resume={resume}
+              onSaveResume={handleSaveResume}
+              onNavigateExperiences={() => openWindow("experiences")}
+              onNavigateOpportunities={() => openWindow("opportunities")}
+            />
+          </WindowLayer>
+        </Suspense>
+      )}
+
+      {openWindows.includes("calendar") && (
+        <Suspense
+          fallback={
+            <WindowLoading
+              title="日历"
+              onClose={() => closeWindow("calendar")}
+            />
+          }
+        >
+          <WindowLayer
+            id="calendar"
+            title="日历"
+            subtitle="竞赛 · 考试 · 校内节点"
+            width={960}
+            height={780}
+            onClose={() => closeWindow("calendar")}
+          >
+            <CalendarPage
+              items={CALENDAR_ITEMS}
+              updatedAt={CALENDAR_UPDATED_AT}
+              issue={CALENDAR_ISSUE}
+              onNavigate={(id) => {
+                closeWindow("calendar");
+                navigate(id);
+              }}
+            />
+          </WindowLayer>
+        </Suspense>
+      )}
+
       {ritualOverlay}
     </>
   );
@@ -814,17 +1091,46 @@ function PageLoading() {
   return (
     <div className="px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto w-full max-w-3xl">
-        <p className="font-mono text-[10px] tracking-[0.2em] text-ink/40">
+        <p className="font-mono text-micro tracking-[0.2em] text-ink-3">
           正在打开
         </p>
         <p
           role="status"
-          className="mt-3 flex items-center gap-2 text-sm text-ink/55"
+          className="mt-3 flex items-center gap-2 text-sm text-ink-3"
         >
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber" />
           正在载入这一页…
         </p>
       </div>
+    </div>
+  );
+}
+
+function WindowLoading({
+  title,
+  onClose,
+}: {
+  title: string;
+  onClose: () => void;
+}) {
+  return (
+    <div
+      role="dialog"
+      aria-label={title}
+      className="no-print border-rule bg-surface fixed top-16 left-1/2 z-[70] w-[min(92vw,560px)] -translate-x-1/2 rounded-xl border p-5 shadow-2xl"
+    >
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm font-medium">{title}</p>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label={`关闭${title}`}
+          className="hover:bg-ink/[0.05] inline-flex h-11 w-11 items-center justify-center rounded-lg text-lg text-ink-3"
+        >
+          ×
+        </button>
+      </div>
+      <p className="mt-2 font-mono text-micro text-ink-3">正在打开…</p>
     </div>
   );
 }
@@ -843,7 +1149,7 @@ function LoadingState({ module }: { module: ModuleRoute }) {
   return (
     <div className="px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
       <div className="mx-auto w-full max-w-3xl">
-        <p className="font-mono text-[10px] tracking-[0.2em] text-ink/40">
+        <p className="font-mono text-micro tracking-[0.2em] text-ink-3">
           {meta.code}
         </p>
         <h1 className="mt-2 font-serif text-2xl tracking-tight sm:text-3xl">
@@ -851,7 +1157,7 @@ function LoadingState({ module }: { module: ModuleRoute }) {
         </h1>
         <p
           role="status"
-          className="mt-3 flex items-center gap-2 text-sm text-ink/55"
+          className="mt-3 flex items-center gap-2 text-sm text-ink-3"
         >
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber" />
           正在读取本机数据…

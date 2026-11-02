@@ -34,9 +34,9 @@ interface ExperiencePoolProps {
 }
 
 const BTN_LINK =
-  "hover:text-ink inline-flex min-h-11 items-center text-[11px] text-ink/50 underline-offset-2 hover:underline sm:min-h-8";
+  "hover:text-ink inline-flex min-h-11 items-center text-[11px] text-ink-3 underline-offset-2 hover:underline sm:min-h-8";
 const BTN_SMALL =
-  "border-rule hover:bg-ink/[0.03] inline-flex min-h-9 items-center justify-center rounded-md border bg-surface px-2.5 text-[10px] text-ink/60 disabled:cursor-not-allowed disabled:opacity-40";
+  "border-rule hover:bg-ink/[0.03] inline-flex min-h-9 items-center justify-center rounded-md border bg-surface px-2.5 text-micro text-ink-3 disabled:cursor-not-allowed disabled:opacity-40";
 
 export default function ExperiencePool({
   experiences,
@@ -95,13 +95,13 @@ export default function ExperiencePool({
   if (experiences.length === 0) {
     return (
       <section className="border-rule rounded-xl border bg-surface p-5">
-        <p className="font-mono text-[10px] tracking-[0.16em] text-ink/40">
+        <p className="font-mono text-micro tracking-[0.16em] text-ink-3">
           经历池 · 空
         </p>
         <h2 className="mt-2 text-base font-medium tracking-tight">
           你还没有记录经历
         </h2>
-        <p className="mt-2 text-sm leading-6 text-ink/60">
+        <p className="mt-2 text-sm leading-6 text-ink-3">
           去「经历」页记一条，简历会自动更新。课程设计、比赛、实习、作品都可以，
           没有数字就留空。
         </p>
@@ -120,7 +120,7 @@ export default function ExperiencePool({
     <section aria-labelledby="resume-pool-title">
       <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
-          <p className="font-mono text-[10px] tracking-[0.16em] text-ink/40">
+          <p className="font-mono text-micro tracking-[0.16em] text-ink-3">
             经历池 · {experiences.length} 条
           </p>
           <h2
@@ -196,17 +196,17 @@ export default function ExperiencePool({
               aria-pressed={active}
               onClick={() => onToggleKind(kind)}
               className={[
-                "inline-flex min-h-9 items-center gap-1 rounded-full border px-2.5 text-[10px] transition-colors",
+                "inline-flex min-h-9 items-center gap-1 rounded-full border px-2.5 text-micro transition-colors",
                 active
                   ? "border-ink bg-ink text-paper"
-                  : "border-rule bg-surface text-ink/50 hover:bg-ink/[0.03]",
+                  : "border-rule bg-surface text-ink-3 hover:bg-ink/[0.03]",
               ].join(" ")}
             >
               {EXPERIENCE_KIND_META[kind].label}
               <span
                 className={[
                   "font-mono tabular-nums",
-                  active ? "text-paper/55" : "text-ink/30",
+                  active ? "text-paper/55" : "text-ink-4",
                 ].join(" ")}
               >
                 {kindCounts[kind]}
@@ -218,11 +218,11 @@ export default function ExperiencePool({
 
       {filtered.length === 0 ? (
         <div className="border-rule mt-3 rounded-xl border border-dashed px-4 py-6 text-center">
-          <p className="text-xs text-ink/45">当前筛选下没有经历。</p>
+          <p className="text-xs text-ink-3">当前筛选下没有经历。</p>
           <button
             type="button"
             onClick={onResetFilters}
-            className="text-ink/60 mt-1 inline-flex min-h-11 items-center text-xs underline underline-offset-2 hover:text-ink"
+            className="text-ink-3 mt-1 inline-flex min-h-11 items-center text-xs underline underline-offset-2 hover:text-ink"
           >
             清除筛选
           </button>
@@ -271,7 +271,7 @@ export default function ExperiencePool({
                     <span className="min-w-0 flex-1">
                       <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
                         <span
-                          className="rounded-full px-2 py-0.5 font-mono text-[9px]"
+                          className="rounded-full px-2 py-0.5 font-mono text-micro"
                           style={{
                             color: meta.color,
                             backgroundColor: meta.pale,
@@ -279,16 +279,16 @@ export default function ExperiencePool({
                         >
                           {experienceKindLabel(item.kind, item.kindLabel)}
                         </span>
-                        <span className="font-mono text-[10px] tabular-nums text-ink/45">
+                        <span className="font-mono text-micro tabular-nums text-ink-3">
                           {range}
                         </span>
                         {low && (
-                          <span className="bg-amber/15 rounded-full px-1.5 py-0.5 font-mono text-[9px] text-amber">
+                          <span className="bg-amber/15 rounded-full px-1.5 py-0.5 font-mono text-micro text-amber-ink">
                             待确认
                           </span>
                         )}
                         {selected && (
-                          <span className="bg-ink/[0.06] rounded-full px-1.5 py-0.5 font-mono text-[9px] tabular-nums text-ink/55">
+                          <span className="bg-ink/[0.06] rounded-full px-1.5 py-0.5 font-mono text-micro tabular-nums text-ink-3">
                             简历第 {order} 条
                           </span>
                         )}
@@ -298,12 +298,12 @@ export default function ExperiencePool({
                         {item.title}
                       </span>
                       {item.org && (
-                        <span className="mt-0.5 block text-[10px] leading-4 text-ink/45">
+                        <span className="mt-0.5 block text-micro leading-4 text-ink-3">
                           {item.org}
                         </span>
                       )}
                       {!selected && summary && (
-                        <span className="mt-1 line-clamp-2 block text-[11px] leading-5 text-ink/50">
+                        <span className="mt-1 line-clamp-2 block text-[11px] leading-5 text-ink-3">
                           {summary}
                         </span>
                       )}
@@ -312,13 +312,13 @@ export default function ExperiencePool({
                           {skills.map((skill) => (
                             <span
                               key={skill}
-                              className="bg-ink/[0.05] rounded-full px-1.5 py-0.5 text-[9px] text-ink/55"
+                              className="bg-ink/[0.05] rounded-full px-1.5 py-0.5 text-micro text-ink-3"
                             >
                               {skill}
                             </span>
                           ))}
                           {hiddenSkills > 0 && (
-                            <span className="px-1 py-0.5 font-mono text-[9px] text-ink/30">
+                            <span className="px-1 py-0.5 font-mono text-micro text-ink-4">
                               +{hiddenSkills}
                             </span>
                           )}
@@ -332,7 +332,7 @@ export default function ExperiencePool({
                       role="alert"
                       className="border-amber/40 bg-amber/[0.06] mt-2 rounded-lg border-l-2 px-3 py-2"
                     >
-                      <p className="text-[11px] leading-5 text-ink/70">
+                      <p className="text-[11px] leading-5 text-ink-2">
                         这条经历标为「待确认」。加入简历前，建议先去经历页核对原文。
                       </p>
                       <div className="mt-1 flex flex-wrap items-center gap-3">
@@ -342,7 +342,7 @@ export default function ExperiencePool({
                             onToggleSelect(item.id);
                             setConfirmingLowId(null);
                           }}
-                          className="text-amber inline-flex min-h-11 items-center text-[11px] font-medium underline underline-offset-2 sm:min-h-8"
+                          className="text-amber-ink inline-flex min-h-11 items-center text-[11px] font-medium underline underline-offset-2 sm:min-h-8"
                         >
                           仍要加入
                         </button>
@@ -360,7 +360,7 @@ export default function ExperiencePool({
                   {selected && (
                     <div className="border-rule mt-2.5 border-t pt-2">
                       <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                        <span className="font-mono text-[9px] tracking-[0.1em] text-ink/35">
+                        <span className="font-mono text-micro tracking-[0.1em] text-ink-4">
                           排序
                         </span>
                         <button
@@ -381,10 +381,10 @@ export default function ExperiencePool({
                         >
                           ↓ 下移
                         </button>
-                        <span aria-hidden="true" className="text-ink/20">
+                        <span aria-hidden="true" className="text-ink-4">
                           /
                         </span>
-                        <label className="flex min-h-9 cursor-pointer items-center gap-1.5 text-[10px] text-ink/60">
+                        <label className="flex min-h-9 cursor-pointer items-center gap-1.5 text-micro text-ink-3">
                           <input
                             type="checkbox"
                             checked={concise}
@@ -400,7 +400,7 @@ export default function ExperiencePool({
                           type="button"
                           onClick={() => onGenerate(item.id)}
                           disabled={generating}
-                          className="border-rule hover:bg-ink/[0.03] inline-flex min-h-9 items-center justify-center rounded-md border bg-surface px-2.5 text-[10px] font-medium text-ink/70 disabled:cursor-wait disabled:opacity-50"
+                          className="border-rule hover:bg-ink/[0.03] inline-flex min-h-9 items-center justify-center rounded-md border bg-surface px-2.5 text-micro font-medium text-ink-2 disabled:cursor-wait disabled:opacity-50"
                         >
                           {generating
                             ? "生成中…"
@@ -411,12 +411,12 @@ export default function ExperiencePool({
                         {cache ? (
                           <span
                             className={[
-                              "rounded-full px-1.5 py-0.5 font-mono text-[9px]",
+                              "rounded-full px-1.5 py-0.5 font-mono text-micro",
                               cache.source === "ai"
                                 ? "bg-[#E7EDF6] text-[#1C3355]"
                                 : cache.status === "fallback"
-                                  ? "bg-amber/15 text-amber"
-                                  : "bg-ink/[0.06] text-ink/55",
+                                  ? "bg-amber/15 text-amber-ink"
+                                  : "bg-ink/[0.06] text-ink-3",
                             ].join(" ")}
                           >
                             {cache.source === "ai"
@@ -426,19 +426,19 @@ export default function ExperiencePool({
                                 : "本地草稿"}
                           </span>
                         ) : (
-                          <span className="font-mono text-[9px] text-ink/30">
+                          <span className="font-mono text-micro text-ink-4">
                             当前显示原文
                           </span>
                         )}
                       </div>
 
                       {cache && (
-                        <p className="mt-1 line-clamp-2 text-[10px] leading-4 text-ink/40">
+                        <p className="mt-1 line-clamp-2 text-micro leading-4 text-ink-3">
                           {bulletCacheNote(cache)}
                         </p>
                       )}
                       {!hasContent && (
-                        <p className="mt-1 text-[10px] leading-4 text-amber">
+                        <p className="mt-1 text-micro leading-4 text-amber-ink">
                           四段式为空，请先去经历页补充。
                           <button
                             type="button"
@@ -450,7 +450,7 @@ export default function ExperiencePool({
                         </p>
                       )}
                       {low && (
-                        <p className="mt-1 text-[10px] leading-4 text-amber">
+                        <p className="mt-1 text-micro leading-4 text-amber-ink">
                           待确认经历已加入，导出前请核对原文。
                         </p>
                       )}
@@ -486,14 +486,14 @@ function FilterPill({
         "inline-flex min-h-9 items-center gap-1.5 rounded-full border px-3 text-[11px] transition-colors",
         active
           ? "border-ink bg-ink text-paper"
-          : "border-rule bg-surface text-ink/55 hover:bg-ink/[0.03]",
+          : "border-rule bg-surface text-ink-3 hover:bg-ink/[0.03]",
       ].join(" ")}
     >
       {label}
       <span
         className={[
-          "font-mono text-[9px] tabular-nums",
-          active ? "text-paper/55" : "text-ink/30",
+          "font-mono text-micro tabular-nums",
+          active ? "text-paper/55" : "text-ink-4",
         ].join(" ")}
       >
         {count}

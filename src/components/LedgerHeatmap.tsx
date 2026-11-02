@@ -27,8 +27,8 @@ const LEVEL_BG: Record<GreenLevel, string> = {
 };
 
 const LEVEL_TEXT: Record<GreenLevel, string> = {
-  0: "text-ink/30",
-  1: "text-ink/55",
+  0: "text-ink-4",
+  1: "text-ink-3",
   2: "text-ink",
   3: "text-white",
 };
@@ -52,12 +52,12 @@ export default function LedgerHeatmap({
     >
       <header className="border-rule flex flex-wrap items-center justify-between gap-2 border-b px-4 py-2 sm:px-5">
         <div className="flex items-baseline gap-3">
-          <span className="font-mono text-[10px] tracking-[0.12em] text-accent-ink">
+          <span className="font-mono text-micro tracking-[0.12em] text-accent-ink">
             07
           </span>
           <h2 className="text-sm font-medium">本周绿格</h2>
         </div>
-        <p className="font-mono text-[10px] tabular-nums text-ink/35">
+        <p className="font-mono text-micro tabular-nums text-ink-4">
           {weekRangeLabel(now)}
         </p>
       </header>
@@ -67,7 +67,7 @@ export default function LedgerHeatmap({
           <ul className="grid grid-cols-7 gap-1 sm:gap-1.5">
             {cells.map((cell) => (
               <li key={cell.dateKey}>
-                <p className="text-center font-mono text-[9px] text-ink/35">
+                <p className="text-center font-mono text-micro text-ink-4">
                   {cell.label.slice(1)}
                 </p>
                 <div
@@ -76,7 +76,7 @@ export default function LedgerHeatmap({
                   }${cell.isToday ? "，今天" : ""}`}
                   title={`${cell.dateKey} · ${cell.level > 0 ? `${cell.level} 格` : "空"}`}
                   className={[
-                    "mt-1 flex aspect-square items-center justify-center rounded-md border font-mono text-[10px] tabular-nums transition-colors",
+                    "mt-1 flex aspect-square items-center justify-center rounded-md border font-mono text-micro tabular-nums transition-colors",
                     LEVEL_BG[cell.level],
                     LEVEL_TEXT[cell.level],
                     cell.isFuture ? "opacity-35" : "",
@@ -92,12 +92,12 @@ export default function LedgerHeatmap({
           </ul>
 
           <div className="mt-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-            <p className="text-[11px] leading-5 text-ink/55">
+            <p className="text-[11px] leading-5 text-ink-3">
               本周 <span className="font-mono tabular-nums">{activeDays}/7</span>{" "}
               天留下结果
               {streak.days > 0 ? ` · 连续 ${streak.days} 天` : ""}
             </p>
-            <p className="font-mono text-[9px] text-ink/30">
+            <p className="font-mono text-micro text-ink-4">
               每天 1–3 格，只记产生结果的动作
             </p>
           </div>
@@ -110,14 +110,14 @@ export default function LedgerHeatmap({
               { label: "活跃", value: stats.activeDays, unit: "天" },
             ].map((item) => (
               <div key={item.label}>
-                <dt className="font-mono text-[9px] tracking-[0.08em] text-ink/35">
+                <dt className="font-mono text-micro tracking-[0.08em] text-ink-4">
                   {item.label}
                 </dt>
                 <dd className="mt-0.5 flex items-baseline gap-1">
                   <span className="font-serif text-xl leading-none tabular-nums">
                     {item.value}
                   </span>
-                  <span className="text-[9px] text-ink/30">{item.unit}</span>
+                  <span className="text-micro text-ink-4">{item.unit}</span>
                 </dd>
               </div>
             ))}
@@ -127,15 +127,15 @@ export default function LedgerHeatmap({
         <div className="px-4 py-4 sm:px-5">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <div>
-              <p className="font-mono text-[10px] tracking-[0.08em] text-ink/40">
+              <p className="font-mono text-micro tracking-[0.08em] text-ink-3">
                 档案就绪度
               </p>
               <p className="mt-1 flex items-baseline gap-1.5">
                 <span className="font-serif text-3xl leading-none tabular-nums">
                   {readiness.score}
                 </span>
-                <span className="font-mono text-[10px] text-ink/35">/100</span>
-                <span className="bg-accent/10 text-accent-ink ml-1 rounded-full px-2 py-0.5 font-mono text-[9px]">
+                <span className="font-mono text-micro text-ink-4">/100</span>
+                <span className="bg-accent/10 text-accent-ink ml-1 rounded-full px-2 py-0.5 font-mono text-micro">
                   {readiness.label}
                 </span>
               </p>
@@ -172,17 +172,17 @@ export default function LedgerHeatmap({
             />
           </div>
 
-          <p className="mt-2 text-[11px] leading-5 text-ink/55">
-            <span className="text-ink/35">下一步 · </span>
+          <p className="mt-2 text-[11px] leading-5 text-ink-3">
+            <span className="text-ink-4">下一步 · </span>
             {readiness.next}
           </p>
 
           <details className="group border-rule mt-3 border-t pt-2.5">
-            <summary className="flex min-h-8 cursor-pointer list-none items-center justify-between text-[10px] text-ink/40">
+            <summary className="flex min-h-8 cursor-pointer list-none items-center justify-between text-micro text-ink-3">
               四段构成
               <span
                 aria-hidden="true"
-                className="font-mono text-ink/30 transition-transform group-open:rotate-45"
+                className="font-mono text-ink-4 transition-transform group-open:rotate-45"
               >
                 +
               </span>
@@ -190,9 +190,9 @@ export default function LedgerHeatmap({
             <ul className="mt-1 space-y-2.5 pb-1">
               {readiness.items.map((item) => (
                 <li key={item.key}>
-                  <div className="flex items-baseline justify-between gap-2 text-[10px]">
-                    <span className="text-ink/60">{item.label}</span>
-                    <span className="font-mono tabular-nums text-ink/35">
+                  <div className="flex items-baseline justify-between gap-2 text-micro">
+                    <span className="text-ink-3">{item.label}</span>
+                    <span className="font-mono tabular-nums text-ink-4">
                       {Math.round(item.earned)}/{item.weight}
                     </span>
                   </div>
@@ -205,7 +205,7 @@ export default function LedgerHeatmap({
                     />
                   </div>
                   {item.earned < item.weight && (
-                    <p className="mt-0.5 text-[9px] leading-4 text-ink/35">
+                    <p className="mt-0.5 text-micro leading-4 text-ink-4">
                       {item.hint}
                     </p>
                   )}
