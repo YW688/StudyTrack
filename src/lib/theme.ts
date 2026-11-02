@@ -1,4 +1,4 @@
-export type ThemeId = "dawn" | "sprout" | "sunset";
+export type ThemeId = "dawn" | "night";
 
 export const THEME_KEY = "studytrack:landing-theme";
 
@@ -9,14 +9,9 @@ export const THEMES = [
     swatch: "linear-gradient(135deg,#ccfbff,#ef96c5)",
   },
   {
-    id: "sprout",
-    name: "新芽",
-    swatch: "linear-gradient(135deg,#f8fff5,#c6e6b3 45%,#688f40)",
-  },
-  {
-    id: "sunset",
-    name: "落日",
-    swatch: "linear-gradient(135deg,#ea6113,#fbb931 55%,#ffe3b3)",
+    id: "night",
+    name: "夜间",
+    swatch: "linear-gradient(135deg,#1b2330,#7d84b8 52%,#ef96c5)",
   },
 ] as const;
 
@@ -41,6 +36,7 @@ export function nextTheme(current: ThemeId): ThemeId {
 
 export function applyTheme(theme: ThemeId): void {
   document.documentElement.dataset.appTheme = theme;
+  document.documentElement.style.colorScheme = theme === "night" ? "dark" : "light";
   try {
     localStorage.setItem(THEME_KEY, theme);
   } catch {

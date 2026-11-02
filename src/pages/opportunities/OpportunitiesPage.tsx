@@ -78,7 +78,7 @@ const TYPE_TABS: { id: "all" | JobType; label: string }[] = [
 ];
 
 const QUALIFICATION_CHIP_CLASS: Record<QualificationTier, string> = {
-  qualified: "border-[#2F5A3C]/25 bg-[#E8EFE8] text-[#2F5A3C]",
+  qualified: "chip-ok-line",
   near: "border-amber/40 bg-amber/10 text-amber-ink",
   far: "border-rule bg-ink/[0.04] text-ink-4",
 };

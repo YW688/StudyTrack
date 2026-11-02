@@ -312,7 +312,7 @@ export default function ExperiencePool({
                           </span>
                         )}
                         {!selected && ready && (
-                          <span className="rounded-full bg-[#E8EFE8] px-1.5 py-0.5 font-mono text-micro text-[#2F5A3C]">
+                          <span className="chip-ok rounded-full px-1.5 py-0.5 font-mono text-micro">
                             简历就绪
                           </span>
                         )}
@@ -437,7 +437,7 @@ export default function ExperiencePool({
                             className={[
                               "rounded-full px-1.5 py-0.5 font-mono text-micro",
                               cache.source === "ai"
-                                ? "bg-[#E7EDF6] text-[#1C3355]"
+                                ? "chip-info"
                                 : cache.status === "fallback"
                                   ? "bg-amber/15 text-amber-ink"
                                   : "bg-ink/[0.06] text-ink-3",

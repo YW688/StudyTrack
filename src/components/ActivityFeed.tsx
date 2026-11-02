@@ -62,7 +62,7 @@ export default function ActivityFeed({
                 <span
                   className={[
                     "ml-auto font-mono text-micro",
-                    readiness.ready ? "text-[#4a6b46]" : "text-amber-ink",
+                    readiness.ready ? "text-[color:var(--tone-ok-ink)]" : "text-amber-ink",
                   ].join(" ")}
                 >
                   {readiness.ready
