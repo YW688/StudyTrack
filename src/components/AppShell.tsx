@@ -313,9 +313,12 @@ export default function AppShell({
 
         <button
           type="button"
-          onClick={() => setIslandOpen(true)}
-          aria-label="打开本机存档卡"
-          title="打开本机存档卡"
+          onClick={() => setIslandOpen((value) => !value)}
+          data-island-trigger
+          aria-expanded={islandOpen}
+          aria-haspopup="dialog"
+          aria-label={islandOpen ? "收起本机存档卡" : "打开本机存档卡"}
+          title={islandOpen ? "收起本机存档卡" : "打开本机存档卡"}
           className="app-profile"
         >
           <ProfileSigil
@@ -527,6 +530,9 @@ export default function AppShell({
           onToggle={() => setStatusCollapsed((value) => !value)}
           onHome={onHome}
           onOpenAgent={onOpenAgent}
+          themeName={currentTheme.name}
+          themeSwatch={currentTheme.swatch}
+          onNextTheme={() => onThemeChange(nextTheme(theme))}
         />
         <div className="app-sheet" ref={sheetRef}>
           {children}

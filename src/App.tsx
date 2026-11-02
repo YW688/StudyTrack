@@ -90,7 +90,7 @@ import {
   CALENDAR_UPDATED_AT,
 } from "./store/calendar";
 import { resumeHasContent } from "./lib/resume";
-import { applyTheme, readStoredTheme, type ThemeId } from "./lib/theme";
+import { applyTheme, readStoredTheme, switchTheme, type ThemeId } from "./lib/theme";
 import { backupFileName, downloadBackupFile } from "./lib/backup";
 import { newId } from "./lib/id";
 import { GUIDE_OPPORTUNITIES_KEY } from "./lib/guide";
@@ -217,6 +217,11 @@ export default function App() {
   useEffect(() => {
     applyTheme(theme);
   }, [theme]);
+
+  const changeTheme = (next: ThemeId) => {
+    if (next === theme) return;
+    switchTheme(next, () => setTheme(next));
+  };
 
   useEffect(() => {
     let alive = true;
@@ -810,7 +815,7 @@ export default function App() {
       <>
         <LandingPage
           theme={theme}
-          onThemeChange={setTheme}
+          onThemeChange={changeTheme}
           onStart={handleStart}
         />
         {ritualOverlay}
@@ -868,7 +873,7 @@ export default function App() {
         routeKey={route}
         locked={locked}
         theme={theme}
-        onThemeChange={setTheme}
+        onThemeChange={changeTheme}
         hasData={
           timetable !== null ||
           assignments !== null ||

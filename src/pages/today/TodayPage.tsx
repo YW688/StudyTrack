@@ -18,7 +18,6 @@ import {
   GOAL_LABELS,
 } from "../../types";
 import TierPips from "../../components/TierPips";
-import CheckinGrid from "../../components/CheckinGrid";
 import { currentWeekOf } from "../../parse/schedule";
 import {
   EXPERIENCE_KIND_META,
@@ -44,7 +43,6 @@ import {
 import {
   characterLevel,
   comboLine,
-  LEVEL_UNIT_TOTAL,
   levelUpLine,
   tierLine,
   tierStars,
@@ -53,7 +51,6 @@ import {
 } from "../../lib/level";
 import {
   computeReadiness,
-  greenMatrix,
   previousStudyDateKey,
   settleDay,
   streakInfo,
@@ -198,7 +195,6 @@ export default function TodayPage({
   const yesterdayKey = previousStudyDateKey(now);
   const yesterday = settleDay(ledger, yesterdayKey);
   const streak = streakInfo(ledger, now);
-  const checkin = greenMatrix(ledger, now);
   const todayNotes = notes
     .filter((note) => studyDateKey(dayjs(note.createdAt)) === todayKey)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
@@ -279,7 +275,6 @@ export default function TodayPage({
             <p className="page-sub flex flex-wrap items-center gap-x-3 gap-y-1">
               <span>{now.format("YYYY年M月D日")}</span>
               <span>{pending.length} 项未完成</span>
-              {streak.days > 0 && <span>连击 {streak.days} 天</span>}
             </p>
             {profile && (
               <p className="page-sub flex flex-wrap items-center gap-x-3 gap-y-1 lg:hidden">
@@ -292,14 +287,6 @@ export default function TodayPage({
           </div>
 
           <div className="page-actions">
-            {profile && (
-              <p className="app-profile-chip flex items-center gap-2">
-                <span className="text-accent-ink">{`Lv.${level.level}`}</span>
-                <span>{profile.grade || "年级未填"}</span>
-                <span>{profile.major || "专业未填"}</span>
-                <span>{GOAL_LABELS[profile.goal]}</span>
-              </p>
-            )}
             <button
               type="button"
               onClick={() => onOpenWindow("timetable")}
@@ -378,23 +365,23 @@ export default function TodayPage({
           </section>
         )}
 
-        <div className="mt-3 grid gap-4 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
+        <div className="mt-3 grid gap-4 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] xl:grid-cols-[minmax(0,1.85fr)_minmax(0,0.95fr)]">
           <div className="min-w-0 space-y-4">
-            <section className="app-card p-5 sm:p-6">
+            <section className="app-card p-6 sm:p-8">
               <div className="app-card-head">
                 <p className="app-card-label">{briefingSegment(now)}</p>
                 <p className="app-card-meta">
                   {now.format("M月D日")} {DAY_LABELS[dayIndexOf(now)]}
                 </p>
               </div>
-              <h2 className="mt-4 max-w-[34rem] font-serif text-[clamp(1.65rem,2.9vw,2.4rem)] leading-[1.34] tracking-[0.01em]">
+              <h2 className="mt-5 max-w-[38rem] font-serif text-[clamp(1.85rem,3vw,2.7rem)] leading-[1.3] tracking-[0.01em]">
                 {judgment.line}
               </h2>
-              <p className="mt-3 max-w-[34rem] text-sm leading-7 text-ink-3">
+              <p className="mt-3 max-w-[38rem] text-sm leading-7 text-ink-3">
                 {judgment.detail}
               </p>
               {aside && (
-                <p className="mt-1.5 max-w-[34rem] text-[11px] leading-5 text-accent-ink">
+                <p className="mt-1.5 max-w-[38rem] text-[11px] leading-5 text-accent-ink">
                   {aside}
                 </p>
               )}
@@ -544,29 +531,14 @@ export default function TodayPage({
                 )}
               </div>
 
-              <div className="mt-4 border-t border-rule/60 pt-3">
-                <div className="flex items-baseline justify-between gap-3">
-                  <p className="min-w-0 text-[11px] leading-5 text-ink-3">
-                    {levelUpLine(level)}
-                  </p>
-                  <p className="shrink-0 font-mono text-micro tabular-nums text-ink-4">
-                    就绪 {level.ready}/{level.total}
-                  </p>
-                </div>
-                <div className="mt-2 flex items-center gap-2">
-                  <TierPips
-                    units={level.nextUnits}
-                    total={LEVEL_UNIT_TOTAL}
-                    label={`Lv.${level.level} 下一级进度 ${level.percent}%`}
-                  />
-                  <span className="font-mono text-micro tabular-nums text-ink-4">
-                    {level.percent}%
-                  </span>
-                </div>
+              <div className="mt-5 border-t border-rule/60 pt-3">
+                <p className="text-[11px] leading-5 text-ink-3">
+                  {levelUpLine(level)}
+                </p>
               </div>
             </section>
 
-            <section className="app-card p-5 sm:p-6">
+            <section className="app-card p-5">
               <div className="app-card-head">
                 <p className="app-card-label">委托</p>
                 <p className="app-card-meta">
@@ -636,12 +608,9 @@ export default function TodayPage({
           </div>
 
           <div className="min-w-0 space-y-4">
-            <section className="app-card p-5">
+            <section className="app-card p-4">
               <div className="app-card-head">
                 <p className="app-card-label">节奏</p>
-                <p className="app-card-meta">
-                  近 {checkin.weeks.length} 周 {checkin.activeDays} 天有结果
-                </p>
               </div>
 
               {yesterday.empty ? (
@@ -675,12 +644,10 @@ export default function TodayPage({
               )}
 
               <div className="mt-3">
-                <CheckinGrid matrix={checkin} />
+                <p className="font-mono text-micro leading-5 text-ink-3">
+                  {weekLine} {streakLine} 只算产生结果的动作
+                </p>
               </div>
-
-              <p className="mt-3 font-mono text-micro leading-5 text-ink-3">
-                {weekLine} {streakLine} 只算产生结果的动作
-              </p>
 
               <div className="mt-3 flex items-center gap-3 border-t border-rule/60 pt-2.5">
                 <div className="min-w-0 flex-1">
@@ -711,7 +678,7 @@ export default function TodayPage({
               </div>
             </section>
 
-            <section className="app-card p-5">
+            <section className="app-card p-4">
               <div className="app-card-head">
                 <p className="app-card-label">回声</p>
                 <button
@@ -757,7 +724,7 @@ export default function TodayPage({
                     {echo.experience.title}
                   </p>
                   {echo.quote ? (
-                    <p className="mt-1.5 line-clamp-3 text-[11px] leading-5 text-ink-3">
+                    <p className="mt-1.5 line-clamp-2 text-[11px] leading-5 text-ink-3">
                       “{echo.quote}”
                     </p>
                   ) : (
@@ -786,7 +753,7 @@ export default function TodayPage({
               )}
             </section>
 
-            <section className="app-card p-5">
+            <section className="app-card p-4">
               <div className="app-card-head">
                 <p className="app-card-label">情报</p>
                 <button
@@ -813,7 +780,7 @@ export default function TodayPage({
                     return (
                       <li
                         key={item.id}
-                        className="border-t border-rule/60 py-2.5 first:border-t-0"
+                        className="border-t border-rule/60 py-2 first:border-t-0"
                       >
                         <div className="flex items-center gap-2">
                           <span
@@ -890,7 +857,7 @@ function TaskRow({
     .join(" ");
 
   return (
-    <li className="flex items-start gap-2 border-t border-rule/60 py-3 first:border-t-0 sm:gap-3">
+    <li className="flex items-start gap-2 border-t border-rule/60 py-1.5 first:border-t-0 sm:gap-3">
       <label
         className="flex h-11 w-9 shrink-0 cursor-pointer items-center justify-center"
         title="标记完成"
@@ -918,7 +885,7 @@ function TaskRow({
             </span>
           )}
         </div>
-        <p className="mt-0.5 text-[11px] leading-5 text-ink-3">{meta}</p>
+        <p className="mt-0.5 text-[11px] leading-4 text-ink-3">{meta}</p>
       </div>
 
       <div className="shrink-0 text-right">

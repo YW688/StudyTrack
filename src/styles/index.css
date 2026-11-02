@@ -69,6 +69,40 @@ html[data-app-theme="night"] {
   --tone-info-ink: #aac0e2;
 }
 
+/* ---------- Theme switch: 水波扩散 / 内收 ---------- */
+
+::view-transition-group(root),
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html[data-theme-flow="out"]::view-transition-new(root) {
+  z-index: 2;
+}
+
+html[data-theme-flow="out"]::view-transition-old(root) {
+  z-index: 1;
+}
+
+html[data-theme-flow="in"]::view-transition-old(root) {
+  z-index: 2;
+}
+
+html[data-theme-flow="in"]::view-transition-new(root) {
+  z-index: 1;
+}
+
+/* 软边圆形蒙版 放大时边界像水面一样推出去 缩小则从外缘收拢 */
+html[data-theme-flow="out"]::view-transition-new(root),
+html[data-theme-flow="in"]::view-transition-old(root) {
+  mask-image: radial-gradient(circle at 50% 50%, #000 0 62%, transparent 72%);
+  mask-repeat: no-repeat;
+  mask-position: 50% 50%;
+  mask-size: 400% 400%;
+}
+
 @layer base {
   html {
     -webkit-font-smoothing: antialiased;
@@ -3454,6 +3488,38 @@ button.app-mini-chip:hover {
   font-size: 11px;
 }
 
+.app-topbar-theme {
+  display: inline-flex;
+  height: 30px;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid color-mix(in srgb, var(--tint) 55%, var(--color-rule));
+  border-radius: 9999px;
+  background: rgba(var(--wash-rgb), 0.5);
+  padding: 0 11px 0 9px;
+  font-size: 11px;
+  color: var(--color-ink-3);
+  white-space: nowrap;
+}
+
+.app-topbar-theme:hover {
+  background: rgba(var(--wash-rgb), 0.75);
+  color: var(--color-ink);
+}
+
+.app-topbar-theme-dot {
+  height: 11px;
+  width: 11px;
+  flex: none;
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--color-ink) 18%, transparent);
+}
+
+.app-topbar-theme-name {
+  color: var(--color-ink-2);
+}
+
 .app-topbar-toggle {
   display: inline-flex;
   height: 30px;
@@ -4333,6 +4399,14 @@ button.app-mini-chip:hover {
 
 .app-island-actions button:hover {
   background: color-mix(in srgb, var(--color-ink) 6%, var(--color-surface));
+}
+
+/* 这里的 display 是未分层规则，会盖过 Tailwind 的 lg:hidden */
+@media (min-width: 1024px) {
+  .app-island-nav,
+  .app-island-actions {
+    display: none;
+  }
 }
 
 .app-island-backup {

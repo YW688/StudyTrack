@@ -79,7 +79,9 @@ export default function TopbarIsland({
   useEffect(() => {
     if (!open) return;
     const onPointerDown = (event: PointerEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) {
+      const target = event.target as Element | null;
+      if (target?.closest?.("[data-island-trigger]")) return;
+      if (!rootRef.current?.contains(target as Node)) {
         onOpenChange(false);
       }
     };
@@ -170,7 +172,7 @@ export default function TopbarIsland({
             </nav>
           )}
 
-          <div className="app-island-actions">
+          <div className="app-island-actions lg:hidden">
             {!agentHidden && (
               <button
                 type="button"

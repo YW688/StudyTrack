@@ -13,6 +13,9 @@ interface TopbarProps {
   onToggle: () => void;
   onHome: () => void;
   onOpenAgent: () => void;
+  themeName: string;
+  themeSwatch: string;
+  onNextTheme: () => void;
 }
 
 function SearchIcon() {
@@ -65,6 +68,9 @@ export default function Topbar({
   onToggle,
   onHome,
   onOpenAgent,
+  themeName,
+  themeSwatch,
+  onNextTheme,
 }: TopbarProps) {
   const [paletteOpen, setPaletteOpen] = useState(false);
 
@@ -119,21 +125,36 @@ export default function Topbar({
               {demoMode && (
                 <span className="app-topbar-chip is-demo">示例</span>
               )}
-              {!agentHidden && (
-                <button
-                  type="button"
-                  className="app-topbar-agent"
-                  onClick={onOpenAgent}
-                  aria-label="打开记录官"
-                >
-                  <span aria-hidden="true" className="app-topbar-agent-mark">
-                    记
-                  </span>
-                  <span className="app-topbar-agent-label">记录官</span>
-                </button>
-              )}
             </>
           )}
+          {!agentHidden && (
+            <button
+              type="button"
+              className="app-topbar-agent"
+              onClick={onOpenAgent}
+              aria-label="打开记录官"
+            >
+              <span aria-hidden="true" className="app-topbar-agent-mark">
+                记
+              </span>
+              <span className="app-topbar-agent-label">记录官</span>
+            </button>
+          )}
+          <button
+            type="button"
+            className="app-topbar-theme"
+            onClick={onNextTheme}
+            aria-label={`切换配色，当前 ${themeName}`}
+            title={`切换配色，当前 ${themeName}`}
+          >
+            <span
+              aria-hidden="true"
+              className="app-topbar-theme-dot"
+              style={{ backgroundImage: themeSwatch }}
+            />
+            <span className="app-topbar-theme-label">配色</span>
+            <span className="app-topbar-theme-name">{themeName}</span>
+          </button>
           <button
             type="button"
             className="app-topbar-toggle"
