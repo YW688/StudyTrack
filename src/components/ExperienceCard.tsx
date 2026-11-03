@@ -66,7 +66,7 @@ export default function ExperienceCard({
   return (
     <article
       className={[
-        "border-rule rounded-xl border bg-surface transition-colors",
+        "app-exp border-rule rounded-xl border bg-surface transition-colors",
         experience.confidence === "low"
           ? "border-amber/50 bg-amber/[0.03]"
           : "",
@@ -75,7 +75,7 @@ export default function ExperienceCard({
       <div className="px-4 py-3.5 sm:px-5">
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
           <span
-            className="rounded-full px-2 py-0.5 font-mono text-micro tracking-[0.04em]"
+            className="app-kind-chip rounded-full px-2 py-0.5 font-mono text-micro tracking-[0.04em]"
             style={{
               color: meta.color,
               backgroundColor: meta.pale,

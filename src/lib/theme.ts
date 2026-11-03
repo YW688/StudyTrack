@@ -1,6 +1,6 @@
 import { flushSync } from "react-dom";
 
-export type ThemeId = "dawn" | "night";
+export type ThemeId = "dawn" | "night" | "manor";
 
 export const THEME_KEY = "studytrack:landing-theme";
 
@@ -26,6 +26,11 @@ export const THEMES = [
     name: "夜间",
     swatch: "linear-gradient(135deg,#1b2330,#7d84b8 52%,#ef96c5)",
   },
+  {
+    id: "manor",
+    name: "庄园",
+    swatch: "linear-gradient(135deg,#241811,#9c8758 52%,#f1dcc7)",
+  },
 ] as const;
 
 export function isThemeId(value: unknown): value is ThemeId {
@@ -49,7 +54,8 @@ export function nextTheme(current: ThemeId): ThemeId {
 
 export function applyTheme(theme: ThemeId): void {
   document.documentElement.dataset.appTheme = theme;
-  document.documentElement.style.colorScheme = theme === "night" ? "dark" : "light";
+  document.documentElement.style.colorScheme =
+    theme === "dawn" ? "light" : "dark";
   try {
     localStorage.setItem(THEME_KEY, theme);
   } catch {
@@ -59,7 +65,7 @@ export function applyTheme(theme: ThemeId): void {
 
 /**
  * 换色用一张软边圆形蒙版接新旧两帧：
- * 去霞光是中心一点向外推开如水波，去夜间是边界从外缘收向中心。
+ * 去霞光是中心一点向外推开如水波，去夜间与庄园是边界从外缘收向中心。
  */
 export function switchTheme(theme: ThemeId, commit: () => void): void {
   const root = document.documentElement;
@@ -85,7 +91,7 @@ export function switchTheme(theme: ThemeId, commit: () => void): void {
     return;
   }
 
-  const dark = theme === "night";
+  const dark = theme !== "dawn";
   const dot = "0% 0%";
   const spread = "175% 175%";
 

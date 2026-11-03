@@ -18,6 +18,7 @@ import {
   GOAL_LABELS,
 } from "../../types";
 import TierPips from "../../components/TierPips";
+import WaxSeal from "../../components/WaxSeal";
 import { currentWeekOf } from "../../parse/schedule";
 import {
   EXPERIENCE_KIND_META,
@@ -373,7 +374,7 @@ export default function TodayPage({
 
         <div className="mt-3 grid gap-4 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] xl:grid-cols-[minmax(0,1.85fr)_minmax(0,0.95fr)]">
           <div className="min-w-0 space-y-4">
-            <section className="app-card p-6 sm:p-8">
+            <section className="app-card app-card-brief p-6 sm:p-8">
               <div className="app-card-head">
                 <p className="app-card-label">{briefingSegment(now)}</p>
               </div>
@@ -451,6 +452,15 @@ export default function TodayPage({
 
                 <div className="app-capture-bar mt-2">
                   <span aria-hidden="true" className="app-capture-dot" />
+                  {captureStatus === "done" && (
+                    <WaxSeal
+                      units={4}
+                      total={4}
+                      ready
+                      size={16}
+                      className="app-seal-stamp"
+                    />
+                  )}
                   <label htmlFor="today-capture-input" className="sr-only">
                     今天做了什么
                   </label>

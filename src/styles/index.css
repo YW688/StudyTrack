@@ -69,6 +69,424 @@ html[data-app-theme="night"] {
   --tone-info-ink: #aac0e2;
 }
 
+/* ---------- 庄园主题（第三套可选主题） ---------- */
+/* 视觉豁免见 .qoder/rules/00-core.md 第六节：羊皮纸卡底 暗金描边 双线圆角框 蜡封 舌片 小面积金属渐变 */
+
+html[data-app-theme="manor"] {
+  color-scheme: dark;
+  --wash-rgb: 30, 30, 32;
+  --tint: #1e1e20;
+  --color-paper: #241811;
+  --color-surface: #1e1e20;
+  --color-ink: #f1e4c2;
+  --color-rule: #3d3122;
+  --color-accent: #6b2018;
+  --color-accent-ink: #d9a08c;
+  --color-amber: #9c8758;
+  --color-amber-ink: #ffe08a;
+  --tone-ok-bg: #241f16;
+  --tone-ok-ink: #cbb98a;
+  --tone-ok-dot: #b9a06a;
+  --tone-info-bg: #221a14;
+  --tone-info-ink: #d8c39a;
+  --manor-parchment: #f1dcc7;
+  --manor-parchment-2: #f1e4c2;
+  --manor-parchment-ink: #241811;
+  --manor-gold-line: #9c8758;
+  --manor-seal: #6b2018;
+  --manor-seal-edge: #4a150f;
+  --manor-fiber: 124, 90, 46;
+  --manor-hairline: 107, 74, 38;
+}
+
+/* 页面底：深棕木桌面，压住黑金金属感 */
+html[data-app-theme="manor"] .app-shell {
+  background:
+    radial-gradient(92% 62% at 50% -16%, #2e1f15 0%, rgba(46, 31, 21, 0) 66%),
+    radial-gradient(58% 46% at 94% 2%, rgba(156, 135, 88, 0.07), transparent 70%),
+    linear-gradient(180deg, #241811 0%, #150e09 56%, #0d0806 100%);
+  background-attachment: fixed;
+}
+
+/* 羊皮纸只给主卡 存档卡 征途卡 一屏最多两块 其余走深面板 */
+/* 卡内重新作用域同一套 token 让 ink-2/3/4 自动派生成深棕 金系不上羊皮纸 */
+html[data-app-theme="manor"] .app-card-brief,
+html[data-app-theme="manor"] .app-archive,
+html[data-app-theme="manor"] .app-exp {
+  --color-paper: var(--manor-parchment);
+  --color-surface: var(--manor-parchment-2);
+  --color-ink: var(--manor-parchment-ink);
+  --color-ink-2: color-mix(in srgb, var(--color-ink) 85%, var(--color-paper));
+  --color-ink-3: color-mix(in srgb, var(--color-ink) 72%, var(--color-paper));
+  --color-ink-4: color-mix(in srgb, var(--color-ink) 66%, var(--color-paper));
+  --color-rule: #d3c2a4;
+  --color-accent: #6b2018;
+  --color-accent-ink: #6b2018;
+  --color-amber: #8a5511;
+  --color-amber-ink: #8a5511;
+  --tone-ok-bg: #e4d8bd;
+  --tone-ok-ink: #4c5a34;
+  --tone-ok-dot: #6f7f4a;
+  --tone-info-bg: #e7dcc2;
+  --tone-info-ink: #5a4a2a;
+  --wash-rgb: 255, 255, 255;
+  color: var(--manor-parchment-ink);
+  background-color: var(--manor-parchment);
+  /* 纸面保持干净：受光 + 极淡暖纱 + 纤维，不用污渍斑点 */
+  background-image:
+    radial-gradient(
+      130% 110% at 10% -12%,
+      rgba(255, 250, 240, 0.2),
+      rgba(255, 250, 240, 0) 72%
+    ),
+    radial-gradient(
+      120% 105% at 108% 112%,
+      rgba(150, 110, 62, 0.12),
+      rgba(150, 110, 62, 0) 76%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(196, 150, 92, 0.015),
+      rgba(146, 100, 50, 0.05)
+    ),
+    repeating-linear-gradient(
+      96deg,
+      rgba(var(--manor-fiber), 0.008) 0 1px,
+      rgba(var(--manor-fiber), 0) 1px 7px
+    ),
+    repeating-linear-gradient(
+      4deg,
+      rgba(var(--manor-fiber), 0.006) 0 1px,
+      rgba(var(--manor-fiber), 0) 1px 8px
+    );
+  border-color: color-mix(
+    in srgb,
+    var(--manor-gold-line) 42%,
+    var(--manor-parchment)
+  );
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  /* 软边：淡金内衬 + 轻压边，干净不脏 */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 249, 236, 0.3),
+    inset 0 0 0 3px rgba(156, 135, 88, 0.12),
+    inset 0 0 10px rgba(102, 64, 28, 0.07),
+    inset 0 0 38px rgba(102, 64, 28, 0.11),
+    0 26px 54px -38px rgba(0, 0, 0, 0.78);
+}
+
+/* 双线圆角卡框：外 1px 淡金 内 3px 极淡金衬，靠内阴影出厚度 */
+html[data-app-theme="manor"] .app-card {
+  border-color: color-mix(in srgb, var(--manor-gold-line) 34%, transparent);
+  box-shadow:
+    inset 0 0 0 3px rgba(156, 135, 88, 0.06),
+    0 26px 52px -38px rgba(0, 0, 0, 0.7);
+}
+
+/* 羊皮纸卡压过上面的通用双线框，换成软内衬与纸面阴影 */
+html[data-app-theme="manor"] .app-card-brief,
+html[data-app-theme="manor"] .app-exp {
+  border-color: color-mix(
+    in srgb,
+    var(--manor-gold-line) 32%,
+    var(--manor-parchment)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 249, 236, 0.3),
+    inset 0 0 0 3px rgba(156, 135, 88, 0.12),
+    inset 0 0 10px rgba(102, 64, 28, 0.07),
+    inset 0 0 38px rgba(102, 64, 28, 0.11),
+    0 26px 54px -38px rgba(0, 0, 0, 0.78);
+}
+
+/* 今日主卡做成卷轴：上下各卷一道纸边，两端收口，卷口压影在纸面上 */
+html[data-app-theme="manor"] .app-card-brief {
+  position: relative;
+}
+
+html[data-app-theme="manor"] .app-card-brief::before,
+html[data-app-theme="manor"] .app-card-brief::after {
+  content: "";
+  position: absolute;
+  left: -12px;
+  right: -12px;
+  height: 18px;
+  border-radius: 9999px;
+  pointer-events: none;
+  background-image:
+    radial-gradient(
+      circle at 9px 50%,
+      rgba(74, 46, 22, 0.3) 0 3.4px,
+      rgba(74, 46, 22, 0) 5px
+    ),
+    radial-gradient(
+      circle at calc(100% - 9px) 50%,
+      rgba(74, 46, 22, 0.3) 0 3.4px,
+      rgba(74, 46, 22, 0) 5px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(140, 100, 56, 0) 0 33%,
+      rgba(140, 100, 56, 0.14) 35%,
+      rgba(140, 100, 56, 0) 38%
+    ),
+    linear-gradient(
+      180deg,
+      #f8ecd6 0%,
+      #efdcbd 20%,
+      #d9bc93 48%,
+      #c6a672 68%,
+      #e7d1ac 86%,
+      #b08a58 100%
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 240, 0.75),
+    inset 0 -2px 4px rgba(96, 62, 28, 0.32);
+}
+
+html[data-app-theme="manor"] .app-card-brief::before {
+  top: -9px;
+  box-shadow:
+    0 6px 12px -4px rgba(58, 36, 16, 0.35),
+    inset 0 1px 0 rgba(255, 250, 240, 0.75),
+    inset 0 -2px 4px rgba(96, 62, 28, 0.32);
+}
+
+html[data-app-theme="manor"] .app-card-brief::after {
+  bottom: -9px;
+  box-shadow:
+    0 -6px 12px -4px rgba(58, 36, 16, 0.35),
+    inset 0 1px 0 rgba(255, 250, 240, 0.75),
+    inset 0 -2px 4px rgba(96, 62, 28, 0.32);
+}
+
+/* 侧栏舌片：右缘一枚 45 度信封舌 选中才填羊皮纸 */
+html[data-app-theme="manor"] .app-nav-item {
+  position: relative;
+  border: 1px solid color-mix(in srgb, var(--manor-gold-line) 42%, transparent);
+  border-radius: 12px;
+  background-color: transparent;
+}
+
+html[data-app-theme="manor"] .app-nav-item::after {
+  content: "";
+  position: absolute;
+  top: calc(50% - 6px);
+  right: -7px;
+  width: 12px;
+  height: 12px;
+  transform: rotate(45deg);
+  background: inherit;
+  border-top: 1px solid
+    color-mix(in srgb, var(--manor-gold-line) 42%, transparent);
+  border-right: 1px solid
+    color-mix(in srgb, var(--manor-gold-line) 42%, transparent);
+  border-radius: 0 3px 0 0;
+}
+
+html[data-app-theme="manor"] .app-nav-item.is-active {
+  background-color: var(--manor-parchment);
+  color: var(--manor-parchment-ink);
+}
+
+/* 蜡封只在庄园主题出现 其余主题隐藏菱形 pips */
+.tier-seal,
+.app-archive-seal,
+.app-seal-stamp {
+  display: none;
+}
+
+html[data-app-theme="manor"] .tier-seal {
+  display: inline-block;
+}
+
+html[data-app-theme="manor"] .tier-pip {
+  display: none;
+}
+
+html[data-app-theme="manor"] .app-archive {
+  position: relative;
+}
+
+/* 类型 chip 是内联 hex 庄园下收编进羊皮纸色板 */
+html[data-app-theme="manor"] .app-kind-chip {
+  background: var(--manor-parchment-2) !important;
+  color: #5a4a2a !important;
+}
+
+/* 存档卡：蜡封压在卡顶正中，卡内让出 34px 给它 */
+html[data-app-theme="manor"] .app-archive {
+  padding-top: 34px;
+}
+
+html[data-app-theme="manor"] .app-archive-seal {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  right: auto;
+  display: block;
+  transform: translateX(-50%) rotate(-4deg);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.34));
+}
+
+/* 荣誉 / 战绩：账目式横排，去掉灰底块 */
+html[data-app-theme="manor"] .app-archive-stats {
+  margin-top: 12px;
+  padding-top: 11px;
+  overflow: visible;
+  border: 0;
+  border-top: 1px solid rgba(var(--manor-hairline), 0.22);
+  border-radius: 0;
+  background: none;
+}
+
+html[data-app-theme="manor"] .app-archive-stat {
+  padding: 0 12px 0 2px;
+}
+
+html[data-app-theme="manor"] .app-archive-stat + .app-archive-stat {
+  border-left: 1px solid rgba(var(--manor-hairline), 0.22);
+  padding-left: 14px;
+}
+
+html[data-app-theme="manor"] .app-archive-label {
+  color: #77613f;
+  letter-spacing: 0.1em;
+}
+
+html[data-app-theme="manor"] .app-archive-label::before {
+  content: "";
+  display: inline-block;
+  height: 4px;
+  width: 4px;
+  margin-right: 6px;
+  transform: rotate(45deg);
+  background: var(--manor-gold-line);
+  vertical-align: 1px;
+}
+
+html[data-app-theme="manor"] .app-archive-stat-num {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #241811;
+}
+
+html[data-app-theme="manor"] .app-archive-stat-num > span {
+  font-size: 12px;
+  color: #8a6b41;
+}
+
+html[data-app-theme="manor"] .app-archive-stat-cap {
+  color: #6f5636;
+}
+
+html[data-app-theme="manor"] .app-archive-checkin {
+  border-top-color: rgba(var(--manor-hairline), 0.2);
+}
+
+html[data-app-theme="manor"] .app-archive-about {
+  border-top-color: rgba(var(--manor-hairline), 0.2);
+}
+
+html[data-app-theme="manor"] .app-archive-combo {
+  color: #6b2018;
+}
+
+/* 绿格在庄园里换成烫金格：金调往纸色里化，避免一排高饱和方块 */
+html[data-app-theme="manor"] .checkin-cell {
+  border-color: rgba(var(--manor-fiber), 0.2);
+  background: rgba(255, 250, 238, 0.3);
+}
+
+html[data-app-theme="manor"] .checkin-cell[data-level="1"] {
+  border-color: transparent;
+  background: #e4cfa6;
+}
+
+html[data-app-theme="manor"] .checkin-cell[data-level="2"] {
+  border-color: transparent;
+  background: #cfb37f;
+}
+
+html[data-app-theme="manor"] .checkin-cell[data-level="3"] {
+  border-color: transparent;
+  background: #b08f5b;
+}
+
+html[data-app-theme="manor"] .checkin-cell[data-today="1"] {
+  outline-color: rgba(107, 32, 24, 0.45);
+}
+
+/* 木器底：顶栏 侧栏 灵动岛统一压成暖棕，避免中性灰的金属感 */
+html[data-app-theme="manor"] .app-topbar {
+  border-color: rgba(156, 135, 88, 0.42);
+  background: rgba(32, 22, 16, 0.78);
+  box-shadow:
+    0 20px 40px -36px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 236, 205, 0.08);
+}
+
+html[data-app-theme="manor"] .app-sidebar {
+  border-color: rgba(156, 135, 88, 0.3);
+  background: rgba(28, 19, 14, 0.82);
+}
+
+html[data-app-theme="manor"] .app-nav {
+  border-bottom-color: rgba(156, 135, 88, 0.22);
+}
+
+html[data-app-theme="manor"] .app-island {
+  border-color: rgba(156, 135, 88, 0.5);
+  background: #241811;
+}
+
+html[data-app-theme="manor"] .app-island:hover {
+  background: #2e2017;
+}
+
+html[data-app-theme="manor"] .app-island-panel {
+  border-color: rgba(156, 135, 88, 0.5);
+  background: #1a120d;
+  box-shadow:
+    inset 0 0 0 1px rgba(156, 135, 88, 0.1),
+    0 28px 60px -30px rgba(0, 0, 0, 0.9);
+}
+
+/* 头像章：深棕底 金刻度环，换成庄园的徽记 */
+html[data-app-theme="manor"] .app-sigil {
+  --sigil-face: #2b1b12 !important;
+  --sigil-text: #f0dcb8 !important;
+  background: conic-gradient(
+    #b99a5f var(--sigil-angle),
+    rgba(120, 86, 40, 0.24) 0
+  );
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.32);
+}
+
+html[data-app-theme="manor"] .app-seal-stamp {
+  display: inline-block;
+  animation: manor-seal-drop 360ms cubic-bezier(0.2, 0.9, 0.3, 1.15);
+}
+
+@keyframes manor-seal-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(1.3);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-seal-stamp {
+    animation: none;
+  }
+}
+
 /* ---------- Theme switch: 水波扩散 / 内收 ---------- */
 
 ::view-transition-group(root),

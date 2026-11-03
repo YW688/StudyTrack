@@ -4,6 +4,7 @@ import { createAvatarFromFile } from "../lib/avatar";
 import type { Goal } from "../types";
 import CheckinGrid from "./CheckinGrid";
 import ProfileSigil from "./ProfileSigil";
+import WaxSeal from "./WaxSeal";
 
 interface ArchiveCardProps {
   level: number;
@@ -72,6 +73,13 @@ export default function ArchiveCard({
 
   return (
     <section aria-label="本机存档卡" className="app-archive">
+      <WaxSeal
+        units={ready}
+        total={total}
+        ready={total > 0 && ready === total}
+        size={46}
+        className="app-archive-seal"
+      />
       <div className="app-archive-head">
         <div className="app-archive-portrait">
           <ProfileSigil
