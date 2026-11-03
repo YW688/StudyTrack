@@ -114,7 +114,7 @@ export function createSampleReviewPayload(): ReviewPayload {
       confidence: item.confidence,
       detail: item.detail,
     })),
-    warnings: ["这是根据你提供的三张截图整理的示例数据，请核对后导入。"],
+    warnings: ["三张截图整理的示例 请核对后导入"],
     source: "sample",
     sourceLabel: "示例待办",
   };
@@ -139,7 +139,7 @@ export function PasteDialog({
   function handleParse() {
     const result = parseAssignmentsText(text);
     if (!result.items.length) {
-      setError(result.warnings[0] ?? "没有识别到待办，请检查文本格式。");
+      setError(result.warnings[0] ?? "没有识别到待办 请检查文本格式");
       return;
     }
     onParsed({
@@ -153,7 +153,7 @@ export function PasteDialog({
   return (
     <Dialog
       title="粘贴作业文本"
-      subtitle="每行一条，标题和截止时间写在同一行，或用空行分开。"
+      subtitle="每行一条 标题和截止写在同一行"
       onClose={onClose}
       footer={
         <>
@@ -214,7 +214,7 @@ export function PasteDialog({
       )}
 
       <p className="mt-4 text-[11px] leading-5 text-ink-3">
-        只处理你主动粘贴的文本，不登录学习通、不调用其接口。粘贴后先核对再入库。
+        只处理你主动粘贴的文本 不登录学习通
       </p>
     </Dialog>
   );
@@ -238,7 +238,7 @@ export function ScreenshotDialog({
   const [message, setMessage] = useState<string | null>(
     configured
       ? null
-      : "本机还没有配置视觉解析代理，无法识别截图。可以先用下面根据你三张截图整理的示例数据，或改用粘贴、手动录入。",
+      : "本机还没配置视觉解析代理 先用下面的示例数据 或改用粘贴 手动录入",
   );
   const [preview, setPreview] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -257,18 +257,18 @@ export function ScreenshotDialog({
     if (!isVisionConfigured()) {
       setPhase("fallback");
       setMessage(
-        "视觉解析尚未配置，暂时无法识别这张截图。请改用粘贴文本或手动添加，也可以先用示例截图数据。",
+        "视觉解析尚未配置 改用粘贴文本或手动添加 也可以用示例截图数据",
       );
       return;
     }
     if (!file.type.startsWith("image/")) {
       setPhase("fallback");
-      setMessage("请选择 PNG / JPG 格式的截图。");
+      setMessage("请选择 PNG / JPG 格式的截图");
       return;
     }
     if (file.size > MAX_IMAGE_BYTES) {
       setPhase("fallback");
-      setMessage("图片超过 8MB，请压缩后再试。");
+      setMessage("图片超过 8MB 请压缩后再试");
       return;
     }
 
@@ -278,7 +278,7 @@ export function ScreenshotDialog({
       const result = await extractAssignmentsFromImage(file);
       if (!result.items.length) {
         setPhase("fallback");
-        setMessage(result.warnings[0] ?? "截图里没有识别到作业，请换一张或手动录入。");
+        setMessage(result.warnings[0] ?? "截图里没有识别到作业 请换一张或手动录入");
         return;
       }
       onParsed({
@@ -292,7 +292,7 @@ export function ScreenshotDialog({
       setMessage(
         error instanceof Error
           ? error.message
-          : "截图解析失败，请重试或手动录入。",
+          : "截图解析失败 请重试或手动录入",
       );
     }
   }
@@ -300,7 +300,7 @@ export function ScreenshotDialog({
   return (
     <Dialog
       title="导入截图"
-      subtitle="只处理你主动上传的截图，不登录学习通、不抓取页面。"
+      subtitle="只处理你主动上传的截图"
       onClose={onClose}
       footer={
         phase === "working" ? (
@@ -328,8 +328,7 @@ export function ScreenshotDialog({
         <>
           <div className="border-rule rounded-xl border bg-surface p-4">
             <p className="text-sm leading-6 text-ink-2">
-              识别标题与截止时间，结果会先给你核对。截图里的课程名、教师等
-              信息若没有出现，不会凭空补全。
+              识别标题与截止时间 结果先给你核对
             </p>
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <button
@@ -340,11 +339,11 @@ export function ScreenshotDialog({
                 选择截图
               </button>
               <span className="font-mono text-micro text-ink-4">
-                PNG / JPG · ≤ 8MB
+                PNG JPG ≤ 8MB
               </span>
             </div>
             <p className="mt-3 text-[11px] leading-5 text-ink-3">
-              图片只用于本次识别：配置代理时发给解析代理，不经过学习通。
+              图片只用于本次识别
             </p>
           </div>
 
@@ -462,7 +461,7 @@ export function ReviewDialog({
   return (
     <Dialog
       title="核对导入结果"
-      subtitle={`共 ${rows.length} 条 · 低置信与未识别截止的条目标黄，可直接修改。`}
+      subtitle={`共 ${rows.length} 条 低置信与未识别截止的条目标黄 可直接修改`}
       wide
       onClose={onClose}
       footer={
@@ -503,7 +502,7 @@ export function ReviewDialog({
 
       {lowCount > 0 && (
         <p className="mb-3 text-[11px] leading-5 text-amber-ink">
-          {lowCount} 条需要你核对：补上标题或截止时间后自动转为高置信。
+          {lowCount} 条需要你核对
         </p>
       )}
 
@@ -635,7 +634,7 @@ export function AssignmentFormDialog({
 
   async function handleSubmit() {
     if (!form.title.trim()) {
-      setError("请填写待办标题。");
+      setError("请填写待办标题");
       return;
     }
     setSaving(true);
@@ -646,7 +645,7 @@ export function AssignmentFormDialog({
       setError(
         submitError instanceof Error
           ? submitError.message
-          : "写入本机失败，请检查浏览器存储权限。",
+          : "写入本机失败 请检查浏览器存储权限",
       );
       setSaving(false);
     }
@@ -655,7 +654,7 @@ export function AssignmentFormDialog({
   return (
     <Dialog
       title={initial ? "编辑待办" : "手动添加待办"}
-      subtitle="作业、竞赛报名、实习投递都可以放在这里。"
+      subtitle="作业 竞赛报名 实习投递都可以放在这里"
       onClose={onClose}
       footer={
         <>

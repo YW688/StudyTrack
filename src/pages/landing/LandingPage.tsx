@@ -41,32 +41,32 @@ const STAGES: Stage[] = [
   {
     year: "大一",
     title: "先不漏",
-    hint: "课表、作业、DDL，一眼看完今天。",
-    label: "工具箱 · 课表",
+    hint: "课表 作业 DDL 一眼看完今天",
+    label: "工具箱 课表",
     tone: "tone-2",
     preview: <WeekShowcase />,
   },
   {
     year: "大二",
     title: "开始攒",
-    hint: "课程设计、比赛、实习，做完就记一条。",
-    label: "征途 · 经历",
+    hint: "课程设计 比赛 实习 做完就记一条",
+    label: "征途 经历",
     tone: "tone-4",
     preview: <ExperienceShowcase />,
   },
   {
     year: "大三",
     title: "拿出证据",
-    hint: "勾选经历自动排版，低置信标黄再确认。",
-    label: "工具箱 · 简历",
+    hint: "勾选经历自动排版 低置信标黄再确认",
+    label: "工具箱 简历",
     tone: "tone-5",
     preview: <ResumeShowcase />,
   },
   {
     year: "大四",
     title: "找对机会",
-    hint: "按经历检索岗位，命中与缺口一目了然。",
-    label: "征召 · 岗位匹配",
+    hint: "按经历检索岗位 命中与缺口一目了然",
+    label: "征召 岗位匹配",
     tone: "tone-1",
     preview: <MatchShowcase />,
   },
@@ -75,45 +75,45 @@ const STAGES: Stage[] = [
 const PRIVACY_FACTS = [
   {
     title: "存在哪",
-    text: "浏览器 IndexedDB。刷新、重开都还在；换浏览器或清除站点数据会丢，先导出备份。",
+    text: "浏览器 IndexedDB 刷新重开都还在 清除站点数据会丢 先导出备份",
   },
   {
     title: "发给模型什么",
-    text: "只发当前这一步的文本或截图，不发整份档案。模型 Key 在代理里，前端拿不到。",
+    text: "只发当前这一步的文本或截图 不发整份档案 Key 在代理里 前端拿不到",
   },
   {
     title: "怎么带走",
-    text: "「导出」得到一份 JSON；换设备用「导入」接着记；「清除本机数据」一键删干净。",
+    text: "导出得到一份 JSON 换设备用导入接着记 清除本机数据一键删干净",
   },
 ];
 
 const FAQS = [
   {
     q: "需要注册或登录吗？",
-    a: "不需要。打开就能用，数据只存在这台设备。",
+    a: "不需要 打开就能用 数据只存在这台设备",
   },
   {
     q: "数据会丢吗？",
-    a: "换浏览器、清除站点数据或换电脑会丢。侧栏可以导出 JSON，导入后接着记。",
+    a: "换浏览器 清除站点数据或换电脑会丢 侧栏导出 JSON 导入后接着记",
   },
   {
     q: "记录官会替我编经历吗？",
-    a: "不会。它只做整理和提问，写入前先给你草稿；原文没有的数字、奖项、名次一律不生成。",
+    a: "不会 只做整理和提问 写入前先给草稿 原文没有的数字奖项名次不生成",
   },
   {
     q: "课表能直接从教务系统导入吗？",
-    a: "不登录学习通，也不调它的接口。支持 Excel / CSV 导入，单双周会展开成具体周次，解析不准可以逐条改。",
+    a: "不登录学习通 也不调它的接口 支持 Excel CSV 导入 单双周展开成具体周次 解析不准可以逐条改",
   },
   {
     q: "岗位是爬来的吗？",
-    a: "不是。只放官方招聘入口、人工整理的演示岗位和你粘贴的 JD；检索在浏览器本地完成。",
+    a: "不是 只放官方招聘入口 人工整理的演示岗位和你粘贴的 JD 检索在浏览器本地完成",
   },
 ];
 
 const STEPS = [
-  { no: "01", title: "建档", text: "年级、专业、目标，30 秒。" },
-  { no: "02", title: "记一条", text: "截图、粘贴或一句话，落进征途。" },
-  { no: "03", title: "看匹配", text: "命中指回原文，缺口给下一步。" },
+  { no: "01", title: "建档", text: "年级 专业 目标 30 秒" },
+  { no: "02", title: "记一条", text: "截图 粘贴或一句话 落进征途" },
+  { no: "03", title: "看匹配", text: "命中指回原文 缺口给下一步" },
 ];
 
 const FOOTER_LINKS = [
@@ -263,9 +263,9 @@ export default function LandingPage({
               </h1>
 
               <p className="landing-enter lp-soft mt-5 max-w-[31rem] text-[14px] leading-7 [animation-delay:100ms] sm:text-[15px]">
-                每天 30 秒，把课表、作业、经历和机会收进同一份本机档案。
+                每天 30 秒 把课表 作业 经历和机会收进同一份本机档案
                 <br className="hidden sm:block" />
-                四年后，它是一份可验证的履历。
+                四年后它是一份可验证的履历
               </p>
 
               <div className="landing-enter mt-6 flex flex-wrap items-center justify-center gap-2 [animation-delay:160ms]">
@@ -298,7 +298,7 @@ export default function LandingPage({
                 className="lp-alert mt-1 text-[12px] leading-5"
               >
                 {state === "error"
-                  ? "没能打开今日页，请重试或检查浏览器存储权限。"
+                  ? "没能打开今日页 请重试或检查浏览器存储权限"
                   : ""}
               </p>
             </div>
@@ -326,7 +326,7 @@ export default function LandingPage({
 
               <div className="hero-workbench">
                 <div className="hero-workbench-bar">
-                  <span>学径 · 第 8 周 · 周日</span>
+                  <span>学径 第 8 周 周一</span>
                   <span>示例数据</span>
                 </div>
                 <div
@@ -355,7 +355,7 @@ export default function LandingPage({
                 ))}
               </div>
               <p className="lp-faint mt-3 text-center font-mono text-[10px] tracking-[0.14em]">
-                四个面并列 · 点开任意一面看工作台预览
+                四个面并列 点开任意一面看工作台预览
               </p>
             </div>
           </div>
@@ -370,12 +370,12 @@ export default function LandingPage({
           <div className="mx-auto w-full max-w-[1240px]">
             <Reveal>
               <div className="landing-section-head">
-                <p className="landing-eyebrow">工作台 · 四个面并列</p>
+                <p className="landing-eyebrow">工作台 四个面并列</p>
                 <h2 className="mx-auto mt-3 max-w-[40rem] font-serif text-[clamp(2rem,4.4vw,3.25rem)] leading-[1.16] tracking-[0.01em]">
                   四个面，一张工作台
                 </h2>
                 <p className="lp-soft mx-auto mt-4 max-w-[32rem] text-[14px] leading-7">
-                  点开任意一面看看。示例数据只在这张预览里，不会写进你的档案。
+                  点开任意一面 示例数据只在预览里 不会写进你的档案
                 </p>
               </div>
             </Reveal>
@@ -402,7 +402,7 @@ export default function LandingPage({
               <WorkbenchDemo active={face} onChange={setFace} />
               <div className="mt-4 flex flex-col items-center gap-2 sm:flex-row sm:justify-center">
                 <p className="lp-faint font-mono text-[10.5px] tracking-[0.06em]">
-                  示例数据 · 四个面共享同一份档案
+                  示例数据 四个面共享同一份档案
                 </p>
                 <a
                   href="#path"
@@ -423,12 +423,12 @@ export default function LandingPage({
           <div className="mx-auto w-full max-w-[1120px]">
             <Reveal>
               <div className="landing-section-head">
-                <p className="landing-eyebrow">一条径 · 四个年级</p>
+                <p className="landing-eyebrow">一条径 四个年级</p>
                 <h2 className="mx-auto mt-3 font-serif text-[clamp(2rem,4.4vw,3.25rem)] leading-[1.16] tracking-[0.01em]">
                   一条径，四个年级
                 </h2>
                 <p className="lp-soft mx-auto mt-4 max-w-[26rem] text-[14px] leading-7">
-                  径不是捷径，是把每一天收进同一条路。
+                  径不是捷径 是把每一天收进同一条路
                 </p>
               </div>
             </Reveal>
@@ -481,13 +481,12 @@ export default function LandingPage({
           <div className="mx-auto w-full max-w-[780px]">
             <Reveal>
               <div className="landing-section-head">
-                <p className="landing-eyebrow">关于数据 · 写在前面</p>
+                <p className="landing-eyebrow">关于数据 写在前面</p>
                 <h2 className="mx-auto mt-4 font-serif text-[clamp(2.2rem,4.8vw,3.4rem)] leading-[1.2] tracking-[0.01em]">
-                  你的档案，只留在这台电脑。
+                  你的档案 只留在这台电脑
                 </h2>
                 <p className="lp-soft mx-auto mt-5 max-w-[38rem] text-[14.5px] leading-8">
-                  没有账号，没有云端数据库，也没有后台在你看不见的地方攒数据。所有内容停在浏览器的 IndexedDB
-                  里；只有你主动粘贴或上传的那一段材料，才会在需要时递给模型。
+                  没有账号 没有云端数据库 也没有后台攒数据 内容停在浏览器 IndexedDB 只有你主动粘贴或上传的那段材料会在需要时递给模型
                 </p>
                 <p className="lp-faint mt-6 font-mono text-[10.5px] tracking-[0.08em]">
                   —— 学径，给本科生的四年档案
@@ -517,7 +516,7 @@ export default function LandingPage({
                 ))}
               </dl>
               <p className="lp-faint mt-4 text-center text-[11px] leading-5">
-                本页所有数字与截图均为示例数据；真实数据只在你的浏览器里。
+                本页数字与截图均为示例数据 真实数据只在你的浏览器里
               </p>
             </Reveal>
           </div>
@@ -535,7 +534,7 @@ export default function LandingPage({
                   先把疑问说清楚
                 </h2>
                 <p className="lp-soft mx-auto mt-4 max-w-[26rem] text-[13.5px] leading-7">
-                  没有注册、没有后台，也不替你编经历。下面是常见问法。
+                  没有注册 没有后台 也不替你编经历
                 </p>
               </div>
             </Reveal>
@@ -561,14 +560,14 @@ export default function LandingPage({
         <section className="landing-close px-4 py-24 sm:px-8 lg:py-28">
           <div className="mx-auto w-full max-w-[780px] text-center">
             <Reveal>
-              <p className="landing-eyebrow">开始 · 不用等开学</p>
+              <p className="landing-eyebrow">开始 不用等开学</p>
               <h2 className="mx-auto mt-4 max-w-[36rem] font-serif text-[clamp(2.4rem,6vw,4.2rem)] leading-[1.12] tracking-[0.01em]">
                 从今天开始，
                 <br />
-                留下第一条记录。
+                留下第一条记录
               </h2>
               <p className="close-soft mx-auto mt-5 max-w-[30rem] text-[14px] leading-8">
-                不用先填完课表，也不要求注册。先看示例，再换成你自己的。
+                不用先填完课表 也不要求注册 先看示例再换成你自己的
               </p>
               <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
                 <StartButton
@@ -589,7 +588,7 @@ export default function LandingPage({
                 />
               </div>
               <p className="close-soft mt-3 font-mono text-[10.5px] tracking-[0.06em]">
-                无需注册 · 数据只存本机 · 随时可清除
+                无需注册 数据只存本机 随时可清除
               </p>
             </Reveal>
 
@@ -632,7 +631,7 @@ export default function LandingPage({
               </span>
             </div>
             <p className="lp-soft mx-auto mt-4 max-w-[30rem] text-[13px] leading-7 text-pretty">
-              每天 30 秒，把大学四年变成一份可验证的履历。数据只存在你的浏览器。
+              每天 30 秒 把大学四年变成一份可验证的履历 数据只存在你的浏览器
             </p>
           </div>
 
@@ -652,8 +651,8 @@ export default function LandingPage({
           </nav>
 
           <div className="lp-faint flex w-full flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-[color:var(--lp-line)] pt-5 text-[11px]">
-            <span className="font-mono tracking-[0.06em]">学径 StudyTrack · 2026</span>
-            <span>无账号 · 无云端数据库 · 无第三方追踪</span>
+            <span className="font-mono tracking-[0.06em]">学径 StudyTrack 2026</span>
+            <span>无账号 无云端数据库 无第三方追踪</span>
             <a
               href="#main"
               className="inline-flex min-h-11 items-center underline-offset-4 hover:text-[color:var(--lp-ink)] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-accent)]"
@@ -839,10 +838,10 @@ function ExperiencePreview() {
 }
 
 const TOOL_ROWS = [
-  { label: "课表", meta: "单双周 · 周视图", tone: "tone-2" },
-  { label: "作业", meta: "DDL · 完成状态", tone: "tone-3" },
-  { label: "简历", meta: "勾选经历 · A4", tone: "tone-5" },
-  { label: "日历", meta: "竞赛 · 考试 · 校内", tone: "tone-1" },
+  { label: "课表", meta: "单双周 周视图", tone: "tone-2" },
+  { label: "作业", meta: "DDL 完成状态", tone: "tone-3" },
+  { label: "简历", meta: "勾选经历 A4", tone: "tone-5" },
+  { label: "日历", meta: "竞赛 考试 校内", tone: "tone-1" },
 ];
 
 function ToolboxPreview() {

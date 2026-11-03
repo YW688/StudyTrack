@@ -84,14 +84,14 @@ export default function TimetablePage({
       if (!result.courses.length) {
         setParseError(
           result.warnings[0] ??
-            "没有从这份文件里识别出课程。请换一份带「星期 / 节次」表头的 Excel，或手动建课表。",
+            "没识别出课程 换一份带「星期 节次」表头的 Excel 或手动建课表",
         );
         return;
       }
       setParseResult(result);
     } catch {
       setParseError(
-        "文件读取失败。请确认是 .xls / .xlsx / .csv 格式的课表文件；也可以手动建课表。",
+        "文件读取失败 确认是 xls xlsx 或 csv 课表 也可以手动建课表",
       );
     } finally {
       setParsing(false);
@@ -109,9 +109,9 @@ export default function TimetablePage({
     };
     try {
       await onSave(next);
-      setNotice(`已导入 ${courses.length} 门课 · 共 ${semester.totalWeeks} 周`);
+      setNotice(`已导入 ${courses.length} 门课 共 ${semester.totalWeeks} 周`);
     } catch (error) {
-      setNotice(error instanceof Error ? error.message : "写入本机失败。");
+      setNotice(error instanceof Error ? error.message : "写入本机失败");
     }
     setParseResult(null);
   }
@@ -125,22 +125,22 @@ export default function TimetablePage({
         updatedAt: new Date().toISOString(),
       });
     } catch (error) {
-      setNotice(error instanceof Error ? error.message : "开学日期未保存。");
+      setNotice(error instanceof Error ? error.message : "开学日期未保存");
     }
   }
 
   async function handleManualSubmit() {
     if (!form.name.trim()) {
-      setFormError("请填写课程名。");
+      setFormError("请填写课程名");
       return;
     }
     const weeks = expandWeeksText(form.weeks);
     if (!weeks) {
-      setFormError("周次无法识别，示例：1-16、1-8,10-16、2-16双。");
+      setFormError("周次无法识别 示例 1-16 或 1-8,10-16");
       return;
     }
     if (form.endPeriod < form.startPeriod) {
-      setFormError("结束节不能早于起始节。");
+      setFormError("结束节不能早于起始节");
       return;
     }
 
@@ -194,7 +194,7 @@ export default function TimetablePage({
       setFormError(null);
     } catch (error) {
       setFormError(
-        error instanceof Error ? error.message : "写入本机失败，请检查浏览器存储权限。",
+        error instanceof Error ? error.message : "写入本机失败 请检查浏览器存储权限",
       );
     }
   }
@@ -209,8 +209,7 @@ export default function TimetablePage({
               先把这学期的课表放进来
             </h2>
             <p className="mt-2 max-w-lg text-sm leading-6 text-ink-3">
-              解析后先对照原表确认，再写入本机。单双周会自动展开成具体周次，
-              之后每周切换只看当周课程。
+              导入后先对照原表确认 单双周会自动展开
             </p>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -249,9 +248,7 @@ export default function TimetablePage({
 
             <div className="border-rule mt-6 border-t pt-4">
               <p className="text-xs leading-5 text-ink-3">
-                建议使用 Excel：教务系统导出的 .xls / .xlsx 最完整，支持合并单元格、
-                多工作表与单双周。截图导入需要视觉模型，且容易漏掉课程，
-                当前版本暂未开放。
+                推荐 Excel 导入 支持合并单元格与单双周 截图导入暂未开放
               </p>
             </div>
           </div>
@@ -317,9 +314,9 @@ export default function TimetablePage({
             </div>
             <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-2 text-xs leading-5 text-ink-3">
               <span>
-                {data.semester.name ?? "未命名学期"} · 共{" "}
-                {data.semester.totalWeeks} 周 · {data.courses.length} 门课
-                {data.sourceLabel ? ` · ${data.sourceLabel}` : ""}
+                {data.semester.name ?? "未命名学期"} 共{" "}
+                {data.semester.totalWeeks} 周 {data.courses.length} 门课
+                {data.sourceLabel ? ` ${data.sourceLabel}` : ""}
               </span>
               <label className="inline-flex items-center gap-2">
                 <span className={data.semester.startDate ? "" : "text-amber-ink"}>
@@ -412,8 +409,8 @@ export default function TimetablePage({
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-ink-3">
           <p>
-            第 {week} 周 · {visibleCount} 门课有安排
-            {visibleCount === 0 ? "（本周无课，可切换其他周查看）" : ""}
+            第 {week} 周 {visibleCount} 门课有安排
+            {visibleCount === 0 ? "（本周无课）" : ""}
           </p>
           <p className="font-mono tracking-[0.04em]">
             {data.sourceLabel === "示例课表" ? "示例数据" : "本机数据"}
@@ -423,20 +420,20 @@ export default function TimetablePage({
         {conflicts.length > 0 && (
           <section className="border-amber/50 bg-amber/[0.05] mt-5 rounded-xl border-l-2 px-4 py-3">
             <h2 className="text-xs font-medium text-ink">
-              本周有 {conflicts.length} 处时间重叠（只提示，不阻止）
+              本周有 {conflicts.length} 处时间重叠
             </h2>
             <ul className="mt-2 space-y-1 text-xs leading-5 text-ink-3">
               {conflicts.slice(0, 4).map((conflict, index) => (
                 <li key={`${conflict.a.id}-${conflict.b.id}-${index}`}>
                   {DAY_LABELS[conflict.day - 1]} 第 {conflict.startPeriod}-
-                  {conflict.endPeriod} 节 ·《{conflict.a.name}》×《
+                  {conflict.endPeriod} 节 《{conflict.a.name}》与《
                   {conflict.b.name}》
                 </li>
               ))}
             </ul>
             {conflicts.length > 4 && (
               <p className="mt-1 text-[11px] text-ink-3">
-                还有 {conflicts.length - 4} 处未列出。
+                还有 {conflicts.length - 4} 处
               </p>
             )}
           </section>
@@ -444,19 +441,17 @@ export default function TimetablePage({
 
         <details className="border-rule group mt-6 rounded-xl border bg-surface/60 px-4 py-3">
           <summary className="cursor-pointer list-none text-xs text-ink-3">
-            导入说明 · 支持 .xls / .xlsx / .csv
+            导入说明 支持 xls xlsx csv
             <span className="ml-2 font-mono text-micro text-ink-4">
               单双周自动展开
             </span>
           </summary>
           <div className="mt-3 space-y-2 text-xs leading-6 text-ink-3">
             <p>
-              推荐从教务系统导出 Excel：能保留合并单元格、多工作表与“单/双周”标注。
-              导入前会左右对照原表，低置信的课程标黄，可改周次、节次或整门删除。
+              推荐从教务系统导出 Excel 导入前可左右对照 低置信标黄
             </p>
             <p className="text-ink-3">
-              截图导入依赖视觉模型，容易漏掉未出现在截图里的课程，当前版本暂未开放。
-              所有课表只保存在本机浏览器，不上传服务器。
+              截图导入暂未开放 课表只保存在本机
             </p>
           </div>
         </details>
@@ -508,9 +503,6 @@ function EmptyHeader() {
       <h1 className="mt-2 font-serif text-2xl tracking-tight sm:text-3xl">
         课表
       </h1>
-      <p className="mt-2 text-sm text-ink-3">
-        管好每周上什么，是这份档案的第一块地基。
-      </p>
     </div>
   );
 }

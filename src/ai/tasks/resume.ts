@@ -54,8 +54,8 @@ export async function generateResumeBullets(
       hiddenCount: 0,
       note:
         local.length > 0
-          ? "未配置模型代理，已按原文提炼本地草稿。"
-          : "四段式还没有可提炼的内容，请先去经历页补充。",
+          ? "未配置模型代理 已按原文提炼本地草稿"
+          : "四段式还没有可提炼的内容 先去经历页补充",
       usedFallback: false,
     };
   }
@@ -70,7 +70,7 @@ export async function generateResumeBullets(
     });
     const parsed = aiBulletResponseSchema.safeParse(raw);
     if (!parsed.success) {
-      throw new TextTaskError("invalid", "模型输出字段不完整。");
+      throw new TextTaskError("invalid", "模型输出字段不完整");
     }
 
     const validated = validateAiBullets(
@@ -80,7 +80,7 @@ export async function generateResumeBullets(
     );
     dropped = validated.dropped;
     if (validated.bullets.length === 0) {
-      throw new TextTaskError("invalid", "模型输出缺少原文依据。");
+      throw new TextTaskError("invalid", "模型输出缺少原文依据");
     }
 
     return {
@@ -90,15 +90,15 @@ export async function generateResumeBullets(
       hiddenCount: validated.dropped,
       note:
         validated.dropped > 0
-          ? `有 ${validated.dropped} 条因缺少依据或重复被过滤。`
-          : "AI 依据原文提炼。",
+          ? `有 ${validated.dropped} 条因缺少依据或重复被过滤`
+          : "AI 依据原文提炼",
       usedFallback: false,
     };
   } catch (error) {
     const reason =
-      error instanceof TextTaskError ? error.message : "AI 暂不可用。";
+      error instanceof TextTaskError ? error.message : "AI 暂不可用";
     const filtered =
-      dropped > 0 ? `有 ${dropped} 条因缺少依据或重复被过滤。` : "";
+      dropped > 0 ? `有 ${dropped} 条因缺少依据或重复被过滤` : "";
     return {
       bullets: local,
       source: "local",
@@ -106,8 +106,8 @@ export async function generateResumeBullets(
       hiddenCount: dropped,
       note:
         local.length > 0
-          ? `${reason}${filtered} 已使用原文兜底。`
-          : `${reason}${filtered} 四段式还没有可提炼的内容。`,
+          ? `${reason} ${filtered} 已使用原文兜底`
+          : `${reason} ${filtered} 四段式还没有可提炼的内容`,
       usedFallback: true,
     };
   }

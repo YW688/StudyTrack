@@ -102,13 +102,13 @@ export default function ExperiencePool({
     return (
       <section className="border-rule rounded-xl border bg-surface p-5">
         <p className="font-mono text-micro tracking-[0.16em] text-ink-3">
-          经历池 · 空
+          经历池 空
         </p>
         <h2 className="mt-2 text-base font-medium tracking-tight">
           你还没有记录经历
         </h2>
         <p className="mt-2 text-sm leading-6 text-ink-3">
-          去「经历」页记一条，简历会自动更新。课程设计、比赛、实习、作品都可以，
+          去「经历」页记一条 课程设计 比赛 实习 都可以
           没有数字就留空。
         </p>
         <button
@@ -127,7 +127,7 @@ export default function ExperiencePool({
       <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
           <p className="font-mono text-micro tracking-[0.16em] text-ink-3">
-            经历池 · {experiences.length} 条
+            经历池 {experiences.length} 条
           </p>
           <h2
             id="resume-pool-title"
@@ -236,7 +236,7 @@ export default function ExperiencePool({
 
       {filtered.length === 0 ? (
         <div className="border-rule mt-3 rounded-xl border border-dashed px-4 py-6 text-center">
-          <p className="text-xs text-ink-3">当前筛选下没有经历。</p>
+          <p className="text-xs text-ink-3">当前筛选下没有经历</p>
           <button
             type="button"
             onClick={onResetFilters}
@@ -357,7 +357,7 @@ export default function ExperiencePool({
                       className="border-amber/40 bg-amber/[0.06] mt-2 rounded-lg border-l-2 px-3 py-2"
                     >
                       <p className="text-[11px] leading-5 text-ink-2">
-                        这条经历标为「待确认」。加入简历前，建议先去经历页核对原文。
+                        标为「待确认」 加入简历前先核对原文
                       </p>
                       <div className="mt-1 flex flex-wrap items-center gap-3">
                         <button
@@ -463,7 +463,7 @@ export default function ExperiencePool({
                       )}
                       {!hasContent && (
                         <p className="mt-1 text-micro leading-4 text-amber-ink">
-                          四段式为空，请先去经历页补充。
+                          四段式为空 先去经历页补充
                           <button
                             type="button"
                             onClick={onNavigateExperiences}
@@ -475,7 +475,7 @@ export default function ExperiencePool({
                       )}
                       {low && (
                         <p className="mt-1 text-micro leading-4 text-amber-ink">
-                          待确认经历已加入，导出前请核对原文。
+                          待确认经历已加入 导出前请核对原文
                         </p>
                       )}
                     </div>

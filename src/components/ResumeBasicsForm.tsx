@@ -71,7 +71,7 @@ export default function ResumeBasicsForm({
         </span>
         <span className="flex items-center gap-3">
           <span className="hidden text-micro text-ink-4 sm:inline">
-            全部可留空，空字段不打印
+            全部可留空 空字段不打印
           </span>
           <span
             aria-hidden="true"
@@ -272,7 +272,7 @@ export default function ResumeBasicsForm({
           </div>
 
           <p className="mt-3 text-micro leading-5 text-ink-4">
-            技能由所选经历的标签自动汇总；作品集链接会包含你填写的姓名与联系方式，分享前请确认。
+            技能由所选经历汇总 作品集链接含姓名与联系方式 分享前请确认
           </p>
         </div>
       )}

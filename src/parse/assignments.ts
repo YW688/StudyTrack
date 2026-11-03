@@ -216,21 +216,21 @@ export function parseAssignmentsText(raw: string): AssignmentParseResult {
   }
 
   if (records.length > MAX_ITEMS) {
-    warnings.push(`一次最多导入 ${MAX_ITEMS} 条，其余已忽略。`);
+    warnings.push(`一次最多导入 ${MAX_ITEMS} 条 其余已忽略`);
   }
   if (!items.length) {
     warnings.push(
-      "没有识别到待办。每行写「标题 + 截止时间」，例如：实验三 数据库操作 2026-11-08 23:55。",
+      "没有识别到待办 每行写「标题 + 截止时间」 例如 实验三 数据库操作 2026-11-08 23:55",
     );
   } else {
     if (missingDue) {
-      warnings.push(`${missingDue} 条没有识别到截止时间，导入后可手动补。`);
+      warnings.push(`${missingDue} 条没有识别到截止时间 导入后可手动补`);
     }
     if (missingTime) {
-      warnings.push(`${missingTime} 条只识别到日期，按当日 23:59 计。`);
+      warnings.push(`${missingTime} 条只识别到日期 按当日 23:59 计`);
     }
     if (missingTitle) {
-      warnings.push(`${missingTitle} 条没有标题，已标为待补充。`);
+      warnings.push(`${missingTitle} 条没有标题 已标为待补充`);
     }
   }
 

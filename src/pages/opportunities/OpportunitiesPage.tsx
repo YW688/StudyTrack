@@ -349,9 +349,9 @@ export default function OpportunitiesPage({
     setSeedError(null);
     try {
       await onUseSample();
-      setNotice("已写入示例经历，匹配结果已按示例经历更新。");
+      setNotice("已写入示例经历 匹配已更新");
     } catch {
-      setSeedError("示例经历写入失败，请检查浏览器存储权限后重试。");
+      setSeedError("示例经历写入失败 请检查浏览器存储权限后重试");
     } finally {
       setSeedBusy(false);
     }
@@ -399,7 +399,7 @@ export default function OpportunitiesPage({
               </span>
             </div>
             <p className="mt-2 text-xs leading-5 text-ink-3">
-              {CHANNELS.length} 个官方入口 + {JOB_POSTINGS.length} 张演示岗位卡 把经历对到要求上：命中指回原文，缺口给出下一步
+              {CHANNELS.length} 个官方入口 {JOB_POSTINGS.length} 个岗位方向
             </p>
             <p className="mt-1 font-mono text-micro leading-5 text-ink-4">
               来源核验：官方入口 {channelOk}/{CHANNELS.length} 可达 演示卡来源{" "}
@@ -454,7 +454,7 @@ export default function OpportunitiesPage({
             role="alert"
             className="border-amber/50 bg-amber/[0.07] mt-4 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink-2"
           >
-            {JOB_LIBRARY_ISSUE}。仍可粘贴一份 JD 做本地匹配。
+            {JOB_LIBRARY_ISSUE} 仍可粘贴 JD 本地匹配
           </p>
         )}
 
@@ -462,7 +462,7 @@ export default function OpportunitiesPage({
           <section className="border-accent/50 bg-accent/[0.06] mt-4 rounded-lg border-l-2 px-4 py-3">
             <p className="text-sm font-medium">还没有可匹配的经历</p>
             <p className="mt-1 text-[11px] leading-5 text-ink-3">
-              命中项必须引用经历原文。先用示例经历走一遍，或去经历库写第一条。
+              命中项必须引用经历原文
             </p>
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <button
@@ -566,7 +566,7 @@ export default function OpportunitiesPage({
               </>
             ) : (
               <span className="text-micro text-ink-4">
-                在经历里填写技能标签，匹配会更准
+                在经历里填技能标签 匹配会更准
               </span>
             )}
             <span className="ml-auto text-micro text-ink-4">
@@ -576,8 +576,7 @@ export default function OpportunitiesPage({
           {incomplete.length > 0 ? (
             <div className="border-rule bg-amber/[0.05] flex flex-wrap items-center justify-between gap-2 border-t px-4 py-2.5">
               <p className="text-micro leading-5 text-ink-3">
-                补全后可提高排序准确度：
-                {incomplete.map((item) => item.label).join("、")}
+                待补：{incomplete.map((item) => item.label).join(" ")}
               </p>
               <button
                 type="button"
@@ -589,7 +588,7 @@ export default function OpportunitiesPage({
             </div>
           ) : (
             <p className="border-rule border-t px-4 py-2.5 text-micro leading-5 text-ink-4">
-              匹配依据齐全，排序已按求职意向、城市与年级加权。
+              已按意向 城市 年级排序
             </p>
           )}
         </section>
@@ -953,9 +952,7 @@ export default function OpportunitiesPage({
                     : "没有符合条件的岗位"}
                 </p>
                 <p className="mx-auto mt-1.5 max-w-sm text-[11px] leading-5 text-ink-3">
-                  {allJobs.length === 0
-                    ? "仍可粘贴一份 JD，在本地对照经历。"
-                    : "换个关键词或重置筛选。岗位方向库只收录已核对的官方校招与实习方向。"}
+                  {allJobs.length === 0 ? "可粘贴一份 JD 对照经历" : "换个关键词或重置筛选"}
                 </p>
                 <div className="mt-3 flex flex-wrap justify-center gap-2">
                   {filtersActive && (
@@ -1006,9 +1003,7 @@ export default function OpportunitiesPage({
                       : "选择一个岗位"}
                 </p>
                 <p className="mx-auto mt-1.5 max-w-sm text-[11px] leading-5 text-ink-3">
-                  {visible.length === 0
-                    ? "调整检索词或筛选条件，再查看匹配详情。"
-                    : "选中岗位后，这里会逐条展示命中依据与待补缺口。"}
+                  {visible.length === 0 ? "调整检索词或筛选条件" : "选中岗位查看命中与缺口"}
                 </p>
                 <button
                   type="button"
@@ -1035,7 +1030,7 @@ export default function OpportunitiesPage({
                 id="channel-heading"
                 className="mt-1 font-serif text-xl tracking-tight"
               >
-                {CHANNELS.length} 个官方入口，自己去投
+                {CHANNELS.length} 个官方入口 自己去投
               </h2>
               <p className="mt-1 max-w-2xl text-[11px] leading-5 text-ink-3">
                 {CHANNEL_LIBRARY_NOTE}
@@ -1168,7 +1163,7 @@ export default function OpportunitiesPage({
 
         <footer className="border-rule mt-8 border-t py-5">
           <p className="text-micro leading-5 text-ink-4">
-            匹配、检索与数据存储均在本机浏览器完成；来源核验在构建期完成，只检查官方公开入口可达性；岗位方向仍为人工整理，具体在招职位与截止时间以官网为准；学径不代投、不抓取招聘平台职位内容。
+            匹配与检索都在本机完成 岗位方向为人工整理 以官网为准 不代投 不抓取
           </p>
         </footer>
       </div>

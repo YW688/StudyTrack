@@ -44,9 +44,6 @@ export default function BulletManager({
           </span>
         </span>
         <span className="flex items-center gap-3">
-          <span className="hidden text-micro text-ink-4 sm:inline">
-            每条要点都能展开原文依据
-          </span>
           <span
             aria-hidden="true"
             className={[
@@ -63,7 +60,7 @@ export default function BulletManager({
         <div className="border-rule border-t px-4 py-3">
           {entries.length === 0 ? (
             <p className="text-[11px] leading-5 text-ink-3">
-              先从左侧选择经历加入简历，再生成要点。
+              先从左侧选经历加入简历 再生成要点
             </p>
           ) : (
             <ul className="space-y-4">
@@ -82,7 +79,7 @@ export default function BulletManager({
                         <p className="mt-0.5 text-micro leading-4 text-ink-3">
                           {cache
                             ? bulletCacheNote(cache)
-                            : "当前简历显示原文；生成后可逐条核对。"}
+                            : "当前显示原文 生成后可逐条核对"}
                           {hiddenCount > 0
                             ? ` 已过滤 ${hiddenCount} 条无依据要点。`
                             : ""}
@@ -157,8 +154,8 @@ export default function BulletManager({
                         experience.method.trim() ||
                         experience.contribution.trim() ||
                         experience.result.trim()
-                          ? "还没有生成要点。当前草稿会直接使用原文结果与贡献。"
-                          : "四段式为空，请先去经历页补充。"}
+                          ? "还没有生成要点 草稿直接用原文结果与贡献"
+                          : "四段式为空 请先去经历页补充"}
                       </p>
                     )}
                   </li>
@@ -167,7 +164,7 @@ export default function BulletManager({
             </ul>
           )}
           <p className="mt-3 text-micro leading-5 text-ink-4">
-            要点只从经历原文提炼；数字必须有原文或量化数据支撑，缺少依据的条目会被丢弃。
+            要点只从原文提炼 数字必须有出处
           </p>
         </div>
       )}

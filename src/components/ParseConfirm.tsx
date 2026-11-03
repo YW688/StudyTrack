@@ -85,7 +85,7 @@ function WeeksInput({
       />
       {invalid && (
         <span className="mt-0.5 block text-[12px] leading-4 text-amber-ink">
-          周次写法无法识别，如「1-16」「1-8,10-16」「2-16双」
+          周次写法无法识别 如 1-16 或 1-8,10-16
         </span>
       )}
     </label>
@@ -236,13 +236,13 @@ export default function ParseConfirm({
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="font-mono text-micro tracking-[0.18em] text-ink-3">
-              导入课表 · 第 2 步 / 共 3 步
+              导入课表 第 2 步 共 3 步
             </p>
             <h1 className="mt-1 text-lg font-medium tracking-tight">
               核对解析结果
             </h1>
             <p className="mt-1 text-xs text-ink-3">
-              {result.semester.name ?? "未识别学期"} · 共读取 {draft.length} 门课、
+              {result.semester.name ?? "未识别学期"} 共读取 {draft.length} 门课{" "}
               {sessionCount} 个时段
             </p>
             <label className="mt-2 flex flex-wrap items-center gap-2 text-xs text-ink-3">
@@ -317,7 +317,7 @@ export default function ParseConfirm({
               <RawTable sheet={sheet} />
             ) : (
               <p className="border-rule rounded-lg border p-4 text-sm text-ink-3">
-                原始表格不可用，请以右侧结构化结果为准。
+                原始表格不可用 以右侧结果为准
               </p>
             )}
 
@@ -515,14 +515,13 @@ export default function ParseConfirm({
 
               {draft.length === 0 && (
                 <p className="border-rule rounded-lg border p-4 text-sm text-ink-3">
-                  没有可导入的课程。返回后可改用手动建课表。
+                  没有可导入的课程 返回改用手动建课表
                 </p>
               )}
             </div>
 
             <p className="mt-4 text-[11px] leading-5 text-ink-3">
-              确认后写入本机 IndexedDB，刷新不丢；随时可重新导入或清除。
-              标黄的课程请核对周次与节次。
+              写入本机 标黄的课程请核对周次与节次
             </p>
           </section>
         </div>

@@ -67,12 +67,12 @@ export default function PasteJdDialog({
     event.preventDefault();
     const text = raw.trim();
     if (text.length < 20) {
-      setError("JD 太短，请至少粘贴 20 个字。");
+      setError("JD 太短 至少粘贴 20 个字");
       return;
     }
     const result = parsePastedJd({ raw: text, title, company, city, type });
     if (!result.job) {
-      setError(result.warnings[0] ?? "没有解析出岗位要求，请检查粘贴内容。");
+      setError(result.warnings[0] ?? "没有解析出岗位要求 请检查粘贴内容");
       return;
     }
     onCreate(result.job, result.warnings);
@@ -216,11 +216,11 @@ export default function PasteJdDialog({
               aria-describedby="jd-hint"
               className="border-rule focus-visible:border-accent-ink focus:ring-2 focus:ring-accent/45 mt-1.5 w-full resize-y rounded-lg border bg-surface px-3 py-2.5 text-xs leading-6 text-ink outline-none transition-colors placeholder:text-ink-4"
               placeholder={
-                "粘贴岗位职责与任职要求，每行一条效果最好。\n例如：\n- 熟悉 React 与 TypeScript，能独立完成页面开发\n- 了解前端性能优化\n- 每周到岗 4 天以上"
+                "粘贴岗位职责与任职要求 每行一条效果最好\n例如：\n- 熟悉 React 与 TypeScript，能独立完成页面开发\n- 了解前端性能优化\n- 每周到岗 4 天以上"
               }
             />
             <p id="jd-hint" className="mt-1.5 text-micro leading-5 text-ink-3">
-              最多拆出 8 条要求，只在本地识别技能关键词；不会上传，也不保存到浏览器。
+              最多拆出 8 条 只在本地识别
             </p>
           </div>
 
@@ -235,7 +235,7 @@ export default function PasteJdDialog({
 
           <div className="border-rule mt-4 flex flex-wrap items-center justify-between gap-3 border-t pt-4">
             <p className="max-w-xs text-micro leading-5 text-ink-4">
-              岗位信息以企业官网为准；学径不代投、不抓取招聘平台。
+              以官网为准 不代投 不抓取
             </p>
             <div className="flex items-center gap-2">
               <button type="button" onClick={onClose} className={BTN_SECONDARY}>

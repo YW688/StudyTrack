@@ -90,9 +90,9 @@ export const CHANNELS: Channel[] = channelsParsed.success
   ? (channelsParsed.data as Channel[])
   : [];
 
-export const JOB_LIBRARY_NOTE = `${JOB_POSTINGS.length} 张演示岗位卡：人工整理自企业官方招聘方向，只用于本地对照；具体在招职位、城市与截止时间以官网为准。`;
+export const JOB_LIBRARY_NOTE = `${JOB_POSTINGS.length} 张演示岗位卡 人工整理 以官网为准`;
 
-export const CHANNEL_LIBRARY_NOTE = `${CHANNELS.length} 个官方入口：只做链接，不抓取站内职位；开放月份与具体岗位以官网为准。`;
+export const CHANNEL_LIBRARY_NOTE = `${CHANNELS.length} 个官方入口 只做链接 具体岗位以官网为准`;
 
 export const JOB_LIBRARY_ISSUE = jobsParsed.success
   ? null
@@ -480,7 +480,7 @@ const ADVICE_GROUPS: { skills: string[]; advice: string }[] = [
       "响应式布局",
     ],
     advice:
-      "做一个可复现的前端作品，写清你解决的页面问题、采用的方案和可验证的结果，把代码仓库或演示链接写进经历证据。",
+      "做一个可复现的前端作品 写清你解决的页面问题 采用的方案和可验证的结果 把代码仓库或演示链接写进经历证据",
   },
   {
     skills: [
@@ -497,7 +497,7 @@ const ADVICE_GROUPS: { skills: string[]; advice: string }[] = [
       "游戏UI",
     ],
     advice:
-      "把一次真实的界面改版整理成案例：问题、目标、方案、上线结果，附上 Figma 链接与关键页面。",
+      "把一次真实的界面改版整理成案例 问题 目标 方案 上线结果 附上 Figma 链接与关键页面",
   },
   {
     skills: [
@@ -510,7 +510,7 @@ const ADVICE_GROUPS: { skills: string[]; advice: string }[] = [
       "产品设计",
     ],
     advice:
-      "为现有项目补一份访谈纪要、需求清单或 PRD，把用户原话与设计决策对应起来，作为经历证据。",
+      "为现有项目补一份访谈纪要 需求清单或 PRD 把用户原话与设计决策对应起来 作为经历证据",
   },
   {
     skills: [
@@ -532,17 +532,17 @@ const ADVICE_GROUPS: { skills: string[]; advice: string }[] = [
       "算法",
     ],
     advice:
-      "用一份公开数据完成清洗、分析、图表和结论，写清指标定义与结果；不要只写“会使用工具”。",
+      "用一份公开数据完成清洗 分析 图表和结论 写清指标定义与结果 不要只写「会使用工具」",
   },
   {
     skills: ["沟通", "团队协作", "项目管理", "活动组织", "活动策划", "招聘", "课程设计"],
     advice:
-      "在课程、社团或志愿活动里承担一次组织角色，记录协作对象、推进节点与最终结果。",
+      "在课程 社团或志愿活动里承担一次组织角色 记录协作对象 推进节点与最终结果",
   },
   {
     skills: ["内容运营", "文案", "短视频", "用户运营", "社群运营", "市场推广"],
     advice:
-      "选一个你运营过的账号或活动，写清选题、发布节奏、数据反馈和你的调整动作。",
+      "选一个你运营过的账号或活动 写清选题 发布节奏 数据反馈和你的调整动作",
   },
   {
     skills: [
@@ -561,7 +561,7 @@ const ADVICE_GROUPS: { skills: string[]; advice: string }[] = [
       "脚本",
     ],
     advice:
-      "在课程实验或比赛中留下可验证的过程材料：设计文档、测试记录、代码或演示视频。",
+      "在课程实验或比赛中留下可验证的过程材料 设计文档 测试记录 代码或演示视频",
   },
 ];
 
@@ -574,9 +574,9 @@ function buildAdvice(
       .map(canonicalSkill)
       .filter(Boolean),
   );
-  if (skills.length === 0) return "补一条能验证这项要求的真实经历。";
+  if (skills.length === 0) return "补一条能验证这项要求的真实经历";
   if (missing && missing.length === 0) {
-    return "这项要求的技能分散在多条经历里，建议合并成一条完整经历，或补一条能覆盖全部要求的项目证据。";
+    return "这项要求的技能分散在多条经历里 建议合并成一条完整经历 或补一条能覆盖全部要求的项目证据";
   }
   const focus = missing && missing.length > 0 ? missing : skills;
   const group = ADVICE_GROUPS.find((item) =>
@@ -584,11 +584,11 @@ function buildAdvice(
   );
   const tail =
     group?.advice ??
-    "补一条课程设计、比赛或实习经历，写清问题、你的做法和结果；没有真实项目就从课程作业开始。";
+    "补一条课程设计 比赛或实习经历 写清问题 你的做法和结果 没有真实项目就从课程作业开始";
   if (rule.any?.length && !rule.all?.length) {
-    return `这项要求至少需要一项可验证证据（${focus.join("、")}）。${tail}`;
+    return `这项要求至少需要一项可验证证据（${focus.join(" ")}） ${tail}`;
   }
-  return `这项要求还缺少可验证证据（${focus.join("、")}）。${tail}`;
+  return `这项要求还缺少可验证证据（${focus.join(" ")}） ${tail}`;
 }
 
 const TARGET_FAMILY_RULES: { family: JobFamily; re: RegExp }[] = [
@@ -823,7 +823,7 @@ export function matchJob(job: JobPosting, context: MatchContext): JobMatch {
       eligibility.push({
         index,
         requirement,
-        note: "资格条件（学历、届别、到岗时间等），投递前请以企业官网为准。",
+        note: "学历 届别 到岗时间等条件 投递前请以企业官网为准",
       });
       return;
     }
@@ -915,7 +915,7 @@ export function matchJob(job: JobPosting, context: MatchContext): JobMatch {
 
   const warnings: string[] = [];
   if (!context.profile.target) {
-    warnings.push("未填写求职意向，当前主要按经历与技能排序。");
+    warnings.push("未填写求职意向 当前主要按经历与技能排序");
   }
   if (
     context.profile.grade &&
@@ -923,7 +923,7 @@ export function matchJob(job: JobPosting, context: MatchContext): JobMatch {
     job.gradeFit.length > 0
   ) {
     warnings.push(
-      `该岗位通常面向${formatGradeFit(job.gradeFit)}，你填写的是${context.profile.grade}。`,
+      `该岗位通常面向${formatGradeFit(job.gradeFit)} 你填写的是${context.profile.grade}`,
     );
   }
   if (
@@ -934,21 +934,21 @@ export function matchJob(job: JobPosting, context: MatchContext): JobMatch {
     job.city !== "不限"
   ) {
     warnings.push(
-      `岗位在${job.city}，你填写的意向城市是${context.profile.city}。`,
+      `岗位在${job.city} 你填写的意向城市是${context.profile.city}`,
     );
   }
   if (context.profile.target && targetFit < 0.5) {
-    warnings.push(`与求职意向「${context.profile.target}」方向不同。`);
+    warnings.push(`与求职意向「${context.profile.target}」方向不同`);
   }
   if (context.units.length === 0) {
-    warnings.push("还没有可用于匹配的经历，补齐后命中项才有原文依据。");
+    warnings.push("还没有可用于匹配的经历 补齐后命中项才有原文依据");
   }
   if (matchable === 0) {
-    warnings.push("这条 JD 没有识别出可匹配的技能要求，请手动对照任职要求。");
+    warnings.push("这条 JD 没有识别出可匹配的技能要求 请手动对照任职要求");
   }
   if (context.profile.experienceCount > 0 && !context.profile.usesSelected) {
     warnings.push(
-      "简历尚未选入经历，当前按全部经历评估；勾选后匹配更聚焦。",
+      "简历尚未选入经历 当前按全部经历评估 勾选后匹配更聚焦",
     );
   }
 
@@ -1147,7 +1147,7 @@ function inferJobFamily(text: string): JobFamily {
 export function parsePastedJd(input: PastedJdInput): ParsedJdResult {
   const raw = input.raw.trim();
   if (raw.length < 20) {
-    return { job: null, warnings: ["JD 太短，至少粘贴 20 个字。"] };
+    return { job: null, warnings: ["JD 太短 至少粘贴 20 个字"] };
   }
 
   const lines = raw
@@ -1180,10 +1180,10 @@ export function parsePastedJd(input: PastedJdInput): ParsedJdResult {
 
   const warnings: string[] = [];
   if (skills.length === 0) {
-    warnings.push("没有识别到技能关键词，匹配将只展示要求清单。");
+    warnings.push("没有识别到技能关键词 匹配将只展示要求清单");
   }
   if (requirements.length < 2) {
-    warnings.push("JD 可拆分的条目较少，建议把职责与要求分行粘贴。");
+    warnings.push("JD 可拆分的条目较少 建议把职责与要求分行粘贴");
   }
 
   const job: JobPosting = {

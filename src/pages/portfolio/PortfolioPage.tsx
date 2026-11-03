@@ -54,7 +54,7 @@ export default function PortfolioPage({ hash }: PortfolioPageProps) {
   async function handleCopy() {
     const ok = await copyText(window.location.href);
     setCopied(ok);
-    setCopyError(ok ? null : "自动复制失败，请从地址栏复制。");
+    setCopyError(ok ? null : "自动复制失败 请从地址栏复制");
   }
 
   if (!payload) {
@@ -68,8 +68,7 @@ export default function PortfolioPage({ hash }: PortfolioPageProps) {
             链接无效或数据已损坏
           </h1>
           <p className="mt-3 text-sm leading-6 text-ink-3">
-            作品集内容全部编码在这条链接里。如果链接被聊天工具截断，就会打不开。
-            可以回到学径重新生成一条。
+            内容全部编码在链接里 被聊天工具截断就会打不开
           </p>
           <a
             href="#/"
@@ -137,7 +136,7 @@ export default function PortfolioPage({ hash }: PortfolioPageProps) {
           )}
         </div>
         <p className="mt-2 font-mono text-micro tracking-[0.08em] text-ink-4">
-          {payload.items.length} 个项目 · 内容在链接里，不上传服务器
+          {payload.items.length} 个项目 内容在链接里 不上传服务器
         </p>
       </header>
 
@@ -174,7 +173,7 @@ export default function PortfolioPage({ hash }: PortfolioPageProps) {
             由学径 StudyTrack 生成
           </p>
           <p className="text-micro text-ink-4">
-            数据只在这条链接里，不会上传服务器
+            数据只在这条链接里 不上传服务器
           </p>
         </footer>
       </main>

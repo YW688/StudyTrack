@@ -32,29 +32,29 @@ export default function ToolboxPage({
       id: "timetable",
       no: "01",
       title: "课表",
-      hint: "Excel 导入、单双周展开、周视图",
+      hint: "Excel 导入 单双周展开 周视图",
       meta: "上课时间与教室",
     },
     {
       id: "assignments",
       no: "02",
       title: "作业",
-      hint: "截图、粘贴或手动录入，按 DDL 排",
+      hint: "截图 粘贴或手动录入 按 DDL 排",
       meta: "未完成与完成状态",
     },
     {
       id: "resume",
       no: "03",
       title: "简历",
-      hint: "勾选经历自动排版，浏览器打印 A4",
+      hint: "勾选经历自动排版 浏览器打印 A4",
       meta: "只导出你确认过的内容",
     },
     {
       id: "calendar",
       no: "04",
       title: "日历",
-      hint: "竞赛、考试报名、校内节点",
-      meta: `${calendarCount} 条 · ${calendarUpdatedLabel(calendarUpdatedAt)}`,
+      hint: "竞赛 考试报名 校内节点",
+      meta: `${calendarCount} 条 ${calendarUpdatedLabel(calendarUpdatedAt)}`,
     },
   ];
 
@@ -69,9 +69,6 @@ export default function ToolboxPage({
             <h1 className="mt-2 font-serif text-2xl tracking-tight sm:text-3xl">
               工具箱
             </h1>
-            <p className="mt-2 max-w-2xl text-xs leading-5 text-ink-3">
-              课表、作业、简历、日历。需要时打开，不占今日的注意力。
-            </p>
           </div>
           <button
             type="button"
@@ -114,10 +111,10 @@ export default function ToolboxPage({
           ))}
         </div>
 
-        <section className="border-rule mt-4 rounded-xl border bg-surface px-4 py-3.5 sm:px-5">
+        <section className="border-rule mt-4 rounded-xl border bg-surface px-4 py-3.5 sm:px-5 lg:hidden">
           <p className="text-xs font-medium">数据与备份</p>
           <p className="mt-1 text-[11px] leading-5 text-ink-3">
-            导出、导入与清除本机数据在左侧导航底部；手机端在「数据与备份」里。所有数据只存在这台设备。
+            数据只在本机 换设备前先导出
           </p>
         </section>
       </div>

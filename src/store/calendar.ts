@@ -41,4 +41,4 @@ export const CALENDAR_UPDATED_AT: string | null = parsed.success
 
 export const CALENDAR_ISSUE: string | null = parsed.success
   ? null
-  : "日历数据格式有误，已暂时隐藏情报。请检查 data/calendar.json。";
+  : "日历数据格式有误 已暂时隐藏情报 请检查 data/calendar.json";

@@ -6,7 +6,7 @@
     "entryUrl": "https://join.qq.com/",
     "openMonths": [8, 9, 10, 11],
     "fitGrade": [3, 4, 5],
-    "note": "官方入口；具体岗位与截止时间以官网为准"
+    "note": "入口链接 以官网为准"
   },
   {
     "id": "ch-bytedance",
@@ -15,7 +15,7 @@
     "entryUrl": "https://jobs.bytedance.com/campus",
     "openMonths": [3, 4, 5, 8, 9, 10, 11],
     "fitGrade": [3, 4, 5],
-    "note": "官方入口；具体岗位与截止时间以官网为准"
+    "note": "入口链接 以官网为准"
   },
   {
     "id": "ch-alibaba",
@@ -24,7 +24,7 @@
     "entryUrl": "https://talent.alibaba.com/",
     "openMonths": [8, 9, 10, 11],
     "fitGrade": [3, 4, 5],
-    "note": "官方入口；具体岗位与截止时间以官网为准"
+    "note": "入口链接 以官网为准"
   },
   {
     "id": "ch-huawei",
@@ -33,7 +33,7 @@
     "entryUrl": "https://career.huawei.com/cn/campus-recruitment",
     "openMonths": [8, 9, 10, 11],
     "fitGrade": [4, 5],
-    "note": "官方入口；具体岗位与截止时间以官网为准"
+    "note": "入口链接 以官网为准"
   },
   {
     "id": "ch-dji",
@@ -42,7 +42,7 @@
     "entryUrl": "https://careers.dji.com/zh-CN/campus",
     "openMonths": [7, 8, 9, 10],
     "fitGrade": [4, 5],
-    "note": "官方入口；含校园招聘与实习生方向"
+    "note": "含校园招聘与实习生方向"
   },
   {
     "id": "ch-tesla",
@@ -51,6 +51,6 @@
     "entryUrl": "https://www.tesla.cn/careers",
     "openMonths": [8, 9, 10, 11],
     "fitGrade": [3, 4, 5],
-    "note": "官方入口；校招批次以官网公告为准"
+    "note": "校招批次以官网公告为准"
   }
 ]

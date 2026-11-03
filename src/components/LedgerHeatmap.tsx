@@ -98,7 +98,7 @@ export default function LedgerHeatmap({
               {streak.days > 0 ? ` 连续 ${streak.days} 天` : ""}
             </p>
             <p className="font-mono text-micro text-ink-4">
-              每天 1–3 格，只记产生结果的动作
+              每天 1–3 格 只记产生结果的动作
             </p>
           </div>
 

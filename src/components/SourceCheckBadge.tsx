@@ -59,7 +59,7 @@ export default function SourceCheckBadge({
     : null;
   const title = [meta.label, check?.note, checkedAt ? `核验于 ${checkedAt}` : null]
     .filter(Boolean)
-    .join(" · ");
+    .join(" ");
 
   return (
     <span

@@ -51,22 +51,22 @@ const PARTS = [
   {
     key: "problem",
     label: "问题",
-    placeholder: "当时要解决什么问题？例如：选课高峰期系统卡顿，人工登记容易超选。",
+    placeholder: "当时要解决什么问题 例如 选课高峰期系统卡顿 人工登记容易超选",
   },
   {
     key: "method",
     label: "方法",
-    placeholder: "你用了什么方法、技术或流程？例如：重新设计 E-R 模型，用事务处理选课。",
+    placeholder: "你用了什么方法 技术或流程 例如 重新设计 E-R 模型 用事务处理选课",
   },
   {
     key: "contribution",
     label: "我的贡献",
-    placeholder: "你具体做了什么？避免只写「参与」，写清楚自己负责的部分。",
+    placeholder: "你具体做了什么 避免只写「参与」 写清楚自己负责的部分",
   },
   {
     key: "result",
     label: "结果",
-    placeholder: "结果如何？有数字就写数字；没有就写可验证的结果，不猜数字。",
+    placeholder: "结果如何 有数字就写数字 没有就写可验证的结果 不猜数字",
   },
 ] as const;
 
@@ -136,11 +136,11 @@ export default function ExperienceEditor({
 
     const cleanTitle = title.trim();
     if (!cleanTitle) {
-      setError("请先填写经历标题。");
+      setError("请先填写经历标题");
       return;
     }
     if (start && end && end < start) {
-      setError("结束月份不能早于开始月份。");
+      setError("结束月份不能早于开始月份");
       return;
     }
 
@@ -193,7 +193,7 @@ export default function ExperienceEditor({
     try {
       await onSave(value);
     } catch {
-      setError("写入本机失败，请检查浏览器存储权限后重试。");
+      setError("写入本机失败 请检查浏览器存储权限后重试");
       setSaving(false);
     }
   }
@@ -224,7 +224,7 @@ export default function ExperienceEditor({
               {initial ? "编辑经历" : "记录一段经历"}
             </h2>
             <p className="mt-1 text-xs leading-5 text-ink-3">
-              只写真实发生的事；没有数字就留空，不猜。
+              没有数字就留空
             </p>
           </div>
           <button
@@ -303,7 +303,7 @@ export default function ExperienceEditor({
                       className={FIELD}
                     />
                     <p className="mt-1 text-micro leading-4 text-ink-4">
-                      会显示在经历卡片上；留空则显示「其他」。
+                      留空显示「其他」
                     </p>
                   </div>
                 )}
@@ -376,7 +376,7 @@ export default function ExperienceEditor({
                     className={FIELD}
                   />
                   <p className="mt-1 text-micro leading-4 text-ink-4">
-                    留空表示仍然进行中。
+                    留空表示进行中
                   </p>
                 </div>
               </div>
@@ -386,7 +386,7 @@ export default function ExperienceEditor({
           <section aria-labelledby="experience-parts" className="mt-6">
             <SectionLabel index="02" id="experience-parts" label="四段式" />
             <p className="mt-1 text-[11px] leading-5 text-ink-3">
-              问题 → 方法 → 我的贡献 → 结果。每段一到两句，简历会从这里取素材。
+              问题 → 方法 → 我的贡献 → 结果
             </p>
             <div className="mt-3 space-y-3">
               {PARTS.map((part) => (
@@ -416,7 +416,7 @@ export default function ExperienceEditor({
           <section aria-labelledby="experience-proof" className="mt-6">
             <SectionLabel index="03" id="experience-proof" label="证据与标签" />
             <p className="mt-1 text-[11px] leading-5 text-ink-3">
-              没有量化数据就留空；证据可以是报告、截图、作品链接或公开页面。
+              没有就留空 证据可以是报告 截图 作品链接
             </p>
 
             <div className="mt-3">
@@ -553,7 +553,7 @@ export default function ExperienceEditor({
                   className={FIELD}
                 />
                 <p className="mt-1 text-micro leading-4 text-ink-4">
-                  用逗号分隔，简历与岗位匹配会用到。
+                  用逗号分隔
                 </p>
               </div>
               <div>
@@ -571,7 +571,7 @@ export default function ExperienceEditor({
                   className={FIELD}
                 />
                 <p className="mt-1 text-micro leading-4 text-ink-4">
-                  用于时间线筛选和后续检索。
+                  用于时间线筛选
                 </p>
               </div>
             </div>

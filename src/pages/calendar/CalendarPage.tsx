@@ -16,7 +16,6 @@ import {
 import SourceCheckBadge from "../../components/SourceCheckBadge";
 import {
   SOURCE_CHECKS,
-  SOURCE_CHECKED_AT,
   SOURCE_CHECK_POLICY,
   getSourceCheck,
 } from "../../store/sourceChecks";
@@ -70,15 +69,6 @@ export default function CalendarPage({
   const calendarChecks = SOURCE_CHECKS.filter(
     (check) => check.kind === "calendar",
   );
-  const reachableCount = calendarChecks.filter(
-    (check) => check.status === "ok",
-  ).length;
-  const fetchedCount = calendarChecks.filter(
-    (check) => check.mode === "fetch" && check.status === "ok",
-  ).length;
-  const dateMatchedCount = calendarChecks.filter(
-    (check) => check.dateMatched === true,
-  ).length;
 
   const filtered =
     filter === "all"
@@ -119,23 +109,14 @@ export default function CalendarPage({
               </span>
             </div>
             <p className="mt-2 max-w-2xl text-xs leading-5 text-ink-3">
-              竞赛、考试报名、校内节点。只写官方已公布的时间；未公布就留空，不猜日期。
+              竞赛 考试报名 校内节点
             </p>
             <p className="mt-1 font-mono text-micro leading-5 text-ink-4">
               {updatedAt
                 ? `更新于 ${formatCalendarDate(updatedAt)}`
                 : "更新日期待补"}{" "}
-              · 官方 {officialCount} 条 · 示例 {sampleCount} 条
+              官方 {officialCount} 条 示例 {sampleCount} 条
             </p>
-            {calendarChecks.length > 0 && (
-              <p className="mt-1 font-mono text-micro leading-5 text-ink-4">
-                来源核验：{reachableCount}/{calendarChecks.length} 可达 · 正文读取{" "}
-                {fetchedCount} 条 · 日期匹配 {dateMatchedCount} 条
-                {SOURCE_CHECKED_AT
-                  ? ` · 核验于 ${dayjs(SOURCE_CHECKED_AT).format("M月D日 HH:mm")}`
-                  : ""}
-              </p>
-            )}
           </div>
           <div className="flex flex-wrap gap-2">
             <button
@@ -202,9 +183,9 @@ export default function CalendarPage({
 
         {items.length === 0 ? (
           <div className="border-rule mt-6 rounded-xl border bg-surface px-5 py-6">
-            <p className="text-sm text-ink-3">日历数据还没读进来。</p>
+            <p className="text-sm text-ink-3">日历数据还没读进来</p>
             <p className="mt-1 text-[11px] leading-5 text-ink-3">
-              检查 data/calendar.json 的格式，或回到工具箱重新生成示例。
+              检查 data/calendar.json 格式 或回工具箱重新生成示例
             </p>
           </div>
         ) : (
@@ -242,12 +223,7 @@ export default function CalendarPage({
               </section>
             ) : (
               <div className="border-rule mt-5 rounded-xl border bg-surface px-5 py-5">
-                <p className="text-sm text-ink-3">
-                  近期没有已公布日期的条目。
-                </p>
-                <p className="mt-1 text-[11px] leading-5 text-ink-3">
-                  日期未定的条目在下面，未公布的不猜。
-                </p>
+                <p className="text-sm text-ink-3">近期没有已公布日期的条目</p>
               </div>
             )}
 
@@ -272,7 +248,7 @@ export default function CalendarPage({
             {past.length > 0 && (
               <details className="border-rule group mt-8 rounded-xl border bg-surface">
                 <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 text-xs text-ink-3 [&::-webkit-details-marker]:hidden sm:px-5">
-                  已结束 · {past.length} 条
+                  已结束 {past.length} 条
                   <span className="font-mono text-micro text-ink-4 group-open:hidden">
                     展开
                   </span>
@@ -293,7 +269,7 @@ export default function CalendarPage({
         {calendarChecks.length > 0 && (
           <details className="border-rule group mt-8 rounded-xl border bg-surface">
             <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 text-xs text-ink-3 [&::-webkit-details-marker]:hidden sm:px-5">
-              来源核验明细 · {calendarChecks.length} 条
+              来源核验明细 {calendarChecks.length} 条
               <span className="font-mono text-micro text-ink-4 group-open:hidden">
                 展开
               </span>
@@ -323,7 +299,7 @@ export default function CalendarPage({
                         href={check.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex min-h-9 items-center text-micro text-ink-3 underline underline-offset-2 hover:text-ink"
+                        className="app-text-link"
                       >
                         来源 ↗
                       </a>
@@ -352,10 +328,7 @@ export default function CalendarPage({
 
         <div className="border-rule mt-8 border-t pt-4">
           <p className="text-[11px] leading-5 text-ink-3">
-            日期以官方公告为准；未公布日期的条目只保留名称与来源，不写推测日期。
-          </p>
-          <p className="mt-1 text-[11px] leading-5 text-ink-3">
-            来源核验在构建期完成：只检查公开页面可达性，正文只保留标题与短片段；不在浏览器运行时抓取、不代报名。
+            日期以官方公告为准 构建期只核验入口可达性 运行时不抓取 不代报名
           </p>
         </div>
       </div>
@@ -382,7 +355,7 @@ function CalendarRow({
   ]
     .filter(Boolean)
     .filter((value, index, list) => list.indexOf(value) === index)
-    .join(" · ");
+    .join(" ");
 
   return (
     <li
@@ -446,11 +419,11 @@ function CalendarRow({
                 href={item.sourceUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex min-h-9 items-center text-micro text-ink-3 underline underline-offset-2 hover:text-ink"
+                className="app-text-link"
               >
                 来源 ↗
               </a>
-            ) : (
+            ) : schedule.includes("以本校通知为准") ? null : (
               <span className="text-micro text-ink-4">
                 以本校通知为准
               </span>

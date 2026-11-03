@@ -754,12 +754,12 @@ export default function App() {
       navigate("today");
       return {
         ok: true,
-        message: `已导入 ${snapshot.experiences?.experiences.length ?? 0} 条战绩、${snapshot.ledger.length} 条留痕记录、${snapshot.notes.length} 条记录。`,
+        message: `已导入 ${snapshot.experiences?.experiences.length ?? 0} 条战绩、${snapshot.ledger.length} 条留痕记录、${snapshot.notes.length} 条记录`,
       };
     } catch {
       return {
         ok: false,
-        message: "导入失败，请重试或检查浏览器存储权限。",
+        message: "导入失败 请重试或检查浏览器存储权限",
       };
     }
   }

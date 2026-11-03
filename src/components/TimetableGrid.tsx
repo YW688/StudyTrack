@@ -126,7 +126,7 @@ export default function TimetableGrid({
                     )}
                   </p>
                   <p className="font-mono text-micro tabular-nums text-ink-3">
-                    {date ?? ""} · {sessions.length} 个时段
+                    {date ?? ""} {sessions.length} 个时段
                   </p>
                 </div>
                 <ul>
@@ -156,7 +156,7 @@ export default function TimetableGrid({
                             <p className="mt-1 text-[11px] leading-5 text-ink-3">
                               {[course.location, course.teacher]
                                 .filter(Boolean)
-                                .join(" · ")}
+                                .join(" ")}
                             </p>
                           )}
                           <p className="mt-0.5 font-mono text-micro text-ink-4">

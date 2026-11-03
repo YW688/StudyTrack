@@ -133,7 +133,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
         },
       });
     } catch {
-      setError("没写进本机，请检查浏览器存储权限后重试。");
+      setError("没写进本机 请检查浏览器存储权限后重试");
       setSaving(false);
     }
   }
@@ -144,7 +144,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
     try {
       await onUseDemo();
     } catch {
-      setError("示例数据写入失败，请检查浏览器存储权限后重试。");
+      setError("示例数据写入失败 请检查浏览器存储权限后重试");
     } finally {
       setDemoBusy(false);
     }
@@ -157,7 +157,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
           <div className="page-head-main">
             <h1 className="page-title">建档</h1>
             <p className="page-sub">
-              第 {step + 1} / {STEPS.length} 步 · 填完这四步，今日 / 征途 / 征召 / 工具箱同时开启
+              第 {step + 1} / {STEPS.length} 步 填完这四步 四个面同时开启
             </p>
           </div>
         </header>
@@ -204,15 +204,15 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
               {step === 0 && "你在读什么？"}
               {step === 1 && "这四年更想往哪走？"}
               {step === 2 && "想投哪些岗位？"}
-              {step === 3 && "先记下第一条战绩。"}
+              {step === 3 && "先记下第一条战绩"}
             </h2>
             <p className="mt-1 text-[11px] leading-5 text-ink-3">
               {step === 0 &&
-                "只用来筛情报和排学期，不写姓名学号；之后在工具箱随时能改。"}
-              {step === 1 && "决定征召页先看哪些岗位方向，可以之后再改。"}
-              {step === 2 && "最多选 6 个，简历与匹配都以它为锚。"}
+                "只用来筛情报和排学期 不写姓名学号 之后随时能改"}
+              {step === 1 && "决定征召先看哪些方向 之后可以改"}
+              {step === 2 && "最多 6 个 简历与匹配都以它为锚"}
               {step === 3 &&
-                "这条会以动态形式出现在征途。四段式、证据可以之后补，没数字不会替你编。"}
+                "这条会作为动态出现在征途 四段式和证据可以之后补"}
             </p>
           </div>
 
@@ -230,7 +230,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
                     onChange={(event) =>
                       setMajor(event.target.value.slice(0, 60))
                     }
-                    placeholder="如：人工智能"
+                    placeholder="如 人工智能"
                     className={`${FIELD} max-w-md`}
                   />
                 </div>
@@ -334,14 +334,14 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
                   value={roleDraft}
                   onChange={(event) => setRoleDraft(event.target.value)}
                   onKeyDown={addDraftRole}
-                  placeholder="如：嵌入式软件实习，回车添加"
+                  placeholder="如 嵌入式软件实习 回车添加"
                   className={FIELD}
                 />
 
                 <p className="mt-3 font-mono text-micro text-ink-4">
                   {roles.length > 0
-                    ? `已选 ${roles.length} / 6 · ${roles.join(" · ")}`
-                    : "还没选，至少 1 个才能开启四个面。"}
+                    ? `已选 ${roles.length} / 6 ${roles.join(" ")}`
+                    : "还没选 至少 1 个才能开启四个面"}
                 </p>
               </div>
             )}
@@ -385,7 +385,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
                       id="guide-kind-label"
                       value={kindLabel}
                       onChange={(event) => setKindLabel(event.target.value)}
-                      placeholder="如：社团、辅修、交换"
+                      placeholder="如 社团 辅修 交换"
                       className={`${FIELD} max-w-md`}
                     />
                   </div>
@@ -399,7 +399,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
                     id="guide-title"
                     value={title}
                     onChange={(event) => setTitle(event.target.value)}
-                    placeholder="如：数据库课程设计 · 选课事务"
+                    placeholder="如 数据库课程设计 选课事务"
                     className={FIELD}
                   />
                 </div>
@@ -413,7 +413,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
                     value={detail}
                     rows={3}
                     onChange={(event) => setDetail(event.target.value.slice(0, 500))}
-                    placeholder="如：解决选课并发冲突，用 Spring Boot + MySQL 跑通了下单与回滚。"
+                    placeholder="如 解决选课并发冲突 用 Spring Boot + MySQL 跑通了下单与回滚"
                     className="border-rule focus:border-accent/60 focus:ring-accent/15 mt-2 min-h-[92px] w-full resize-y rounded-lg border bg-paper/40 px-3 py-2.5 text-sm leading-6 outline-none placeholder:text-ink-4 focus:ring-2"
                   />
                   <p className="mt-1 font-mono text-micro text-ink-4">
@@ -446,7 +446,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
               )}
               {missing.length > 0 && (
                 <span className="font-mono text-micro text-amber-ink">
-                  还差：{missing.join(" · ")}
+                  还差 {missing.join(" ")}
                 </span>
               )}
             </div>
@@ -477,7 +477,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
         </form>
 
         <p className="mt-3 font-mono text-micro leading-5 text-ink-4">
-          不写姓名学号 · 数据只存在你的浏览器 · 建档后可随时在工具箱改方向与岗位
+          不写姓名学号 数据只存在你的浏览器 建档后可随时改方向与岗位
         </p>
       </div>
     </div>

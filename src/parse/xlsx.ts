@@ -228,30 +228,30 @@ export function parseWorkbook(
 
   if (!courses.size) {
     warnings.push(
-      "没有从这份文件里识别出课程。可以改用「手动建课表」，或换一份带「星期 / 节次」表头的 Excel。",
+      "没识别出课程 可以改用手动建课表 或换一份带「星期 节次」表头的 Excel",
     );
   }
   if (lowConfidence) {
     warnings.push(
-      `${lowConfidence} 门课程的周次或节次没有完全识别，已标黄，请在确认前补全。`,
+      `${lowConfidence} 门课程的周次或节次没有完全识别 已标黄 请在确认前补全`,
     );
   }
   if (filledWeeks) {
     warnings.push(
-      `${filledWeeks} 门课程没写周次，已按整学期 1-${semester.totalWeeks} 周处理，请在确认时核对。`,
+      `${filledWeeks} 门课程没写周次 已按整学期 1-${semester.totalWeeks} 周处理 请在确认时核对`,
     );
   }
   if (parsedCells === 0 && unidentifiedCells > 0) {
-    warnings.push("表格格式与常见课表差异较大，建议改用「手动建课表」。");
+    warnings.push("表格格式差异较大 建议改用手动建课表");
   }
   if (!semester.startDate && courses.size) {
-    warnings.push("没有找到开学日期，周次仍按导入结果展示，当前周标记可能不准确。");
+    warnings.push("没有找到开学日期 周次按导入结果展示 当前周标记可能不准");
   }
   if (!semester.name && courses.size) {
-    warnings.push("没有找到学期名称，已省略学期标题。");
+    warnings.push("没有找到学期名称 已省略学期标题");
   }
   if (sheets.length > 1) {
-    warnings.push(`读取了 ${sheets.length} 个工作表，已合并为一份课表。`);
+    warnings.push(`读取了 ${sheets.length} 个工作表 已合并为一份课表`);
   }
 
   return {

@@ -13,7 +13,7 @@ export function createSampleAssignments(): AssignmentData {
     {
       id: makeId(),
       title: "实验三 数据库操作",
-      detail: "题量 1 · 满分 100 · 附件：实验三.docx 13.82K",
+      detail: "题量 1 满分 100 附件 实验三.docx 13.82K",
       courseName: undefined,
       due: "2026-11-08T23:55:00+08:00",
       status: "todo",
@@ -25,7 +25,7 @@ export function createSampleAssignments(): AssignmentData {
     {
       id: makeId(),
       title: "实验四 综合实训",
-      detail: "题量 1 · 满分 100 · 附件：实验四.docx 11.46K",
+      detail: "题量 1 满分 100 附件 实验四.docx 11.46K",
       courseName: undefined,
       due: "2026-11-14T23:55:00+08:00",
       status: "todo",

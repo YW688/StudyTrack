@@ -219,7 +219,7 @@ export default function AppShell({
     {
       id: "tool-timetable",
       label: "课表",
-      meta: "Excel 导入 · 周视图",
+      meta: "Excel 导入 周视图",
       group: "工具",
       run: () => onOpenWindow("timetable"),
     },
@@ -233,21 +233,21 @@ export default function AppShell({
     {
       id: "tool-resume",
       label: "简历工作台",
-      meta: "勾选经历 · A4 打印",
+      meta: "勾选经历 A4 打印",
       group: "工具",
       run: () => onOpenWindow("resume"),
     },
     {
       id: "tool-calendar",
       label: "日历",
-      meta: "竞赛 · 考试 · 校内节点",
+      meta: "竞赛 考试 校内节点",
       group: "工具",
       run: () => onOpenWindow("calendar"),
     },
     {
       id: "agent",
       label: "打开记录官",
-      meta: "建档 · 写账 · 查账",
+      meta: "建档 写账 查账",
       group: "助手",
       run: onOpenAgent,
     },

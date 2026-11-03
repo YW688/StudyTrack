@@ -57,7 +57,7 @@ export default function SnapshotMenu({
       {snapshots.length === 0 ? (
         <div className="px-3 py-5">
           <p className="text-[11px] leading-5 text-ink-3">
-            还没有版本。点击「保存快照」记录当前简历，打印前也会自动保存一次。
+            还没有版本 打印前会自动保存一次
           </p>
         </div>
       ) : (
@@ -81,7 +81,7 @@ export default function SnapshotMenu({
               <p className="mt-0.5 font-mono text-micro text-ink-4">
                 {relativeTimeLabel(snapshot.createdAt)}
                 {snapshot.basics.name.trim()
-                  ? ` · ${snapshot.basics.name.trim()}`
+                  ? ` ${snapshot.basics.name.trim()}`
                   : ""}
               </p>
               <div className="mt-1.5 flex items-center gap-3">

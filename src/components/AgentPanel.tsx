@@ -87,11 +87,11 @@ const MODE_LABELS: Record<AgentMode, string> = {
 };
 
 const PLACEHOLDERS: Record<AgentMode, string> = {
-  auto: "问记录官：这周做了什么 / 我有哪些经历 / 离实习还差什么",
-  profile: "如：大二，人工智能，想找算法实习，会 Python 和 SQL",
+  auto: "问记录官 这周做了什么 我有哪些经历 离实习还差什么",
+  profile: "如 大二 人工智能 想找算法实习 会 Python 和 SQL",
   experience:
-    "如：做了一个校园选课系统，负责数据库设计，用 MySQL 事务解决超选问题，200 人并发测试通过",
-  note: "把想法或待办丢给我，我记成一条记录。",
+    "如 做了一个校园选课系统 负责数据库设计 用 MySQL 事务解决超选问题 200 人并发测试通过",
+  note: "把想法或待办丢给我 我记成一条记录",
 };
 
 function splitList(value: string, limit: number): string[] {
@@ -241,14 +241,14 @@ export default function AgentPanel({
     setInput("");
     if (nextMode === "profile") {
       appendAgent(
-        "用一句话告诉我：年级、专业、想往哪走。比如：大二，人工智能，想找算法实习。",
+        "一句话说清年级 专业 想往哪走 例如 大二 人工智能 想找算法实习",
       );
     } else if (nextMode === "experience") {
       appendAgent(
-        "把这件事按你记得的写下来：做了什么、怎么做的、你负责什么、结果怎样。不用分段。",
+        "写下做了什么 怎么做的 你负责什么 结果怎样 不用分段",
       );
     } else if (nextMode === "note") {
-      appendAgent("把想法或待办丢给我，我记成一条记录，不会当作完整经历。");
+      appendAgent("想法或待办丢给我 我记成一条记录 不算完整经历");
     }
     window.setTimeout(() => inputRef.current?.focus(), 30);
   }
@@ -270,42 +270,42 @@ export default function AgentPanel({
       if (draft.kind === "profile") {
         await onSaveProfile(draft.data);
         appendAgent(
-          `已建档：${[
+          `已建档 ${[
             draft.data.grade || "年级未填",
             draft.data.major || "专业未填",
             GOAL_LABELS[draft.data.goal],
-          ].join(" · ")}。去征召可以按这份档案对照岗位。`,
+          ].join(" ")} 去征召可以按这份档案对照岗位`,
         );
         setNavigateTarget("opportunities");
       } else if (draft.kind === "experience") {
         const missing = missingExperienceParts(draft.data);
         if (!draft.data.title.trim()) {
-          setError("标题不能为空。");
+          setError("标题不能为空");
           setBusy(false);
           return;
         }
         if (missing.length === 4) {
-          setError("四段至少填一段，或者改成只记一条备注。");
+          setError("四段至少填一段 或改成只记一条备注");
           setBusy(false);
           return;
         }
         await onSaveExperience(draft.data);
         appendAgent(
-          `已写入征途：「${draft.data.title}」。${
+          `已写入征途「${draft.data.title}」 ${
             missing.length > 0
-              ? `还缺 ${missing.join("、")}，可以在经历页继续补。`
-              : "四段已齐，可以去征召看匹配。"
+              ? `还缺 ${missing.join(" ")} 可以去经历页继续补`
+              : "四段已齐 可以去征召看匹配"
           }`,
         );
         setNavigateTarget("experiences");
       } else {
         await onAddNote(draft.text, ["记录官"]);
-        appendAgent("已记下这条记录。");
+        appendAgent("已记下这条记录");
         setNavigateTarget("today");
       }
       setDraft(null);
     } catch {
-      setError("写入失败，请检查浏览器存储权限后重试。");
+      setError("写入失败 请检查浏览器存储权限后重试");
     } finally {
       setBusy(false);
     }
@@ -326,11 +326,11 @@ export default function AgentPanel({
         .filter(Boolean)
         .join("；");
       await onAddNote(noteText || draft.data.raw, ["记录官"]);
-      appendAgent("已按草稿记成一条记录，没有当作完整经历。");
+      appendAgent("已按草稿记成一条记录 不算完整经历");
       setDraft(null);
       setNavigateTarget("today");
     } catch {
-      setError("写入失败，请检查浏览器存储权限后重试。");
+      setError("写入失败 请检查浏览器存储权限后重试");
     } finally {
       setBusy(false);
     }
@@ -339,7 +339,7 @@ export default function AgentPanel({
   function handleCancel() {
     setDraft(null);
     setError(null);
-    appendAgent("已取消，这次没有写入。");
+    appendAgent("已取消 这次没有写入");
   }
 
   function handleNavigate(id: NonNullable<AgentReply["navigate"]>) {
@@ -361,7 +361,7 @@ export default function AgentPanel({
                   记录官
                 </h2>
                 <p className="mt-1 text-micro leading-5 text-ink-3">
-                  建档、写账、查账、解读。写入前先给你草稿；不闲聊、不编造、不联网。
+                  建档 写账 查账 解读 写入前先给草稿
                 </p>
               </div>
               <div className="-mt-1 flex shrink-0 items-center gap-0.5">
@@ -407,27 +407,11 @@ export default function AgentPanel({
               {messages.length === 0 ? (
                 <div className="border-rule bg-paper/40 rounded-xl border p-4">
                   <p className="font-serif text-lg tracking-tight">
-                    我是记录官。
+                    我是记录官
                   </p>
                   <p className="mt-1 text-[11px] leading-5 text-ink-3">
-                    先告诉我你在读什么、想往哪走，或者把今天推进的一件事丢给我。写入前我会先给你草稿。
+                    说说你在读什么 想往哪走 或今天推进的一件事
                   </p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() => startMode("profile")}
-                      className={BTN_SECONDARY}
-                    >
-                      帮我建档
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => startMode("experience")}
-                      className={BTN_SECONDARY}
-                    >
-                      记一条经历
-                    </button>
-                  </div>
                 </div>
               ) : (
                 <ul className="space-y-3">
@@ -553,10 +537,6 @@ export default function AgentPanel({
                   发送
                 </button>
               </div>
-
-              <p className="mt-2 text-micro leading-4 text-ink-4">
-                记录官只处理建档、写账、查账和解读；写入前必须确认。
-              </p>
             </footer>
     </div>
   );
@@ -581,7 +561,7 @@ export default function AgentPanel({
       <WindowLayer
         id="agent"
         title="记录官"
-        subtitle="本地建档 · 写账 · 查账"
+        subtitle="本地建档 写账 查账"
         width={424}
         height={680}
         onClose={() => onDockModeChange("closed")}
@@ -776,7 +756,7 @@ function ProfileDraftCard({
       </label>
 
       <p className="mt-2 text-micro leading-4 text-ink-4">
-        只写年级、专业、方向和技能，不写姓名学号。
+        不写姓名学号
       </p>
       {error && (
         <p role="alert" className="mt-2 text-micro text-red-800">
@@ -920,7 +900,7 @@ function ExperienceDraftCard({
       </div>
 
       <p className="mt-2 text-micro leading-4 text-ink-4">
-        确认后写入征途；四段不全会标为待确认，不会自动进简历。
+        四段不全标为待确认 不进简历
       </p>
       {error && (
         <p role="alert" className="mt-2 text-micro text-red-800">
@@ -987,7 +967,7 @@ function NoteDraftCard({
         className={`${FIELD} resize-y py-2 leading-5`}
       />
       <p className="mt-2 text-micro leading-4 text-ink-4">
-        确认后记进征途；不会当作完整经历。
+        记进征途 不算完整经历
       </p>
       {error && (
         <p role="alert" className="mt-2 text-micro text-red-800">

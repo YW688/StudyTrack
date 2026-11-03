@@ -122,7 +122,7 @@ export default function PortfolioDialog({
     if (!link) return;
     const ok = await copyText(link);
     setCopied(ok);
-    setCopyError(ok ? null : "自动复制失败，请手动选择链接复制。");
+    setCopyError(ok ? null : "自动复制失败 请手动选择链接复制");
   }
 
   return (
@@ -142,13 +142,13 @@ export default function PortfolioDialog({
         <header className="border-rule sticky top-0 z-10 flex items-start justify-between gap-3 border-b bg-surface px-4 py-3 sm:px-5">
           <div>
             <p className="font-mono text-micro tracking-[0.16em] text-ink-3">
-              作品集 · 无后端
+              作品集 无后端
             </p>
             <h2
               id="portfolio-dialog-title"
               className="mt-1 text-base font-medium tracking-tight"
             >
-              精选 3–6 条经历，生成可分享链接
+              精选 3–6 条经历 生成可分享链接
             </h2>
           </div>
           <button
@@ -167,7 +167,7 @@ export default function PortfolioDialog({
               <p className="text-sm font-medium">还差一点素材</p>
               <p className="mt-1 text-xs leading-5 text-ink-3">
                 作品集需要从已加入简历的经历里精选 3–6 条。当前只有{" "}
-                {experiences.length} 条，请先在左侧勾选更多经历。
+                {experiences.length} 条 请先在左侧勾选更多经历
               </p>
             </div>
           ) : (
@@ -275,7 +275,7 @@ export default function PortfolioDialog({
 
               <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
                 <p className="max-w-sm text-micro leading-5 text-ink-3">
-                  链接里会包含姓名、联系方式与所选经历；任何人打开都能看到，不会上传到服务器。
+                  链接含姓名 联系方式与所选经历 任何人可打开 不上传服务器
                 </p>
                 <button
                   type="button"
@@ -333,7 +333,7 @@ export default function PortfolioDialog({
                   )}
                   {sizeWarning && (
                     <p className="text-amber-ink mt-2 text-micro leading-5">
-                      链接超过 8KB，部分聊天工具可能截断。建议减少条目或缩短介绍。
+                      链接超过 8KB 聊天工具可能截断 建议减少条目
                     </p>
                   )}
                 </div>

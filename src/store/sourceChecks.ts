@@ -40,11 +40,11 @@ export const SOURCE_CHECKED_AT: string | null = parsed.success
 
 export const SOURCE_CHECK_POLICY: string = parsed.success
   ? parsed.data.policy
-  : "来源核验数据格式有误，请重新运行 npm run verify:sources。";
+  : "来源核验数据格式有误 请重新运行 npm run verify:sources";
 
 export const SOURCE_CHECK_ISSUE: string | null = parsed.success
   ? null
-  : "来源核验数据格式有误，已隐藏核验明细。";
+  : "来源核验数据格式有误 已隐藏核验明细";
 
 export function getSourceCheck(id: string): SourceCheck | undefined {
   return SOURCE_CHECKS.find((check) => check.id === id);

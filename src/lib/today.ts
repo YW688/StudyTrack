@@ -93,7 +93,7 @@ export function briefingAside(input: {
   pendingCount: number;
 }): string | null {
   if (input.intel) {
-    return `${input.intel.title} ${input.intel.timing} 顺手记进今日`;
+    return `${input.intel.title} ${input.intel.timing}`;
   }
   if (input.pendingCount === 0 && input.readyCount > 0) {
     return `就绪战绩 ${input.readyCount} 条 去征召看匹配`;
@@ -128,7 +128,7 @@ export function buildTodayJudgment(input: JudgmentInput): TodayJudgment {
   if (overdue.length > 0) {
     return {
       line: `先清掉 ${overdue.length} 个逾期项`,
-      detail: "在委托里划掉，完成会记进征途",
+      detail: "",
     };
   }
 
@@ -145,7 +145,7 @@ export function buildTodayJudgment(input: JudgmentInput): TodayJudgment {
   if (input.weekUnknown) {
     return {
       line: "先给课表补个开学日期",
-      detail: "补上就能算出今天是第几周 也能判断今天有没有课",
+      detail: "",
     };
   }
 
@@ -153,7 +153,7 @@ export function buildTodayJudgment(input: JudgmentInput): TodayJudgment {
     const first = courses[0];
     return {
       line: `今天 ${courses.length} 节课，先上完再说`,
-      detail: `${first.course.name} 第 ${first.startPeriod}-${first.endPeriod} 节${first.location ? ` ${first.location}` : ""}`,
+      detail: first.location ? `地点 ${first.location}` : "",
     };
   }
 
@@ -169,13 +169,13 @@ export function buildTodayJudgment(input: JudgmentInput): TodayJudgment {
   if (yesterdayGreen > 0) {
     return {
       line: `昨天留下 ${yesterdayGreen} 条记录，今天别断`,
-      detail: "补一条就够，绿格只记产生结果的动作",
+      detail: "",
     };
   }
 
   return {
     line: "今天没有硬性截止，适合补一条战绩",
-    detail: "写下今天推进的一件事，之后写简历时它会派上用场",
+    detail: "",
   };
 }
 

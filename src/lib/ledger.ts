@@ -269,7 +269,7 @@ export function computeReadiness(
       label: "基本信息",
       weight: 20,
       earned: basics,
-      hint: "补上专业，情报会按你的方向筛。",
+      hint: "补上专业 情报会按你的方向筛",
     },
     {
       key: "breadth",
@@ -278,8 +278,8 @@ export function computeReadiness(
       earned: breadth,
       hint:
         experiences.length >= 3
-          ? "已经有 3 条以上战绩。"
-          : `再写 ${3 - experiences.length} 条战绩，征途才有厚度。`,
+          ? "已经有 3 条以上战绩"
+          : `再写 ${3 - experiences.length} 条战绩 征途才有厚度`,
     },
     {
       key: "evidence",
@@ -288,10 +288,10 @@ export function computeReadiness(
       earned: evidence,
       hint:
         experiences.length === 0
-          ? "先写下第一条战绩。"
+          ? "先写下第一条战绩"
           : withEvidence === experiences.length
-            ? "每条战绩都有证据。"
-            : `还有 ${experiences.length - withEvidence} 条战绩没有证据。`,
+            ? "每条战绩都有证据"
+            : `还有 ${experiences.length - withEvidence} 条战绩没有证据`,
     },
     {
       key: "direction",
@@ -300,8 +300,8 @@ export function computeReadiness(
       earned: skills + direction,
       hint:
         profile && profile.targetRoles.length > 0
-          ? "方向已写，技能可以慢慢补到 3 个。"
-          : "写下 3 个技能和 1 个目标岗位。",
+          ? "方向已写 技能可以慢慢补到 3 个"
+          : "写下 3 个技能和 1 个目标岗位",
     },
   ];
 
@@ -318,7 +318,7 @@ export function computeReadiness(
           : "从今天开始";
   const next =
     items.find((item) => item.earned < item.weight)?.hint ??
-    "档案已经能出征，去征召看看。";
+    "档案已经能出征 去征召看看";
 
   return { score, label, next, items };
 }

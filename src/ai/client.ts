@@ -60,7 +60,7 @@ function readAsDataUrl(file: File): Promise<string> {
     const reader = new FileReader();
     reader.onload = () => resolve(String(reader.result ?? ""));
     reader.onerror = () =>
-      reject(new VisionError("unsupported", "图片读取失败，请换一张截图。"));
+      reject(new VisionError("unsupported", "图片读取失败 请换一张截图"));
     reader.readAsDataURL(file);
   });
 }
@@ -78,7 +78,7 @@ async function requestOnce(body: string): Promise<unknown> {
     if (!response.ok) {
       const error = new VisionError(
         "invalid",
-        `解析服务返回 ${response.status}，请稍后重试或改用手动录入。`,
+        `解析服务返回 ${response.status} 请稍后重试或改用手动录入`,
       );
       error.retryable = response.status >= 500;
       throw error;
@@ -88,7 +88,7 @@ async function requestOnce(body: string): Promise<unknown> {
     if (error instanceof VisionError) throw error;
     const wrapped = new VisionError(
       "network",
-      "网络中断或解析超时（45 秒），请重试或改用手动录入。",
+      "网络中断或解析超时（45 秒） 请重试或改用手动录入",
     );
     throw wrapped;
   } finally {
@@ -115,14 +115,14 @@ export async function extractAssignmentsFromImage(
   if (!PROXY_URL) {
     throw new VisionError(
       "unconfigured",
-      "视觉解析尚未配置。请改用粘贴文本或手动添加。",
+      "视觉解析尚未配置 请改用粘贴文本或手动添加",
     );
   }
   if (!file.type.startsWith("image/")) {
-    throw new VisionError("unsupported", "请上传 PNG / JPG 格式的截图。");
+    throw new VisionError("unsupported", "请上传 PNG / JPG 格式的截图");
   }
   if (file.size > MAX_IMAGE_BYTES) {
-    throw new VisionError("too-large", "图片超过 8MB，请压缩后再试。");
+    throw new VisionError("too-large", "图片超过 8MB 请压缩后再试");
   }
 
   const dataUrl = await readAsDataUrl(file);
@@ -137,7 +137,7 @@ export async function extractAssignmentsFromImage(
   if (!parsed.success) {
     throw new VisionError(
       "invalid",
-      "解析结果不完整，请重试或改用手动录入。",
+      "解析结果不完整 请重试或改用手动录入",
     );
   }
 
@@ -158,7 +158,7 @@ export async function extractAssignmentsFromImage(
   });
 
   if (items.some((item) => !item.due)) {
-    warnings.push("有截图内容没有读到截止时间，请在确认页补全。");
+    warnings.push("有截图内容没有读到截止时间 请在确认页补全");
   }
 
   return { items, warnings };
@@ -258,17 +258,17 @@ async function postTextTask(body: string): Promise<unknown> {
     try {
       raw = (await response.json()) as unknown;
     } catch {
-      throw new TextTaskError("invalid", "模型返回的不是合法 JSON。");
+      throw new TextTaskError("invalid", "模型返回的不是合法 JSON");
     }
 
     try {
       return extractJsonPayload(raw);
     } catch {
-      throw new TextTaskError("invalid", "模型返回内容无法解析为 JSON。");
+      throw new TextTaskError("invalid", "模型返回内容无法解析为 JSON");
     }
   } catch (error) {
     if (error instanceof TextTaskError) throw error;
-    throw new TextTaskError("network", "网络中断或模型超时（45 秒）。");
+    throw new TextTaskError("network", "网络中断或模型超时（45 秒）");
   } finally {
     window.clearTimeout(timer);
   }
@@ -278,7 +278,7 @@ export async function requestTextJson(
   request: TextTaskRequest,
 ): Promise<unknown> {
   if (!PROXY_URL) {
-    throw new TextTaskError("unconfigured", "尚未配置模型代理。");
+    throw new TextTaskError("unconfigured", "尚未配置模型代理");
   }
 
   const body = JSON.stringify({

@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import dayjs, { type Dayjs } from "dayjs";
 import type {
   Assignment,
@@ -91,8 +91,6 @@ const TIER_TEXT: Record<string, string> = {
   none: "",
 };
 
-const BTN_PRIMARY =
-  "app-pill-primary inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full px-5 text-sm font-medium disabled:opacity-50";
 const BTN_SECONDARY =
   "app-pill inline-flex min-h-11 items-center justify-center rounded-full px-4 text-sm";
 
@@ -150,6 +148,7 @@ export default function TodayPage({
   const [captureStatus, setCaptureStatus] = useState<
     "idle" | "saving" | "done" | "error"
   >("idle");
+  const captureRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const timer = window.setInterval(
@@ -205,8 +204,6 @@ export default function TodayPage({
     .filter((note) => studyDateKey(dayjs(note.createdAt)) === todayKey)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
-  const focusItem = pending[0] ?? null;
-
   const completedToday = [
     ...new Map(
       todaySettlement.events
@@ -242,7 +239,10 @@ export default function TodayPage({
   async function handleCapture(event?: FormEvent) {
     event?.preventDefault();
     const value = captureText.trim();
-    if (!value) return;
+    if (!value) {
+      captureRef.current?.focus();
+      return;
+    }
     setCaptureStatus("saving");
     try {
       await onAddNote(value);
@@ -349,7 +349,7 @@ export default function TodayPage({
                 建档完成 四个面已开启
               </p>
               <p className="mt-1 text-xs leading-5 text-ink-3">
-                第一条战绩已记进征途，补完四段式和证据才会进简历草稿
+                第一条战绩已记进征途
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -376,91 +376,70 @@ export default function TodayPage({
             <section className="app-card p-6 sm:p-8">
               <div className="app-card-head">
                 <p className="app-card-label">{briefingSegment(now)}</p>
-                <p className="app-card-meta">
-                  {now.format("M月D日")} {DAY_LABELS[dayIndexOf(now)]}
-                </p>
               </div>
-              <h2 className="mt-5 max-w-[38rem] font-serif text-[clamp(1.85rem,3vw,2.7rem)] leading-[1.3] tracking-[0.01em]">
+              <h2 className="mt-4 max-w-[34rem] font-serif text-[clamp(1.75rem,2.7vw,2.4rem)] leading-[1.32] tracking-[0.01em]">
                 {judgment.line}
               </h2>
-              <p className="mt-3 max-w-[38rem] text-sm leading-7 text-ink-3">
-                {judgment.detail}
-              </p>
-              {aside && (
-                <p className="mt-1.5 max-w-[38rem] text-[11px] leading-5 text-accent-ink">
-                  {aside}
-                </p>
-              )}
 
-              <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1.5">
-                {courses.length > 0 ? (
-                  courses.map((course) => (
-                    <span
-                      key={`${course.course.id}-${course.startPeriod}`}
-                      className="app-mini-chip"
-                    >
-                      <span className="font-mono text-micro text-ink-4">
-                        {course.startPeriod}-{course.endPeriod} 节
+              <div className="mt-4 max-w-[36rem]">
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 text-[12.5px] leading-6 text-ink-3">
+                  {courses.length > 0 ? (
+                    courses.map((course) => (
+                      <span
+                        key={`${course.course.id}-${course.startPeriod}`}
+                        className="whitespace-nowrap"
+                      >
+                        <span className="font-mono tabular-nums text-ink-4">
+                          {course.startPeriod}-{course.endPeriod} 节
+                        </span>{" "}
+                        <span className="text-ink-2">{course.course.name}</span>
                       </span>
-                      <span className="font-medium text-ink-2">
-                        {course.course.name}
-                      </span>
+                    ))
+                  ) : (
+                    <span>
+                      {timetable
+                        ? weekUnknown
+                          ? "课表已导入 未设开学日期"
+                          : "今天没有课"
+                        : "课表未导入"}
                     </span>
-                  ))
-                ) : (
-                  <span className="text-[11px] text-ink-3">
-                    {timetable
-                      ? weekUnknown
-                        ? "课表已导入 未设开学日期"
-                        : "今天没有课"
-                      : "课表未导入"}
-                  </span>
-                )}
-                {weekUnknown && courses.length > 0 && (
-                  <span className="text-[11px] text-amber-ink">
-                    周次未校准 先按每周有课列出
-                  </span>
-                )}
-                <button
-                  type="button"
-                  onClick={() => onOpenWindow("timetable")}
-                  className="app-text-link"
-                >
-                  {weekUnknown ? "设开学日期 ↗" : "课表 ↗"}
-                </button>
-              </div>
-
-              <div className="mt-5 flex flex-wrap items-center gap-2">
-                {focusItem ? (
-                  <>
-                    <button
-                      type="button"
-                      onClick={() => void handleToggle(focusItem)}
-                      className={BTN_PRIMARY}
-                    >
-                      <CheckGlyph />
-                      完成这一件
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => onOpenWindow("assignments")}
-                      className={BTN_SECONDARY}
-                    >
-                      全部作业 ↗
-                    </button>
-                  </>
-                ) : (
+                  )}
                   <button
                     type="button"
-                    onClick={() => onOpenWindow("experiences")}
-                    className={BTN_SECONDARY}
+                    onClick={() => onOpenWindow("timetable")}
+                    className="app-text-link"
                   >
-                    打开征途 ↗
+                    {!timetable
+                      ? "导入课表 ↗"
+                      : weekUnknown
+                        ? "设开学日期 ↗"
+                        : "课表 ↗"}
                   </button>
+                </div>
+
+                {judgment.detail && (
+                  <p className="mt-1 text-[12px] leading-5 text-ink-3">
+                    {judgment.detail}
+                  </p>
+                )}
+
+                {weekUnknown && courses.length > 0 && (
+                  <p className="mt-1 text-[11px] leading-5 text-amber-ink">
+                    周次未校准 先按每周有课列出
+                  </p>
+                )}
+
+                {aside && (
+                  <p className="mt-1.5 text-[12px] leading-5 text-amber-ink">
+                    {aside}
+                  </p>
                 )}
               </div>
 
-              <div className="mt-5 border-t border-rule/60 pt-3">
+              <form
+                onSubmit={(event) => void handleCapture(event)}
+                className="mt-6"
+              >
                 <div className="flex items-baseline justify-between gap-3">
                   <p className="font-mono text-micro tracking-[0.14em] text-ink-4">
                     留痕
@@ -469,52 +448,51 @@ export default function TodayPage({
                     今天 {todayNotes.length} 条
                   </p>
                 </div>
-                <form
-                  onSubmit={(event) => void handleCapture(event)}
-                  className="mt-2"
-                >
-                  <div className="app-capture-bar">
-                    <span aria-hidden="true" className="app-capture-dot" />
-                    <label htmlFor="today-capture-input" className="sr-only">
-                      今天做了什么
-                    </label>
-                    <input
-                      id="today-capture-input"
-                      value={captureText}
-                      onChange={(event) => {
-                        setCaptureText(event.target.value.slice(0, 500));
-                        if (captureStatus !== "saving") setCaptureStatus("idle");
-                      }}
-                      placeholder="今天做了什么 一句话也行"
-                      className="app-capture-input"
-                    />
-                    <button
-                      type="submit"
-                      disabled={captureStatus === "saving" || !captureText.trim()}
-                      className="app-capture-submit"
-                    >
-                      {captureStatus === "saving" ? "提交中…" : "提交征途碎片"}
-                    </button>
+
+                <div className="app-capture-bar mt-2">
+                  <span aria-hidden="true" className="app-capture-dot" />
+                  <label htmlFor="today-capture-input" className="sr-only">
+                    今天做了什么
+                  </label>
+                  <input
+                    ref={captureRef}
+                    id="today-capture-input"
+                    value={captureText}
+                    onChange={(event) => {
+                      setCaptureText(event.target.value.slice(0, 500));
+                      if (captureStatus !== "saving") setCaptureStatus("idle");
+                    }}
+                    placeholder="今天做了什么 一句话也行"
+                    className="app-capture-input"
+                  />
+                  <button
+                    type="submit"
+                    disabled={captureStatus === "saving"}
+                    className="app-capture-submit"
+                  >
+                    {captureStatus === "saving" ? "提交中…" : "提交征途碎片"}
+                  </button>
+                </div>
+
+                {prompts.length > 0 && (
+                  <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] leading-5">
+                    {prompts.slice(0, 2).map((prompt) => (
+                      <button
+                        key={prompt}
+                        type="button"
+                        onClick={() => {
+                          setCaptureText(prompt);
+                          setCaptureStatus("idle");
+                        }}
+                        className="max-w-full truncate text-left text-ink-4 underline decoration-ink/20 underline-offset-4 transition-colors hover:text-ink"
+                      >
+                        {prompt}
+                      </button>
+                    ))}
                   </div>
+                )}
 
-                  {prompts.length > 0 && (
-                    <div className="mt-2 flex flex-wrap gap-1.5">
-                      {prompts.slice(0, 2).map((prompt) => (
-                        <button
-                          key={prompt}
-                          type="button"
-                          onClick={() => {
-                            setCaptureText(prompt);
-                            setCaptureStatus("idle");
-                          }}
-                          className="app-mini-chip max-w-full min-w-0 truncate"
-                        >
-                          {prompt}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-
+                {captureStatus !== "idle" && (
                   <p
                     aria-live="polite"
                     className={[
@@ -523,34 +501,30 @@ export default function TodayPage({
                     ].join(" ")}
                   >
                     {captureStatus === "error"
-                      ? "这次没写进本机，请检查浏览器存储权限后重试"
-                      : captureStatus === "done"
-                        ? "已存进碎片收件箱"
-                        : "先进征途碎片收件箱 补齐四段式才算战绩"}
+                      ? "这次没写进本机 请检查浏览器存储权限后重试"
+                      : "已存进碎片收件箱"}
                   </p>
-                </form>
-
-                {todayNotes.length > 0 && (
-                  <ul className="mt-2 space-y-1.5 border-t border-rule/60 pt-2.5">
-                    {todayNotes.slice(0, 3).map((note) => (
-                      <li key={note.id} className="flex gap-2.5">
-                        <span className="w-9 shrink-0 font-mono text-micro tabular-nums text-ink-4">
-                          {dayjs(note.createdAt).format("HH:mm")}
-                        </span>
-                        <span className="line-clamp-2 min-w-0 flex-1 text-[11px] leading-5 text-ink-3">
-                          {note.text}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
                 )}
-              </div>
+              </form>
 
-              <div className="mt-5 border-t border-rule/60 pt-3">
-                <p className="text-[11px] leading-5 text-ink-3">
-                  {levelUpLine(level)}
-                </p>
-              </div>
+              {todayNotes.length > 0 && (
+                <ul className="mt-3 space-y-1.5 border-t border-rule/60 pt-2.5">
+                  {todayNotes.slice(0, 3).map((note) => (
+                    <li key={note.id} className="flex gap-2.5">
+                      <span className="w-9 shrink-0 font-mono text-micro tabular-nums text-ink-4">
+                        {dayjs(note.createdAt).format("HH:mm")}
+                      </span>
+                      <span className="line-clamp-2 min-w-0 flex-1 text-[11px] leading-5 text-ink-3">
+                        {note.text}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              <p className="mt-4 text-[11px] leading-5 text-ink-4">
+                {levelUpLine(level)}
+              </p>
             </section>
 
             <section className="app-card p-5">
@@ -563,9 +537,7 @@ export default function TodayPage({
 
               {!assignments ? (
                 <div className="mt-3">
-                  <p className="text-sm leading-6 text-ink-3">
-                    还没有作业数据，可以在新窗口里粘贴、截图或手动添加
-                  </p>
+                  <p className="text-sm leading-6 text-ink-3">还没有作业数据</p>
                   <button
                     type="button"
                     onClick={() => onOpenWindow("assignments")}
@@ -576,7 +548,7 @@ export default function TodayPage({
                 </div>
               ) : pending.length === 0 ? (
                 <p className="mt-3 text-sm leading-6 text-ink-3">
-                  没有未完成的作业，看看之后的 DDL 或记一条今天推进的事
+                  没有未完成的作业
                 </p>
               ) : (
                 <ul className="mt-1">
@@ -630,7 +602,7 @@ export default function TodayPage({
 
               {yesterday.empty ? (
                 <p className="mt-3 text-[12px] leading-6 text-ink-3">
-                  昨天没有产生结果的动作 空一天不算断 今天补一条就接上
+                  昨天没有产生结果的动作
                 </p>
               ) : (
                 <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2.5">
@@ -660,7 +632,7 @@ export default function TodayPage({
 
               <div className="mt-3">
                 <p className="font-mono text-micro leading-5 text-ink-3">
-                  {weekLine} {streakLine} 只算产生结果的动作
+                  {weekLine} {streakLine}
                 </p>
               </div>
 
@@ -707,7 +679,7 @@ export default function TodayPage({
 
               {!echo ? (
                 <p className="mt-3 text-[12px] leading-6 text-ink-3">
-                  今天写下第一条战绩 过几天这里会把它送回来
+                  今天写下第一条战绩
                 </p>
               ) : (
                 <div className="mt-3">
@@ -744,7 +716,7 @@ export default function TodayPage({
                     </p>
                   ) : (
                     <p className="mt-1.5 text-[11px] leading-5 text-amber-ink">
-                      结果还没写 补上它才会进简历草稿
+                      结果还没写
                     </p>
                   )}
                   <div className="mt-2 flex items-center gap-2">
@@ -786,7 +758,7 @@ export default function TodayPage({
                 </p>
               ) : intel.length === 0 ? (
                 <p className="mt-3 text-[11px] leading-5 text-ink-3">
-                  近期没有已公布日期的情报 未公布日期的只留在日历里
+                  近期没有已公布日期的情报
                 </p>
               ) : (
                 <ul className="mt-1">

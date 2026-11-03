@@ -157,7 +157,7 @@ export function parseBackupText(text: string): ParseBackupResult {
   } catch {
     return {
       ok: false,
-      message: "文件不是有效的 JSON。请选择学径导出的备份文件。",
+      message: "文件不是有效的 JSON 请选择学径导出的备份文件",
     };
   }
 
@@ -165,7 +165,7 @@ export function parseBackupText(text: string): ParseBackupResult {
   if (!parsed.success) {
     return {
       ok: false,
-      message: "备份结构校验失败，未写入任何数据。",
+      message: "备份结构校验失败 未写入任何数据",
     };
   }
   return { ok: true, backup: parsed.data };

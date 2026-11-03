@@ -159,7 +159,7 @@ export default function ExperiencesPage({
       setNotice("已丢弃一条碎片");
       setSaveError(null);
     } catch {
-      setSaveError("丢弃没写进本机。请检查浏览器存储权限后重试。");
+      setSaveError("丢弃没写进本机 请检查浏览器存储权限后重试");
     } finally {
       setDiscardBusyId(null);
     }
@@ -196,7 +196,7 @@ export default function ExperiencesPage({
           await onArchiveNote(fromNote.id, created.id);
           setNotice(`已把碎片并进《${value.title}》`);
         } catch {
-          setSaveError("战绩已保存，但碎片没能归档。刷新后可以再转一次。");
+          setSaveError("战绩已保存 碎片没能归档 刷新后可再转一次");
         }
       } else {
         setNotice(`已记录《${value.title}》`);
@@ -212,7 +212,7 @@ export default function ExperiencesPage({
       setNotice(target ? `已删除《${target.title}》` : "已删除经历");
       setSaveError(null);
     } catch {
-      setSaveError("写入本机失败，删除未生效。请检查浏览器存储权限后重试。");
+      setSaveError("写入本机失败 删除未生效 请检查浏览器存储权限后重试");
     }
   }
 
@@ -229,7 +229,7 @@ export default function ExperiencesPage({
       setNotice("已确认该条经历");
       setSaveError(null);
     } catch {
-      setSaveError("写入本机失败，确认没有保存。请检查浏览器存储权限后重试。");
+      setSaveError("写入本机失败 确认没有保存 请检查浏览器存储权限后重试");
     }
   }
 
@@ -238,10 +238,10 @@ export default function ExperiencesPage({
     try {
       const sample = createSampleExperiences();
       await onSave(sample);
-      setNotice("已写入 6 条示例经历，可随时编辑或删除。");
+      setNotice("已写入 6 条示例经历 可随时编辑或删除");
       setSaveError(null);
     } catch {
-      setSaveError("示例经历写入失败，请检查浏览器存储权限后重试。");
+      setSaveError("示例经历写入失败 请检查浏览器存储权限后重试");
     } finally {
       setSampleBusy(false);
     }
@@ -265,9 +265,7 @@ export default function ExperiencesPage({
                 </span>
               )}
             </div>
-            <p className="mt-2 text-xs leading-5 text-ink-3">
-              一条经历 = 一份可复用的简历素材。按学期沉淀，空白的学期就是待补的缺口。
-            </p>
+            <p className="mt-2 text-xs leading-5 text-ink-3">按学期沉淀</p>
             {items.length > 0 && (
               <p className="mt-1 font-mono text-micro tabular-nums text-ink-4">
                 覆盖 {availableKinds.length} 类 最近记录{" "}
@@ -405,8 +403,7 @@ export default function ExperiencesPage({
                 从一件已经做完的事开始
               </h2>
               <p className="mt-2 max-w-xl text-sm leading-6 text-ink-3">
-                课程设计、比赛、科研、实习、作品、志愿，或其他类型。先写标题和时间，
-                四段式可以慢慢补；没有数字就留空，不会替你编。
+                先写标题和时间 四段式可以慢慢补
               </p>
 
               <div className="mt-5 grid gap-2 sm:grid-cols-2">
@@ -428,7 +425,7 @@ export default function ExperiencesPage({
               </div>
 
               <p className="mt-4 text-[11px] leading-5 text-ink-3">
-                示例只写入本机浏览器，可随时编辑或删除；不会上传任何内容。
+                示例只写入本机
               </p>
             </section>
 
@@ -436,15 +433,15 @@ export default function ExperiencesPage({
               {[
                 {
                   title: "四段式",
-                  text: "问题、方法、我的贡献、结果。每段一到两句，简历直接用。",
+                  text: "问题 方法 我的贡献 结果",
                 },
                 {
                   title: "证据与技能",
-                  text: "报告、截图、作品链接和技能标签，面试前不用再翻硬盘。",
+                  text: "报告 截图 作品链接 技能标签",
                 },
                 {
                   title: "学期时间线",
-                  text: "按学期倒序排列，哪一学期是空的，一眼就能看到。",
+                  text: "按学期倒序",
                 },
               ].map((feature) => (
                 <div
@@ -524,9 +521,8 @@ export default function ExperiencesPage({
                 </div>
 
                 <p className="mt-2 text-micro leading-5 text-ink-4">
-                  秋季按 8 月至次年 1 月归档，春季按 2 至 7 月归档。
-                  {undatedCount > 0 &&
-                    ` 另有 ${undatedCount} 条未标时间，排在时间线末尾。`}
+                  秋季 8 月至次年 1 月 春季 2 至 7 月
+                  {undatedCount > 0 && ` 另有 ${undatedCount} 条未标时间`}
                 </p>
               </div>
             </section>
@@ -587,7 +583,7 @@ export default function ExperiencesPage({
                       onConfirm={(id) => void handleConfirm(id)}
                     />
                     <p className="mt-3 text-[11px] leading-5 text-ink-4">
-                      动态只在本机浏览器生成与可见，不上传、不分享；「本机可见」表示这条记录没有离开这台电脑。
+                      动态只在本机生成
                     </p>
                   </>
                 ) : (
@@ -603,7 +599,7 @@ export default function ExperiencesPage({
                 )
               ) : (
                 <p className="border-rule mt-2 rounded-xl border border-dashed px-4 py-6 text-center text-xs text-ink-3">
-                  这一学期还没有经历。
+                  这一学期还没有经历
                   <button
                     type="button"
                     onClick={() => openCreate()}

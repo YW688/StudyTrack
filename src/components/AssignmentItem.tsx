@@ -95,7 +95,6 @@ export default function AssignmentItem({
             <span className="text-ink-3">{item.courseName}</span>
           )}
           <span>{ASSIGNMENT_KIND_LABELS[item.kind]}</span>
-          <span aria-hidden="true">·</span>
           <span>{ASSIGNMENT_SOURCE_LABELS[item.source]}录入</span>
         </p>
 

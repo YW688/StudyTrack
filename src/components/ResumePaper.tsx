@@ -97,7 +97,7 @@ export default function ResumePaper({
             <div className="resume-section-body">
               {entries.length === 0 ? (
                 <p className="resume-empty screen-only">
-                  从左侧选择经历加入简历，这里会实时更新。
+                  从左侧选经历 这里实时更新
                 </p>
               ) : (
                 entries.map((entry) => {
@@ -136,7 +136,7 @@ export default function ResumePaper({
                         </ul>
                       ) : (
                         <p className="resume-entry-empty screen-only">
-                          四段式为空，这条经历暂时只有标题。
+                          四段式为空 只显示标题
                         </p>
                       )}
                     </article>

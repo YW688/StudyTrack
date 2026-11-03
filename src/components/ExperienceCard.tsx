@@ -158,7 +158,7 @@ export default function ExperienceCard({
               </div>
             ) : (
               <p className="text-xs leading-5 text-ink-3">
-                四段式还没填。补齐问题、方法、贡献和结果，简历与岗位匹配才有素材。
+                四段式还没填 补齐问题 方法 贡献 结果
               </p>
             )}
 
@@ -183,7 +183,7 @@ export default function ExperienceCard({
                   </dl>
                 ) : (
                   <p className="mt-1 text-micro leading-5 text-ink-4">
-                    原文未提供量化数据，不做推测。
+                    原文未提供量化数据
                   </p>
                 )}
               </div>
@@ -221,7 +221,7 @@ export default function ExperienceCard({
                   </ul>
                 ) : (
                   <p className="mt-1 text-micro leading-5 text-ink-4">
-                    暂无证据，可补报告、截图或链接。
+                    暂无证据 可补报告 截图或链接
                   </p>
                 )}
               </div>
@@ -337,7 +337,7 @@ export default function ExperienceCard({
               title={
                 ready
                   ? "四段式齐 有证据或量化 置信已确认"
-                  : "补齐四段式、证据与确认，才算就绪"
+                  : "补齐四段式 证据与确认 才算就绪"
               }
               className={[
                 "font-mono text-micro tabular-nums",

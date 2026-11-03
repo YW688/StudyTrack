@@ -37,9 +37,9 @@ export default function DataBackup({
     setMessage(null);
     try {
       await onExport();
-      setMessage({ tone: "ok", text: "已导出，浏览器正在下载备份文件。" });
+      setMessage({ tone: "ok", text: "已导出 浏览器正在下载备份文件" });
     } catch {
-      setMessage({ tone: "error", text: "导出失败，请稍后重试。" });
+      setMessage({ tone: "error", text: "导出失败 请稍后重试" });
     } finally {
       setBusy(null);
     }
@@ -65,7 +65,7 @@ export default function DataBackup({
         notes: parsed.backup.notes?.length ?? 0,
       });
     } catch {
-      setMessage({ tone: "error", text: "读不出这个文件，请重试。" });
+      setMessage({ tone: "error", text: "读不出这个文件 请重试" });
     }
   }
 
@@ -81,7 +81,7 @@ export default function DataBackup({
       });
       if (result.ok) setPendingImport(null);
     } catch {
-      setMessage({ tone: "error", text: "导入失败，本机数据没有被覆盖。" });
+      setMessage({ tone: "error", text: "导入失败 本机数据未被覆盖" });
     } finally {
       setBusy(null);
     }
@@ -93,9 +93,9 @@ export default function DataBackup({
     try {
       await onClear();
       setConfirmingClear(false);
-      setMessage({ tone: "ok", text: "已清除本机全部数据。" });
+      setMessage({ tone: "ok", text: "已清除本机全部数据" });
     } catch {
-      setMessage({ tone: "error", text: "清除失败，请检查浏览器存储权限。" });
+      setMessage({ tone: "error", text: "清除失败 请检查浏览器存储权限" });
     } finally {
       setBusy(null);
     }

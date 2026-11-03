@@ -115,7 +115,7 @@ export function ExperienceShowcase() {
             校园选课系统
           </p>
           <p className="shot-xs lp-faint mt-1 truncate">
-            数据库原理 · 2026 年 6 月 · 个人项目
+            数据库原理 2026 年 6 月 个人项目
           </p>
         </div>
         <span className="shot-xs lp-soft flex shrink-0 items-center gap-1">
@@ -151,7 +151,7 @@ export function ExperienceShowcase() {
             </span>
           ))}
         </div>
-        <span className="shot-xs lp-faint shrink-0">证据 2 · 量化 3</span>
+        <span className="shot-xs lp-faint shrink-0">证据 2 量化 3</span>
       </div>
     </div>
   );
@@ -222,10 +222,10 @@ export function ResumeShowcase() {
 
       <p className="shot-xs shot-hide-narrow absolute bottom-0 left-0 flex items-center gap-1 text-[#8a6a22]">
         <span className="h-1.5 w-1.5 rounded-[1px] bg-[#e8c86a]" />
-        低置信标黄 · 待确认
+        低置信标黄 待确认
       </p>
       <span className="shot-xs lp-faint shot-hide-narrow absolute right-0 bottom-0 rounded-full border lp-hairline px-2 py-0.5">
-        快照 v3 · 10 月 30 日
+        快照 v3 10 月 30 日
       </span>
     </div>
   );
@@ -255,7 +255,7 @@ export function MatchShowcase() {
         <div className="shot-xs flex min-w-0 items-center gap-1.5">
           <span className="lp-faint shrink-0">检索</span>
           <span className="shot-sm truncate">
-            数据分析 · 杭州 · 2027 届
+            数据分析 杭州 2027 届
           </span>
         </div>
         <span className="shot-xs lp-faint shrink-0">42 条</span>
@@ -274,7 +274,7 @@ export function MatchShowcase() {
                     {job.title}
                   </span>
                   <span className="shot-xs lp-faint block truncate leading-[1.3]">
-                    {job.city} · {job.cohort}
+                    {job.city} {job.cohort}
                   </span>
                 </span>
                 <span
@@ -285,7 +285,7 @@ export function MatchShowcase() {
               </li>
             ))}
           </ul>
-          <p className="shot-xs lp-faint mt-auto pt-2">岗位库 42 条 · 人工整理</p>
+          <p className="shot-xs lp-faint mt-auto pt-2">岗位库 42 条 人工整理</p>
         </div>
 
         <div className="flex min-h-0 flex-col rounded-lg border lp-hairline p-2">
@@ -294,7 +294,7 @@ export function MatchShowcase() {
               <p className="shot-sm truncate leading-[1.3] font-medium">
                 数据分析实习生
               </p>
-              <p className="shot-xs lp-faint mt-0.5">杭州 · 2027 届</p>
+              <p className="shot-xs lp-faint mt-0.5">杭州 2027 届</p>
             </div>
             <p className="shrink-0 text-right">
               <span className="shot-xl font-serif leading-none text-[color:var(--lp-accent)]">
@@ -331,7 +331,7 @@ export function MatchShowcase() {
               <div className="min-w-0">
                 <p className="shot-sm truncate leading-[1.3]">SQL 窗口函数</p>
                 <p className="shot-xs lp-faint truncate leading-[1.3]">
-                  下学期补 · 指回经历原文
+                  下学期补
                 </p>
               </div>
             </div>

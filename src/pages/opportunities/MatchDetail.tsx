@@ -110,11 +110,11 @@ export default function MatchDetail({
       ...(job.sourceUrl
         ? [`岗位来源：${job.sourceName}（${job.sourceUrl}）`]
         : []),
-      "匹配依据：学径本机简历与经历；岗位信息以企业官网为准。",
+      "依据本机简历与经历 岗位以官网为准",
     ];
     const ok = await copyText(lines.join("\n"));
     setCopied(ok);
-    setCopyError(ok ? null : "复制失败，请手动选择文本复制。");
+    setCopyError(ok ? null : "复制失败 请手动选择文本复制");
   }
 
   return (
@@ -207,7 +207,7 @@ export default function MatchDetail({
 
         {job.custom ? (
           <p className="mt-2 text-micro leading-5 text-ink-4">
-            粘贴的 JD 只在当前页面有效，刷新后消失
+            粘贴的 JD 只在当前页面有效
           </p>
         ) : (
           <div className="border-rule mt-3 border-t pt-2.5">
@@ -253,7 +253,7 @@ export default function MatchDetail({
           </ul>
         ) : (
           <p className="mt-2 text-[11px] leading-5 text-ink-3">
-            暂无推荐理由。先补全求职意向与经历，再重新查看。
+            暂无推荐理由
           </p>
         )}
 
@@ -283,7 +283,7 @@ export default function MatchDetail({
           </span>
         </div>
         <p className="mt-1 text-micro leading-5 text-ink-4">
-          方向级要求，供自查使用；投递前以官网职位说明为准。
+          投递前以官网职位说明为准
         </p>
 
         <ol className="border-rule mt-2 divide-y divide-rule border-t">
@@ -346,7 +346,7 @@ export default function MatchDetail({
                         {archiveExperience && (
                           <div className="border-accent/30 bg-accent/[0.05] mt-2 rounded-lg border px-3 py-2.5">
                             <p className="text-micro leading-5 text-accent-ink">
-                              这条经历还没进简历，勾选后可提升命中。
+                              还没进简历 勾选后可提升命中
                             </p>
                             <p className="mt-1 text-[11px] font-medium leading-5">
                               {archiveExperience.title}
@@ -390,7 +390,7 @@ export default function MatchDetail({
         </div>
         {job.skills.length === 0 ? (
           <p className="mt-2 text-[11px] leading-5 text-ink-3">
-            这条 JD 没有识别出技能关键词，请直接对照上方要求清单。
+            没有识别出技能关键词
           </p>
         ) : (
           <div className="mt-2 flex flex-wrap gap-1.5">
@@ -414,7 +414,7 @@ export default function MatchDetail({
           </div>
         )}
         <p className="mt-2 text-micro leading-5 text-ink-4">
-          技能只按经历原文与技能标签核对，不做推测。
+          只按经历原文与技能标签核对
         </p>
       </section>
 
@@ -488,7 +488,7 @@ export default function MatchDetail({
             </button>
           </div>
           <p className="max-w-xs text-micro leading-5 text-ink-4">
-            匹配分由本机经历计算，不代表企业筛选结果；岗位以官网为准，学径不代投。
+            匹配分由本机经历计算 不代表企业筛选结果
           </p>
         </div>
         {copyError && (

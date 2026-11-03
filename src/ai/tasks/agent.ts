@@ -263,16 +263,16 @@ function profileReply(text: string): AgentReply {
   const draft = parseProfile(text);
   if (!draft) {
     return {
-      text: "告诉我年级、专业和想去的方向，例如：大二，人工智能，想找算法实习。每一步都能改。",
+      text: "说清年级 专业 想去的方向 例如 大二 人工智能 想找算法实习",
     };
   }
   const summary = [
     draft.grade || "年级未填",
     draft.major || "专业未填",
     GOAL_LABELS[draft.goal],
-  ].join(" · ");
+  ].join(" ");
   return {
-    text: `我按这句话整理了一份档案草稿：${summary}。确认前可以改。`,
+    text: `档案草稿 ${summary} 确认前可以改`,
     draft: { kind: "profile", data: draft },
   };
 }
@@ -280,7 +280,7 @@ function profileReply(text: string): AgentReply {
 function experienceReply(text: string): AgentReply {
   if (text.length < 8) {
     return {
-      text: "再多说一点：做了什么、怎么做的、你负责什么、结果怎样。四段不用一次写全。",
+      text: "再多说一点 做了什么 怎么做的 你负责什么 结果怎样 四段不用一次写全",
     };
   }
   const draft = parseExperience(text);
@@ -288,15 +288,15 @@ function experienceReply(text: string): AgentReply {
   return {
     text:
       missing.length === 0
-        ? "四段都齐了。确认后写入征途，之后可以再补证据和数字。"
-        : `我先填了能识别的部分。还缺：${missing.join("、")}，可以直接在下面补。`,
+        ? "四段都齐了 确认后写入征途 之后可以再补证据和数字"
+        : `先填了能识别的部分 还缺 ${missing.join(" ")} 可以直接在下面补`,
     draft: { kind: "experience", data: draft },
   };
 }
 
 function noteReply(text: string): AgentReply {
   return {
-    text: "这条更像一条记录。确认后记进征途，不会当作完整经历。",
+    text: "这条更像一条记录 确认后记进征途 不算完整经历",
     draft: { kind: "note", text: text.slice(0, 1000) },
   };
 }
@@ -317,7 +317,7 @@ function weekReply(context: AgentContext): AgentReply {
 
   if (events.length === 0) {
     return {
-      text: "这周还没有产生结果的记录。今天补一条就够，不用写长；绿格只记产生结果的动作。",
+      text: "这周还没有产生结果的记录 今天补一条就够 绿格只记产生结果的动作",
     };
   }
 
@@ -325,7 +325,7 @@ function weekReply(context: AgentContext): AgentReply {
     (event) => `- ${dayjs(event.date).format("M月D日")} ${event.title}`,
   );
   return {
-    text: `这周有 ${events.length} 条记录：\n${shown.join("\n")}${
+    text: `这周有 ${events.length} 条记录\n${shown.join("\n")}${
       events.length > 6 ? "\n……" : ""
     }`,
   };
@@ -334,7 +334,7 @@ function weekReply(context: AgentContext): AgentReply {
 function experienceListReply(context: AgentContext): AgentReply {
   if (context.experiences.length === 0) {
     return {
-      text: "征途还是空的。先记一条课程设计、比赛或实习；四段不用一次写全。",
+      text: "征途还是空的 先记一条课程设计 比赛或实习 四段不用一次写全",
     };
   }
   const shown = context.experiences.slice(0, 5).map((experience) => {
@@ -342,12 +342,12 @@ function experienceListReply(context: AgentContext): AgentReply {
     return `- ${experience.title}（${experienceKindLabel(
       experience.kind,
       experience.kindLabel,
-    )} · ${range}）`;
+    )} ${range}）`;
   });
   return {
-    text: `征途里有 ${context.experiences.length} 条战绩：\n${shown.join("\n")}${
+    text: `征途里有 ${context.experiences.length} 条战绩\n${shown.join("\n")}${
       context.experiences.length > 5 ? "\n……" : ""
-    }\n要补证据或改四段式，去征途页。`,
+    }\n补证据或改四段式 去征途页`,
     navigate: "experiences",
   };
 }
@@ -356,13 +356,13 @@ function readinessReply(context: AgentContext): AgentReply {
   const { profile } = context;
   if (!profile) {
     return {
-      text: "还没有档案。先让我建档，再判断离实习差什么。",
+      text: "还没有档案 先建档 再判断离实习差什么",
     };
   }
   const readiness = computeReadiness(profile, context.experiences);
   if (context.experiences.length === 0) {
     return {
-      text: `档案厚度 ${readiness.score}/100（${readiness.label}）。\n下一步：${readiness.next}\n征途还没有战绩，先记一条再判断岗位差距。`,
+      text: `档案厚度 ${readiness.score}/100（${readiness.label}）\n下一步 ${readiness.next}\n征途还没有战绩 先记一条再判断岗位差距`,
     };
   }
   const matches = rankJobs(
@@ -377,10 +377,10 @@ function readinessReply(context: AgentContext): AgentReply {
       ? profile.targetRoles.join("、")
       : "还没写目标岗位";
   return {
-    text: `档案厚度 ${readiness.score}/100（${readiness.label}）。\n下一步：${readiness.next}\n目标：${target}。\n${
+    text: `档案厚度 ${readiness.score}/100（${readiness.label}）\n下一步 ${readiness.next}\n目标 ${target}\n${
       missing.length > 0
-        ? `对照演示岗位，常见缺口：${missing.join("、")}。`
-        : "对照演示岗位，暂无明显技能缺口。"
+        ? `对照演示岗位 常见缺口 ${missing.join(" ")}`
+        : "对照演示岗位 暂无明显技能缺口"
     }`,
     navigate: "opportunities",
   };
@@ -389,12 +389,12 @@ function readinessReply(context: AgentContext): AgentReply {
 function jobReply(context: AgentContext): AgentReply {
   if (JOB_POSTINGS.length === 0) {
     return {
-      text: "岗位库暂时不可用。可以到征召页粘贴一份 JD 做本地对照。",
+      text: "岗位库暂时不可用 可到征召页粘贴 JD 本地对照",
     };
   }
   if (context.experiences.length === 0) {
     return {
-      text: "还没有经历，匹配只能看岗位要求。先记一条，再回来对照。",
+      text: "还没有经历 匹配只能看岗位要求 先记一条再回来对照",
       navigate: "opportunities",
     };
   }
@@ -408,22 +408,22 @@ function jobReply(context: AgentContext): AgentReply {
       const job = JOB_POSTINGS.find((item) => item.id === match.jobId);
       if (!job) return "";
       const gaps = match.missingSkills.slice(0, 2);
-      return `- ${job.company} · ${job.title}：${match.score} 分（${
+      return `- ${job.company} ${job.title} ${match.score} 分（${
         MATCH_TIER_LABELS[match.tier]
-      }）${gaps.length > 0 ? `，缺口：${gaps.join("、")}` : ""}`;
+      }）${gaps.length > 0 ? ` 缺口 ${gaps.join(" ")}` : ""}`;
     })
     .filter(Boolean);
   return {
-    text: `先看这 ${lines.length} 张演示岗位卡：\n${lines.join(
+    text: `先看这 ${lines.length} 张演示岗位卡\n${lines.join(
       "\n",
-    )}\n详情在征召页，命中会指回经历原文。`,
+    )}\n详情在征召页 命中会指回经历原文`,
     navigate: "opportunities",
   };
 }
 
 function unsupportedReply(): AgentReply {
   return {
-    text: "记录官只处理建档、写账、查账和解读，不做闲聊。你可以说：\n- 帮我建档：大二，人工智能，想找算法实习\n- 记一条经历：做了什么、怎么做的、结果怎样\n- 这周做了什么\n- 离实习还差什么",
+    text: "记录官只处理建档 写账 查账和解读\n- 帮我建档 大二 人工智能 想找算法实习\n- 记一条经历 做了什么 怎么做的 结果怎样\n- 这周做了什么\n- 离实习还差什么",
   };
 }
 
@@ -433,7 +433,7 @@ export function runAgent(
   mode: AgentMode = "auto",
 ): AgentReply {
   const text = input.trim();
-  if (!text) return { text: "写一句你想让我处理的事。" };
+  if (!text) return { text: "写一句你想让我处理的事" };
 
   if (mode === "profile") return profileReply(text);
   if (mode === "experience") return experienceReply(text);

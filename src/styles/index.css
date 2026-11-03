@@ -1101,11 +1101,6 @@ html[data-theme-flow="in"]::view-transition-old(root) {
   border-radius: 4px;
 }
 
-.demo-square.is-done {
-  border-color: transparent;
-  background-color: var(--lp-accent);
-}
-
 .demo-tag {
   display: inline-flex;
   align-items: center;
@@ -1116,12 +1111,6 @@ html[data-theme-flow="in"]::view-transition-old(root) {
   font-size: 10px;
   color: var(--lp-ink-soft);
   white-space: nowrap;
-}
-
-.demo-tag--alert {
-  border-color: color-mix(in srgb, var(--lp-alert), transparent 60%);
-  background: color-mix(in srgb, var(--lp-alert), transparent 92%);
-  color: var(--lp-alert);
 }
 
 .demo-capture {
@@ -1140,39 +1129,6 @@ html[data-theme-flow="in"]::view-transition-old(root) {
   flex: none;
   border-radius: 9999px;
   background-color: var(--lp-accent);
-}
-
-.demo-capture-key {
-  flex: none;
-  padding: 2px 6px;
-  border: 1px solid var(--lp-line);
-  border-radius: 5px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--lp-ink-faint);
-}
-
-.demo-weekcell {
-  display: flex;
-  flex: 1;
-  aspect-ratio: 1;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--lp-line-soft);
-  border-radius: 7px;
-  font-size: 10px;
-  color: var(--lp-ink-faint);
-}
-
-.demo-weekcell.is-on {
-  border-color: transparent;
-  background: color-mix(in srgb, var(--lp-accent), transparent 78%);
-  color: var(--lp-ink-soft);
-}
-
-.demo-weekcell.is-today {
-  border: 1px solid var(--lp-accent);
-  color: var(--lp-ink);
 }
 
 .demo-heat {
@@ -1209,6 +1165,19 @@ html[data-theme-flow="in"]::view-transition-old(root) {
   border-color: transparent;
   background: color-mix(in srgb, var(--lp-accent), transparent 84%);
   color: var(--lp-ink);
+}
+
+.demo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 8px;
+  border: 1px solid var(--lp-line);
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--lp-surface), transparent 15%);
+  font-size: 10px;
+  color: var(--lp-ink-soft);
+  white-space: nowrap;
 }
 
 .demo-job {
@@ -2759,18 +2728,36 @@ button.app-mini-chip:hover {
 
 .app-text-link {
   display: inline-flex;
-  min-height: 32px;
+  min-height: 30px;
   align-items: center;
-  padding: 0 2px;
+  gap: 3px;
+  padding: 0 9px;
+  border: 1px solid var(--color-rule);
+  border-radius: 9999px;
+  background: var(--color-surface);
   font-size: 11px;
-  color: var(--color-ink-3);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  transition: color 160ms ease;
+  color: var(--color-ink-2);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease;
 }
 
 .app-text-link:hover {
+  border-color: color-mix(in srgb, var(--color-ink) 30%, transparent);
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
   color: var(--color-ink);
+}
+
+.app-text-link:active {
+  background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+}
+
+.app-text-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 /* ---------- 工具栏控件：分段切换 / 步进器 / 描边按钮 ---------- */
@@ -3133,15 +3120,25 @@ button.app-mini-chip:hover {
 .app-capture-bar {
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-height: 52px;
-  padding: 0 4px 0 14px;
+  gap: 12px;
+  min-height: 56px;
+  padding: 0 6px 0 18px;
   border-radius: 9999px;
   border: 1px solid color-mix(in srgb, var(--tint) 55%, var(--color-rule));
   background: rgba(var(--wash-rgb), 0.5);
   box-shadow: inset 0 1px 0 rgba(var(--wash-rgb), 0.7);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.app-capture-bar:focus-within {
+  border-color: color-mix(in srgb, var(--color-accent) 42%, var(--color-rule));
+  box-shadow:
+    inset 0 1px 0 rgba(var(--wash-rgb), 0.7),
+    0 0 0 4px color-mix(in srgb, var(--color-accent) 9%, transparent);
 }
 
 .app-capture-dot {
@@ -3157,7 +3154,7 @@ button.app-mini-chip:hover {
   flex: 1;
   min-width: 0;
   background: transparent;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-ink);
   outline: none;
 }
@@ -3170,15 +3167,29 @@ button.app-mini-chip:hover {
   flex: none;
   min-height: 44px;
   border-radius: 9999px;
-  background: color-mix(in srgb, var(--color-ink) 90%, transparent);
-  padding: 0 16px;
-  font-size: 11px;
+  background: color-mix(in srgb, var(--color-ink) 92%, transparent);
+  padding: 0 20px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
   color: var(--color-paper);
-  transition: opacity 160ms ease;
+  box-shadow: 0 16px 30px -24px rgba(25, 40, 55, 0.6);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    filter 160ms ease;
+}
+
+.app-capture-submit:not(:disabled):hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
 }
 
 .app-capture-submit:disabled {
-  opacity: 0.4;
+  border: 1px solid transparent;
+  background: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  box-shadow: none;
+  color: var(--color-paper);
 }
 
 @media (max-width: 639px) {

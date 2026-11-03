@@ -225,13 +225,13 @@ export default function ResumePage({
         selectedExperienceIds: selected.filter((item) => item !== id),
         conciseIds: resume.conciseIds.filter((item) => item !== id),
       });
-      setNotice("已从简历移除。");
+      setNotice("已从简历移除");
     } else {
       commit({
         ...resume,
         selectedExperienceIds: [...selected, id],
       });
-      setNotice("已加入简历，顺序可在经历池中调整。");
+      setNotice("已加入简历 顺序可在经历池中调整");
     }
     setError(null);
   }
@@ -261,7 +261,7 @@ export default function ResumePage({
       selectedExperienceIds: [],
       conciseIds: [],
     });
-    setNotice("已清空简历中的经历。");
+    setNotice("已清空简历中的经历");
     setError(null);
   }
 
@@ -270,7 +270,7 @@ export default function ResumePage({
       ...new Set([...resume.selectedExperienceIds, ...ids]),
     ].filter((id) => experienceMap.has(id));
     commit({ ...resume, selectedExperienceIds: merged });
-    setNotice(`已选入 ${ids.length} 条就绪战绩，可继续排序或精简。`);
+    setNotice(`已选入 ${ids.length} 条就绪战绩 可继续排序或精简`);
     setError(null);
   }
 
@@ -316,7 +316,7 @@ export default function ResumePage({
       setNotice(`已保存版本 v${snapshot.version}。`);
       setError(null);
     } catch {
-      setError("快照保存失败，请检查浏览器存储权限后重试。");
+      setError("快照保存失败 请检查浏览器存储权限后重试");
     }
   }
 
@@ -329,7 +329,7 @@ export default function ResumePage({
       const result = await generateResumeBullets(experience);
       if (result.bullets.length === 0) {
         setNotice(result.note);
-        setError("这条经历还没有可提炼的内容，请先去经历页补充四段式。");
+        setError("这条经历还没有可提炼的内容 先去经历页补四段式");
         return;
       }
       const cache: ResumeBulletCache = {
@@ -348,7 +348,7 @@ export default function ResumePage({
       setManagerOpen(true);
       setNotice(result.note);
     } catch {
-      setError("生成要点失败，请稍后重试。");
+      setError("生成要点失败 请稍后重试");
     } finally {
       setGeneratingId(null);
     }
@@ -365,7 +365,7 @@ export default function ResumePage({
       nextBullets[experienceId] = { ...cache, bullets };
     }
     commit({ ...resume, bullets: nextBullets });
-    setNotice("已删除该条要点。");
+    setNotice("已删除该条要点");
   }
 
   async function handleRegenerateBullet(
@@ -391,7 +391,7 @@ export default function ResumePage({
       });
       const replacement = result.bullets[0];
       if (!replacement) {
-        setNotice("没有找到可替换的新要点，已保留原条目。");
+        setNotice("没有找到可替换的新要点 已保留原条目");
         return;
       }
       const latest = resumeRef.current;
@@ -400,7 +400,7 @@ export default function ResumePage({
         (bullet) => bullet.id === bulletId,
       );
       if (latestIndex < 0) {
-        setNotice("该条要点已被删除，已保留当前内容。");
+        setNotice("该条要点已被删除 已保留当前内容");
         return;
       }
       const bullets = latestCache.bullets.map((bullet, index) =>
@@ -421,9 +421,9 @@ export default function ResumePage({
           },
         },
       });
-      setNotice("已重写这条要点。");
+      setNotice("已重写这条要点");
     } catch {
-      setError("重写失败，已保留原条目。");
+      setError("重写失败 已保留原条目");
     } finally {
       setGeneratingId(null);
     }
@@ -459,7 +459,7 @@ export default function ResumePage({
     setSnapshotPanelOpen(false);
     setNotice(
       skipped > 0
-        ? `已恢复 v${snapshot.version}；${skipped} 条经历已不存在，已跳过。`
+        ? `已恢复 v${snapshot.version} 跳过 ${skipped} 条失效经历`
         : `已恢复到 v${snapshot.version}。`,
     );
     setError(null);
@@ -467,13 +467,13 @@ export default function ResumePage({
 
   async function handlePrint() {
     if (displayedEntries.length === 0) {
-      setError("先从左侧选择经历，再打印。");
+      setError("先从左侧选经历 再打印");
       return;
     }
     if (
       overflow &&
       !window.confirm(
-        "内容可能超过一页 A4，建议精简或减少条目。仍要继续打印吗？",
+        "内容可能超过一页 A4 仍要继续打印吗",
       )
     ) {
       return;
@@ -488,7 +488,7 @@ export default function ResumePage({
         setSnapshots(next);
         setNotice(`打印前已保存版本 v${snapshot.version}。`);
       } catch {
-        setNotice("快照保存失败，已继续打印。");
+        setNotice("快照保存失败 已继续打印");
       }
     }
 
@@ -537,11 +537,11 @@ export default function ResumePage({
               </span>
             </div>
             <p className="mt-2 text-xs leading-5 text-ink-3">
-              勾选经历 → 核对要点 → 打印 A4。内容只在本机，作品集分享靠链接本身。
+              勾选经历 核对要点 打印 A4
             </p>
             {latestSnapshot && (
               <p className="mt-1 font-mono text-micro tabular-nums text-ink-4">
-                共 {snapshots.length} 个版本 · 最近一次{" "}
+                共 {snapshots.length} 个版本 最近一次{" "}
                 {relativeTimeLabel(latestSnapshot.createdAt)}
               </p>
             )}
@@ -624,7 +624,7 @@ export default function ResumePage({
         {nameMissing && !previewSnapshot && (
           <div className="resume-banner border-amber/50 bg-amber/[0.07] mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border-l-2 px-3 py-2">
             <p className="text-xs leading-5 text-ink-2">
-              填写姓名后导出的简历更完整。
+              填写姓名后导出更完整
             </p>
             <button
               type="button"
@@ -643,12 +643,12 @@ export default function ResumePage({
                 <p className="text-sm font-medium">
                   正在预览 v{previewSnapshot.version}
                   <span className="ml-2 font-mono text-micro font-normal text-ink-3">
-                    只读 · {formatSnapshotTime(previewSnapshot.createdAt)} ·{" "}
+                    只读 {formatSnapshotTime(previewSnapshot.createdAt)}{" "}
                     {previewEntries.length} 条经历
                   </span>
                 </p>
                 <p className="mt-1 text-[11px] leading-5 text-ink-3">
-                  预览不会修改当前简历。
+                  只读预览
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
@@ -679,7 +679,7 @@ export default function ResumePage({
 
             {overflow && (
               <p className="resume-banner border-amber/50 bg-amber/[0.07] mt-3 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink-2">
-                内容超过一页 A4，建议精简或减少条目。仍可继续打印。
+                超过一页 A4 建议删减条目 仍可打印
               </p>
             )}
 
@@ -747,17 +747,17 @@ export default function ResumePage({
               >
                 <div className="screen-only mb-2 flex flex-wrap items-center justify-between gap-2">
                   <p className="font-mono text-micro tabular-nums text-ink-3">
-                    已选 {entries.length} 条 ·{" "}
+                    已选 {entries.length} 条{" "}
                     {overflow ? "预计超过 1 页" : "1 页内"}
                   </p>
                   <p className="text-micro text-ink-4">
-                    移动端为缩略预览，打印以 A4 为准
+                    移动端为缩略预览
                   </p>
                 </div>
 
                 {overflow && (
                   <p className="resume-banner border-amber/50 bg-amber/[0.07] mb-3 rounded-lg border-l-2 px-3 py-2 text-xs leading-5 text-ink-2">
-                    内容超过一页 A4，建议精简或减少条目。仍可继续打印。
+                    超过一页 A4 建议删减条目 仍可打印
                   </p>
                 )}
 
