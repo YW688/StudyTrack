@@ -183,7 +183,7 @@ export default function LandingPage({
         <section className="landing-hero flex min-h-dvh flex-col overflow-hidden px-4 sm:px-8">
           <div aria-hidden="true" className="landing-noise" />
 
-          <header className="landing-glass-nav relative z-20 mx-auto mt-4 grid w-full max-w-[1240px] grid-cols-[auto_1fr_auto] items-center gap-4 rounded-full px-3 py-2 sm:mt-5 sm:px-5">
+          <header className="landing-glass-nav relative z-20 mx-auto mt-4 grid w-full max-w-[1240px] grid-cols-[auto_1fr_auto] items-center gap-4 rounded-full px-3 py-2 sm:mt-5 sm:px-5 lg:gap-10 lg:px-7 lg:py-2.5">
             <div className="flex shrink-0 items-center gap-3 sm:gap-3.5">
               <BrandMark
                 size={32}
@@ -201,7 +201,7 @@ export default function LandingPage({
 
             <nav
               aria-label="页面导航"
-              className="mx-auto hidden w-full max-w-[720px] grid-cols-4 items-center justify-items-center lg:grid"
+              className="mx-auto hidden w-full max-w-[820px] grid-cols-4 items-center justify-items-center lg:grid"
             >
               <a
                 href="#demo"
@@ -229,7 +229,7 @@ export default function LandingPage({
               </a>
             </nav>
 
-            <div className="flex items-center justify-self-end gap-1.5 md:gap-2">
+            <div className="flex items-center justify-self-end gap-2.5 md:gap-4 lg:gap-6">
               <ThemeToggle
                 theme={theme}
                 onToggle={() => onThemeChange(nextTheme(theme))}
@@ -239,7 +239,7 @@ export default function LandingPage({
                 pending={pending}
                 mode="fresh"
                 variant="primary"
-                size="sm"
+                size="lg"
                 onClick={() => void handleStart("fresh")}
               />
             </div>
@@ -724,7 +724,7 @@ function ThemeToggle({
       onClick={onToggle}
       aria-label={`切换配色 当前${current.name} 下一套${next.name}`}
       title={`切换到${next.name}`}
-      className="lp-theme-toggle inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-full px-3.5 text-[12.5px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-accent)]"
+      className="lp-theme-toggle inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-full px-4 text-[12.5px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-accent)] lg:min-h-12 lg:px-5"
     >
       <span
         aria-hidden="true"

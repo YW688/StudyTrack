@@ -23,8 +23,8 @@ export default function TierPips({
           ].join(" ")}
         />
       ))}
-      <ApertureMark className="tier-aperture" size={20} />
-      <StarMark className="tier-star" size={16} />
+      <ApertureMark className="tier-aperture" size={20} tier={units} />
+      <StarMark className="tier-star" size={16} tier={units} />
       <WaxSeal units={units} total={total} className="tier-seal" />
     </span>
   );

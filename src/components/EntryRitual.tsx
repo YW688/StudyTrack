@@ -15,13 +15,13 @@ const POEMS = [
 ] as const;
 
 const POEM_STORAGE_KEY = "studytrack:ritual-poem";
-const POEM_MS = 820;
-const MARK_HOLD_MS = 320;
+const POEM_MS = 960;
+const MARK_HOLD_MS = 440;
 const FLY_MS = 360;
-const REVEAL_MS = 160;
+const REVEAL_MS = 150;
 const HANDOFF_FALLBACK_MS = 1100;
-const POEM_CHAR_START = 0.14;
-const POEM_CHAR_STEP = 0.026;
+const POEM_CHAR_START = 0.12;
+const POEM_CHAR_STEP = 0.022;
 const POEM_LINE_STEP = 0.045;
 
 type Phase = "poem" | "mark" | "handoff" | "exit";
@@ -113,7 +113,9 @@ export default function EntryRitual({
 
     const fly = () => {
       const mark = markRef.current;
-      const target = document.querySelector<HTMLElement>("[data-brand-mark]");
+      const target = document.querySelector<HTMLElement>(
+        "[data-brand-mark]:not(.entry-ritual__logo)",
+      );
       if (!mark || !target) {
         if (performance.now() - startedAt < 1500) {
           frame = window.requestAnimationFrame(fly);
@@ -124,6 +126,11 @@ export default function EntryRitual({
       }
       const from = mark.getBoundingClientRect();
       const to = target.getBoundingClientRect();
+      // 窄屏下侧栏收起，落点宽度为 0；此时直接收尾，不要把徽记缩成一点
+      if (to.width < 8) {
+        setPhase("exit");
+        return;
+      }
       const scale = to.width / from.width;
       setFlight({
         transform: `translate(${to.left - from.left}px, ${to.top - from.top}px) scale(${scale})`,

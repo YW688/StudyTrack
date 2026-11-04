@@ -3143,8 +3143,8 @@ html[data-theme-flow="in"]::view-transition-old(root) {
   opacity: 0;
   transform: translateY(6px);
   transition:
-    opacity 260ms ease 80ms,
-    transform 260ms ease 80ms;
+    opacity 240ms ease,
+    transform 240ms ease;
 }
 
 .entry-ritual[data-phase="mark"] .entry-ritual__caption {
@@ -5478,100 +5478,6 @@ button.app-mini-chip:hover {
     transition:
       max-width 220ms cubic-bezier(0.22, 1, 0.36, 1),
       opacity 150ms ease;
-  }
-
-  .app-side-menu-trigger {
-    display: inline-flex;
-    height: 28px;
-    width: 28px;
-    flex: none;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--tint) 50%, var(--color-rule));
-    border-radius: 8px;
-    background: rgba(var(--wash-rgb), 0.42);
-    color: var(--color-ink-3);
-    font-size: 14px;
-    line-height: 1;
-    letter-spacing: 0.08em;
-    transition:
-      width 220ms cubic-bezier(0.22, 1, 0.36, 1),
-      opacity 150ms ease,
-      border-width 220ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .app-side-menu-trigger:hover,
-  .app-side-menu-trigger.is-open {
-    border-color: color-mix(in srgb, var(--color-ink) 15%, var(--color-rule));
-    background: rgba(var(--wash-rgb), 0.72);
-    color: var(--color-ink);
-  }
-
-  .app-side-menu-trigger:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
-  }
-
-  .app-side-menu-panel {
-    border: 1px solid color-mix(in srgb, var(--color-ink) 12%, var(--color-rule));
-    border-radius: 12px;
-    background: color-mix(in srgb, var(--color-surface) 94%, transparent);
-    padding: 10px;
-    box-shadow: 0 10px 24px -20px rgba(14, 27, 42, 0.45);
-  }
-
-  .app-sidebar-label {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.16em;
-    color: var(--color-ink-4);
-  }
-
-  .app-theme-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 2px;
-    margin-top: 6px;
-    border: 1px solid color-mix(in srgb, var(--tint) 50%, var(--color-rule));
-    border-radius: 10px;
-    background: rgba(var(--wash-rgb), 0.38);
-    padding: 2px;
-  }
-
-  .app-theme-grid button {
-    display: flex;
-    min-height: 38px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    border-radius: 8px;
-    font-size: 11px;
-    color: var(--color-ink-3);
-  }
-
-  .app-theme-grid button:hover {
-    background: rgba(var(--wash-rgb), 0.55);
-    color: var(--color-ink);
-  }
-
-  .app-theme-grid button.is-active {
-    background: rgba(var(--wash-rgb), 0.9);
-    color: var(--color-ink);
-  }
-
-  .app-theme-dot {
-    height: 10px;
-    width: 10px;
-    border-radius: 9999px;
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
-  }
-
-  .app-sidebar-backup {
-    border-top: 1px solid color-mix(in srgb, var(--color-ink) 7%, transparent);
-    margin-top: 10px;
-    padding-top: 10px;
   }
 
   .app-main {
@@ -9568,6 +9474,55 @@ html[data-app-theme="night"] .app-stamp-star {
 @media (prefers-reduced-motion: reduce) {
   .app-stamp-aperture,
   .app-stamp-star {
+    animation: none;
+  }
+}
+
+/* === 品质升满动效：3/4 → 4/4 那一步落封 / 开光 / 点星，沿用留痕落封的 360ms 与同一缓动 === */
+/* 只写 from，末帧回落到主题各自的常驻投影，征途卡与时间线共用一套关键帧 */
+html[data-app-theme="manor"] .app-exp-seal-corner.is-tier-up .app-exp-seal,
+html[data-app-theme="manor"] .tl-quality.is-tier-up .tier-seal {
+  animation: manor-tier-seal 360ms cubic-bezier(0.2, 0.9, 0.3, 1.15);
+}
+
+html[data-app-theme="dawn"] .app-exp-seal-corner.is-tier-up .app-exp-aperture,
+html[data-app-theme="dawn"] .tl-quality.is-tier-up .tier-aperture {
+  animation: dawn-tier-iris 360ms cubic-bezier(0.2, 0.9, 0.3, 1.15);
+}
+
+html[data-app-theme="night"] .app-exp-seal-corner.is-tier-up .app-exp-star,
+html[data-app-theme="night"] .tl-quality.is-tier-up .tier-star {
+  animation: night-tier-ray 360ms cubic-bezier(0.2, 0.9, 0.3, 1.15);
+}
+
+@keyframes manor-tier-seal {
+  from {
+    transform: translateY(-5px) scale(1.18);
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.42)) brightness(1.28);
+  }
+}
+
+@keyframes dawn-tier-iris {
+  from {
+    transform: scale(0.8);
+    filter: drop-shadow(0 0 9px rgba(201, 111, 159, 0.62)) brightness(1.2);
+  }
+}
+
+@keyframes night-tier-ray {
+  from {
+    transform: scale(0.86);
+    filter: drop-shadow(0 0 10px rgba(237, 214, 166, 0.7)) brightness(1.3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-exp-seal-corner.is-tier-up .app-exp-seal,
+  .app-exp-seal-corner.is-tier-up .app-exp-aperture,
+  .app-exp-seal-corner.is-tier-up .app-exp-star,
+  .tl-quality.is-tier-up .tier-seal,
+  .tl-quality.is-tier-up .tier-aperture,
+  .tl-quality.is-tier-up .tier-star {
     animation: none;
   }
 }

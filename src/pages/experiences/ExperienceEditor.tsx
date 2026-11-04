@@ -1,4 +1,10 @@
-import { useEffect, useState, type FormEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import type {
   Experience,
   ExperienceEvidence,
@@ -105,6 +111,12 @@ export default function ExperienceEditor({
   const [tagsText, setTagsText] = useState(initial?.tags.join("，") ?? "");
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const titleRef = useRef<HTMLInputElement>(null);
+
+  // 弹层嵌在列表的滚动容器里，autoFocus 会让 Chrome 顺手把底下的列表滚到输入框
+  useEffect(() => {
+    titleRef.current?.focus({ preventScroll: true });
+  }, []);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -318,11 +330,11 @@ export default function ExperienceEditor({
                 </label>
                 <input
                   id="experience-title"
+                  ref={titleRef}
                   value={title}
                   onChange={(event) => setTitle(event.target.value)}
                   maxLength={120}
                   required
-                  autoFocus
                   placeholder="例如：数据库课程设计：校园选课系统"
                   className={FIELD}
                 />

@@ -164,7 +164,6 @@ export default function AppShell({
   const [collapsed, setCollapsed] = useState(readRailCollapsed);
   const [statusCollapsed, setStatusCollapsed] = useState(readStatusCollapsed);
   const [islandOpen, setIslandOpen] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
   const currentTheme = THEMES.find((item) => item.id === theme) ?? THEMES[0];
   const upcomingTheme =
     THEMES.find((item) => item.id === nextTheme(theme)) ?? THEMES[0];
@@ -174,12 +173,7 @@ export default function AppShell({
   useEffect(() => {
     sheetRef.current?.scrollTo({ top: 0 });
     setIslandOpen(false);
-    setMenuOpen(false);
   }, [routeKey]);
-
-  useEffect(() => {
-    if (collapsed) setMenuOpen(false);
-  }, [collapsed]);
 
   useEffect(() => {
     try {
@@ -425,45 +419,6 @@ export default function AppShell({
         </details>
 
         <div className="app-sidebar-foot">
-          {!collapsed && menuOpen && (
-            <div className="app-side-menu-panel" aria-label="本机设置">
-              <p className="app-sidebar-label">界面配色</p>
-              <div
-                role="group"
-                aria-label="界面配色"
-                className="app-theme-grid"
-              >
-                {THEMES.map((item) => {
-                  const selected = item.id === theme;
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      aria-pressed={selected}
-                      onClick={() => onThemeChange(item.id)}
-                      className={selected ? "is-active" : ""}
-                    >
-                      <span
-                        aria-hidden="true"
-                        className="app-theme-dot"
-                        style={{ backgroundImage: item.swatch }}
-                      />
-                      {item.name}
-                    </button>
-                  );
-                })}
-              </div>
-              <div className="app-sidebar-backup">
-                <DataBackup
-                  hasData={hasData}
-                  onExport={onExport}
-                  onImport={onImport}
-                  onClear={onClear}
-                />
-              </div>
-            </div>
-          )}
-
           <div className="app-sidebar-footer-row">
             <p className="app-sidebar-saved">
               <span
@@ -472,21 +427,6 @@ export default function AppShell({
               />
               <span className="app-sidebar-saved-text">本机 已保存</span>
             </p>
-            <button
-              type="button"
-              onClick={() => setMenuOpen((value) => !value)}
-              aria-expanded={menuOpen}
-              aria-label="本机设置"
-              title="本机设置"
-              tabIndex={collapsed ? -1 : undefined}
-              aria-hidden={collapsed}
-              className={[
-                "app-side-menu-trigger",
-                menuOpen ? "is-open" : "",
-              ].join(" ")}
-            >
-              ⋯
-            </button>
           </div>
         </div>
       </aside>

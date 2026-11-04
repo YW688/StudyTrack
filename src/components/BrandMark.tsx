@@ -13,6 +13,7 @@ export default function BrandMark({
       width={size}
       height={size}
       className={`brand-mark ${className}`.trim()}
+      data-brand-mark=""
       aria-hidden="true"
       focusable="false"
     >

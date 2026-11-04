@@ -78,9 +78,9 @@ export default function ArchiveCard({
       <ApertureMark size={46} className="app-archive-aperture" />
       <StarMark size={44} className="app-archive-star" />
       <WaxSeal
-        units={ready}
+        units={total}
         total={total}
-        ready={total > 0 && ready === total}
+        ready
         size={46}
         className="app-archive-seal"
       />

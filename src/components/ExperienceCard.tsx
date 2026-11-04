@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Experience } from "../types";
 import ApertureMark from "./ApertureMark";
 import CompassRose from "./CompassRose";
@@ -10,10 +10,10 @@ import {
   EXPERIENCE_KIND_META,
   experienceKindLabel,
   formatExperienceRange,
-  fourPartCount,
   isSafeHttpUrl,
   resumeReadiness,
 } from "../lib/experience";
+import { tierStars } from "../lib/level";
 
 interface ExperienceCardProps {
   experience: Experience;
@@ -48,8 +48,18 @@ export default function ExperienceCard({
   const meta = EXPERIENCE_KIND_META[experience.kind];
   const range = formatExperienceRange(experience.start, experience.end);
   const ongoing = Boolean(experience.start) && !experience.end;
-  const completeness = fourPartCount(experience);
+  const tier = tierStars(experience);
   const ready = resumeReadiness(experience).ready;
+  const [tierUp, setTierUp] = useState(false);
+  const lastTier = useRef(tier);
+  useEffect(() => {
+    const upgraded = lastTier.current < 4 && tier === 4;
+    lastTier.current = tier;
+    if (!upgraded) return;
+    setTierUp(true);
+    const timer = window.setTimeout(() => setTierUp(false), 420);
+    return () => window.clearTimeout(timer);
+  }, [tier]);
   const summary = experience.result.trim() || experience.problem.trim();
   const filledSections = SECTION_META.filter(
     (section) => experience[section.key].trim().length > 0,
@@ -82,28 +92,26 @@ export default function ExperienceCard({
         <DraftingRose className="app-exp-rose-drafting" />
         <ObservatoryRose className="app-exp-rose-observatory" />
 
-        <div className="app-exp-seal-corner">
+        <div className={`app-exp-seal-corner${tierUp ? " is-tier-up" : ""}`}>
           <WaxSeal
-            units={completeness}
+            units={tier}
             total={4}
             ready={ready}
             size={56}
             className="app-exp-seal"
           />
-          <ApertureMark size={52} className="app-exp-aperture" />
-          <StarMark size={52} className="app-exp-star" />
+          <ApertureMark size={52} className="app-exp-aperture" tier={tier} />
+          <StarMark size={52} className="app-exp-star" tier={tier} />
           <span
             className="app-exp-seal-label"
             title={
               ready
                 ? "四段式齐 有证据或量化 置信已确认"
-                : "补齐四段式 证据与确认 才算就绪"
+                : "补齐四段式 证据与确认 才给第 4 星"
             }
           >
             <span>品质</span>
-            <span className="app-exp-seal-count">
-              {ready ? "4/4" : `${completeness}/4`}
-            </span>
+            <span className="app-exp-seal-count">{tier}/4</span>
           </span>
         </div>
 
@@ -378,9 +386,9 @@ export default function ExperienceCard({
           )}
           <span className="app-exp-tier-inline ml-auto flex items-center gap-2">
             <TierPips
-              units={completeness}
+              units={tier}
               total={4}
-              label={`四段式已写 ${completeness}/4 段`}
+              label={`品质 ${tier}/4`}
             />
             <span
               title={
@@ -393,7 +401,7 @@ export default function ExperienceCard({
                 ready ? "text-accent-ink" : "text-ink-4",
               ].join(" ")}
             >
-              {ready ? "品质 4/4 已就绪" : `品质 ${completeness}/4`}
+              {ready ? `品质 ${tier}/4 已就绪` : `品质 ${tier}/4`}
             </span>
           </span>
         </div>

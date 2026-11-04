@@ -137,15 +137,16 @@ export function comboLine(days: number, includesToday: boolean): string {
     : `连击 ${days} 天 ${status}`;
 }
 
-/** 战绩品质：四段式写满几段就是几颗星。 */
+/** 战绩品质：四段式写几段算几星，但第 4 星只发给「简历就绪」的那条。 */
 export function tierStars(experience: Experience): number {
-  return fourPartCount(experience);
+  if (resumeReadiness(experience).ready) return 4;
+  return Math.min(fourPartCount(experience), 3);
 }
 
 export function tierLine(experience: Experience): string {
   const stars = tierStars(experience);
-  if (resumeReadiness(experience).ready) {
-    return `品质 ${stars}/4 已就绪，可进简历`;
+  if (stars === 4) {
+    return `品质 ${stars}/4 已就绪 可进简历`;
   }
   return `品质 ${stars}/4 ${levelGap(experience)}`;
 }

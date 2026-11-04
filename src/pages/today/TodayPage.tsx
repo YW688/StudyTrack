@@ -881,7 +881,7 @@ export default function TodayPage({
                     <TierPips
                       units={echoStars}
                       total={4}
-                      label={`四段式已写 ${echoStars}/4 段`}
+                      label={`品质 ${echoStars}/4`}
                     />
                     <span className="font-mono text-micro text-ink-4">
                       {tierLine(echo.experience)}

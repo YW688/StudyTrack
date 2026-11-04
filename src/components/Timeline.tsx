@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Experience } from "../types";
 import {
   EXPERIENCE_KIND_META,
   experienceKindLabel,
   formatExperienceRange,
-  fourPartCount,
   isSafeHttpUrl,
   resumeReadiness,
   type ExperienceTermGroup,
 } from "../lib/experience";
+import { tierStars } from "../lib/level";
 import TierPips from "./TierPips";
 
 export type TimelineVariant = "rope" | "hand";
@@ -182,8 +182,18 @@ function TimelineRow({
 
   const meta = EXPERIENCE_KIND_META[experience.kind];
   const range = formatExperienceRange(experience.start, experience.end);
-  const completeness = fourPartCount(experience);
+  const tier = tierStars(experience);
   const ready = resumeReadiness(experience).ready;
+  const [tierUp, setTierUp] = useState(false);
+  const lastTier = useRef(tier);
+  useEffect(() => {
+    const upgraded = lastTier.current < 4 && tier === 4;
+    lastTier.current = tier;
+    if (!upgraded) return;
+    setTierUp(true);
+    const timer = window.setTimeout(() => setTierUp(false), 420);
+    return () => window.clearTimeout(timer);
+  }, [tier]);
   const pending = experience.confidence === "low";
   const summary =
     experience.result.trim() ||
@@ -224,14 +234,10 @@ function TimelineRow({
           >
             {experienceKindLabel(experience.kind, experience.kindLabel)}
           </span>
-          <span className="tl-quality">
-            <TierPips
-              units={completeness}
-              total={4}
-              label={`品质 ${completeness}/4`}
-            />
+          <span className={`tl-quality${tierUp ? " is-tier-up" : ""}`}>
+            <TierPips units={tier} total={4} label={`品质 ${tier}/4`} />
             <span className="tl-quality-text" aria-hidden="true">
-              品质 {completeness}/4
+              品质 {tier}/4
             </span>
           </span>
           {ready && <span className="tl-ready">简历就绪</span>}

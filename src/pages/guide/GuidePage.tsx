@@ -46,7 +46,7 @@ const BTN_SECONDARY =
 const BTN_BACK =
   "inline-flex min-h-11 items-center rounded-full px-4 text-[11px] text-ink-3 underline underline-offset-4 hover:text-ink";
 const FIELD =
-  "border-rule focus:border-accent/60 focus:ring-accent/25 mt-2 min-h-11 w-full rounded-lg border bg-paper/40 px-3 text-sm outline-none placeholder:text-ink-4 focus:ring-2";
+  "border-rule focus:border-accent/60 focus:ring-accent/25 mt-3 min-h-11 w-full rounded-lg border bg-paper/40 px-3 text-sm outline-none placeholder:text-ink-4 focus:ring-2";
 const CHIP =
   "manor-chip inline-flex min-h-11 items-center rounded-lg border px-4 text-xs transition-colors";
 
@@ -234,7 +234,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
             {step === 0 && (
               <>
                 <div>
-                  <label htmlFor="guide-major" className="text-sm font-medium">
+                  <label htmlFor="guide-major" className="block text-sm font-medium">
                     专业
                   </label>
                   <input
@@ -250,7 +250,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
                 </div>
                 <fieldset>
                   <legend className="text-sm font-medium">年级</legend>
-                  <div className="mt-2 flex flex-wrap gap-1.5">
+                  <div className="mt-3 flex flex-wrap gap-1.5">
                     {RESUME_GRADES.map((item) => {
                       const selected = grade === item;
                       return (
@@ -317,7 +317,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
                 <p className="text-sm font-medium">
                   {goal === "intern" ? "常见岗位" : "常见就业方向"}
                 </p>
-                <div className="mt-2 flex flex-wrap gap-1.5">
+                <div className="mt-3 flex flex-wrap gap-1.5">
                   {ROLE_SUGGESTIONS[goal].map((item) => {
                     const selected = roles.includes(item);
                     return (
@@ -368,7 +368,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
               <>
                 <fieldset>
                   <legend className="text-sm font-medium">类型</legend>
-                  <div className="mt-2 flex flex-wrap gap-1.5">
+                  <div className="mt-3 flex flex-wrap gap-1.5">
                     {EXPERIENCE_KINDS.map((item) => {
                       const selected = kind === item;
                       return (
@@ -410,7 +410,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
                 )}
 
                 <div>
-                  <label htmlFor="guide-title" className="text-sm font-medium">
+                  <label htmlFor="guide-title" className="block text-sm font-medium">
                     战绩标题
                   </label>
                   <input
@@ -423,7 +423,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
                 </div>
 
                 <div>
-                  <label htmlFor="guide-detail" className="text-sm font-medium">
+                  <label htmlFor="guide-detail" className="block text-sm font-medium">
                     一句话说明
                   </label>
                   <textarea
@@ -432,7 +432,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
                     rows={3}
                     onChange={(event) => setDetail(event.target.value.slice(0, 500))}
                     placeholder="如 解决选课并发冲突 用 Spring Boot + MySQL 跑通了下单与回滚"
-                    className="border-rule focus:border-accent/60 focus:ring-accent/25 mt-2 min-h-[92px] w-full resize-y rounded-lg border bg-paper/40 px-3 py-2.5 text-sm leading-6 outline-none placeholder:text-ink-4 focus:ring-2"
+                    className="border-rule focus:border-accent/60 focus:ring-accent/25 mt-3 min-h-[92px] w-full resize-y rounded-lg border bg-paper/40 px-3 py-2.5 text-sm leading-6 outline-none placeholder:text-ink-4 focus:ring-2"
                   />
                   <p className="mt-1 font-mono text-micro text-ink-4">
                     {detail.length} / 500
