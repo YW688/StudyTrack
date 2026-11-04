@@ -13,8 +13,14 @@ import {
   experienceKindLabel,
   newlyReadyIds,
 } from "./lib/experience";
-import { greenMatrix, streakInfo, weekGreenDayCount } from "./lib/ledger";
+import {
+  experienceLedgerDrafts,
+  greenMatrix,
+  streakInfo,
+  weekGreenDayCount,
+} from "./lib/ledger";
 import { characterLevel } from "./lib/level";
+import { buildSky } from "./lib/sky";
 import type {
   AgentMessage,
   Assignment,
@@ -52,6 +58,7 @@ const OpportunitiesPage = lazy(
 );
 const ToolboxPage = lazy(() => import("./pages/toolbox/ToolboxPage"));
 const CalendarPage = lazy(() => import("./pages/calendar/CalendarPage"));
+const SpacePage = lazy(() => import("./pages/space/SpacePage"));
 import { clearLocalData, loadTimetable, saveTimetable } from "./store/idb";
 import {
   loadAssignments,
@@ -109,15 +116,22 @@ type Route =
   | "opportunities"
   | "toolbox"
   | "calendar"
+  | "space"
   | "portfolio";
 
 type ModuleRoute = Exclude<Route, "landing" | "portfolio">;
-type SurfaceId = "today" | "experiences" | "opportunities" | "toolbox";
+type SurfaceId =
+  | "today"
+  | "experiences"
+  | "opportunities"
+  | "toolbox"
+  | "space";
 
 function navIdForRoute(route: Route): SurfaceId {
   if (route === "today") return "today";
   if (route === "experiences") return "experiences";
   if (route === "opportunities") return "opportunities";
+  if (route === "space") return "space";
   return "toolbox";
 }
 
@@ -186,6 +200,7 @@ function readRoute(): Route {
   if (hash === "opportunities") return "opportunities";
   if (hash === "toolbox") return "toolbox";
   if (hash === "calendar") return "calendar";
+  if (hash === "space") return "space";
   if (hash.startsWith("p/")) return "portfolio";
   return "landing";
 }
@@ -210,13 +225,26 @@ export default function App() {
   const [ritual, setRitual] = useState<{ theme: ThemeId } | null>(null);
   const [ritualReady, setRitualReady] = useState(false);
   const [unlockedHint, setUnlockedHint] = useState(false);
+  const [toast, setToast] = useState<{ id: number; text: string } | null>(
+    null,
+  );
   const resumeWriteRef = useRef<Promise<void>>(Promise.resolve());
   const agentWriteRef = useRef<Promise<void>>(Promise.resolve());
+  const toastTimerRef = useRef<number | null>(null);
   const loadedRef = useRef(false);
 
   useEffect(() => {
     applyTheme(theme);
   }, [theme]);
+
+  useEffect(
+    () => () => {
+      if (toastTimerRef.current) {
+        window.clearTimeout(toastTimerRef.current);
+      }
+    },
+    [],
+  );
 
   const changeTheme = (next: ThemeId) => {
     if (next === theme) return;
@@ -301,6 +329,14 @@ export default function App() {
     window.scrollTo({ top: 0 });
   }, []);
 
+  const showToast = useCallback((text: string) => {
+    setToast({ id: Date.now(), text });
+    if (toastTimerRef.current) {
+      window.clearTimeout(toastTimerRef.current);
+    }
+    toastTimerRef.current = window.setTimeout(() => setToast(null), 2600);
+  }, []);
+
   const handleDockModeChange = useCallback((mode: DockMode) => {
     setDockMode(mode);
     try {
@@ -331,6 +367,20 @@ export default function App() {
       .then(() => saveResume(next))
       .catch(() => undefined);
   }, []);
+
+  /** 打印或存 PDF 才算真的产出一份简历，这一步落一颗星 */
+  async function handleResumeGenerated(entryCount: number) {
+    const nextLedger = [
+      ...ledger,
+      createLedgerEvent({
+        type: "resume_generated",
+        title: "生成简历",
+        detail: `${entryCount} 条战绩排出 A4`,
+      }),
+    ];
+    await saveLedger(nextLedger);
+    setLedger(nextLedger);
+  }
 
   const handleAgentMessages = useCallback((next: AgentMessage[]) => {
     setAgentMessages(next);
@@ -441,12 +491,19 @@ export default function App() {
   }
 
   async function handleSaveExperiences(next: ExperienceData) {
+    const previous = experiences?.experiences ?? [];
+    const drafts = experienceLedgerDrafts(previous, next.experiences);
     await saveExperiences(next);
     setExperiences(next);
-    const nextResume = readyDraftSelection(
-      experiences?.experiences ?? [],
-      next.experiences,
-    );
+    if (drafts.length > 0) {
+      const nextLedger = [
+        ...ledger,
+        ...drafts.map((draft) => createLedgerEvent(draft)),
+      ];
+      await saveLedger(nextLedger);
+      setLedger(nextLedger);
+    }
+    const nextResume = readyDraftSelection(previous, next.experiences);
     if (nextResume) {
       await saveResume(nextResume);
       setResume(nextResume);
@@ -848,6 +905,8 @@ export default function App() {
   const assignmentCount =
     assignments?.items.filter((item) => item.status !== "done").length ?? 0;
   const now = dayjs();
+  const experienceList = experiences?.experiences ?? [];
+  const toolboxSkyDays = buildSky(ledger, now).stars.length;
   const weekNumber = timetable
     ? currentWeekOf(
         timetable.semester.startDate,
@@ -908,8 +967,10 @@ export default function App() {
           experiences: experiences?.experiences.length ?? 0,
           opportunities: 0,
           toolbox: 0,
+          space: toolboxSkyDays,
         }}
         demoMode={demoMode}
+        toast={toast}
         onClear={handleClear}
         onExport={handleExport}
         onImport={handleImport}
@@ -980,6 +1041,7 @@ export default function App() {
             onDismissUnlockHint={() => setUnlockedHint(false)}
             onToggleAssignment={handleToggleAssignment}
             onAddNote={handleAddNote}
+            onCaptureSaved={() => showToast("提交成功")}
             demoMode={demoMode}
             onOpenWindow={openWindow}
             onExitDemo={() => void handleExitDemo()}
@@ -999,6 +1061,7 @@ export default function App() {
             experiences={experiences}
             resume={resume}
             onSaveResume={handleSaveResume}
+            onResumeGenerated={handleResumeGenerated}
             onNavigateExperiences={() => navigate("experiences")}
             onNavigateOpportunities={() => navigate("opportunities")}
           />
@@ -1006,6 +1069,7 @@ export default function App() {
           <OpportunitiesPage
             experiences={experiences}
             resume={resume}
+            goal={profile?.goal ?? null}
             onNavigateResume={() => navigate("resume")}
             onNavigateExperiences={() => navigate("experiences")}
             onUseSample={() => handleUseSample("opportunities")}
@@ -1022,6 +1086,13 @@ export default function App() {
             updatedAt={CALENDAR_UPDATED_AT}
             issue={CALENDAR_ISSUE}
             onNavigate={(id) => navigate(id)}
+          />
+        ) : route === "space" ? (
+          <SpacePage
+            theme={theme}
+            ledger={ledger}
+            experiences={experienceList}
+            onGoToday={() => navigate("today")}
           />
           ) : (
             <TimetablePage
@@ -1129,6 +1200,7 @@ export default function App() {
             <OpportunitiesPage
               experiences={experiences}
               resume={resume}
+              goal={profile?.goal ?? null}
               onNavigateResume={() => openWindow("resume")}
               onNavigateExperiences={() => openWindow("experiences")}
               onUseSample={async () => {
@@ -1161,6 +1233,7 @@ export default function App() {
               experiences={experiences}
               resume={resume}
               onSaveResume={handleSaveResume}
+              onResumeGenerated={handleResumeGenerated}
               onNavigateExperiences={() => openWindow("experiences")}
               onNavigateOpportunities={() => openWindow("opportunities")}
             />
@@ -1261,6 +1334,7 @@ function LoadingState({ module }: { module: ModuleRoute }) {
     opportunities: { code: "征召", title: "机会仪表盘" },
     toolbox: { code: "工具箱", title: "工具箱" },
     calendar: { code: "工具箱", title: "日历" },
+    space: { code: "工具箱", title: "学径空间" },
   }[module];
   return (
     <div className="px-4 py-8 sm:px-6 lg:px-8 lg:py-12">

@@ -46,9 +46,9 @@ const BTN_SECONDARY =
 const BTN_BACK =
   "inline-flex min-h-11 items-center rounded-full px-4 text-[11px] text-ink-3 underline underline-offset-4 hover:text-ink";
 const FIELD =
-  "border-rule focus:border-accent/60 focus:ring-accent/15 mt-2 min-h-11 w-full rounded-lg border bg-paper/40 px-3 text-sm outline-none placeholder:text-ink-4 focus:ring-2";
+  "border-rule focus:border-accent/60 focus:ring-accent/25 mt-2 min-h-11 w-full rounded-lg border bg-paper/40 px-3 text-sm outline-none placeholder:text-ink-4 focus:ring-2";
 const CHIP =
-  "inline-flex min-h-11 items-center rounded-lg border px-4 text-xs transition-colors";
+  "manor-chip inline-flex min-h-11 items-center rounded-lg border px-4 text-xs transition-colors";
 
 export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
   const [step, setStep] = useState(0);
@@ -65,6 +65,11 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
   const [error, setError] = useState<string | null>(null);
   const [demoBusy, setDemoBusy] = useState(false);
 
+  const roleOptional = goal !== null && goal !== "intern";
+  const stepLabels = roleOptional
+    ? [STEPS[0], STEPS[1], "就业备选", STEPS[3]]
+    : [...STEPS];
+
   const missing = useMemo(() => {
     if (step === 0) {
       return [
@@ -73,7 +78,10 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
       ];
     }
     if (step === 1) return goal ? [] : ["方向"];
-    if (step === 2) return roles.length > 0 ? [] : ["至少 1 个目标岗位"];
+    if (step === 2) {
+      if (!goal) return [];
+      return roleOptional || roles.length > 0 ? [] : ["至少 1 个目标岗位"];
+    }
     return [
       ...(title.trim() ? [] : ["战绩标题"]),
       ...(detail.trim() ? [] : ["一句话说明"]),
@@ -163,7 +171,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
         </header>
 
         <section aria-label="建档进度" className="mt-4 grid grid-cols-4 gap-1.5">
-          {STEPS.map((label, index) => (
+          {stepLabels.map((label, index) => (
             <div key={label}>
               <span
                 className={[
@@ -193,7 +201,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
 
         <form
           onSubmit={next}
-          aria-label={STEPS[step]}
+          aria-label={stepLabels[step]}
           className="app-card mt-4 overflow-hidden"
         >
           <div className="border-rule border-b px-5 py-4 sm:px-6">
@@ -203,14 +211,20 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
             <h2 className="mt-1.5 font-serif text-xl tracking-tight sm:text-2xl">
               {step === 0 && "你在读什么？"}
               {step === 1 && "这四年更想往哪走？"}
-              {step === 2 && "想投哪些岗位？"}
+              {step === 2 &&
+                (goal === "intern" ? "想投哪些岗位？" : "要不要留一条就业后路？")}
               {step === 3 && "先记下第一条战绩"}
             </h2>
             <p className="mt-1 text-[11px] leading-5 text-ink-3">
               {step === 0 &&
                 "只用来筛情报和排学期 不写姓名学号 之后随时能改"}
-              {step === 1 && "决定征召先看哪些方向 之后可以改"}
-              {step === 2 && "最多 6 个 简历与匹配都以它为锚"}
+              {step === 1 && "决定征召怎么给你参考 之后可以改"}
+              {step === 2 &&
+                (goal && goal !== "intern"
+                  ? goal === "undecided"
+                    ? "还没定就慢慢来 岗位可留空 之后在档案里补"
+                    : `主方向是${GOAL_LABELS[goal]} 征召只作为备选 岗位可留空`
+                  : "最多 6 个 简历与匹配都以它为锚")}
               {step === 3 &&
                 "这条会作为动态出现在征途 四段式和证据可以之后补"}
             </p>
@@ -277,7 +291,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
                           setError(null);
                         }}
                         className={[
-                          "flex min-h-11 items-center justify-between gap-3 rounded-lg border px-4 text-left text-xs transition-colors",
+                          "manor-chip flex min-h-11 items-center justify-between gap-3 rounded-lg border px-4 text-left text-xs transition-colors",
                           selected
                             ? "border-accent/50 bg-accent/10 text-ink"
                             : "border-rule text-ink-3 hover:bg-ink/[0.03]",
@@ -300,7 +314,9 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
 
             {step === 2 && goal && (
               <div>
-                <p className="text-sm font-medium">常见方向</p>
+                <p className="text-sm font-medium">
+                  {goal === "intern" ? "常见岗位" : "常见就业方向"}
+                </p>
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {ROLE_SUGGESTIONS[goal].map((item) => {
                     const selected = roles.includes(item);
@@ -341,7 +357,9 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
                 <p className="mt-3 font-mono text-micro text-ink-4">
                   {roles.length > 0
                     ? `已选 ${roles.length} / 6 ${roles.join(" ")}`
-                    : "还没选 至少 1 个才能开启四个面"}
+                    : goal === "intern"
+                      ? "还没选 至少 1 个才能开启四个面"
+                      : "可留空 之后在档案里补"}
                 </p>
               </div>
             )}
@@ -414,7 +432,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
                     rows={3}
                     onChange={(event) => setDetail(event.target.value.slice(0, 500))}
                     placeholder="如 解决选课并发冲突 用 Spring Boot + MySQL 跑通了下单与回滚"
-                    className="border-rule focus:border-accent/60 focus:ring-accent/15 mt-2 min-h-[92px] w-full resize-y rounded-lg border bg-paper/40 px-3 py-2.5 text-sm leading-6 outline-none placeholder:text-ink-4 focus:ring-2"
+                    className="border-rule focus:border-accent/60 focus:ring-accent/25 mt-2 min-h-[92px] w-full resize-y rounded-lg border bg-paper/40 px-3 py-2.5 text-sm leading-6 outline-none placeholder:text-ink-4 focus:ring-2"
                   />
                   <p className="mt-1 font-mono text-micro text-ink-4">
                     {detail.length} / 500

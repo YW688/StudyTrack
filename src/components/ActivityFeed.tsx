@@ -36,7 +36,7 @@ export default function ActivityFeed({
 
   return (
     <div>
-      <ol className="mt-3 space-y-4">
+      <ol className="app-feed mt-3 space-y-4">
         {visible.map((item) => {
           const readiness = resumeReadiness(item);
           return (
@@ -48,7 +48,7 @@ export default function ActivityFeed({
                 aria-hidden="true"
                 className="bg-accent absolute top-3 left-0 h-[11px] w-[11px] rounded-full border-2 border-paper"
               />
-              <div className="mb-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 pl-1">
+              <div className="app-feed-meta mb-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 pl-1">
                 <span className="text-micro text-ink-3">
                   记于 {relativeDaysLabel(recordedDaysAgo(item.createdAt))}
                 </span>
@@ -61,8 +61,10 @@ export default function ActivityFeed({
                 </span>
                 <span
                   className={[
-                    "ml-auto font-mono text-micro",
-                    readiness.ready ? "text-[color:var(--tone-ok-ink)]" : "text-amber-ink",
+                    "app-feed-ready ml-auto font-mono text-micro",
+                    readiness.ready
+                      ? "is-ready text-[color:var(--tone-ok-ink)]"
+                      : "text-amber-ink",
                   ].join(" ")}
                 >
                   {readiness.ready

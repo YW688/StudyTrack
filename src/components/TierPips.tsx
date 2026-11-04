@@ -1,3 +1,5 @@
+import ApertureMark from "./ApertureMark";
+import StarMark from "./StarMark";
 import WaxSeal from "./WaxSeal";
 
 export default function TierPips({
@@ -21,6 +23,8 @@ export default function TierPips({
           ].join(" ")}
         />
       ))}
+      <ApertureMark className="tier-aperture" size={20} />
+      <StarMark className="tier-star" size={16} />
       <WaxSeal units={units} total={total} className="tier-seal" />
     </span>
   );

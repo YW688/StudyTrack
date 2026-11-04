@@ -19,12 +19,12 @@ export const THEMES = [
   {
     id: "dawn",
     name: "霞光",
-    swatch: "linear-gradient(135deg,#ccfbff,#ef96c5)",
+    swatch: "linear-gradient(135deg,#f6f8f9,#bfeff3 46%,#ef96c5)",
   },
   {
     id: "night",
     name: "夜间",
-    swatch: "linear-gradient(135deg,#1b2330,#7d84b8 52%,#ef96c5)",
+    swatch: "linear-gradient(135deg,#0d131a,#8ea9d9 48%,#e295be 72%,#c9a45e)",
   },
   {
     id: "manor",

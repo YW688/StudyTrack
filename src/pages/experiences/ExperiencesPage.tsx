@@ -312,12 +312,12 @@ export default function ExperiencesPage({
 
         <section
           aria-label="征途碎片收件箱"
-          className="border-rule bg-surface mt-5 rounded-xl border"
+          className="exp-inbox border-rule bg-surface mt-5 rounded-xl border"
         >
-          <div className="border-rule flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3">
+          <div className="exp-inbox-head border-rule flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3">
             <div className="flex items-center gap-2">
               <h2 className="text-sm font-medium">征途碎片收件箱</h2>
-              <span className="bg-accent/15 rounded-full px-2 py-0.5 font-mono text-micro text-ink">
+              <span className="exp-inbox-count bg-accent/15 rounded-full px-2 py-0.5 font-mono text-micro text-ink">
                 {inboxNotes.length} 条
               </span>
             </div>
@@ -326,19 +326,23 @@ export default function ExperiencesPage({
             </p>
           </div>
           {inboxNotes.length === 0 ? (
-            <p className="px-4 py-4 text-xs leading-5 text-ink-3">
-              还没有待整理的碎片 在今日记一句就会到这里
-            </p>
+            <div className="exp-drawer-empty px-4 py-4">
+              <span aria-hidden="true" className="exp-drawer-pull" />
+              <p className="text-xs leading-5 text-ink-3">
+                还没有待整理的碎片 在今日记一句就会到这里
+              </p>
+            </div>
           ) : (
-            <ul>
+            <ul className="exp-drawer-grid">
               {inboxNotes.map((note, index) => (
                 <li
                   key={note.id}
                   className={[
-                    "flex flex-wrap items-start justify-between gap-3 px-4 py-3",
+                    "exp-drawer-cell flex flex-wrap items-start justify-between gap-3 px-4 py-3",
                     index > 0 ? "border-rule border-t" : "",
                   ].join(" ")}
                 >
+                  <span aria-hidden="true" className="exp-drawer-pull" />
                   <div className="min-w-0 flex-1">
                     <p className="line-clamp-2 text-sm leading-6 text-ink-2">
                       {note.text}
@@ -381,7 +385,7 @@ export default function ExperiencesPage({
                         type="button"
                         onClick={() => startFromNote(note)}
                         aria-label={`把「${note.text.slice(0, 24)}」转成战绩`}
-                        className={BTN_SECONDARY}
+                        className={`${BTN_SECONDARY} exp-inbox-archive`}
                       >
                         转成战绩
                       </button>
@@ -458,7 +462,7 @@ export default function ExperiencesPage({
           </>
         ) : (
           <>
-            <section className="border-rule mt-5 overflow-hidden rounded-xl border bg-surface">
+            <section className="exp-axis border-rule mt-5 overflow-hidden rounded-xl border bg-surface">
               <header className="border-rule flex items-center justify-between gap-3 border-b px-4 py-3 sm:px-5">
                 <div>
                   <p className="font-mono text-micro tracking-[0.16em] text-ink-3">
@@ -481,7 +485,7 @@ export default function ExperiencesPage({
                       <div
                         key={cell.term.key}
                         className={[
-                          "rounded-lg border px-3 py-2.5",
+                          "exp-axis-cell rounded-lg border px-3 py-2.5",
                           "sm:min-w-[88px] sm:flex-1",
                           empty
                             ? "border-rule border-dashed bg-paper"
@@ -548,9 +552,9 @@ export default function ExperiencesPage({
               ))}
             </section>
 
-            <section className="mt-5">
+            <section className="exp-list mt-5">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <h2 className="text-sm font-medium">
+                <h2 className="exp-list-title text-sm font-medium">
                   {effectiveFilter === "all"
                     ? "全部经历"
                     : EXPERIENCE_KIND_META[effectiveFilter].label}

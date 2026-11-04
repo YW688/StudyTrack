@@ -1,6 +1,15 @@
 import dayjs from "dayjs";
+import CompassRose from "../../components/CompassRose";
+import WaxSeal from "../../components/WaxSeal";
+import ApertureMark from "../../components/ApertureMark";
+import StarMark from "../../components/StarMark";
+import { DraftingRose, ObservatoryRose } from "../../components/ThemeRose";
 
-type ToolRoute = "timetable" | "assignments" | "resume" | "calendar";
+type ToolRoute =
+  | "timetable"
+  | "assignments"
+  | "resume"
+  | "calendar";
 
 interface ToolboxPageProps {
   calendarCount: number;
@@ -69,49 +78,80 @@ export default function ToolboxPage({
             <h1 className="mt-2 font-serif text-2xl tracking-tight sm:text-3xl">
               工具箱
             </h1>
+            <p className="mt-2 text-xs leading-5 text-ink-3">
+              四件常用工具 数据都在这台机器
+            </p>
           </div>
           <button
             type="button"
             onClick={() => onNavigate("calendar")}
             className="border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-surface px-4 text-sm"
           >
-            先看日历 →
+            先看日历
           </button>
         </header>
 
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          {tools.map((tool) => (
-            <button
-              key={tool.id}
-              type="button"
-              onClick={() => onNavigate(tool.id)}
-              className="border-rule hover:bg-ink/[0.025] group flex min-h-32 flex-col rounded-xl border bg-surface p-4 text-left transition-colors focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none sm:p-5"
-            >
-              <span className="font-mono text-micro tracking-[0.14em] text-accent-ink">
-                {tool.no}
-              </span>
-              <span className="mt-2 flex items-baseline justify-between gap-3">
-                <span className="font-serif text-xl leading-none">
-                  {tool.title}
-                </span>
-                <span
-                  aria-hidden="true"
-                  className="text-ink-4 transition-transform group-hover:translate-x-0.5"
-                >
-                  →
-                </span>
-              </span>
-              <span className="mt-2 text-[13px] leading-6 text-ink-3">
-                {tool.hint}
-              </span>
-              <span className="border-rule mt-auto border-t pt-2.5 text-micro leading-4 text-ink-3">
-                {tool.meta}
-              </span>
-            </button>
-          ))}
-        </div>
+        <section
+          aria-labelledby="tool-chest-heading"
+          className="tool-chest tool-sheet border-rule mt-5 overflow-hidden rounded-xl border bg-surface"
+        >
+          <CompassRose className="tool-sheet-rose" />
+          <DraftingRose className="tool-sheet-rose-drafting" />
+          <ObservatoryRose className="tool-sheet-rose-observatory" />
 
-        <section className="border-rule mt-4 rounded-xl border bg-surface px-4 py-3.5 sm:px-5 lg:hidden">
+          <span className="tool-sheet-seal" aria-hidden="true">
+            <WaxSeal units={4} total={4} ready size={48} className="tool-sheet-wax" />
+            <ApertureMark size={46} className="tool-sheet-aperture" />
+            <StarMark size={46} className="tool-sheet-star" />
+            <span className="tool-sheet-seal-label">工具册</span>
+          </span>
+
+          <header className="tool-chest-head border-rule flex items-end justify-between gap-3 border-b px-4 py-3 sm:px-5">
+            <div>
+              <p className="font-mono text-micro tracking-[0.16em] text-ink-4">
+                工具抽屉
+              </p>
+              <h2
+                id="tool-chest-heading"
+                className="mt-0.5 font-serif text-base tracking-tight"
+              >
+                四件常用工具
+              </h2>
+            </div>
+            <p className="text-micro text-ink-4">课表 作业 简历 日历</p>
+          </header>
+
+          <div className="tool-drawer-stack divide-rule divide-y">
+            {tools.map((tool) => (
+              <button
+                key={tool.id}
+                type="button"
+                onClick={() => onNavigate(tool.id)}
+                className="tool-drawer hover:bg-ink/[0.025] focus-visible:ring-accent group flex w-full flex-wrap items-center gap-x-4 gap-y-1.5 px-4 py-3.5 text-left transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:outline-none sm:px-5"
+              >
+                <span className="tool-drawer-no font-mono text-micro tracking-[0.14em] text-accent-ink">
+                  {tool.no}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="tool-drawer-title block font-serif text-lg leading-tight">
+                    {tool.title}
+                  </span>
+                  <span className="mt-1 block text-[12px] leading-5 text-ink-3">
+                    {tool.hint}
+                  </span>
+                </span>
+                <span className="tool-drawer-side ml-auto flex w-full items-center gap-3 sm:w-auto">
+                  <span className="text-micro leading-4 text-ink-4">
+                    {tool.meta}
+                  </span>
+                  <span aria-hidden="true" className="tool-drawer-pull" />
+                </span>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <section className="tool-backup border-rule mt-4 rounded-xl border bg-surface px-4 py-3.5 sm:px-5 lg:hidden">
           <p className="text-xs font-medium">数据与备份</p>
           <p className="mt-1 text-[11px] leading-5 text-ink-3">
             数据只在本机 换设备前先导出

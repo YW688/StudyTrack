@@ -2,6 +2,8 @@ import { useState, type ChangeEvent } from "react";
 import type { GreenMatrix } from "../lib/ledger";
 import { createAvatarFromFile } from "../lib/avatar";
 import type { Goal } from "../types";
+import ApertureMark from "./ApertureMark";
+import StarMark from "./StarMark";
 import CheckinGrid from "./CheckinGrid";
 import ProfileSigil from "./ProfileSigil";
 import WaxSeal from "./WaxSeal";
@@ -73,6 +75,8 @@ export default function ArchiveCard({
 
   return (
     <section aria-label="本机存档卡" className="app-archive">
+      <ApertureMark size={46} className="app-archive-aperture" />
+      <StarMark size={44} className="app-archive-star" />
       <WaxSeal
         units={ready}
         total={total}

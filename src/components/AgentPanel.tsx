@@ -371,9 +371,9 @@ export default function AgentPanel({
                     onClick={() => onDockModeChange("floating")}
                     aria-label="浮出为独立窗口"
                     title="浮出为独立窗口"
-                    className="hover:bg-ink/[0.04] inline-flex h-11 w-11 items-center justify-center rounded-lg text-base text-ink-3 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+                    className="hover:bg-ink/[0.04] inline-flex h-11 w-11 items-center justify-center rounded-lg text-[11px] leading-none text-ink-3 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
                   >
-                    ↗
+                    浮出
                   </button>
                 )}
                 {isWide && dockMode === "floating" && (
@@ -382,9 +382,9 @@ export default function AgentPanel({
                     onClick={() => onDockModeChange("docked")}
                     aria-label="停靠到右侧"
                     title="停靠到右侧"
-                    className="hover:bg-ink/[0.04] inline-flex h-11 w-11 items-center justify-center rounded-lg text-base text-ink-3 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+                    className="hover:bg-ink/[0.04] inline-flex h-11 w-11 items-center justify-center rounded-lg text-[11px] leading-none text-ink-3 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
                   >
-                    ⇤
+                    停靠
                   </button>
                 )}
                 {!isWide && (
@@ -468,7 +468,7 @@ export default function AgentPanel({
                   onClick={() => handleNavigate(navigateTarget)}
                   className={`${BTN_SECONDARY} mt-3 w-full`}
                 >
-                  {navigateLabel(navigateTarget)} →
+                  {navigateLabel(navigateTarget)}
                 </button>
               )}
 

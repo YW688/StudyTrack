@@ -261,7 +261,11 @@ export function computeReadiness(
   const skills = profile
     ? Math.min(profile.skills.length / 3, 1) * 10
     : 0;
-  const direction = profile && profile.targetRoles.length > 0 ? 10 : 0;
+  const direction =
+    profile &&
+    (profile.targetRoles.length > 0 || profile.goal !== "intern")
+      ? 10
+      : 0;
 
   const items: ReadinessItem[] = [
     {
@@ -301,7 +305,9 @@ export function computeReadiness(
       hint:
         profile && profile.targetRoles.length > 0
           ? "方向已写 技能可以慢慢补到 3 个"
-          : "写下 3 个技能和 1 个目标岗位",
+          : profile && profile.goal !== "intern"
+            ? "主方向已写 就业备选可以之后补"
+            : "写下 3 个技能和 1 个目标岗位",
     },
   ];
 
@@ -329,7 +335,6 @@ export interface ArchiveStats {
   notes: number;
   activeDays: number;
 }
-
 export function archiveStats(
   experiences: Experience[],
   notes: Note[],
@@ -346,4 +351,53 @@ export function archiveStats(
       ledger.filter(isGreenEvent).map((event) => event.date),
     ).size,
   };
+}
+
+export interface LedgerDraft {
+  type: LedgerEventType;
+  title: string;
+  detail?: string;
+  refId?: string;
+}
+
+/* 在征途里手写的战绩与补的证据同样是「产生结果的动作」：
+   只比对新旧库，一条新战绩记一次，编辑与确认不重复计，示例数据不点亮 */
+export function experienceLedgerDrafts(
+  previous: Experience[],
+  next: Experience[],
+): LedgerDraft[] {
+  const before = new Map(previous.map((item) => [item.id, item]));
+  const drafts: LedgerDraft[] = [];
+
+  for (const item of next) {
+    if (item.source === "sample") continue;
+    const old = before.get(item.id);
+
+    if (!old) {
+      drafts.push({
+        type: "experience_added",
+        title: `记下「${item.title}」`.slice(0, 120),
+        detail: (item.result || item.method || item.problem).slice(0, 80),
+        refId: item.id,
+      });
+      continue;
+    }
+
+    const known = new Set(
+      old.evidence.map((entry) => `${entry.label}|${entry.url ?? ""}`),
+    );
+    for (const evidence of item.evidence) {
+      const key = `${evidence.label}|${evidence.url ?? ""}`;
+      if (known.has(key)) continue;
+      known.add(key);
+      drafts.push({
+        type: "evidence_added",
+        title: `补证据「${evidence.label}」`.slice(0, 120),
+        detail: item.title.slice(0, 80),
+        refId: item.id,
+      });
+    }
+  }
+
+  return drafts;
 }

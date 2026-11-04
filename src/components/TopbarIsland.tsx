@@ -27,6 +27,7 @@ interface TopbarIslandProps {
   checkin: GreenMatrix;
   recentTitle: string | null;
   archiveTitle: string;
+  toast?: { id: number; text: string } | null;
   weekLabel: string;
   weekLine: string;
   nav: IslandNavItem[];
@@ -59,6 +60,7 @@ export default function TopbarIsland({
   checkin,
   recentTitle,
   archiveTitle,
+  toast,
   weekLabel,
   weekLine,
   nav,
@@ -119,6 +121,29 @@ export default function TopbarIsland({
         <span className="sr-only">展开快捷面板</span>
       </button>
 
+      {toast && (
+        <div
+          key={toast.id}
+          role="status"
+          aria-live="polite"
+          className="app-island-toast"
+        >
+          <span aria-hidden="true" className="app-island-toast-check">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M5 12.5l4.4 4.4L19 7.3" />
+            </svg>
+          </span>
+          <span>{toast.text}</span>
+        </div>
+      )}
+
       {open && (
         <div
           role="dialog"
@@ -142,7 +167,7 @@ export default function TopbarIsland({
           />
 
           {!locked && (
-            <nav aria-label="四个面快捷导航" className="app-island-nav lg:hidden">
+            <nav aria-label="主栏目快捷导航" className="app-island-nav lg:hidden">
               {nav.map((item) => (
                 <button
                   key={item.id}

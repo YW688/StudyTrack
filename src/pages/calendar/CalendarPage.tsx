@@ -301,7 +301,7 @@ export default function CalendarPage({
                         rel="noreferrer"
                         className="app-text-link"
                       >
-                        来源 ↗
+                        来源
                       </a>
                     </div>
                     {check.title && (
@@ -421,7 +421,7 @@ function CalendarRow({
                 rel="noreferrer"
                 className="app-text-link"
               >
-                来源 ↗
+                来源
               </a>
             ) : schedule.includes("以本校通知为准") ? null : (
               <span className="text-micro text-ink-4">

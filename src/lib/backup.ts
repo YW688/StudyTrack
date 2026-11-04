@@ -15,5 +15,6 @@ export function downloadBackupFile(payload: unknown, filename: string): void {
   document.body.appendChild(anchor);
   anchor.click();
   anchor.remove();
-  URL.revokeObjectURL(url);
+  /* 立刻 revoke 会让下载请求拿不到 blob 而取消 留一拍交给浏览器 */
+  window.setTimeout(() => URL.revokeObjectURL(url), 4000);
 }

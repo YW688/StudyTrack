@@ -45,6 +45,7 @@ interface ResumePageProps {
   experiences: ExperienceData | null;
   resume: ResumeData;
   onSaveResume: (data: ResumeData) => void;
+  onResumeGenerated: (entryCount: number) => void;
   onNavigateExperiences: () => void;
   onNavigateOpportunities: () => void;
 }
@@ -58,6 +59,7 @@ export default function ResumePage({
   experiences,
   resume,
   onSaveResume,
+  onResumeGenerated,
   onNavigateExperiences,
   onNavigateOpportunities,
 }: ResumePageProps) {
@@ -501,6 +503,7 @@ export default function ResumePage({
       window.removeEventListener("afterprint", restore);
     };
     window.addEventListener("afterprint", restore);
+    onResumeGenerated(displayedEntries.length);
     window.print();
   }
 

@@ -348,9 +348,6 @@ export default function LandingPage({
                     aria-label={`查看${module.name}示例`}
                   >
                     <span>{module.name}</span>
-                    <span aria-hidden="true" className="hero-face-arrow">
-                      →
-                    </span>
                   </button>
                 ))}
               </div>
@@ -769,15 +766,12 @@ function StartButton({
       onClick={onClick}
       disabled={state === "loading"}
       className={[
-        "inline-flex items-center justify-center gap-2 rounded-full font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-accent)] disabled:cursor-wait disabled:opacity-60",
+        "inline-flex items-center justify-center rounded-full font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--lp-accent)] disabled:cursor-wait disabled:opacity-60",
         variantClass,
         size === "lg" ? "min-h-12 px-7 text-[15px]" : "min-h-11 px-5 text-[14px]",
       ].join(" ")}
     >
       {loading ? loadingLabel : label}
-      <span aria-hidden="true" className="text-[12px]">
-        →
-      </span>
     </button>
   );
 }

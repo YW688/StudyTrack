@@ -253,12 +253,9 @@ function PortfolioCard({
                   href={evidence.url}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="border-rule hover:bg-ink/[0.03] inline-flex min-h-9 items-center gap-1 rounded-md border px-2 text-micro text-ink-3"
+                  className="border-rule hover:bg-ink/[0.03] inline-flex min-h-9 items-center rounded-md border px-2 text-micro text-ink-3"
                 >
                   {evidence.label}
-                  <span aria-hidden="true" className="text-ink-4">
-                    ↗
-                  </span>
                 </a>
               </li>
             ) : (

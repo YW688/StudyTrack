@@ -203,7 +203,7 @@ export default function DataBackup({
             <button
               type="button"
               onClick={() => setConfirmingClear(true)}
-              className="hover:bg-ink/[0.04] inline-flex min-h-11 items-center rounded-lg px-1 text-[12px] text-ink-3 underline underline-offset-4 hover:text-ink"
+              className="hover:bg-red-800/[0.06] text-red-800 inline-flex min-h-11 items-center rounded-lg px-1 text-[12px] underline underline-offset-4"
             >
               清除本机数据
             </button>

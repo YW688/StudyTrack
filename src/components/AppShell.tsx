@@ -49,6 +49,14 @@ const NAV = [
     tone: "#f5e7cd",
     ink: "#6f5323",
   },
+  {
+    id: "space",
+    label: "学径空间",
+    short: "星",
+    unit: "天星光",
+    tone: "#e7e1f4",
+    ink: "#54427f",
+  },
 ] as const;
 
 type NavId = (typeof NAV)[number]["id"];
@@ -111,6 +119,7 @@ interface AppShellProps {
   comboDays: number;
   checkin: GreenMatrix;
   archiveTitle: string;
+  toast: { id: number; text: string } | null;
   dock?: ReactNode;
   dockWidth: number;
   children: ReactNode;
@@ -147,6 +156,7 @@ export default function AppShell({
   comboDays,
   checkin,
   archiveTitle,
+  toast,
   dock,
   dockWidth,
   children,
@@ -278,7 +288,7 @@ export default function AppShell({
       ].join(" ")}
       style={
         {
-          "--rail": collapsed ? "72px" : "232px",
+          "--rail": collapsed ? "96px" : "232px",
           "--dock": `${dockWidth}px`,
         } as CSSProperties
       }
@@ -335,7 +345,7 @@ export default function AppShell({
             </span>
             <span className="app-profile-meta">
               {locked
-                ? "填完 4 步开启四个面"
+                ? "填完 4 步开启主栏目"
                 : goal
                   ? GOAL_LABELS[goal]
                   : "目标未填"}
@@ -344,8 +354,8 @@ export default function AppShell({
           <span aria-hidden="true" className="app-profile-chev" />
         </button>
 
-        <nav className="app-nav" aria-label="四个面导航">
-          {NAV.map((item) => {
+        <nav className="app-nav" aria-label="主导航">
+          {NAV.map((item, index) => {
             const isActive = !locked && item.id === active;
             const count = locked ? 0 : (counts[item.id] ?? 0);
             return (
@@ -363,6 +373,9 @@ export default function AppShell({
                 ].join(" ")}
                 style={{ "--nav-ink": item.ink } as CSSProperties}
               >
+                <span aria-hidden="true" className="app-nav-index">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
                 <span
                   aria-hidden="true"
                   className="app-nav-char"
@@ -392,7 +405,7 @@ export default function AppShell({
         {locked && !collapsed && (
           <p className="app-nav-lock-note">
             <span aria-hidden="true" className="app-nav-lock-dot" />
-            四个面在建档完成后开启
+            主栏目在建档完成后开启
           </p>
         )}
 
@@ -451,32 +464,30 @@ export default function AppShell({
             </div>
           )}
 
-          {collapsed ? (
-            <span className="app-sidebar-mini">
-              <span aria-hidden="true" className="app-sidebar-mini-dot" />
-              本机
-            </span>
-          ) : (
-            <div className="app-sidebar-footer-row">
-              <p className="app-sidebar-saved">
-                <span aria-hidden="true" />
-                本机 已保存
-              </p>
-              <button
-                type="button"
-                onClick={() => setMenuOpen((value) => !value)}
-                aria-expanded={menuOpen}
-                aria-label="本机设置"
-                title="本机设置"
-                className={[
-                  "app-side-menu-trigger",
-                  menuOpen ? "is-open" : "",
-                ].join(" ")}
-              >
-                ⋯
-              </button>
-            </div>
-          )}
+          <div className="app-sidebar-footer-row">
+            <p className="app-sidebar-saved">
+              <span
+                aria-hidden="true"
+                className="app-sidebar-saved-dot"
+              />
+              <span className="app-sidebar-saved-text">本机 已保存</span>
+            </p>
+            <button
+              type="button"
+              onClick={() => setMenuOpen((value) => !value)}
+              aria-expanded={menuOpen}
+              aria-label="本机设置"
+              title="本机设置"
+              tabIndex={collapsed ? -1 : undefined}
+              aria-hidden={collapsed}
+              className={[
+                "app-side-menu-trigger",
+                menuOpen ? "is-open" : "",
+              ].join(" ")}
+            >
+              ⋯
+            </button>
+          </div>
         </div>
       </aside>
 
@@ -505,6 +516,7 @@ export default function AppShell({
               checkin={checkin}
               recentTitle={recents[0]?.title ?? null}
               archiveTitle={archiveTitle}
+              toast={toast}
               weekLabel={week}
               weekLine={weekLine}
               nav={NAV.map((item) => ({

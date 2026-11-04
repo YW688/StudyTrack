@@ -4,6 +4,7 @@ import type {
   ChannelType,
   Experience,
   ExperienceData,
+  Goal,
   JobFamily,
   JobPosting,
   JobType,
@@ -11,6 +12,7 @@ import type {
 } from "../../types";
 import {
   CHANNEL_TYPE_LABELS,
+  GOAL_LABELS,
   JOB_TYPE_LABELS,
   MATCH_TIER_LABELS,
 } from "../../types";
@@ -52,6 +54,7 @@ import {
 interface OpportunitiesPageProps {
   experiences: ExperienceData | null;
   resume: ResumeData;
+  goal: Goal | null;
   onNavigateResume: () => void;
   onNavigateExperiences: () => void;
   onUseSample: () => Promise<void>;
@@ -59,7 +62,7 @@ interface OpportunitiesPageProps {
 
 const EMPTY_EXPERIENCES: Experience[] = [];
 const BTN_PRIMARY =
-  "bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-4 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-40";
+  "manor-primary bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-4 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-40";
 const BTN_SECONDARY =
   "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border bg-surface px-3 text-xs disabled:cursor-not-allowed disabled:opacity-40";
 const LINK_ACTION =
@@ -87,6 +90,7 @@ const QUALIFICATION_CHIP_CLASS: Record<QualificationTier, string> = {
 export default function OpportunitiesPage({
   experiences,
   resume,
+  goal,
   onNavigateResume,
   onNavigateExperiences,
   onUseSample,
@@ -216,7 +220,12 @@ export default function OpportunitiesPage({
   const farCount = matches.length - qualifiedCount - nearCount;
 
   const profile = context.profile;
-  const incomplete = profile.completeness.filter((item) => !item.done);
+  const fallbackOnly = goal !== null && goal !== "intern";
+  const incomplete = profile.completeness.filter(
+    (item) =>
+      !item.done &&
+      !(fallbackOnly && item.label === "求职意向"),
+  );
   const campusCount = allJobs.filter((job) => job.type === "campus").length;
   const internCount = allJobs.length - campusCount;
   const highCount = matches.filter((match) => match.tier === "high").length;
@@ -291,7 +300,10 @@ export default function OpportunitiesPage({
   const profileFields = [
     {
       label: "求职意向",
-      value: profile.target,
+      value:
+        fallbackOnly && !profile.target
+          ? "未设就业备选"
+          : profile.target,
       done: profile.target.length > 0,
     },
     {
@@ -484,9 +496,35 @@ export default function OpportunitiesPage({
           </section>
         )}
 
+        {goal && goal !== "intern" && (
+          <section
+            aria-label="就业备选提示"
+            className="border-rule bg-ink/[0.02] mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border px-3.5 py-2.5"
+          >
+            <p className="text-micro leading-5 text-ink-3">
+              {goal === "undecided"
+                ? "方向还没定 征召先作为就业备选"
+                : `主方向 ${GOAL_LABELS[goal]} 征召只作为就业备选`}
+            </p>
+            {profile.target.length > 0 ? (
+              <span className="font-mono text-micro text-ink-4">
+                已设 {profile.target}
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={onNavigateResume}
+                className={LINK_ACTION}
+              >
+                补目标岗位
+              </button>
+            )}
+          </section>
+        )}
+
         <section
           aria-label="匹配概览"
-          className="bg-rule border-rule mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl border sm:grid-cols-4"
+          className="opp-stats bg-rule border-rule mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl border sm:grid-cols-4"
         >
           {stats.map((stat) => (
             <div key={stat.label} className="bg-surface px-4 py-3.5">
@@ -505,7 +543,7 @@ export default function OpportunitiesPage({
 
         <section
           aria-label="匹配依据"
-          className="border-rule mt-4 overflow-hidden rounded-xl border bg-surface"
+          className="opp-basis border-rule mt-4 overflow-hidden rounded-xl border bg-surface"
         >
           <div className="border-rule flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3">
             <div className="flex items-center gap-2">
@@ -595,7 +633,7 @@ export default function OpportunitiesPage({
 
         <section
           aria-label="筛选岗位"
-          className="border-rule mt-4 overflow-hidden rounded-xl border bg-surface"
+          className="opp-filters border-rule mt-4 overflow-hidden rounded-xl border bg-surface"
         >
           <div className="flex flex-col gap-2 p-3 lg:flex-row lg:items-center">
             <div className="relative min-w-0 flex-1">
@@ -772,10 +810,13 @@ export default function OpportunitiesPage({
           <section
             id="job-list"
             aria-label="岗位列表"
-            className={view === "list" ? "scroll-mt-4" : "hidden xl:block"}
+            className={[
+              "opp-jobs",
+              view === "list" ? "scroll-mt-4" : "hidden xl:block",
+            ].join(" ")}
           >
             <div className="mb-2 flex items-baseline justify-between gap-2 px-1">
-              <h2 className="text-xs font-medium">推荐结果</h2>
+              <h2 className="opp-jobs-title text-xs font-medium">推荐结果</h2>
               <span className="font-mono text-micro tracking-[0.08em] text-ink-4">
                 按匹配分降序 附官网
               </span>
@@ -799,9 +840,9 @@ export default function OpportunitiesPage({
                   <li
                     key={job.id}
                     className={[
-                      "overflow-hidden rounded-xl border bg-surface transition-colors",
+                      "job-row overflow-hidden rounded-xl border bg-surface transition-colors",
                       selected
-                        ? "border-ink/35 ring-1 ring-ink/10"
+                        ? "is-selected border-ink/35 ring-1 ring-ink/10"
                         : "border-rule hover:border-ink/25 hover:bg-ink/[0.015]",
                     ].join(" ")}
                   >
@@ -838,7 +879,7 @@ export default function OpportunitiesPage({
                             <span className="text-[13px] leading-5 font-medium">
                               {job.title}
                             </span>
-                            <span className="shrink-0 font-mono text-base leading-5 tabular-nums">
+                            <span className="job-score shrink-0 font-mono text-base leading-5 tabular-nums">
                               {match.score}
                             </span>
                           </span>
@@ -1065,7 +1106,7 @@ export default function OpportunitiesPage({
                   aria-pressed={active}
                   onClick={() => setChannelType(tab.id)}
                   className={[
-                    "inline-flex min-h-10 items-center gap-1.5 rounded-full border px-3 text-[11px] transition-colors",
+                    "manor-chip inline-flex min-h-10 items-center gap-1.5 rounded-full border px-3 text-[11px] transition-colors",
                     active
                       ? "border-ink bg-ink text-paper"
                       : "border-rule hover:bg-ink/[0.03] bg-surface text-ink-3",
@@ -1195,22 +1236,10 @@ function QualPill({
       type="button"
       aria-pressed={active}
       onClick={onClick}
-      className={[
-        "inline-flex min-h-9 items-center gap-1.5 rounded-full border px-2.5 text-micro transition-colors",
-        active
-          ? "border-ink bg-ink text-paper"
-          : "border-rule bg-surface text-ink-3 hover:bg-ink/[0.03]",
-      ].join(" ")}
+      className="qual-tab"
     >
       {label}
-      <span
-        className={[
-          "font-mono tabular-nums",
-          active ? "text-paper/55" : "text-ink-4",
-        ].join(" ")}
-      >
-        {count}
-      </span>
+      <span className="qual-tab-count">{count}</span>
     </button>
   );
 }

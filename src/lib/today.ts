@@ -186,13 +186,11 @@ export interface EchoPick {
   quote: string;
 }
 
-export function pickEcho(
+function echoCandidates(
   experiences: Experience[],
-  now: Dayjs = dayjs(),
-): EchoPick | null {
-  if (experiences.length === 0) return null;
-
-  const candidates = experiences
+  now: Dayjs,
+): Array<{ experience: Experience; daysAgo: number }> {
+  return experiences
     .map((experience) => {
       const created = dayjs(experience.createdAt);
       const daysAgo = created.isValid()
@@ -201,20 +199,43 @@ export function pickEcho(
       return { experience, daysAgo };
     })
     .sort((a, b) => a.daysAgo - b.daysAgo);
+}
 
-  const older = candidates.filter((candidate) => candidate.daysAgo >= 1);
-  const picked = older[0] ?? candidates[0];
+function toEchoPick(candidate: {
+  experience: Experience;
+  daysAgo: number;
+}): EchoPick {
   const quote =
-    picked.experience.result.trim() ||
-    picked.experience.contribution.trim() ||
-    picked.experience.method.trim();
-
+    candidate.experience.result.trim() ||
+    candidate.experience.contribution.trim() ||
+    candidate.experience.method.trim();
   return {
-    experience: picked.experience,
-    daysAgo: picked.daysAgo,
-    label: echoLabel(picked.daysAgo),
+    experience: candidate.experience,
+    daysAgo: candidate.daysAgo,
+    label: echoLabel(candidate.daysAgo),
     quote,
   };
+}
+
+export function pickEcho(
+  experiences: Experience[],
+  now: Dayjs = dayjs(),
+): EchoPick | null {
+  if (experiences.length === 0) return null;
+  const candidates = echoCandidates(experiences, now);
+  const older = candidates.filter((candidate) => candidate.daysAgo >= 1);
+  return toEchoPick(older[0] ?? candidates[0]);
+}
+
+/* 星图的回声队列：新近优先，每次流星只取一条，避免多条字幕同时上屏 */
+export function pickEchoQueue(
+  experiences: Experience[],
+  now: Dayjs = dayjs(),
+  limit = 8,
+): EchoPick[] {
+  return echoCandidates(experiences, now)
+    .slice(0, limit)
+    .map(toEchoPick);
 }
 
 function echoLabel(daysAgo: number): string {

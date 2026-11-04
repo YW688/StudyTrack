@@ -42,31 +42,41 @@ html {
 }
 
 html[data-app-theme="dawn"] {
-  --color-paper: #f2f5f6;
-  --color-surface: #fbfdfe;
-  --color-ink: #232c33;
-  --color-rule: #d8e0e4;
-  --color-accent: #bd5f90;
-  --color-accent-ink: #8c3f6b;
+  --color-paper: #f6f8f9;
+  --color-surface: #fcfdfe;
+  --color-ink: #26313a;
+  --color-rule: #c9d5dc;
+  --color-accent: #c96f9f;
+  --color-accent-ink: #a64c7a;
+  --tone-ok-bg: #e9f0e8;
+  --tone-ok-ink: #3c5c40;
+  --tone-ok-dot: #6f8f6a;
+  --tone-info-bg: #e5eef5;
+  --tone-info-ink: #284a66;
+  --dawn-cyan: 191, 239, 243;
+  --dawn-rose: 239, 150, 197;
+  --dawn-hairline: 38, 49, 58;
 }
 
 html[data-app-theme="night"] {
   color-scheme: dark;
-  --wash-rgb: 50, 61, 74;
+  --wash-rgb: 42, 54, 68;
   --tint: var(--color-paper);
-  --color-paper: #0f141a;
-  --color-surface: #18202a;
-  --color-ink: #e7ebf0;
-  --color-rule: #2b3641;
+  --color-paper: #0d131a;
+  --color-surface: #151e28;
+  --color-ink: #e8edf3;
+  --color-rule: #293646;
   --color-accent: #e295be;
   --color-accent-ink: #f0b4d2;
-  --color-amber: #d69a4a;
-  --color-amber-ink: #e8b877;
-  --tone-ok-bg: #1b2b22;
-  --tone-ok-ink: #a3c9ab;
-  --tone-ok-dot: #7fa383;
-  --tone-info-bg: #1a2636;
-  --tone-info-ink: #aac0e2;
+  --color-amber: #c9a45e;
+  --color-amber-ink: #e3c489;
+  --tone-ok-bg: #17281f;
+  --tone-ok-ink: #a9c9b4;
+  --tone-ok-dot: #7fa98b;
+  --tone-info-bg: #172437;
+  --tone-info-ink: #b6c8e4;
+  --night-star: 142, 169, 217;
+  --night-light: 232, 237, 243;
 }
 
 /* ---------- 庄园主题（第三套可选主题） ---------- */
@@ -74,37 +84,38 @@ html[data-app-theme="night"] {
 
 html[data-app-theme="manor"] {
   color-scheme: dark;
-  --wash-rgb: 30, 30, 32;
-  --tint: #1e1e20;
-  --color-paper: #241811;
-  --color-surface: #1e1e20;
-  --color-ink: #f1e4c2;
-  --color-rule: #3d3122;
-  --color-accent: #6b2018;
-  --color-accent-ink: #d9a08c;
-  --color-amber: #9c8758;
-  --color-amber-ink: #ffe08a;
-  --tone-ok-bg: #241f16;
-  --tone-ok-ink: #cbb98a;
-  --tone-ok-dot: #b9a06a;
-  --tone-info-bg: #221a14;
-  --tone-info-ink: #d8c39a;
-  --manor-parchment: #f1dcc7;
-  --manor-parchment-2: #f1e4c2;
+  --wash-rgb: 20, 17, 14;
+  --tint: #12100e;
+  --color-paper: #090807;
+  --color-surface: #12100e;
+  --color-ink: #f2e8d4;
+  --color-rule: #332b24;
+  --color-accent: #a3302a;
+  --color-accent-ink: #f29d89;
+  --color-amber: #b99b64;
+  --color-amber-ink: #f6d99b;
+  --tone-ok-bg: #192a24;
+  --tone-ok-ink: #a9c3a9;
+  --tone-ok-dot: #7fae90;
+  --tone-info-bg: #19242f;
+  --tone-info-ink: #b9c9dd;
+  --manor-parchment: #f4e3c9;
+  --manor-parchment-2: #f6e8d2;
   --manor-parchment-ink: #241811;
-  --manor-gold-line: #9c8758;
-  --manor-seal: #6b2018;
-  --manor-seal-edge: #4a150f;
+  --manor-gold-line: #c2a870;
+  --manor-seal: #8f2b24;
+  --manor-seal-edge: #5f1a15;
   --manor-fiber: 124, 90, 46;
-  --manor-hairline: 107, 74, 38;
+  --manor-hairline: 194, 168, 112;
 }
 
-/* 页面底：深棕木桌面，压住黑金金属感 */
+/* 页面底：月光下的冷铁石墙，暖木只留在家具与羊皮纸上 */
 html[data-app-theme="manor"] .app-shell {
   background:
-    radial-gradient(92% 62% at 50% -16%, #2e1f15 0%, rgba(46, 31, 21, 0) 66%),
-    radial-gradient(58% 46% at 94% 2%, rgba(156, 135, 88, 0.07), transparent 70%),
-    linear-gradient(180deg, #241811 0%, #150e09 56%, #0d0806 100%);
+    radial-gradient(92% 62% at 50% -16%, rgba(56, 44, 33, 0.42) 0%, rgba(48, 38, 30, 0) 66%),
+    radial-gradient(58% 46% at 94% 2%, rgba(120, 78, 52, 0.1), transparent 70%),
+    radial-gradient(52% 44% at 6% 84%, rgba(96, 88, 78, 0.07), transparent 74%),
+    linear-gradient(180deg, #12100d 0%, #0a0907 56%, #050404 100%);
   background-attachment: fixed;
 }
 
@@ -112,7 +123,11 @@ html[data-app-theme="manor"] .app-shell {
 /* 卡内重新作用域同一套 token 让 ink-2/3/4 自动派生成深棕 金系不上羊皮纸 */
 html[data-app-theme="manor"] .app-card-brief,
 html[data-app-theme="manor"] .app-archive,
-html[data-app-theme="manor"] .app-exp {
+html[data-app-theme="manor"] .app-exp,
+html[data-app-theme="manor"] .tool-chest,
+html[data-app-theme="manor"] .sky-detail-sheet,
+html[data-app-theme="manor"] .opp-stats,
+html[data-app-theme="manor"] .match-sheet {
   --color-paper: var(--manor-parchment);
   --color-surface: var(--manor-parchment-2);
   --color-ink: var(--manor-parchment-ink);
@@ -120,8 +135,8 @@ html[data-app-theme="manor"] .app-exp {
   --color-ink-3: color-mix(in srgb, var(--color-ink) 72%, var(--color-paper));
   --color-ink-4: color-mix(in srgb, var(--color-ink) 66%, var(--color-paper));
   --color-rule: #d3c2a4;
-  --color-accent: #6b2018;
-  --color-accent-ink: #6b2018;
+  --color-accent: #8f2b24;
+  --color-accent-ink: #8f2b24;
   --color-amber: #8a5511;
   --color-amber-ink: #8a5511;
   --tone-ok-bg: #e4d8bd;
@@ -185,7 +200,10 @@ html[data-app-theme="manor"] .app-card {
 
 /* 羊皮纸卡压过上面的通用双线框，换成软内衬与纸面阴影 */
 html[data-app-theme="manor"] .app-card-brief,
-html[data-app-theme="manor"] .app-exp {
+html[data-app-theme="manor"] .app-exp,
+html[data-app-theme="manor"] .tool-chest,
+html[data-app-theme="manor"] .sky-detail-sheet,
+html[data-app-theme="manor"] .match-sheet {
   border-color: color-mix(
     in srgb,
     var(--manor-gold-line) 32%,
@@ -298,6 +316,7 @@ html[data-app-theme="manor"] .app-nav-item.is-active {
 
 html[data-app-theme="manor"] .tier-seal {
   display: inline-block;
+  filter: drop-shadow(0 1.2px 1.4px rgba(0, 0, 0, 0.32));
 }
 
 html[data-app-theme="manor"] .tier-pip {
@@ -326,7 +345,151 @@ html[data-app-theme="manor"] .app-archive-seal {
   right: auto;
   display: block;
   transform: translateX(-50%) rotate(-4deg);
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.34));
+  filter: drop-shadow(0 5px 9px rgba(0, 0, 0, 0.4));
+}
+
+/* 征途卡：蜡封压右上角 罗盘纹章在左上角 品质两行在封下；非庄园不出现 */
+.app-exp-rose,
+.app-exp-rose-drafting,
+.app-exp-rose-observatory,
+.app-exp-seal-corner,
+.app-exp-aperture,
+.app-exp-star,
+.tool-sheet-rose,
+.tool-sheet-rose-drafting,
+.tool-sheet-rose-observatory,
+.tool-sheet-seal,
+.tool-sheet-wax,
+.tool-sheet-aperture,
+.tool-sheet-star,
+.app-stamp-aperture,
+.app-stamp-star {
+  display: none;
+}
+
+html[data-app-theme="manor"] .app-exp {
+  position: relative;
+}
+
+html[data-app-theme="manor"] .app-exp-rose {
+  display: block;
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  width: 34px;
+  height: 34px;
+  color: #8a7148;
+  pointer-events: none;
+}
+
+html[data-app-theme="manor"] .app-exp-seal-corner {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  pointer-events: none;
+}
+
+html[data-app-theme="manor"] .app-exp-seal {
+  width: 56px;
+  height: 56px;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.3));
+}
+
+html[data-app-theme="manor"] .app-exp-seal-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  color: #6f5636;
+}
+
+html[data-app-theme="manor"] .app-exp-seal-count {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: #5a4426;
+}
+
+html[data-app-theme="manor"] .app-exp-head {
+  min-height: 92px;
+  padding-left: 48px;
+  padding-right: 78px;
+}
+
+html[data-app-theme="manor"] .app-exp-tier-inline {
+  display: none;
+}
+
+/* 中缝饰线：两段细金线夹一枚菱形，只在庄园出现 */
+.app-exp-divider {
+  display: none;
+}
+
+html[data-app-theme="manor"] .app-exp-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0 10px;
+}
+
+html[data-app-theme="manor"] .app-exp-divider-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(156, 135, 88, 0.32);
+}
+
+html[data-app-theme="manor"] .app-exp-divider-mark {
+  width: 28px;
+  height: 12px;
+  flex-shrink: 0;
+  color: #9c8758;
+  opacity: 0.65;
+}
+
+/* 底排操作收成描边胶囊，斜杠分隔在庄园下收起 */
+html[data-app-theme="manor"] .app-exp-actions > span[aria-hidden="true"] {
+  display: none;
+}
+
+html[data-app-theme="manor"] .app-exp-actions button {
+  border: 1px solid rgba(156, 135, 88, 0.5);
+  border-radius: 9999px;
+  padding: 0 12px;
+  background: rgba(255, 252, 244, 0.32);
+  text-decoration: none;
+}
+
+html[data-app-theme="manor"] .app-exp-actions button:hover {
+  background: rgba(255, 252, 244, 0.6);
+  text-decoration: none;
+}
+
+@media (max-width: 639px) {
+  html[data-app-theme="manor"] .app-exp-rose {
+    top: 10px;
+    left: 12px;
+    width: 30px;
+    height: 30px;
+  }
+
+  html[data-app-theme="manor"] .app-exp-seal {
+    width: 48px;
+    height: 48px;
+  }
+
+  html[data-app-theme="manor"] .app-exp-head {
+    min-height: 90px;
+    padding-left: 42px;
+    padding-right: 64px;
+  }
 }
 
 /* 荣誉 / 战绩：账目式横排，去掉灰底块 */
@@ -421,37 +584,48 @@ html[data-app-theme="manor"] .checkin-cell[data-today="1"] {
 
 /* 木器底：顶栏 侧栏 灵动岛统一压成暖棕，避免中性灰的金属感 */
 html[data-app-theme="manor"] .app-topbar {
-  border-color: rgba(156, 135, 88, 0.42);
-  background: rgba(32, 22, 16, 0.78);
+  border-color: rgba(194, 168, 112, 0.4);
+  background: rgba(12, 10, 8, 0.82);
   box-shadow:
     0 20px 40px -36px rgba(0, 0, 0, 0.8),
-    inset 0 1px 0 rgba(255, 236, 205, 0.08);
+    inset 0 1px 0 rgba(236, 226, 205, 0.08);
 }
 
 html[data-app-theme="manor"] .app-sidebar {
-  border-color: rgba(156, 135, 88, 0.3);
-  background: rgba(28, 19, 14, 0.82);
+  border-color: rgba(194, 168, 112, 0.28);
+  background: rgba(9, 8, 7, 0.86);
 }
 
 html[data-app-theme="manor"] .app-nav {
-  border-bottom-color: rgba(156, 135, 88, 0.22);
+  border-bottom-color: rgba(194, 168, 112, 0.22);
 }
 
 html[data-app-theme="manor"] .app-island {
-  border-color: rgba(156, 135, 88, 0.5);
-  background: #241811;
+  border-color: rgba(194, 168, 112, 0.48);
+  background: #12100e;
 }
 
 html[data-app-theme="manor"] .app-island:hover {
-  background: #2e2017;
+  background: #1b1713;
 }
 
 html[data-app-theme="manor"] .app-island-panel {
-  border-color: rgba(156, 135, 88, 0.5);
-  background: #1a120d;
+  border-color: rgba(194, 168, 112, 0.5);
+  background: #0c0a09;
   box-shadow:
-    inset 0 0 0 1px rgba(156, 135, 88, 0.1),
+    inset 0 0 0 1px rgba(194, 168, 112, 0.1),
     0 28px 60px -30px rgba(0, 0, 0, 0.9);
+}
+
+html[data-app-theme="manor"] .app-island-toast {
+  border-color: rgba(154, 214, 168, 0.4);
+  background: #131a15;
+  color: #e8f3e9;
+}
+
+html[data-app-theme="manor"] .app-island-toast-check {
+  background: #9ad6a8;
+  color: #10241a;
 }
 
 /* 头像章：深棕底 金刻度环，换成庄园的徽记 */
@@ -485,6 +659,775 @@ html[data-app-theme="manor"] .app-seal-stamp {
   .app-seal-stamp {
     animation: none;
   }
+}
+
+/* ---------- 霞光主题 · 晨光描图室 ---------- */
+/* 视觉豁免见 .qoder/rules/00-core.md 第六节：硫酸纸卡面 页面顶部两团窗光 四角套准十字 */
+
+html[data-app-theme="dawn"] .app-shell {
+  background-color: #f6f8f9;
+  background-image:
+    radial-gradient(
+      40% 32% at 8% -4%,
+      rgba(var(--dawn-cyan), 0.24),
+      transparent 72%
+    ),
+    radial-gradient(
+      34% 28% at 94% -2%,
+      rgba(var(--dawn-rose), 0.15),
+      transparent 74%
+    ),
+    linear-gradient(rgba(var(--dawn-hairline), 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--dawn-hairline), 0.11) 1px, transparent 1px),
+    linear-gradient(rgba(var(--dawn-hairline), 0.055) 1px, transparent 1px),
+    linear-gradient(
+      90deg,
+      rgba(var(--dawn-hairline), 0.055) 1px,
+      transparent 1px
+    );
+  background-size:
+    auto,
+    auto,
+    78px 78px,
+    78px 78px,
+    13px 13px,
+    13px 13px;
+  background-repeat: no-repeat, no-repeat, repeat, repeat, repeat, repeat;
+  background-attachment: fixed;
+}
+
+html[data-app-theme="dawn"] .app-sheet {
+  border-color: rgba(var(--dawn-hairline), 0.1);
+  background: rgba(246, 248, 249, 0.62);
+  box-shadow:
+    0 30px 60px -56px rgba(38, 54, 68, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html[data-app-theme="dawn"] .app-sidebar {
+  border-color: rgba(var(--dawn-hairline), 0.12);
+  background:
+    radial-gradient(rgba(var(--dawn-hairline), 0.05) 0.7px, transparent 1px) 0 0 /
+      18px 18px repeat,
+    rgba(252, 253, 254, 0.94) !important;
+  box-shadow:
+    0 24px 50px -46px rgba(38, 54, 68, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html[data-app-theme="dawn"] .app-topbar,
+html[data-app-theme="dawn"] .app-statusbar {
+  border-color: rgba(var(--dawn-hairline), 0.14);
+  background: rgba(252, 253, 254, 0.94);
+  box-shadow:
+    0 18px 36px -34px rgba(38, 54, 68, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html[data-app-theme="dawn"] .app-dock {
+  border-color: rgba(var(--dawn-hairline), 0.12);
+  background: rgba(252, 253, 254, 0.94);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html[data-app-theme="dawn"] .app-island {
+  border-color: rgba(var(--dawn-hairline), 0.16);
+  background: rgba(252, 253, 254, 0.96);
+}
+
+html[data-app-theme="dawn"] .app-island:hover {
+  background: #f7f9fa;
+}
+
+html[data-app-theme="dawn"] .app-island-panel {
+  border-color: rgba(var(--dawn-hairline), 0.16);
+  background: #fcfdfe;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 28px 60px -34px rgba(38, 54, 68, 0.4);
+}
+
+/* 辅卡：平纸 不上套准与叠层 让主卡成为唯一焦点 */
+html[data-app-theme="dawn"] .app-card {
+  border-color: rgba(var(--dawn-hairline), 0.12);
+  background-color: rgba(252, 253, 254, 0.9);
+  background-image: none;
+  box-shadow:
+    0 18px 36px -34px rgba(38, 54, 68, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* 主角卡：白纸 + 窗光 + 13/26px 描图方格 + 四角套准十字（画进背景层，腾出上下伪元素给压条） */
+html[data-app-theme="dawn"] .app-card-brief,
+html[data-app-theme="dawn"] .app-archive,
+html[data-app-theme="dawn"] .tool-chest,
+html[data-app-theme="dawn"] .sky-detail-sheet,
+html[data-app-theme="dawn"] .match-sheet {
+  border-color: rgba(var(--dawn-hairline), 0.22);
+  background-color: rgba(252, 253, 254, 0.94);
+  background-image:
+    radial-gradient(
+      120% 90% at 8% -18%,
+      rgba(var(--dawn-cyan), 0.17),
+      transparent 64%
+    ),
+    radial-gradient(
+      110% 80% at 100% 118%,
+      rgba(var(--dawn-rose), 0.1),
+      transparent 68%
+    ),
+    linear-gradient(rgba(var(--dawn-hairline), 0.026) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--dawn-hairline), 0.026) 1px, transparent 1px),
+    linear-gradient(rgba(var(--dawn-hairline), 0.011) 1px, transparent 1px),
+    linear-gradient(
+      90deg,
+      rgba(var(--dawn-hairline), 0.011) 1px,
+      transparent 1px
+    ),
+    linear-gradient(rgba(var(--dawn-hairline), 0.46), rgba(var(--dawn-hairline), 0.46)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.46), rgba(var(--dawn-hairline), 0.46)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.46), rgba(var(--dawn-hairline), 0.46)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.46), rgba(var(--dawn-hairline), 0.46)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.46), rgba(var(--dawn-hairline), 0.46)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.46), rgba(var(--dawn-hairline), 0.46)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.46), rgba(var(--dawn-hairline), 0.46)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.46), rgba(var(--dawn-hairline), 0.46));
+  background-size:
+    auto,
+    auto,
+    26px 26px,
+    26px 26px,
+    13px 13px,
+    13px 13px,
+    13px 1px,
+    1px 13px,
+    13px 1px,
+    1px 13px,
+    13px 1px,
+    1px 13px,
+    13px 1px,
+    1px 13px;
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    0 0,
+    0 0,
+    0 0,
+    10px 10px,
+    10px 10px,
+    calc(100% - 10px) 10px,
+    calc(100% - 10px) 10px,
+    10px calc(100% - 10px),
+    10px calc(100% - 10px),
+    calc(100% - 10px) calc(100% - 10px),
+    calc(100% - 10px) calc(100% - 10px);
+  background-repeat: no-repeat, no-repeat, repeat, repeat, repeat, repeat,
+    no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
+    no-repeat;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.88),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5),
+    0 22px 44px -38px rgba(38, 54, 68, 0.38);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* 低置信仍要黄底：只叠描图方格与套准十字 不压背景色和琥珀边框 */
+html[data-app-theme="dawn"] .app-exp {
+  background-image:
+    radial-gradient(
+      120% 90% at 8% -18%,
+      rgba(var(--dawn-cyan), 0.14),
+      transparent 64%
+    ),
+    linear-gradient(rgba(var(--dawn-hairline), 0.024) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--dawn-hairline), 0.024) 1px, transparent 1px),
+    linear-gradient(rgba(var(--dawn-hairline), 0.01) 1px, transparent 1px),
+    linear-gradient(
+      90deg,
+      rgba(var(--dawn-hairline), 0.01) 1px,
+      transparent 1px
+    ),
+    linear-gradient(rgba(var(--dawn-hairline), 0.4), rgba(var(--dawn-hairline), 0.4)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.4), rgba(var(--dawn-hairline), 0.4)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.4), rgba(var(--dawn-hairline), 0.4)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.4), rgba(var(--dawn-hairline), 0.4)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.4), rgba(var(--dawn-hairline), 0.4)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.4), rgba(var(--dawn-hairline), 0.4)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.4), rgba(var(--dawn-hairline), 0.4)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.4), rgba(var(--dawn-hairline), 0.4));
+  background-size:
+    auto,
+    26px 26px,
+    26px 26px,
+    13px 13px,
+    13px 13px,
+    12px 1px,
+    1px 12px,
+    12px 1px,
+    1px 12px,
+    12px 1px,
+    1px 12px,
+    12px 1px,
+    1px 12px;
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    0 0,
+    0 0,
+    10px 10px,
+    10px 10px,
+    calc(100% - 10px) 10px,
+    calc(100% - 10px) 10px,
+    10px calc(100% - 10px),
+    10px calc(100% - 10px),
+    calc(100% - 10px) calc(100% - 10px),
+    calc(100% - 10px) calc(100% - 10px);
+  background-repeat: no-repeat, repeat, repeat, repeat, repeat, no-repeat,
+    no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 20px 40px -36px rgba(38, 54, 68, 0.32);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html[data-app-theme="dawn"] .app-card-brief,
+html[data-app-theme="dawn"] .app-exp,
+html[data-app-theme="dawn"] .app-archive,
+html[data-app-theme="dawn"] .tool-chest,
+html[data-app-theme="dawn"] .sky-detail-sheet,
+html[data-app-theme="dawn"] .match-sheet {
+  position: relative;
+}
+
+/* 今日主卡做成制图板：上下各夹一条金属压条，两端收螺丝，压影落在纸面上 */
+html[data-app-theme="dawn"] .app-card-brief::before,
+html[data-app-theme="dawn"] .app-card-brief::after {
+  content: "";
+  position: absolute;
+  left: -10px;
+  right: -10px;
+  height: 15px;
+  border: 1px solid rgba(var(--dawn-hairline), 0.26);
+  border-radius: 3px;
+  pointer-events: none;
+  background-image:
+    radial-gradient(
+      circle at 10px 50%,
+      rgba(var(--dawn-hairline), 0.42) 0 2.1px,
+      rgba(var(--dawn-hairline), 0) 3px
+    ),
+    radial-gradient(
+      circle at calc(100% - 10px) 50%,
+      rgba(var(--dawn-hairline), 0.42) 0 2.1px,
+      rgba(var(--dawn-hairline), 0) 3px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(var(--dawn-rose), 0.62) 0 1.5px,
+      rgba(var(--dawn-rose), 0) 1.5px
+    ),
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f4f8f9 38%,
+      #e3ebef 72%,
+      #d2dce1 100%
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 7px 14px -9px rgba(38, 54, 68, 0.62);
+}
+
+html[data-app-theme="dawn"] .app-card-brief::before {
+  top: -8px;
+}
+
+html[data-app-theme="dawn"] .app-card-brief::after {
+  bottom: -8px;
+}
+
+/* 匹配概览是四格条 不是一张卡：只换边框与 1px 分栏色 */
+html[data-app-theme="dawn"] .opp-stats {
+  border-color: rgba(var(--dawn-hairline), 0.14);
+  background-color: rgba(var(--dawn-hairline), 0.12);
+  box-shadow: 0 16px 32px -32px rgba(38, 54, 68, 0.22);
+}
+
+/* ---------- 夜间主题 · 观星台 ---------- */
+/* 视觉豁免见 .qoder/rules/00-core.md 第六节：静态星图与银河带 卡片 1px 星蓝内微光 */
+
+html[data-app-theme="night"] .app-shell {
+  background-color: #0b1118;
+  background-image:
+    radial-gradient(
+      46% 36% at 12% -8%,
+      rgba(96, 128, 190, 0.26),
+      transparent 72%
+    ),
+    radial-gradient(
+      38% 30% at 92% -2%,
+      rgba(226, 149, 190, 0.13),
+      transparent 74%
+    ),
+    /* 银河带：一条斜贯的星云，中段最亮，两端化开 */
+    linear-gradient(
+      112deg,
+      transparent 24%,
+      rgba(var(--night-star), 0.13) 41%,
+      rgba(var(--night-light), 0.15) 50%,
+      rgba(226, 149, 190, 0.09) 59%,
+      transparent 76%
+    ),
+    linear-gradient(
+      112deg,
+      transparent 39%,
+      rgba(var(--night-star), 0.09) 50%,
+      transparent 63%
+    ),
+    /* 星图网格：赤道方格 */
+    linear-gradient(rgba(var(--night-star), 0.075) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--night-star), 0.075) 1px, transparent 1px),
+    /* 静态星点：五档亮度与尺寸，铺满不闪 */
+    radial-gradient(
+      1.4px 1.4px at 24px 36px,
+      rgba(var(--night-light), 0.95) 0 1.4px,
+      transparent 2px
+    ),
+    radial-gradient(
+      1.8px 1.8px at 132px 86px,
+      rgba(var(--night-star), 0.88) 0 1.8px,
+      transparent 2.5px
+    ),
+    radial-gradient(
+      1px 1px at 68px 152px,
+      rgba(var(--night-light), 0.7) 0 1px,
+      transparent 1.5px
+    ),
+    radial-gradient(
+      1.2px 1.2px at 196px 44px,
+      rgba(var(--night-star), 0.62) 0 1.2px,
+      transparent 1.8px
+    ),
+    radial-gradient(
+      0.9px 0.9px at 44px 212px,
+      rgba(var(--night-light), 0.5) 0 0.9px,
+      transparent 1.4px
+    );
+  background-size:
+    auto,
+    auto,
+    auto,
+    auto,
+    168px 168px,
+    168px 168px,
+    170px 170px,
+    250px 250px,
+    130px 130px,
+    210px 210px,
+    96px 96px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat,
+    repeat, repeat, repeat, repeat, repeat;
+  background-attachment: fixed;
+}
+
+html[data-app-theme="night"] .app-sheet {
+  border-color: rgba(var(--night-star), 0.14);
+  background: rgba(11, 17, 24, 0.58);
+  box-shadow:
+    0 30px 60px -56px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(var(--night-light), 0.04);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html[data-app-theme="night"] .app-sidebar {
+  border-color: rgba(var(--night-star), 0.16);
+  background:
+    linear-gradient(rgba(var(--night-star), 0.035) 1px, transparent 1px) 0 0 /
+      32px 32px repeat,
+    linear-gradient(90deg, rgba(var(--night-star), 0.035) 1px, transparent 1px) 0
+      0 / 32px 32px repeat,
+    #101821 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(var(--night-light), 0.04),
+    0 24px 48px -44px #000;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html[data-app-theme="night"] .app-topbar,
+html[data-app-theme="night"] .app-statusbar {
+  border-color: rgba(var(--night-star), 0.2);
+  background: rgba(17, 26, 36, 0.96);
+  box-shadow:
+    0 18px 36px -32px #000,
+    inset 0 1px 0 rgba(var(--night-light), 0.05);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html[data-app-theme="night"] .app-dock {
+  border-color: rgba(var(--night-star), 0.16);
+  background: rgba(16, 24, 33, 0.96);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html[data-app-theme="night"] .app-island {
+  border-color: rgba(var(--night-star), 0.24);
+  background: #0f1720;
+}
+
+html[data-app-theme="night"] .app-island:hover {
+  background: #131d29;
+}
+
+html[data-app-theme="night"] .app-island-panel {
+  border-color: rgba(var(--night-star), 0.24);
+  background: #111a24;
+  box-shadow:
+    inset 0 1px 0 rgba(var(--night-light), 0.05),
+    0 28px 60px -30px #000;
+}
+
+/* 辅卡：哑光深面板 不上星图网格 让主卡更亮一档 */
+html[data-app-theme="night"] .app-card {
+  border-color: #263342;
+  background-color: #111a24;
+  background-image: none;
+  box-shadow:
+    inset 0 1px 0 rgba(var(--night-light), 0.04),
+    0 20px 40px -36px #000;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* 主角卡：黑曜石面板 + 1px 星蓝内微光 + 淡淡一枚星辰罗盘嵌在卡面 + 四角星刻 */
+html[data-app-theme="night"] .app-card-brief,
+html[data-app-theme="night"] .app-archive,
+html[data-app-theme="night"] .tool-chest,
+html[data-app-theme="night"] .sky-detail-sheet,
+html[data-app-theme="night"] .match-sheet {
+  border-color: #334153;
+  background-color: #141d27;
+  background-image:
+    radial-gradient(
+      120% 90% at 8% -16%,
+      rgba(var(--night-star), 0.16),
+      transparent 62%
+    ),
+    linear-gradient(180deg, rgba(var(--night-light), 0.07), transparent 24%),
+    linear-gradient(
+      90deg,
+      transparent 0 calc(50% - 0.9px),
+      rgba(var(--night-star), 0.13) calc(50% - 0.9px) calc(50% + 0.9px),
+      transparent calc(50% + 0.9px) 0
+    ),
+    linear-gradient(
+      180deg,
+      transparent 0 calc(50% - 0.9px),
+      rgba(var(--night-star), 0.13) calc(50% - 0.9px) calc(50% + 0.9px),
+      transparent calc(50% + 0.9px) 0
+    ),
+    linear-gradient(
+      45deg,
+      transparent 0 calc(50% - 0.7px),
+      rgba(var(--night-star), 0.07) calc(50% - 0.7px) calc(50% + 0.7px),
+      transparent calc(50% + 0.7px) 0
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 0 calc(50% - 0.7px),
+      rgba(var(--night-star), 0.07) calc(50% - 0.7px) calc(50% + 0.7px),
+      transparent calc(50% + 0.7px) 0
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 0 138px,
+      rgba(var(--night-star), 0.12) 138px 139px,
+      transparent 139px
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 0 86px,
+      rgba(var(--night-star), 0.08) 86px 87px,
+      transparent 87px
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(var(--night-star), 0.16) 0 1.6px,
+      transparent 2.4px
+    ),
+    conic-gradient(
+      from -20deg at 50% 50%,
+      rgba(var(--night-star), 0.72) 0 40deg,
+      transparent 0 70deg,
+      rgba(var(--night-star), 0.72) 0 110deg,
+      transparent 0 160deg,
+      rgba(var(--night-star), 0.72) 0 200deg,
+      transparent 0 250deg,
+      rgba(var(--night-star), 0.72) 0 290deg,
+      transparent 0
+    ),
+    conic-gradient(
+      from -20deg at 50% 50%,
+      rgba(var(--night-star), 0.72) 0 40deg,
+      transparent 0 70deg,
+      rgba(var(--night-star), 0.72) 0 110deg,
+      transparent 0 160deg,
+      rgba(var(--night-star), 0.72) 0 200deg,
+      transparent 0 250deg,
+      rgba(var(--night-star), 0.72) 0 290deg,
+      transparent 0
+    ),
+    conic-gradient(
+      from -20deg at 50% 50%,
+      rgba(var(--night-star), 0.72) 0 40deg,
+      transparent 0 70deg,
+      rgba(var(--night-star), 0.72) 0 110deg,
+      transparent 0 160deg,
+      rgba(var(--night-star), 0.72) 0 200deg,
+      transparent 0 250deg,
+      rgba(var(--night-star), 0.72) 0 290deg,
+      transparent 0
+    ),
+    conic-gradient(
+      from -20deg at 50% 50%,
+      rgba(var(--night-star), 0.72) 0 40deg,
+      transparent 0 70deg,
+      rgba(var(--night-star), 0.72) 0 110deg,
+      transparent 0 160deg,
+      rgba(var(--night-star), 0.72) 0 200deg,
+      transparent 0 250deg,
+      rgba(var(--night-star), 0.72) 0 290deg,
+      transparent 0
+    );
+  background-size:
+    auto,
+    auto,
+    276px 276px,
+    276px 276px,
+    122px 122px,
+    122px 122px,
+    300px 300px,
+    300px 300px,
+    300px 300px,
+    12px 12px,
+    12px 12px,
+    12px 12px,
+    12px 12px;
+  background-position:
+    0 0,
+    0 0,
+    50% 50%,
+    50% 50%,
+    50% 50%,
+    50% 50%,
+    50% 50%,
+    50% 50%,
+    50% 50%,
+    9px 9px,
+    calc(100% - 9px) 9px,
+    9px calc(100% - 9px),
+    calc(100% - 9px) calc(100% - 9px);
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
+    no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
+    no-repeat;
+  box-shadow:
+    inset 0 1px 0 rgba(var(--night-light), 0.1),
+    inset 0 0 0 1px rgba(var(--night-star), 0.14),
+    0 24px 48px -40px rgba(0, 0, 0, 0.9);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* 低置信仍要黄底：只叠一枚淡罗盘与四角星刻 不压背景色和琥珀边框 */
+html[data-app-theme="night"] .app-exp {
+  background-image:
+    radial-gradient(
+      120% 90% at 8% -16%,
+      rgba(var(--night-star), 0.14),
+      transparent 62%
+    ),
+    linear-gradient(
+      90deg,
+      transparent 0 calc(50% - 0.8px),
+      rgba(var(--night-star), 0.1) calc(50% - 0.8px) calc(50% + 0.8px),
+      transparent calc(50% + 0.8px) 0
+    ),
+    linear-gradient(
+      180deg,
+      transparent 0 calc(50% - 0.8px),
+      rgba(var(--night-star), 0.1) calc(50% - 0.8px) calc(50% + 0.8px),
+      transparent calc(50% + 0.8px) 0
+    ),
+    linear-gradient(
+      45deg,
+      transparent 0 calc(50% - 0.6px),
+      rgba(var(--night-star), 0.055) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px) 0
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 0 calc(50% - 0.6px),
+      rgba(var(--night-star), 0.055) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px) 0
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 0 68px,
+      rgba(var(--night-star), 0.1) 68px 69px,
+      transparent 69px
+    ),
+    conic-gradient(
+      from -20deg at 50% 50%,
+      rgba(var(--night-star), 0.62) 0 40deg,
+      transparent 0 70deg,
+      rgba(var(--night-star), 0.62) 0 110deg,
+      transparent 0 160deg,
+      rgba(var(--night-star), 0.62) 0 200deg,
+      transparent 0 250deg,
+      rgba(var(--night-star), 0.62) 0 290deg,
+      transparent 0
+    ),
+    conic-gradient(
+      from -20deg at 50% 50%,
+      rgba(var(--night-star), 0.62) 0 40deg,
+      transparent 0 70deg,
+      rgba(var(--night-star), 0.62) 0 110deg,
+      transparent 0 160deg,
+      rgba(var(--night-star), 0.62) 0 200deg,
+      transparent 0 250deg,
+      rgba(var(--night-star), 0.62) 0 290deg,
+      transparent 0
+    ),
+    conic-gradient(
+      from -20deg at 50% 50%,
+      rgba(var(--night-star), 0.62) 0 40deg,
+      transparent 0 70deg,
+      rgba(var(--night-star), 0.62) 0 110deg,
+      transparent 0 160deg,
+      rgba(var(--night-star), 0.62) 0 200deg,
+      transparent 0 250deg,
+      rgba(var(--night-star), 0.62) 0 290deg,
+      transparent 0
+    ),
+    conic-gradient(
+      from -20deg at 50% 50%,
+      rgba(var(--night-star), 0.62) 0 40deg,
+      transparent 0 70deg,
+      rgba(var(--night-star), 0.62) 0 110deg,
+      transparent 0 160deg,
+      rgba(var(--night-star), 0.62) 0 200deg,
+      transparent 0 250deg,
+      rgba(var(--night-star), 0.62) 0 290deg,
+      transparent 0
+    );
+  background-size:
+    auto,
+    136px 136px,
+    136px 136px,
+    68px 68px,
+    68px 68px,
+    150px 150px,
+    11px 11px,
+    11px 11px,
+    11px 11px,
+    11px 11px;
+  background-position:
+    0 0,
+    50% 50%,
+    50% 50%,
+    50% 50%,
+    50% 50%,
+    50% 50%,
+    9px 9px,
+    calc(100% - 9px) 9px,
+    9px calc(100% - 9px),
+    calc(100% - 9px) calc(100% - 9px);
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
+    no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  box-shadow:
+    inset 0 1px 0 rgba(var(--night-light), 0.08),
+    0 22px 44px -38px rgba(0, 0, 0, 0.85);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html[data-app-theme="night"] .app-card-brief,
+html[data-app-theme="night"] .app-exp,
+html[data-app-theme="night"] .app-archive,
+html[data-app-theme="night"] .tool-chest,
+html[data-app-theme="night"] .sky-detail-sheet,
+html[data-app-theme="night"] .match-sheet {
+  position: relative;
+}
+
+/* 今日主卡做成黄铜仪器：上下各压一条刻度轨，两端收铆钉，对应庄园的卷轴边 */
+html[data-app-theme="night"] .app-card-brief::before,
+html[data-app-theme="night"] .app-card-brief::after {
+  content: "";
+  position: absolute;
+  left: -10px;
+  right: -10px;
+  height: 13px;
+  border: 1px solid rgba(201, 164, 94, 0.46);
+  border-radius: 3px;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(201, 164, 94, 0.5) 0 1px,
+      rgba(201, 164, 94, 0) 1px 9px
+    ),
+    radial-gradient(
+      circle at 10px 50%,
+      rgba(237, 214, 166, 0.85) 0 1.9px,
+      rgba(237, 214, 166, 0) 2.8px
+    ),
+    radial-gradient(
+      circle at calc(100% - 10px) 50%,
+      rgba(237, 214, 166, 0.85) 0 1.9px,
+      rgba(237, 214, 166, 0) 2.8px
+    ),
+    linear-gradient(180deg, #3a4864 0%, #1e2937 46%, #121a24 100%);
+  background-size:
+    auto 6px,
+    auto,
+    auto,
+    auto;
+  background-position: 0 50%, 0 0, 100% 0, 0 0;
+  background-repeat: repeat-x, no-repeat, no-repeat, no-repeat;
+  box-shadow:
+    inset 0 1px 0 rgba(242, 230, 207, 0.24),
+    0 7px 16px -9px #000;
+}
+
+html[data-app-theme="night"] .app-card-brief::before {
+  top: -7px;
+}
+
+html[data-app-theme="night"] .app-card-brief::after {
+  bottom: -7px;
+}
+
+html[data-app-theme="night"] .opp-stats {
+  border-color: #293646;
+  background-color: #293646;
+  box-shadow: 0 16px 32px -30px #000;
 }
 
 /* ---------- Theme switch: 水波扩散 / 内收 ---------- */
@@ -2668,11 +3611,6 @@ html[data-theme-flow="in"]::view-transition-old(root) {
   font-size: 13px;
 }
 
-.hero-face-arrow {
-  font-size: 11px;
-  color: var(--lp-ink-faint);
-}
-
 @media (max-width: 719px) {
   .hero-float {
     display: none;
@@ -2691,7 +3629,7 @@ html[data-theme-flow="in"]::view-transition-old(root) {
   }
 
   .hero-face {
-    padding-right: 11px;
+    padding: 0 12px;
     font-size: 12px;
   }
 }
@@ -3072,8 +4010,8 @@ html[data-theme-flow="in"]::view-transition-old(root) {
 
 .app-card-label {
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-size: 13px;
+  letter-spacing: 0.12em;
   color: var(--color-accent-ink);
 }
 
@@ -3553,10 +4491,10 @@ button.app-mini-chip:hover {
 }
 
 .app-capture-bar:focus-within {
-  border-color: color-mix(in srgb, var(--color-accent) 42%, var(--color-rule));
+  border-color: color-mix(in srgb, var(--color-accent) 54%, var(--color-rule));
   box-shadow:
     inset 0 1px 0 rgba(var(--wash-rgb), 0.7),
-    0 0 0 4px color-mix(in srgb, var(--color-accent) 9%, transparent);
+    0 0 0 4px color-mix(in srgb, var(--color-accent) 18%, transparent);
 }
 
 .app-capture-dot {
@@ -3719,20 +4657,29 @@ button.app-mini-chip:hover {
 
 .app-brand-text {
   min-width: 0;
+  max-width: 150px;
+  overflow: hidden;
   line-height: 1.25;
+  transition:
+    max-width 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 150ms ease;
 }
 
 .app-brand-name {
   display: block;
+  overflow: hidden;
   font-size: 14px;
   font-weight: 600;
   letter-spacing: -0.01em;
+  white-space: nowrap;
 }
 
 .app-brand-sub {
   display: block;
   margin-top: 2px;
+  overflow: hidden;
   font-size: 11px;
+  white-space: nowrap;
   color: var(--color-ink-3);
 }
 
@@ -3868,8 +4815,13 @@ button.app-mini-chip:hover {
   display: flex;
   align-items: baseline;
   gap: 0;
+  max-width: 160px;
+  overflow: hidden;
   font-size: 13px;
   white-space: nowrap;
+  transition:
+    max-width 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 150ms ease;
 }
 
 .app-nav-badge {
@@ -4328,6 +5280,7 @@ button.app-mini-chip:hover {
   .app-sidebar {
     height: 100%;
     min-height: 0;
+    overflow-x: hidden;
     overflow-y: auto;
     border: 1px solid color-mix(in srgb, var(--tint) 55%, var(--color-rule));
     border-radius: 18px;
@@ -4340,6 +5293,7 @@ button.app-mini-chip:hover {
   }
 
   .app-brand-row {
+    min-height: 34px;
     gap: 8px;
     padding: 0 2px;
   }
@@ -4362,7 +5316,8 @@ button.app-mini-chip:hover {
     text-align: left;
     transition:
       background-color 150ms ease,
-      border-color 150ms ease;
+      border-color 150ms ease,
+      padding 220ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .app-profile:hover {
@@ -4378,9 +5333,14 @@ button.app-mini-chip:hover {
   .app-profile-text {
     display: flex;
     min-width: 0;
+    max-width: 160px;
     flex: 1;
+    overflow: hidden;
     flex-direction: column;
     gap: 2px;
+    transition:
+      max-width 220ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 150ms ease;
   }
 
   .app-profile-name {
@@ -4411,11 +5371,14 @@ button.app-mini-chip:hover {
     border-right: 1.4px solid var(--color-ink-4);
     opacity: 0.7;
     transform: rotate(45deg);
+    transition:
+      opacity 150ms ease,
+      margin 220ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .app-nav {
     flex-direction: column;
-    gap: 2px;
+    gap: 14px;
     overflow: visible;
     border-bottom: 0;
     padding: 0;
@@ -4423,9 +5386,32 @@ button.app-mini-chip:hover {
 
   .app-nav-item {
     width: 100%;
-    min-height: 40px;
-    height: 40px;
-    padding: 0 8px;
+    min-height: 56px;
+    height: 56px;
+    gap: 10px;
+    padding: 0 10px;
+    transition:
+      background-color 150ms ease,
+      color 150ms ease,
+      border-color 150ms ease,
+      padding 220ms cubic-bezier(0.22, 1, 0.36, 1),
+      gap 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .app-nav-char {
+    height: 34px;
+    width: 34px;
+    border-radius: 11px;
+    font-size: 16px;
+    transition:
+      width 220ms cubic-bezier(0.22, 1, 0.36, 1),
+      height 220ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-radius 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .app-nav-badge {
+    top: 8px;
+    right: 10px;
   }
 
   .app-nav-item::before {
@@ -4471,17 +5457,27 @@ button.app-mini-chip:hover {
     flex: 1;
     align-items: center;
     gap: 6px;
+    overflow: hidden;
     font-size: 11px;
     color: var(--color-ink-3);
   }
 
-  .app-sidebar-saved > span {
+  .app-sidebar-saved-dot {
     height: 5px;
     width: 5px;
     flex: none;
     border-radius: 9999px;
     background: #6f8f6a;
     box-shadow: 0 0 0 2.5px color-mix(in srgb, #6f8f6a 16%, transparent);
+  }
+
+  .app-sidebar-saved-text {
+    max-width: 130px;
+    overflow: hidden;
+    white-space: nowrap;
+    transition:
+      max-width 220ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 150ms ease;
   }
 
   .app-side-menu-trigger {
@@ -4491,6 +5487,7 @@ button.app-mini-chip:hover {
     flex: none;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
     border: 1px solid color-mix(in srgb, var(--tint) 50%, var(--color-rule));
     border-radius: 8px;
     background: rgba(var(--wash-rgb), 0.42);
@@ -4498,6 +5495,10 @@ button.app-mini-chip:hover {
     font-size: 14px;
     line-height: 1;
     letter-spacing: 0.08em;
+    transition:
+      width 220ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 150ms ease,
+      border-width 220ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .app-side-menu-trigger:hover,
@@ -4573,23 +5574,6 @@ button.app-mini-chip:hover {
     padding-top: 10px;
   }
 
-  .app-sidebar-mini {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--color-ink-4);
-  }
-
-  .app-sidebar-mini-dot {
-    height: 5px;
-    width: 5px;
-    border-radius: 9999px;
-    background: var(--color-accent);
-  }
-
   .app-main {
     height: 100%;
     min-height: 0;
@@ -4650,21 +5634,22 @@ button.app-mini-chip:hover {
     background: color-mix(in srgb, var(--color-surface) 62%, transparent);
   }
 
-  /* collapsed rail */
+  /* collapsed rail：只收宽度与标签，纵向节奏与展开态完全一致 */
   .app-shell.is-rail-collapsed .app-sidebar {
-    align-items: center;
-    padding: 14px 8px 12px;
+    padding: 16px 12px 12px;
   }
 
   .app-shell.is-rail-collapsed .app-brand-row {
-    flex-direction: column;
-    gap: 10px;
-    padding: 0;
+    width: 100%;
+    gap: 6px;
+    justify-content: space-between;
+    padding: 0 2px;
   }
 
   .app-shell.is-rail-collapsed .app-brand {
     flex: none;
-    justify-content: center;
+    gap: 0;
+    justify-content: flex-start;
     padding: 0;
   }
 
@@ -4672,18 +5657,18 @@ button.app-mini-chip:hover {
   .app-shell.is-rail-collapsed .app-profile-text,
   .app-shell.is-rail-collapsed .app-profile-chev,
   .app-shell.is-rail-collapsed .app-nav-label,
-  .app-shell.is-rail-collapsed .app-sidebar-foot > *:not(.app-sidebar-mini) {
-    display: none;
+  .app-shell.is-rail-collapsed .app-sidebar-saved-text {
+    max-width: 0;
+    opacity: 0;
   }
 
   .app-shell.is-rail-collapsed .app-profile {
-    width: 44px;
-    height: 44px;
-    justify-content: center;
-    margin: 12px auto 14px;
+    width: 100%;
+    justify-content: flex-start;
+    margin: 14px 0 16px;
     border-color: transparent;
     background: transparent;
-    padding: 0;
+    padding: 9px 10px 9px 15px;
   }
 
   .app-shell.is-rail-collapsed .app-profile:hover {
@@ -4691,37 +5676,24 @@ button.app-mini-chip:hover {
   }
 
   .app-shell.is-rail-collapsed .app-nav {
-    align-items: center;
-    gap: 6px;
-    margin-top: 8px;
+    align-items: stretch;
+    gap: 14px;
+    margin-top: 0;
   }
 
   .app-shell.is-rail-collapsed .app-nav-item {
-    height: 44px;
-    width: 44px;
-    justify-content: center;
-    padding: 0;
-    margin-inline: auto;
-  }
-
-  .app-shell.is-rail-collapsed .app-nav-badge {
-    top: 1px;
-    right: 1px;
-    border-color: var(--color-surface);
+    height: 56px;
+    width: 100%;
+    padding: 0 0 0 16px;
+    gap: 0;
+    margin-inline: 0;
   }
 
   .app-shell.is-rail-collapsed .app-nav-char {
-    height: 30px;
-    width: 30px;
-  }
-
-  .app-shell.is-rail-collapsed .app-sidebar-foot {
-    align-items: center;
-    justify-content: center;
-  }
-
-  .app-shell.is-rail-collapsed .app-sidebar-toggle {
-    margin-top: 2px;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    font-size: 18px;
   }
 }
 
@@ -4903,6 +5875,62 @@ button.app-mini-chip:hover {
   transform: rotate(-135deg) translate(-1px, -1px);
 }
 
+/* 提交成功提示：落在胶囊正下方，绿色对号 */
+.app-island-toast {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  z-index: 62;
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid color-mix(in srgb, #2f7d55 34%, var(--color-rule));
+  border-radius: 9999px;
+  background: color-mix(in srgb, #2f7d55 12%, var(--color-surface));
+  padding: 0 13px 0 9px;
+  font-size: 12px;
+  color: var(--color-ink);
+  white-space: nowrap;
+  box-shadow: 0 16px 30px -22px rgba(14, 27, 42, 0.5);
+  transform: translateX(-50%);
+  pointer-events: none;
+  animation: island-toast-in 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.app-island-toast-check {
+  display: inline-flex;
+  height: 20px;
+  width: 20px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: #2f7d55;
+  color: #f7fbf8;
+}
+
+.app-island-toast-check svg {
+  height: 13px;
+  width: 13px;
+}
+
+@keyframes island-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-6px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-island-toast {
+    animation: none;
+  }
+}
+
 .app-island-panel {
   position: absolute;
   top: calc(100% + 10px);
@@ -4936,8 +5964,8 @@ button.app-mini-chip:hover {
 
 .app-island-nav {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
   margin-top: 10px;
 }
 
@@ -5031,6 +6059,12 @@ button.app-mini-chip:hover {
 
 .app-island-backup summary::-webkit-details-marker {
   display: none;
+}
+
+.app-island-backup summary span {
+  margin-left: 8px;
+  font-size: 18px;
+  line-height: 1;
 }
 
 .app-island-backup[open] summary span {
@@ -5829,6 +6863,11 @@ html[data-app-theme="night"] .text-red-800 {
   color: #f09494;
 }
 
+/* 庄园同样用提亮红 深底上仍能读出危险语义 */
+html[data-app-theme="manor"] .text-red-800 {
+  color: #f09494;
+}
+
 html[data-app-theme="night"] .app-sigil-face.is-photo {
   background: #10161d;
 }
@@ -6042,4 +7081,2807 @@ html[data-app-theme="night"] input[type="checkbox"] {
 .resume-template-thumb[data-template="compact"] .rtt-line--3 {
   top: 21px;
   width: 25px;
+}
+
+/* ---------- 庄园主题 · 落地页首屏与工作台预览 ---------- */
+
+.landing-theme[data-theme="manor"] {
+  --lp-ink: #f2e8d4;
+  --lp-ink-soft: #c9bfa8;
+  --lp-ink-faint: #948c78;
+  --lp-bg: #080706;
+  --lp-bg-top: #14110d;
+  --lp-bg-bottom: #050404;
+  --lp-surface: #100e0b;
+  --lp-surface-2: #181410;
+  --lp-line: rgba(194, 168, 112, 0.36);
+  --lp-line-soft: rgba(194, 168, 112, 0.18);
+  --lp-accent: #d9b878;
+  --lp-alert: #f09494;
+  --lp-cta: #8f2b24;
+  --lp-cta-ink: #f6e8d2;
+  --lp-shadow: rgba(0, 0, 0, 0.72);
+  --lp-tone-1: #1d1a15;
+  --lp-tone-2: #201a14;
+  --lp-tone-3: #191511;
+  --lp-tone-4: #221b16;
+  --lp-tone-5: #2a1714;
+  --lp-tone-6: #c2a870;
+}
+
+.landing-theme[data-theme="manor"] .landing-hero {
+  background-image:
+    radial-gradient(90% 58% at 50% -12%, rgba(62, 48, 36, 0.5), transparent 64%),
+    radial-gradient(70% 46% at 86% 4%, rgba(150, 45, 38, 0.14), transparent 70%),
+    radial-gradient(52% 42% at 8% 82%, rgba(102, 92, 80, 0.09), transparent 76%),
+    linear-gradient(180deg, #12100d 0%, #0a0907 56%, #050404 100%);
+}
+
+.landing-theme[data-theme="manor"] .landing-hero::before {
+  background-image: radial-gradient(
+    closest-side,
+    rgba(150, 118, 76, 0.14),
+    transparent 76%
+  );
+  opacity: 0.7;
+}
+
+.landing-theme[data-theme="manor"] .landing-noise {
+  mix-blend-mode: overlay;
+  opacity: 0.06;
+}
+
+.landing-theme[data-theme="manor"] .landing-glass-nav {
+  border-color: rgba(194, 168, 112, 0.38);
+  background: rgba(10, 9, 8, 0.9);
+  box-shadow:
+    0 26px 50px -36px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(242, 232, 212, 0.08);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.landing-theme[data-theme="manor"] .landing-chip {
+  border-color: rgba(194, 168, 112, 0.34);
+  background: rgba(242, 232, 212, 0.05);
+  box-shadow: inset 0 1px 0 rgba(242, 232, 212, 0.06);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.landing-theme[data-theme="manor"] .lp-theme-toggle {
+  border-color: rgba(194, 168, 112, 0.42);
+  background: rgba(10, 9, 8, 0.88);
+  box-shadow: inset 0 1px 0 rgba(242, 232, 212, 0.08);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.landing-theme[data-theme="manor"] .lp-theme-toggle:hover {
+  background: rgba(18, 15, 12, 0.96);
+}
+
+/* 主按钮 = 古堡吊旗：铁艺横杆 + 绯红织物 + 中央尖角 + 金线流苏 */
+.landing-theme[data-theme="manor"] .start-button {
+  position: relative;
+  border: 0;
+  border-radius: 3px 3px 1px 1px;
+  margin-top: 4px;
+  margin-bottom: 7px;
+  background-color: #7c241e;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 236, 214, 0.055) 0 1px,
+      rgba(255, 236, 214, 0) 1px 14px
+    ),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0) 46%),
+    linear-gradient(180deg, #a2382d 0%, #7f261f 54%, #5d1915 100%);
+  color: #fbeed8;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 214, 180, 0.22),
+    inset 0 -12px 20px -14px rgba(0, 0, 0, 0.9),
+    0 24px 44px -28px rgba(0, 0, 0, 0.92);
+  text-shadow: 0 1px 0 rgba(60, 12, 9, 0.45);
+}
+
+/* 铁艺横杆：两端配金铆，旗面从杆下垂下 */
+.landing-theme[data-theme="manor"] .start-button::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: -6px;
+  right: -6px;
+  height: 5px;
+  border-radius: 2px;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      #efd6a0 0 2px,
+      #6a5430 2.1px 2.9px,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 4px 2.5px,
+      #c9ad74 0 1.6px,
+      #1c2025 1.7px 2.6px,
+      transparent 2.7px
+    ),
+    radial-gradient(
+      circle at calc(100% - 4px) 2.5px,
+      #c9ad74 0 1.6px,
+      #1c2025 1.7px 2.6px,
+      transparent 2.7px
+    ),
+    linear-gradient(180deg, #6d737c 0 1px, #383e46 1px 2.5px, #121519 2.5px 100%);
+  opacity: 0.98;
+}
+
+/* 中央尖角 + 金线流苏 */
+.landing-theme[data-theme="manor"] .start-button::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -7px;
+  height: 8px;
+  background:
+    repeating-linear-gradient(
+        90deg,
+        rgba(230, 203, 149, 0.95) 0 1px,
+        rgba(230, 203, 149, 0) 1px 5px
+      )
+      top center / 100% 2px no-repeat,
+    linear-gradient(180deg, #5d1915 0%, #45120f 100%);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+.landing-theme[data-theme="manor"] .start-button:hover:not(:disabled) {
+  filter: brightness(1.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 222, 190, 0.28),
+    inset 0 -12px 20px -14px rgba(0, 0, 0, 0.9),
+    0 28px 50px -30px rgba(0, 0, 0, 0.94),
+    0 0 0 1px rgba(217, 184, 120, 0.35);
+}
+
+.landing-theme[data-theme="manor"] .hero-stage-glow {
+  background:
+    radial-gradient(
+      45% 55% at 32% 42%,
+      rgba(150, 120, 78, 0.14),
+      transparent 74%
+    ),
+    radial-gradient(
+      45% 55% at 70% 58%,
+      rgba(163, 48, 42, 0.24),
+      transparent 74%
+    );
+  opacity: 0.72;
+}
+
+.landing-theme[data-theme="manor"] .hero-workbench {
+  border-color: rgba(186, 163, 112, 0.55);
+  background: #12100e;
+  box-shadow:
+    0 50px 90px -58px rgba(0, 0, 0, 0.95),
+    inset 0 0 0 4px #0a0908,
+    inset 0 0 0 5px rgba(186, 163, 112, 0.24);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.landing-theme[data-theme="manor"] .hero-workbench-bar {
+  color: #b9a06a;
+}
+
+.landing-theme[data-theme="manor"] .hero-workbench-body {
+  --lp-ink: #241811;
+  --lp-ink-soft: #5d4630;
+  --lp-ink-faint: #7b6243;
+  --lp-line: rgba(107, 74, 38, 0.3);
+  --lp-line-soft: rgba(107, 74, 38, 0.18);
+  --lp-alert: #6b2018;
+  --lp-accent: #6b2018;
+  color: #241811;
+  border-color: rgba(156, 135, 88, 0.75);
+  background: #f1dcc7;
+  box-shadow:
+    inset 0 0 0 3px #f1dcc7,
+    inset 0 0 0 4px rgba(156, 135, 88, 0.55),
+    0 1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.landing-theme[data-theme="manor"] .hero-workbench-body .lp-fill {
+  background-color: rgba(255, 250, 238, 0.5);
+}
+
+.landing-theme[data-theme="manor"] .hero-float {
+  --lp-ink: #241811;
+  --lp-ink-soft: #5d4630;
+  --lp-ink-faint: #7b6243;
+  border-color: rgba(156, 135, 88, 0.75);
+  background: #f1e4c2;
+  color: #241811;
+  box-shadow:
+    0 22px 38px -26px rgba(0, 0, 0, 0.85),
+    inset 0 0 0 2px #f1e4c2,
+    inset 0 0 0 3px rgba(156, 135, 88, 0.4);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.landing-theme[data-theme="manor"] .hero-face {
+  border-color: rgba(186, 163, 112, 0.42);
+  background: rgba(20, 16, 12, 0.9);
+  color: #d8c8a4;
+  box-shadow:
+    0 14px 28px -24px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(241, 228, 194, 0.07);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.landing-theme[data-theme="manor"] .hero-face:hover {
+  background: #241c15;
+  color: #f1e4c2;
+}
+
+.landing-theme[data-theme="manor"] .hero-face-char {
+  border-color: rgba(156, 135, 88, 0.6);
+  background: #f1e4c2;
+  color: #241811;
+}
+
+.landing-theme[data-theme="manor"] .demo-window {
+  border-color: rgba(186, 163, 112, 0.55);
+  background: #14100c;
+  box-shadow:
+    0 50px 90px -60px rgba(0, 0, 0, 0.95),
+    inset 0 0 0 4px #14100c,
+    inset 0 0 0 5px rgba(186, 163, 112, 0.18);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.landing-theme[data-theme="manor"] .demo-titlebar {
+  border-bottom-color: rgba(156, 135, 88, 0.32);
+  background: #12100e;
+}
+
+.landing-theme[data-theme="manor"] .demo-titlebar-title {
+  color: #b9a06a;
+}
+
+.landing-theme[data-theme="manor"] .demo-titlebar-chip {
+  border-color: rgba(186, 163, 112, 0.4);
+  background: rgba(241, 228, 194, 0.05);
+  color: #cdbb93;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.landing-theme[data-theme="manor"] .demo-rail {
+  border-right-color: rgba(156, 135, 88, 0.26);
+  background: #171310;
+}
+
+.landing-theme[data-theme="manor"] .demo-rail-item:hover {
+  background: rgba(241, 228, 194, 0.05);
+}
+
+.landing-theme[data-theme="manor"] .demo-rail-item[aria-selected="true"] {
+  border-color: rgba(186, 163, 112, 0.45);
+  background: rgba(156, 135, 88, 0.14);
+  box-shadow: inset 2px 0 0 #b9a06a;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.landing-theme[data-theme="manor"] .demo-rail-char {
+  border-color: rgba(156, 135, 88, 0.65);
+  background: #f1e4c2;
+  color: #241811;
+}
+
+.landing-theme[data-theme="manor"] .demo-toolbar {
+  border-bottom-color: rgba(156, 135, 88, 0.24);
+}
+
+.landing-theme[data-theme="manor"] .demo-agent {
+  border-color: rgba(186, 163, 112, 0.38);
+  background: rgba(241, 228, 194, 0.05);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.landing-theme[data-theme="manor"] .demo-subpanel {
+  border-color: rgba(156, 135, 88, 0.3);
+  background: #12100e;
+  box-shadow: inset 0 1px 0 rgba(241, 228, 194, 0.04);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.landing-theme[data-theme="manor"] .demo-capture {
+  border-color: rgba(156, 135, 88, 0.38);
+  background: rgba(241, 228, 194, 0.04);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.landing-theme[data-theme="manor"] .demo-tag,
+.landing-theme[data-theme="manor"] .demo-chip {
+  border-color: rgba(186, 163, 112, 0.35);
+  background: rgba(241, 228, 194, 0.06);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.landing-theme[data-theme="manor"] .demo-chip.is-on {
+  border-color: rgba(186, 163, 112, 0.55);
+  background: rgba(156, 135, 88, 0.18);
+  color: #f1e4c2;
+}
+
+.landing-theme[data-theme="manor"] .demo-link {
+  border-color: rgba(186, 163, 112, 0.35);
+  background: rgba(241, 228, 194, 0.05);
+}
+
+.landing-theme[data-theme="manor"] .demo-tile {
+  border-color: rgba(156, 135, 88, 0.38);
+  background: #12100e;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.landing-theme[data-theme="manor"] .demo-job.is-on {
+  border-color: rgba(186, 163, 112, 0.45);
+  background: rgba(156, 135, 88, 0.12);
+  box-shadow: inset 2px 0 0 #b9a06a;
+}
+
+/* 两块示例卡走羊皮纸：今日简报 / 征途战绩 */
+
+.landing-theme[data-theme="manor"] .demo-subpanel--parchment {
+  --lp-ink: #241811;
+  --lp-ink-soft: #5d4630;
+  --lp-ink-faint: #7b6243;
+  --lp-line: rgba(107, 74, 38, 0.32);
+  --lp-line-soft: rgba(107, 74, 38, 0.18);
+  --lp-accent: #6b2018;
+  --lp-alert: #6b2018;
+  --lp-surface: #f1dcc7;
+  --lp-cta: #6b2018;
+  --lp-cta-ink: #f1e4c2;
+  color: #241811;
+  border-color: rgba(156, 135, 88, 0.7);
+  background: #f1dcc7;
+  box-shadow:
+    inset 0 0 0 3px #f1dcc7,
+    inset 0 0 0 4px rgba(156, 135, 88, 0.45),
+    0 18px 34px -30px rgba(0, 0, 0, 0.8);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.landing-theme[data-theme="manor"] .demo-subpanel--parchment .lp-fill {
+  background-color: rgba(255, 250, 238, 0.4);
+}
+
+.landing-theme[data-theme="manor"] .demo-subpanel--parchment .demo-tag,
+.landing-theme[data-theme="manor"] .demo-subpanel--parchment .demo-chip {
+  border-color: rgba(107, 74, 38, 0.3);
+  background: rgba(255, 250, 238, 0.4);
+  color: #5d4630;
+}
+
+.landing-theme[data-theme="manor"] .demo-subpanel--parchment .demo-link {
+  border-color: rgba(107, 74, 38, 0.3);
+  background: rgba(255, 250, 238, 0.4);
+  color: #5d4630;
+}
+
+.landing-theme[data-theme="manor"] .demo-subpanel--parchment .demo-capture {
+  border-color: rgba(107, 74, 38, 0.35);
+  background: rgba(255, 250, 238, 0.35);
+}
+
+.landing-theme[data-theme="manor"] .demo-subpanel--parchment .demo-square {
+  border-color: rgba(107, 74, 38, 0.45);
+}
+
+/* ---------- 庄园主题 · 留痕落封与征途页层次 ---------- */
+
+/* 落封后收起输入圆点 否则和蜡封并排出现两个红点 */
+html[data-app-theme="manor"] .app-capture-bar.is-stamped .app-capture-dot {
+  display: none;
+}
+
+/* 收件箱：一只木抽屉 碎片一格一格放 */
+.exp-drawer-pull,
+.tool-drawer-pull {
+  display: none;
+}
+
+html[data-app-theme="manor"] .exp-inbox {
+  border-color: rgba(186, 163, 112, 0.4);
+  border-radius: 12px;
+  background: #2a1e13;
+  box-shadow:
+    inset 0 1px 0 rgba(241, 228, 194, 0.07),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.35),
+    0 24px 44px -40px rgba(0, 0, 0, 0.9);
+}
+
+html[data-app-theme="manor"] .exp-inbox-head {
+  border-bottom-color: rgba(186, 163, 112, 0.28);
+}
+
+html[data-app-theme="manor"] .exp-inbox h2 {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #f1e4c2;
+}
+
+html[data-app-theme="manor"] .exp-inbox-head > p {
+  color: #a8926a;
+}
+
+html[data-app-theme="manor"] .exp-inbox-count {
+  border: 1px solid rgba(186, 163, 112, 0.4);
+  background: #3a2a19;
+  color: #e8cf9f;
+}
+
+html[data-app-theme="manor"] .exp-drawer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  padding: 12px;
+}
+
+html[data-app-theme="manor"] .exp-drawer-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 0;
+  border-radius: 8px;
+  padding: 12px 14px;
+  background: #1b130d;
+  box-shadow:
+    inset 0 3px 7px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(186, 163, 112, 0.18);
+}
+
+html[data-app-theme="manor"] .exp-drawer-cell > div:first-of-type {
+  padding-right: 28px;
+}
+
+html[data-app-theme="manor"] .exp-drawer-cell p:first-child {
+  color: #ecd9b4;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+html[data-app-theme="manor"] .exp-drawer-cell p + p {
+  color: #a8926a;
+}
+
+html[data-app-theme="manor"] .exp-drawer-cell > div:last-of-type {
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+html[data-app-theme="manor"] .exp-drawer-cell > div:last-of-type > button:not(.exp-inbox-archive) {
+  color: #b9a173;
+}
+
+html[data-app-theme="manor"] .exp-inbox-archive {
+  min-height: 32px;
+  border-color: rgba(186, 163, 112, 0.5);
+  border-radius: 8px;
+  background: #6b2018;
+  color: #f1e4c2;
+}
+
+html[data-app-theme="manor"] .exp-inbox-archive:hover {
+  background: #7a271d;
+  color: #f1e4c2;
+}
+
+html[data-app-theme="manor"] .exp-drawer-pull {
+  display: block;
+  width: 22px;
+  height: 4px;
+  border-radius: 2px;
+  background: #b08a58;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 248, 230, 0.35);
+}
+
+html[data-app-theme="manor"] .exp-drawer-cell > .exp-drawer-pull {
+  position: absolute;
+  top: 13px;
+  right: 12px;
+}
+
+html[data-app-theme="manor"] .exp-drawer-empty {
+  position: relative;
+  margin: 12px;
+  border-radius: 8px;
+  padding: 20px 16px;
+  text-align: center;
+  background: #1b130d;
+  box-shadow:
+    inset 0 3px 7px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(186, 163, 112, 0.18);
+}
+
+html[data-app-theme="manor"] .exp-drawer-empty .exp-drawer-pull {
+  margin: 0 auto 12px;
+  width: 44px;
+  height: 5px;
+}
+
+html[data-app-theme="manor"] .exp-drawer-empty p {
+  color: #a8926a;
+}
+
+/* 学期轴：拆掉卡框，做成一条压在线上的刻度 让位给收件箱与战绩 */
+html[data-app-theme="manor"] .exp-axis {
+  border: 0;
+  border-top: 1px solid rgba(156, 135, 88, 0.34);
+  border-bottom: 1px solid rgba(156, 135, 88, 0.18);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+html[data-app-theme="manor"] .exp-axis > header {
+  border-bottom-color: transparent;
+  padding-top: 10px;
+  padding-bottom: 4px;
+}
+
+html[data-app-theme="manor"] .exp-axis > div {
+  padding-top: 4px;
+  padding-bottom: 12px;
+}
+
+html[data-app-theme="manor"] .exp-axis h2 {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+html[data-app-theme="manor"] .exp-axis-cell {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 2px 14px;
+}
+
+@media (min-width: 640px) {
+  html[data-app-theme="manor"] .exp-axis-cell + .exp-axis-cell {
+    border-left: 1px solid rgba(156, 135, 88, 0.22);
+  }
+}
+
+@media (max-width: 639px) {
+  html[data-app-theme="manor"] .exp-axis-cell {
+    border-bottom: 1px solid rgba(156, 135, 88, 0.18);
+    padding-bottom: 8px;
+  }
+
+  html[data-app-theme="manor"] .exp-inbox-archive {
+    min-height: 44px;
+  }
+}
+
+/* 全部经历：换一段起手 明确这是第三个层次 */
+html[data-app-theme="manor"] .exp-list {
+  margin-top: 18px;
+  border-top: 1px solid rgba(156, 135, 88, 0.22);
+  padding-top: 14px;
+}
+
+html[data-app-theme="manor"] .exp-list-title {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* 战绩信函压薄：一屏能看见下一条的标题 */
+html[data-app-theme="manor"] .app-feed > li + li {
+  margin-top: 6px;
+}
+
+html[data-app-theme="manor"] .app-feed-meta {
+  margin-bottom: 2px;
+}
+
+html[data-app-theme="manor"] .app-feed-ready.is-ready {
+  display: none;
+}
+
+html[data-app-theme="manor"] .app-exp {
+  border-radius: 10px;
+}
+
+html[data-app-theme="manor"] .app-exp > div {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+html[data-app-theme="manor"] .app-exp-rose {
+  top: 9px;
+  left: 12px;
+  width: 26px;
+  height: 26px;
+}
+
+html[data-app-theme="manor"] .app-exp-seal-corner {
+  top: 7px;
+  right: 10px;
+  gap: 0;
+}
+
+html[data-app-theme="manor"] .app-exp-seal {
+  width: 40px;
+  height: 40px;
+}
+
+html[data-app-theme="manor"] .app-exp-seal-label {
+  flex-direction: row;
+  gap: 3px;
+  align-items: baseline;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+}
+
+html[data-app-theme="manor"] .app-exp-seal-count {
+  font-size: 11px;
+}
+
+html[data-app-theme="manor"] .app-exp-head {
+  min-height: 56px;
+  padding-left: 40px;
+  padding-right: 58px;
+}
+
+html[data-app-theme="manor"] .app-exp-head h3 {
+  margin-top: 3px;
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+
+html[data-app-theme="manor"] .app-exp-head p {
+  margin-top: 0;
+  font-size: 10.5px;
+  line-height: 1.6;
+}
+
+html[data-app-theme="manor"] .app-exp-divider {
+  margin: 0 0 4px;
+}
+
+html[data-app-theme="manor"] .app-exp-summary {
+  margin-top: 3px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+html[data-app-theme="manor"] .app-exp-skills {
+  margin-top: 4px;
+  gap: 4px;
+}
+
+html[data-app-theme="manor"] .app-exp-skills li {
+  padding: 0 6px;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+html[data-app-theme="manor"] .app-exp-actions {
+  margin-top: 6px;
+  padding-top: 5px;
+}
+
+html[data-app-theme="manor"] .app-exp-actions button {
+  min-height: 26px;
+  padding: 0 10px;
+  font-size: 10.5px;
+}
+
+@media (max-width: 639px) {
+  html[data-app-theme="manor"] .app-exp-rose {
+    top: 9px;
+    left: 12px;
+    width: 24px;
+    height: 24px;
+  }
+
+  html[data-app-theme="manor"] .app-exp-seal {
+    width: 38px;
+    height: 38px;
+  }
+
+  html[data-app-theme="manor"] .app-exp-head {
+    min-height: 54px;
+    padding-left: 38px;
+    padding-right: 54px;
+  }
+
+  html[data-app-theme="manor"] .app-exp-actions {
+    margin-top: 4px;
+    padding-top: 3px;
+  }
+
+  html[data-app-theme="manor"] .app-exp-actions button {
+    min-height: 44px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    padding: 0 12px 0 0;
+  }
+
+  html[data-app-theme="manor"] .app-exp-actions button:hover {
+    background: transparent;
+    text-decoration: underline;
+  }
+}
+
+/* 应聘资格：无框文字页签 选中只留一道金线 */
+.qual-tab {
+  position: relative;
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  padding: 0 2px;
+  color: var(--color-ink-3);
+  font-size: 11px;
+  transition: color 140ms ease;
+}
+
+.qual-tab:hover {
+  color: var(--color-ink);
+}
+
+.qual-tab + .qual-tab {
+  margin-left: 12px;
+}
+
+.qual-tab[aria-pressed="true"] {
+  color: var(--color-ink);
+}
+
+.qual-tab[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  bottom: 3px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+.qual-tab-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.65;
+}
+
+html[data-app-theme="manor"] .qual-tab {
+  min-height: 38px;
+  color: #9b8766;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+}
+
+html[data-app-theme="manor"] .qual-tab:hover {
+  color: #e6d2ab;
+}
+
+html[data-app-theme="manor"] .qual-tab[aria-pressed="true"] {
+  color: #e8cc92;
+}
+
+html[data-app-theme="manor"] .qual-tab[aria-pressed="true"]::after {
+  background: linear-gradient(
+    90deg,
+    rgba(232, 204, 146, 0),
+    rgba(232, 204, 146, 0.9),
+    rgba(232, 204, 146, 0)
+  );
+  opacity: 1;
+}
+
+html[data-app-theme="manor"] .qual-tab-count {
+  opacity: 0.62;
+}
+
+/* ---------- 庄园主题 · 征召与工具箱分栏 ---------- */
+
+/* 匹配概览：一张羊皮纸台账 四格金线分栏 与下方深色抽屉对比 */
+html[data-app-theme="manor"] .opp-stats {
+  border-color: rgba(140, 110, 62, 0.55);
+  border-radius: 10px;
+  background-color: #b9a173;
+  background-image: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 249, 236, 0.3),
+    0 18px 34px -32px rgba(0, 0, 0, 0.85);
+}
+
+html[data-app-theme="manor"] .opp-stats > div {
+  background: var(--manor-parchment-2);
+  padding: 14px 16px;
+}
+
+html[data-app-theme="manor"] .opp-stats p:first-child {
+  color: #6f5636;
+}
+
+html[data-app-theme="manor"] .opp-stats p:nth-child(2) {
+  font-family: var(--font-serif);
+  font-size: 30px;
+  line-height: 1;
+  color: var(--manor-parchment-ink);
+}
+
+html[data-app-theme="manor"] .opp-stats p:nth-child(3) {
+  color: #6b5334;
+}
+
+/* 匹配依据：一只深色档案抽屉 黄铜拉手 + 凹陷内格 */
+html[data-app-theme="manor"] .opp-basis {
+  border-color: rgba(186, 163, 112, 0.34);
+  border-radius: 10px;
+  background: #1b130d;
+  box-shadow:
+    inset 0 3px 8px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(186, 163, 112, 0.16);
+}
+
+html[data-app-theme="manor"] .opp-basis > div,
+html[data-app-theme="manor"] .opp-basis > p {
+  border-color: rgba(186, 163, 112, 0.2);
+}
+
+html[data-app-theme="manor"] .opp-basis > div:first-child {
+  background: #241a10;
+  border-color: rgba(186, 163, 112, 0.28);
+}
+
+html[data-app-theme="manor"] .opp-basis > div:first-child::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 22px;
+  height: 4px;
+  border-radius: 2px;
+  background: #b08a58;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 248, 230, 0.35);
+}
+
+html[data-app-theme="manor"] .opp-basis > div:first-child > div:first-child {
+  flex: 1;
+}
+
+html[data-app-theme="manor"] .opp-basis > div:first-child p:first-child {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: #f1e4c2;
+}
+
+html[data-app-theme="manor"] .opp-basis > div:first-child span {
+  border: 1px solid rgba(186, 163, 112, 0.35);
+  background: #3a2a19;
+  color: #e8cf9f;
+}
+
+html[data-app-theme="manor"] .opp-basis dl {
+  background: rgba(186, 163, 112, 0.16);
+}
+
+html[data-app-theme="manor"] .opp-basis dl > div {
+  background: #17110c;
+}
+
+/* 筛选岗位：拆掉卡框 收成一条工具条 */
+html[data-app-theme="manor"] .opp-filters {
+  border: 0;
+  border-top: 1px solid rgba(156, 135, 88, 0.34);
+  border-bottom: 1px solid rgba(156, 135, 88, 0.18);
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+html[data-app-theme="manor"] .opp-filters input#job-search,
+html[data-app-theme="manor"] .opp-filters .ctl-field {
+  border-color: rgba(186, 163, 112, 0.28);
+  background: #12100e;
+}
+
+/* 推荐结果：换成衬线小标题 与上面的工具条分层 */
+html[data-app-theme="manor"] .opp-jobs {
+  border-top: 1px solid rgba(156, 135, 88, 0.22);
+  padding-top: 12px;
+}
+
+html[data-app-theme="manor"] .opp-jobs-title {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #f1e4c2;
+}
+
+/* 岗位列表退成深色索引：无框横排 选中只留一道暗金书签 */
+html[data-app-theme="manor"] .opp-jobs ul {
+  border-top: 1px solid rgba(156, 135, 88, 0.28);
+}
+
+html[data-app-theme="manor"] .opp-jobs ul > li + li {
+  margin-top: 0;
+}
+
+html[data-app-theme="manor"] .job-row,
+html[data-app-theme="manor"] .job-row:hover {
+  border: 0 !important;
+  border-radius: 0 !important;
+  border-bottom: 1px solid rgba(156, 135, 88, 0.22) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-app-theme="manor"] .job-row:hover {
+  background: rgba(241, 228, 194, 0.035) !important;
+}
+
+html[data-app-theme="manor"] .job-row.is-selected {
+  background: rgba(186, 163, 112, 0.075) !important;
+  box-shadow: inset 3px 0 0 #b08a58 !important;
+}
+
+html[data-app-theme="manor"] .job-row .job-score {
+  color: #c8a86a;
+  font-size: 18px;
+}
+
+html[data-app-theme="manor"] .job-row.is-selected .job-score {
+  color: #e8cc92;
+}
+
+/* 征召令：右侧详情压成一张羊皮纸告示 */
+.match-sheet-kicker {
+  display: none;
+}
+
+html[data-app-theme="manor"] .match-sheet-kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 12px 20px 0;
+  font-family: var(--font-serif);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: #6f5636;
+}
+
+html[data-app-theme="manor"] .match-sheet-kicker::before,
+html[data-app-theme="manor"] .match-sheet-kicker::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(156, 135, 88, 0.42);
+}
+
+html[data-app-theme="manor"] .match-sheet > header {
+  padding-top: 10px;
+}
+
+html[data-app-theme="manor"] .match-sheet h3 {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  color: #3a2a1a;
+}
+
+html[data-app-theme="manor"] .match-sheet blockquote {
+  color: #5a4426;
+}
+
+html[data-app-theme="manor"] .match-sheet > footer {
+  background: rgba(140, 100, 56, 0.06);
+}
+
+/* 工具箱：一张工具册 四层抽屉都压在羊皮纸上 */
+html[data-app-theme="manor"] .tool-chest {
+  position: relative;
+  border-radius: 14px;
+}
+
+html[data-app-theme="manor"] .tool-chest::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(156, 135, 88, 0.32);
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+html[data-app-theme="manor"] .tool-sheet-rose {
+  display: block;
+  position: absolute;
+  top: 19px;
+  left: 18px;
+  width: 34px;
+  height: 34px;
+  color: #8a7148;
+  pointer-events: none;
+}
+
+html[data-app-theme="manor"] .tool-sheet-seal {
+  display: flex;
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  pointer-events: none;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.26));
+}
+
+html[data-app-theme="manor"] .tool-sheet-wax {
+  display: inline-block;
+}
+
+html[data-app-theme="manor"] .tool-sheet-seal-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: #6f5636;
+}
+
+html[data-app-theme="manor"] .tool-chest-head {
+  position: relative;
+  min-height: 88px;
+  padding: 17px 82px 13px 62px;
+  border-bottom-color: rgba(156, 135, 88, 0.32);
+}
+
+html[data-app-theme="manor"] .tool-chest-head h2 {
+  font-family: var(--font-serif);
+  font-size: 21px;
+  color: #241811;
+}
+
+html[data-app-theme="manor"] .tool-chest-head > p {
+  color: #6f5636;
+}
+
+html[data-app-theme="manor"] .tool-drawer-stack > .tool-drawer + .tool-drawer {
+  border-top: 1px solid rgba(156, 135, 88, 0.26);
+}
+
+html[data-app-theme="manor"] .tool-drawer {
+  position: relative;
+  padding: 17px 20px;
+  transition: background-color 160ms ease;
+}
+
+html[data-app-theme="manor"] .tool-drawer:hover {
+  background: rgba(140, 100, 56, 0.07);
+}
+
+html[data-app-theme="manor"] .tool-drawer-no {
+  align-self: flex-start;
+  margin-top: 5px;
+  color: #8f2b24;
+  font-size: 13px;
+}
+
+html[data-app-theme="manor"] .tool-drawer-title {
+  color: #241811;
+  font-size: 21px;
+  letter-spacing: 0.01em;
+}
+
+html[data-app-theme="manor"] .tool-drawer-side > span:first-child {
+  color: #6f5636;
+}
+
+html[data-app-theme="manor"] .tool-drawer-pull {
+  display: inline-block;
+  width: 34px;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #d9ba84, #a9824c 56%, #7b5a31);
+  box-shadow:
+    0 1px 2px rgba(74, 46, 22, 0.45),
+    inset 0 1px 0 rgba(255, 250, 235, 0.8);
+}
+
+@media (max-width: 639px) {
+  html[data-app-theme="manor"] .tool-chest-head {
+    min-height: 80px;
+    padding: 15px 62px 12px 54px;
+  }
+
+  html[data-app-theme="manor"] .tool-chest-head > p {
+    display: none;
+  }
+
+  html[data-app-theme="manor"] .tool-sheet-rose {
+    top: 16px;
+    left: 13px;
+    width: 28px;
+    height: 28px;
+  }
+
+  html[data-app-theme="manor"] .tool-sheet-seal {
+    top: 10px;
+    right: 11px;
+  }
+
+  html[data-app-theme="manor"] .tool-sheet-seal > svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  html[data-app-theme="manor"] .tool-drawer {
+    padding: 15px 16px;
+  }
+
+  html[data-app-theme="manor"] .tool-drawer-title {
+    font-size: 19px;
+  }
+}
+
+html[data-app-theme="manor"] .tool-backup {
+  border-color: rgba(186, 163, 112, 0.24);
+  background: #12100e;
+}
+
+html[data-app-theme="manor"] .tool-backup p {
+  color: #a8926a;
+}
+
+html[data-app-theme="manor"] .tool-backup p:first-child {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  color: #f1e4c2;
+}
+
+/* ---------- 庄园主题 · 饰牌与吊旗 ---------- */
+/* 主按钮挂吊旗；选项用切边铁牌：双线金框 + 顶部菱饰 + 两侧铜钉 */
+
+html[data-app-theme="manor"] .manor-chip {
+  position: relative;
+  margin: 0;
+  border: 1px solid rgba(194, 168, 112, 0.34) !important;
+  border-radius: 3px !important;
+  background-color: #231519 !important;
+  background-image:
+    radial-gradient(
+      circle at 5px 5px,
+      #bfa36a 0 1.1px,
+      #2a1b1c 1.2px 1.9px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at calc(100% - 5px) 5px,
+      #bfa36a 0 1.1px,
+      #2a1b1c 1.2px 1.9px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 5px calc(100% - 5px),
+      #b0945a 0 1.1px,
+      #2a1b1c 1.2px 1.9px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at calc(100% - 5px) calc(100% - 5px),
+      #b0945a 0 1.1px,
+      #2a1b1c 1.2px 1.9px,
+      transparent 2px
+    ),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.36), rgba(0, 0, 0, 0) 52%),
+    linear-gradient(180deg, #3d2227 0%, #241518 100%) !important;
+  color: #e0cbaa !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(14, 9, 11, 0.8),
+    inset 0 0 0 2px rgba(194, 168, 112, 0.3),
+    inset 0 -9px 14px -11px rgba(0, 0, 0, 0.9) !important;
+  text-shadow: 0 1px 0 rgba(20, 6, 6, 0.5);
+}
+
+html[data-app-theme="manor"] .manor-chip:hover {
+  border-color: rgba(220, 193, 140, 0.58) !important;
+  background-image:
+    radial-gradient(
+      circle at 5px 5px,
+      #d4b77e 0 1.1px,
+      #2a1b1c 1.2px 1.9px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at calc(100% - 5px) 5px,
+      #d4b77e 0 1.1px,
+      #2a1b1c 1.2px 1.9px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 5px calc(100% - 5px),
+      #c8a96c 0 1.1px,
+      #2a1b1c 1.2px 1.9px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at calc(100% - 5px) calc(100% - 5px),
+      #c8a96c 0 1.1px,
+      #2a1b1c 1.2px 1.9px,
+      transparent 2px
+    ),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0) 52%),
+    linear-gradient(180deg, #47282c 0%, #2b191d 100%) !important;
+  color: #ecd9b6 !important;
+}
+
+html[data-app-theme="manor"] .manor-chip[aria-pressed="true"] {
+  border-color: rgba(226, 199, 146, 0.62) !important;
+  background-image:
+    radial-gradient(
+      circle at 5px 5px,
+      #eed6a2 0 1.1px,
+      #4a241f 1.2px 1.9px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at calc(100% - 5px) 5px,
+      #eed6a2 0 1.1px,
+      #4a241f 1.2px 1.9px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 5px calc(100% - 5px),
+      #e3c78e 0 1.1px,
+      #4a241f 1.2px 1.9px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at calc(100% - 5px) calc(100% - 5px),
+      #e3c78e 0 1.1px,
+      #4a241f 1.2px 1.9px,
+      transparent 2px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 240, 220, 0.05) 0 1px,
+      rgba(255, 240, 220, 0) 1px 14px
+    ),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.26), rgba(0, 0, 0, 0) 48%),
+    linear-gradient(180deg, #ad3f31 0%, #872a22 58%, #67201b 100%) !important;
+  color: #fbeed8 !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(78, 22, 17, 0.75),
+    inset 0 0 0 2px rgba(232, 205, 152, 0.45),
+    inset 0 1px 0 rgba(255, 226, 196, 0.2),
+    inset 0 -10px 16px -12px rgba(0, 0, 0, 0.85),
+    0 5px 12px -12px rgba(0, 0, 0, 0.9) !important;
+}
+
+html[data-app-theme="manor"] .manor-chip > span {
+  color: inherit;
+  opacity: 0.85;
+}
+
+/* 主按钮：建档的下一步，同一面吊旗 */
+html[data-app-theme="manor"] .app-pill-primary {
+  position: relative;
+  margin-top: 4px;
+  margin-bottom: 7px;
+  border: 0;
+  border-radius: 3px;
+  background-color: #7c241e;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 236, 214, 0.055) 0 1px,
+      rgba(255, 236, 214, 0) 1px 14px
+    ),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.36), rgba(0, 0, 0, 0) 46%),
+    linear-gradient(180deg, #a2382d 0%, #7f261f 54%, #5d1915 100%);
+  color: #fbeed8;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 214, 180, 0.22),
+    inset 0 -12px 18px -14px rgba(0, 0, 0, 0.9),
+    0 18px 32px -26px rgba(0, 0, 0, 0.9);
+}
+
+html[data-app-theme="manor"] .app-pill-primary::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: -6px;
+  right: -6px;
+  height: 5px;
+  border-radius: 2px;
+  background:
+    radial-gradient(
+      circle at 3.5px 2.5px,
+      #e0c58f 0 2.1px,
+      #4c525b 2.2px 3px,
+      transparent 3.1px
+    ),
+    radial-gradient(
+      circle at calc(100% - 3.5px) 2.5px,
+      #e0c58f 0 2.1px,
+      #4c525b 2.2px 3px,
+      transparent 3.1px
+    ),
+    linear-gradient(180deg, #a2a9b5 0 1px, #595f68 1px 3px, #282d34 3px 100%);
+  opacity: 0.9;
+}
+
+html[data-app-theme="manor"] .app-pill-primary::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 7px;
+  background:
+    repeating-linear-gradient(
+        90deg,
+        rgba(230, 203, 149, 0.95) 0 1px,
+        rgba(230, 203, 149, 0) 1px 5px
+      )
+      top center / 100% 2px no-repeat,
+    linear-gradient(180deg, #5d1915 0%, #45120f 100%);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+html[data-app-theme="manor"] .app-pill-primary:hover:not(:disabled) {
+  filter: brightness(1.07);
+}
+
+/* 次级按钮：铁牌，不再和吊旗抢戏 */
+html[data-app-theme="manor"] .app-pill {
+  border: 1px solid rgba(194, 168, 112, 0.32);
+  border-radius: 4px;
+  background: #12100e;
+  color: #d8c4a3;
+  box-shadow: inset 0 1px 0 rgba(242, 232, 212, 0.06);
+}
+
+html[data-app-theme="manor"] .app-pill:hover {
+  border-color: rgba(194, 168, 112, 0.55);
+  background: #1b1713;
+  color: #f2e8d4;
+}
+
+/* 主操作：绯红漆牌 */
+html[data-app-theme="manor"] .manor-primary {
+  border: 1px solid rgba(220, 193, 140, 0.28);
+  border-radius: 4px;
+  background: #8f2b24;
+  color: #fbeed8;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 226, 196, 0.22),
+    inset 0 -8px 12px -10px rgba(0, 0, 0, 0.8);
+}
+
+html[data-app-theme="manor"] .manor-primary:hover {
+  border-color: rgba(220, 193, 140, 0.5);
+  background: #a3352b;
+  color: #fff5e4;
+}
+
+/* 分段控件：铁槽 + 绯红选中，替掉大块米白 */
+html[data-app-theme="manor"] .ctl-group {
+  border-color: rgba(194, 168, 112, 0.28);
+  background: #12171d;
+}
+
+html[data-app-theme="manor"] .ctl-seg {
+  color: #9a8f7a;
+}
+
+html[data-app-theme="manor"] .ctl-seg:hover:not(:disabled) {
+  background: rgba(242, 232, 212, 0.06);
+  color: #ede0c6;
+}
+
+html[data-app-theme="manor"] .ctl-seg[aria-pressed="true"] {
+  background: #8f2b24;
+  color: #fbeed8;
+  font-weight: 500;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 226, 196, 0.22),
+    inset 0 -6px 10px -8px rgba(0, 0, 0, 0.7);
+}
+
+/* 羊皮纸上的小操作：绯红漆牌，文字改米白 */
+html[data-app-theme="manor"] .app-archive-portrait-note button {
+  border: 1px solid rgba(143, 43, 36, 0.55);
+  border-radius: 4px;
+  background: #8f2b24;
+  padding: 2px 9px;
+  color: #f8ead2;
+  box-shadow: inset 0 1px 0 rgba(255, 226, 196, 0.24);
+}
+
+html[data-app-theme="manor"] .app-archive-portrait-note button:hover {
+  border-color: rgba(194, 168, 112, 0.7);
+  background: #a3352b;
+  color: #fff4e2;
+}
+
+/* 学径空间：右侧仪表卡与星历清单 */
+.sky-panel {
+  border: 1px solid color-mix(in srgb, var(--tint) 55%, var(--color-rule));
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--color-ink) 3%, var(--color-surface));
+  box-shadow: 0 22px 44px -38px rgba(10, 14, 24, 0.55);
+}
+
+html[data-app-theme="manor"] .sky-panel {
+  border-color: rgba(194, 168, 112, 0.3);
+  background: #12100e;
+  box-shadow:
+    inset 0 1px 0 rgba(236, 226, 205, 0.05),
+    0 22px 44px -38px rgba(0, 0, 0, 0.85);
+}
+
+.sky-recent-item {
+  width: 100%;
+  border-radius: 10px;
+  padding: 8px 12px;
+  text-align: left;
+  transition: background-color 150ms ease;
+}
+
+.sky-today-chip {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 34%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-accent) 9%, transparent);
+  padding: 1px 6px;
+  line-height: 1.5;
+  color: var(--color-accent-ink);
+}
+
+html[data-app-theme="manor"] .sky-today-chip {
+  border-color: rgba(194, 168, 112, 0.42);
+  background: rgba(194, 168, 112, 0.1);
+  color: #e0c99b;
+}
+
+html[data-app-theme="manor"] .sky-detail-sheet .sky-today-chip {
+  border-color: rgba(107, 32, 24, 0.32);
+  background: rgba(107, 32, 24, 0.07);
+  color: #6b2018;
+}
+
+.sky-recent-item:hover {
+  background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+}
+
+.sky-recent-item.is-active {
+  background: color-mix(in srgb, var(--color-accent) 11%, transparent);
+}
+
+/* 星图左上角罗盘：夜空恒暗，用主题强调色与暖金混合，保持可读又不抢星点 */
+.sky-rose-mark {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  color: color-mix(in srgb, var(--color-accent) 26%, #d8b46e);
+}
+
+/* 星图下方的日期详情：沿用工具抽屉的纸面，和夜空拉开层次 */
+.sky-detail-sheet {
+  position: relative;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--color-ink) 4%, var(--color-surface));
+  box-shadow: 0 18px 34px -30px rgba(10, 14, 24, 0.55);
+}
+
+html[data-app-theme="manor"] .sky-detail-sheet {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 249, 236, 0.3),
+    inset 0 0 0 3px rgba(156, 135, 88, 0.12),
+    inset 0 0 10px rgba(102, 64, 28, 0.07),
+    inset 0 0 38px rgba(102, 64, 28, 0.1),
+    0 26px 54px -38px rgba(0, 0, 0, 0.78);
+}
+
+html[data-app-theme="manor"] .sky-detail-sheet::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(156, 135, 88, 0.26);
+  border-radius: 9px;
+  pointer-events: none;
+}
+
+.sky-detail-scroll {
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.sky-detail-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sky-detail-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-ink) 22%, transparent);
+}
+
+.sky-detail-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sky-detail-scroll::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+html[data-app-theme="manor"] .sky-detail-scroll::-webkit-scrollbar-thumb {
+  background: rgba(36, 24, 17, 0.28);
+}
+
+/* ---------- 第二批 · 索引页签 子午轨 存档纹章 品质刻度 主按钮 ---------- */
+
+.app-nav-index,
+.tier-aperture,
+.tier-star,
+.app-archive-aperture,
+.app-archive-star {
+  display: none;
+}
+
+/* 霞光：左缘两位索引，选中才亮成页码 */
+@media (min-width: 1024px) {
+  html[data-app-theme="dawn"] .app-nav-index {
+    display: grid;
+    width: 14px;
+    flex: none;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: color-mix(in srgb, var(--color-ink) 34%, transparent);
+  }
+
+  html[data-app-theme="dawn"] .app-nav-item.is-active .app-nav-index {
+    color: var(--color-accent-ink);
+    font-weight: 600;
+  }
+
+  html[data-app-theme="dawn"] .app-nav-item.is-active {
+    border-color: rgba(var(--dawn-hairline), 0.26);
+    background: rgba(252, 253, 254, 0.94);
+  }
+
+  html[data-app-theme="dawn"] .app-nav-item.is-active::before {
+    background: var(--color-accent);
+  }
+
+  html[data-app-theme="dawn"] .app-shell.is-rail-collapsed .app-nav-index {
+    display: none;
+  }
+}
+
+/* 夜间：导航右缘子午轨，选中项落一颗黄铜星 */
+@media (min-width: 1024px) {
+  html[data-app-theme="night"] .app-nav {
+    position: relative;
+  }
+
+  html[data-app-theme="night"] .app-nav::before {
+    content: "";
+    position: absolute;
+    top: 4px;
+    right: -7px;
+    bottom: 4px;
+    width: 5px;
+    background:
+      repeating-linear-gradient(
+          180deg,
+          rgba(201, 164, 94, 0.32) 0 1px,
+          transparent 1px 12px
+        )
+        right top / 4px 100% no-repeat,
+      linear-gradient(
+          180deg,
+          transparent,
+          rgba(var(--night-star), 0.26) 8%,
+          rgba(var(--night-star), 0.26) 92%,
+          transparent
+        )
+        right top / 1px 100% no-repeat;
+    opacity: 0.85;
+    pointer-events: none;
+  }
+
+  html[data-app-theme="night"] .app-nav-item.is-active::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -8px;
+    width: 7px;
+    height: 7px;
+    background: linear-gradient(135deg, #edd6a6, #b08b47);
+    clip-path: polygon(
+      50% 0%,
+      61% 39%,
+      100% 50%,
+      61% 61%,
+      50% 100%,
+      39% 61%,
+      0% 50%,
+      39% 39%
+    );
+    transform: translateY(-50%);
+    box-shadow: 0 0 8px rgba(201, 164, 94, 0.55);
+    pointer-events: none;
+  }
+
+  html[data-app-theme="night"] .app-nav-item.is-active .app-nav-char {
+    box-shadow:
+      0 0 0 1px rgba(201, 164, 94, 0.5),
+      0 0 14px -6px rgba(var(--night-star), 0.65);
+  }
+}
+
+/* 存档纹章：两套主题共用卡顶正中位置，图形各自换 */
+html[data-app-theme="dawn"] .app-archive,
+html[data-app-theme="night"] .app-archive {
+  position: relative;
+  padding-top: 34px;
+}
+
+html[data-app-theme="dawn"] .app-archive-aperture,
+html[data-app-theme="night"] .app-archive-star {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  display: block;
+  transform: translateX(-50%);
+}
+
+html[data-app-theme="dawn"] .app-archive-aperture {
+  color: rgba(38, 49, 58, 0.68);
+  --aperture-face: #fcfdfe;
+  --aperture-accent: var(--color-accent);
+  filter: drop-shadow(0 4px 7px rgba(38, 54, 68, 0.2));
+}
+
+html[data-app-theme="night"] .app-archive-star {
+  filter: drop-shadow(0 5px 9px rgba(0, 0, 0, 0.7));
+}
+
+/* 品质刻度：霞光为制图短刻线 夜间为四角星 */
+html[data-app-theme="dawn"] .tier-pip {
+  width: 2px;
+  height: 7px;
+  border: 0;
+  border-radius: 1px;
+  background: rgba(var(--dawn-hairline), 0.18);
+  transform: none;
+}
+
+html[data-app-theme="dawn"] .tier-pip.bg-accent {
+  background: var(--color-accent);
+}
+
+html[data-app-theme="dawn"] .tier-aperture {
+  display: inline-block;
+  color: rgba(38, 49, 58, 0.78);
+  --aperture-face: transparent;
+  --aperture-accent: var(--color-accent-ink);
+}
+
+html[data-app-theme="night"] .tier-pip {
+  width: 9px;
+  height: 9px;
+  border: 0;
+  background: rgba(var(--night-star), 0.22);
+  clip-path: polygon(
+    50% 0%,
+    61% 39%,
+    100% 50%,
+    61% 61%,
+    50% 100%,
+    39% 61%,
+    0% 50%,
+    39% 39%
+  );
+  transform: none;
+}
+
+html[data-app-theme="night"] .tier-pip.bg-accent {
+  background: var(--color-amber);
+  filter: drop-shadow(0 0 3px rgba(201, 164, 94, 0.45));
+}
+
+html[data-app-theme="night"] .tier-star {
+  display: inline-block;
+  margin-left: 1px;
+  --star-face: transparent;
+}
+
+/* 主按钮：霞光票根，左侧票根带 + 撕口 + 四角套准 */
+html[data-app-theme="dawn"] .app-pill-primary,
+html[data-app-theme="dawn"] .app-capture-submit,
+html[data-app-theme="dawn"] .start-button,
+html[data-app-theme="dawn"] .landing-theme[data-theme="dawn"] .start-button {
+  position: relative;
+  border: 1px solid rgba(var(--dawn-hairline), 0.52);
+  border-radius: 9px;
+  background-color: #fbfcfd;
+  background-image:
+    linear-gradient(90deg, rgba(201, 111, 159, 0.26) 0 16px, transparent 16px),
+    linear-gradient(
+      90deg,
+      transparent 16px,
+      rgba(var(--dawn-hairline), 0.3) 16px 16.6px,
+      transparent 16.6px
+    ),
+    linear-gradient(180deg, #ffffff 0%, #f1f7f8 100%);
+  color: #26313a;
+  font-weight: 600;
+  box-shadow:
+    0 14px 28px -22px rgba(38, 54, 68, 0.62),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  mask:
+    radial-gradient(circle 5px at 0 50%, transparent 4.4px, #000 4.8px),
+    radial-gradient(circle 5px at 100% 50%, transparent 4.4px, #000 4.8px);
+  mask-composite: intersect;
+}
+
+html[data-app-theme="dawn"] .app-pill-primary::after,
+html[data-app-theme="dawn"] .app-capture-submit::after,
+html[data-app-theme="dawn"] .start-button::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  background:
+    linear-gradient(currentColor, currentColor) left top / 6px 1px no-repeat,
+    linear-gradient(currentColor, currentColor) left top / 1px 6px no-repeat,
+    linear-gradient(currentColor, currentColor) right top / 6px 1px no-repeat,
+    linear-gradient(currentColor, currentColor) right top / 1px 6px no-repeat,
+    linear-gradient(currentColor, currentColor) left bottom / 6px 1px no-repeat,
+    linear-gradient(currentColor, currentColor) left bottom / 1px 6px no-repeat,
+    linear-gradient(currentColor, currentColor) right bottom / 6px 1px no-repeat,
+    linear-gradient(currentColor, currentColor) right bottom / 1px 6px no-repeat;
+  color: rgba(var(--dawn-hairline), 0.5);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+html[data-app-theme="dawn"] .start-button:hover:not(:disabled),
+html[data-app-theme="dawn"]
+  .landing-theme[data-theme="dawn"]
+  .start-button:hover:not(:disabled) {
+  filter: brightness(0.99) saturate(1.02);
+  box-shadow:
+    0 16px 30px -22px rgba(38, 54, 68, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+/* 主按钮：夜间黄铜圈 + 星图底色 文字换暖白 */
+html[data-app-theme="night"] .app-pill-primary,
+html[data-app-theme="night"] .app-capture-submit,
+html[data-app-theme="night"] .start-button,
+html[data-app-theme="night"] .landing-theme[data-theme="night"] .start-button {
+  border: 1px solid rgba(201, 164, 94, 0.56);
+  background-color: #101821;
+  background-image:
+    radial-gradient(
+      120% 90% at 20% 0%,
+      rgba(var(--night-star), 0.2),
+      transparent 58%
+    ),
+    linear-gradient(180deg, #1b2634 0%, #0f1720 100%);
+  color: #f2e6cf;
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--night-star), 0.16),
+    inset 0 1px 0 rgba(242, 230, 207, 0.1),
+    0 16px 32px -24px rgba(0, 0, 0, 0.9);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html[data-app-theme="night"] .app-pill-primary:hover,
+html[data-app-theme="night"] .app-capture-submit:not(:disabled):hover,
+html[data-app-theme="night"] .start-button:hover:not(:disabled),
+html[data-app-theme="night"]
+  .landing-theme[data-theme="night"]
+  .start-button:hover:not(:disabled) {
+  border-color: rgba(227, 196, 137, 0.82);
+  filter: brightness(1.1);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--night-star), 0.22),
+    inset 0 1px 0 rgba(242, 230, 207, 0.14),
+    0 18px 36px -24px rgba(0, 0, 0, 0.9),
+    0 0 22px -12px rgba(201, 164, 94, 0.55);
+}
+
+/* ---------- 第三批 · 庄园元素迁移 ---------- */
+/* 逐件对齐庄园的装饰清单：侧栏页签 征途卡纹章与封 中缝饰线 操作胶囊 账目横排 绿格 头像章 工具箱册封 落封动效 */
+
+/* === 侧栏导航：霞光纸页签 / 夜间子午轨 === */
+@media (min-width: 1024px) {
+  html[data-app-theme="dawn"] .app-nav-item {
+    border-color: rgba(var(--dawn-hairline), 0.16);
+    background: rgba(252, 253, 254, 0.5);
+  }
+
+  /* 选中项从栏里探出一枚纸页签，内缘压一道霞光 */
+  html[data-app-theme="dawn"] .app-nav-item::after {
+    content: "";
+    position: absolute;
+    top: calc(50% - 11px);
+    right: -6px;
+    width: 7px;
+    height: 22px;
+    border: 1px solid rgba(var(--dawn-hairline), 0.16);
+    border-left: 0;
+    border-radius: 0 4px 4px 0;
+    background: inherit;
+    opacity: 0;
+    transition: opacity 150ms ease;
+  }
+
+  html[data-app-theme="dawn"] .app-nav-item.is-active {
+    border-color: rgba(var(--dawn-hairline), 0.4);
+    background: #fcfdfe;
+    box-shadow:
+      inset 0 1px 0 #fff,
+      0 10px 20px -16px rgba(38, 54, 68, 0.66);
+  }
+
+  html[data-app-theme="dawn"] .app-nav-item.is-active::after {
+    border-color: rgba(var(--dawn-hairline), 0.4);
+    background: #fcfdfe;
+    opacity: 1;
+    box-shadow: inset -2.5px 0 0 -1px rgba(var(--dawn-rose), 0.72);
+  }
+
+  html[data-app-theme="dawn"] .app-nav-index {
+    color: color-mix(in srgb, var(--color-ink) 52%, transparent);
+  }
+
+  html[data-app-theme="dawn"] .app-nav-item.is-active .app-nav-index {
+    color: var(--color-accent-ink);
+  }
+
+  html[data-app-theme="dawn"] .app-shell.is-rail-collapsed .app-nav-item::after {
+    opacity: 0;
+  }
+
+  html[data-app-theme="night"] .app-nav-item {
+    border-color: rgba(var(--night-star), 0.14);
+    background: rgba(15, 23, 32, 0.5);
+  }
+
+  html[data-app-theme="night"] .app-nav-item.is-active {
+    border-color: rgba(201, 164, 94, 0.52);
+    background-image: linear-gradient(
+      180deg,
+      rgba(201, 164, 94, 0.18),
+      rgba(15, 23, 32, 0.92)
+    );
+    box-shadow:
+      inset 0 1px 0 rgba(242, 230, 207, 0.16),
+      0 10px 22px -18px #000;
+  }
+
+  html[data-app-theme="night"] .app-nav::before {
+    background-image:
+      repeating-linear-gradient(
+        180deg,
+        rgba(201, 164, 94, 0.62) 0 1px,
+        rgba(201, 164, 94, 0) 1px 7px
+      ),
+      linear-gradient(
+        180deg,
+        rgba(var(--night-star), 0) 0%,
+        rgba(var(--night-star), 0.5) 18%,
+        rgba(var(--night-star), 0.5) 82%,
+        rgba(var(--night-star), 0) 100%
+      );
+  }
+
+  html[data-app-theme="night"] .app-nav-item.is-active::after {
+    background: #edd6a6;
+    filter: drop-shadow(0 0 4px rgba(201, 164, 94, 0.75));
+  }
+}
+
+/* === 征途卡：左上纹章 + 右上封 + 品质两行 === */
+html[data-app-theme="dawn"] .app-exp-head,
+html[data-app-theme="night"] .app-exp-head {
+  min-height: 92px;
+  padding-left: 48px;
+  padding-right: 78px;
+}
+
+html[data-app-theme="dawn"] .app-exp-tier-inline,
+html[data-app-theme="night"] .app-exp-tier-inline {
+  display: none;
+}
+
+html[data-app-theme="dawn"] .app-exp-rose-drafting {
+  display: block;
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  width: 34px;
+  height: 34px;
+  color: rgba(38, 49, 58, 0.66);
+  --drafting-accent: var(--color-accent-ink);
+  pointer-events: none;
+}
+
+html[data-app-theme="night"] .app-exp-rose-observatory {
+  display: block;
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  width: 34px;
+  height: 34px;
+  color: rgba(201, 164, 94, 0.9);
+  pointer-events: none;
+}
+
+html[data-app-theme="dawn"] .app-exp-seal-corner,
+html[data-app-theme="night"] .app-exp-seal-corner {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  pointer-events: none;
+}
+
+/* 蜡封是庄园专属，霞光与夜间换成光圈与星盘 */
+html[data-app-theme="dawn"] .app-exp-seal,
+html[data-app-theme="night"] .app-exp-seal {
+  display: none;
+}
+
+html[data-app-theme="dawn"] .app-exp-aperture {
+  display: inline-block;
+  color: rgba(38, 49, 58, 0.78);
+  --aperture-face: rgba(252, 253, 254, 0.94);
+  --aperture-accent: var(--color-accent-ink);
+  filter: drop-shadow(0 2px 4px rgba(38, 54, 68, 0.26));
+}
+
+html[data-app-theme="night"] .app-exp-star {
+  display: inline-block;
+  --star-face: #101821;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6));
+}
+
+html[data-app-theme="dawn"] .app-exp-seal-label,
+html[data-app-theme="night"] .app-exp-seal-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+}
+
+html[data-app-theme="dawn"] .app-exp-seal-label {
+  color: #5c6b76;
+}
+
+html[data-app-theme="night"] .app-exp-seal-label {
+  color: #9fb0c6;
+}
+
+html[data-app-theme="dawn"] .app-exp-seal-count {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--color-accent-ink);
+}
+
+html[data-app-theme="night"] .app-exp-seal-count {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--color-amber-ink);
+}
+
+/* === 中缝饰线：菱形换成霞光套准环 / 夜间四角星 === */
+html[data-app-theme="dawn"] .app-exp-divider,
+html[data-app-theme="night"] .app-exp-divider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0 10px;
+}
+
+html[data-app-theme="dawn"] .app-exp-divider-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(var(--dawn-hairline), 0.32);
+}
+
+html[data-app-theme="night"] .app-exp-divider-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(var(--night-star), 0.34);
+}
+
+/* 原菱形只留占位，主题刻纹绝对居中压上去 */
+html[data-app-theme="dawn"] .app-exp-divider-mark,
+html[data-app-theme="night"] .app-exp-divider-mark {
+  visibility: hidden;
+  width: 28px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+html[data-app-theme="dawn"] .app-exp-divider::before,
+html[data-app-theme="night"] .app-exp-divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+html[data-app-theme="dawn"] .app-exp-divider::before {
+  background-image:
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 0 4.3px,
+      rgba(var(--dawn-hairline), 0.62) 4.3px 5.1px,
+      transparent 5.1px
+    ),
+    linear-gradient(
+      rgba(var(--dawn-hairline), 0.62),
+      rgba(var(--dawn-hairline), 0.62)
+    ),
+    linear-gradient(
+      rgba(var(--dawn-hairline), 0.62),
+      rgba(var(--dawn-hairline), 0.62)
+    );
+  background-size: 14px 14px, 14px 1px, 1px 14px;
+}
+
+html[data-app-theme="night"] .app-exp-divider::before {
+  background-image:
+    conic-gradient(
+      from -20deg at 50% 50%,
+      rgba(237, 214, 166, 0.95) 0 40deg,
+      transparent 0 70deg,
+      rgba(237, 214, 166, 0.95) 0 110deg,
+      transparent 0 160deg,
+      rgba(237, 214, 166, 0.95) 0 200deg,
+      transparent 0 250deg,
+      rgba(237, 214, 166, 0.95) 0 290deg,
+      transparent 0
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 0 5.6px,
+      rgba(var(--night-star), 0.42) 5.6px 6.3px,
+      transparent 6.3px
+    );
+  background-size: 12px 12px, 14px 14px;
+}
+
+/* === 底排操作：霞光纸胶囊 / 夜间黄铜胶囊 === */
+html[data-app-theme="dawn"] .app-exp-actions > span[aria-hidden="true"],
+html[data-app-theme="night"] .app-exp-actions > span[aria-hidden="true"] {
+  display: none;
+}
+
+html[data-app-theme="dawn"] .app-exp-actions button {
+  border: 1px solid rgba(var(--dawn-hairline), 0.34);
+  border-radius: 9999px;
+  padding: 0 12px;
+  background: rgba(252, 253, 254, 0.92);
+  text-decoration: none;
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 6px 12px -10px rgba(38, 54, 68, 0.6);
+}
+
+html[data-app-theme="dawn"] .app-exp-actions button:hover {
+  border-color: rgba(var(--dawn-hairline), 0.5);
+  background: #fff;
+  text-decoration: none;
+}
+
+html[data-app-theme="night"] .app-exp-actions button {
+  border: 1px solid rgba(201, 164, 94, 0.42);
+  border-radius: 9999px;
+  padding: 0 12px;
+  background: rgba(16, 24, 33, 0.92);
+  color: #e9ddc4;
+  text-decoration: none;
+  box-shadow: inset 0 1px 0 rgba(242, 230, 207, 0.1);
+}
+
+html[data-app-theme="night"] .app-exp-actions button:hover {
+  border-color: rgba(201, 164, 94, 0.72);
+  background: #16202c;
+  text-decoration: none;
+}
+
+/* === 存档卡：荣誉与战绩改成账目式横排 === */
+html[data-app-theme="dawn"] .app-archive-stats,
+html[data-app-theme="night"] .app-archive-stats {
+  margin-top: 12px;
+  padding-top: 11px;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+html[data-app-theme="dawn"] .app-archive-stats {
+  border-top: 1px solid rgba(var(--dawn-hairline), 0.2);
+}
+
+html[data-app-theme="night"] .app-archive-stats {
+  border-top: 1px solid rgba(var(--night-star), 0.24);
+}
+
+html[data-app-theme="dawn"] .app-archive-stat,
+html[data-app-theme="night"] .app-archive-stat {
+  padding: 0 12px 0 2px;
+}
+
+html[data-app-theme="dawn"] .app-archive-stat + .app-archive-stat {
+  border-left: 1px solid rgba(var(--dawn-hairline), 0.2);
+  padding-left: 14px;
+}
+
+html[data-app-theme="night"] .app-archive-stat + .app-archive-stat {
+  border-left: 1px solid rgba(var(--night-star), 0.24);
+  padding-left: 14px;
+}
+
+html[data-app-theme="dawn"] .app-archive-label {
+  color: #5c6b76;
+  letter-spacing: 0.1em;
+}
+
+html[data-app-theme="night"] .app-archive-label {
+  color: #9fb0c6;
+  letter-spacing: 0.1em;
+}
+
+/* 霞光用一枚实心菱形起头 */
+html[data-app-theme="dawn"] .app-archive-label::before {
+  content: "";
+  display: inline-block;
+  height: 4px;
+  width: 4px;
+  margin-right: 6px;
+  transform: rotate(45deg);
+  background: var(--color-accent);
+  vertical-align: 1px;
+}
+
+/* 夜间用一颗四角星起头 */
+html[data-app-theme="night"] .app-archive-label::before {
+  content: "";
+  display: inline-block;
+  height: 7px;
+  width: 7px;
+  margin-right: 6px;
+  background: var(--color-amber);
+  clip-path: polygon(
+    50% 0%,
+    61% 39%,
+    100% 50%,
+    61% 61%,
+    50% 100%,
+    39% 61%,
+    0% 50%,
+    39% 39%
+  );
+  vertical-align: 0;
+}
+
+html[data-app-theme="dawn"] .app-archive-stat-num,
+html[data-app-theme="night"] .app-archive-stat-num {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--color-ink);
+}
+
+html[data-app-theme="dawn"] .app-archive-stat-num > span {
+  font-size: 12px;
+  color: #7d8b95;
+}
+
+html[data-app-theme="night"] .app-archive-stat-num > span {
+  font-size: 12px;
+  color: #7f92a8;
+}
+
+html[data-app-theme="dawn"] .app-archive-stat-cap {
+  color: #5c6b76;
+}
+
+html[data-app-theme="night"] .app-archive-stat-cap {
+  color: #9fb0c6;
+}
+
+html[data-app-theme="dawn"] .app-archive-checkin,
+html[data-app-theme="dawn"] .app-archive-about {
+  border-top-color: rgba(var(--dawn-hairline), 0.18);
+}
+
+html[data-app-theme="night"] .app-archive-checkin,
+html[data-app-theme="night"] .app-archive-about {
+  border-top-color: rgba(var(--night-star), 0.22);
+}
+
+html[data-app-theme="dawn"] .app-archive-combo {
+  color: var(--color-accent-ink);
+}
+
+html[data-app-theme="night"] .app-archive-combo {
+  color: var(--color-amber-ink);
+}
+
+/* === 绿格：霞光霞色阶 / 夜间星等阶 === */
+html[data-app-theme="dawn"] .checkin-cell {
+  border-color: rgba(var(--dawn-hairline), 0.2);
+  background: rgba(252, 253, 254, 0.72);
+}
+
+html[data-app-theme="dawn"] .checkin-cell[data-level="1"] {
+  border-color: transparent;
+  background: rgba(201, 111, 159, 0.3);
+}
+
+html[data-app-theme="dawn"] .checkin-cell[data-level="2"] {
+  border-color: transparent;
+  background: rgba(201, 111, 159, 0.58);
+}
+
+html[data-app-theme="dawn"] .checkin-cell[data-level="3"] {
+  border-color: transparent;
+  background: #c2618f;
+}
+
+html[data-app-theme="dawn"] .checkin-cell[data-today="1"] {
+  outline-color: rgba(166, 76, 122, 0.55);
+}
+
+html[data-app-theme="night"] .checkin-cell {
+  border-color: rgba(var(--night-star), 0.26);
+  background: rgba(142, 169, 217, 0.08);
+}
+
+html[data-app-theme="night"] .checkin-cell[data-level="1"] {
+  border-color: transparent;
+  background: rgba(142, 169, 217, 0.34);
+}
+
+html[data-app-theme="night"] .checkin-cell[data-level="2"] {
+  border-color: transparent;
+  background: rgba(142, 169, 217, 0.62);
+}
+
+html[data-app-theme="night"] .checkin-cell[data-level="3"] {
+  border-color: transparent;
+  background: #a9c1e8;
+}
+
+html[data-app-theme="night"] .checkin-cell[data-today="1"] {
+  outline-color: rgba(201, 164, 94, 0.65);
+}
+
+/* === 头像章：霞光描图环 / 夜间黄铜环 === */
+html[data-app-theme="dawn"] .app-sigil {
+  --sigil-face: #fcfdfe !important;
+  --sigil-text: #26313a !important;
+  background: conic-gradient(
+    var(--color-accent) var(--sigil-angle),
+    rgba(38, 49, 58, 0.16) 0
+  );
+  box-shadow: 0 2px 6px rgba(38, 54, 68, 0.24);
+}
+
+html[data-app-theme="night"] .app-sigil {
+  --sigil-face: #101821 !important;
+  --sigil-text: #f2e6cf !important;
+  background: conic-gradient(
+    #c9a45e var(--sigil-angle),
+    rgba(142, 169, 217, 0.24) 0
+  );
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.62);
+}
+
+/* 类型 chip 是内联 hex，夜间压成星蓝统一色阶保证对比 */
+html[data-app-theme="night"] .app-kind-chip {
+  background: rgba(142, 169, 217, 0.16) !important;
+  color: #d3e0ee !important;
+}
+
+/* === 工具箱册封：左上纹章 + 右上封 === */
+html[data-app-theme="dawn"] .tool-sheet-rose-drafting {
+  display: block;
+  position: absolute;
+  top: 19px;
+  left: 18px;
+  width: 34px;
+  height: 34px;
+  color: rgba(38, 49, 58, 0.64);
+  --drafting-accent: var(--color-accent-ink);
+  pointer-events: none;
+}
+
+html[data-app-theme="night"] .tool-sheet-rose-observatory {
+  display: block;
+  position: absolute;
+  top: 19px;
+  left: 18px;
+  width: 34px;
+  height: 34px;
+  color: rgba(201, 164, 94, 0.9);
+  pointer-events: none;
+}
+
+html[data-app-theme="dawn"] .tool-sheet-seal,
+html[data-app-theme="night"] .tool-sheet-seal {
+  display: flex;
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  pointer-events: none;
+}
+
+html[data-app-theme="dawn"] .tool-sheet-aperture {
+  display: inline-block;
+  color: rgba(38, 49, 58, 0.76);
+  --aperture-face: rgba(252, 253, 254, 0.94);
+  --aperture-accent: var(--color-accent-ink);
+  filter: drop-shadow(0 2px 4px rgba(38, 54, 68, 0.24));
+}
+
+html[data-app-theme="night"] .tool-sheet-star {
+  display: inline-block;
+  --star-face: #101821;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6));
+}
+
+html[data-app-theme="dawn"] .tool-sheet-seal-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: #5c6b76;
+}
+
+html[data-app-theme="night"] .tool-sheet-seal-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: #9fb0c6;
+}
+
+html[data-app-theme="dawn"] .tool-chest-head,
+html[data-app-theme="night"] .tool-chest-head {
+  position: relative;
+  min-height: 88px;
+  padding: 17px 82px 13px 62px;
+}
+
+/* === 落封动效：留痕成功那一刻压下徽记 === */
+html[data-app-theme="dawn"] .app-stamp-aperture {
+  display: inline-block;
+  color: rgba(38, 49, 58, 0.85);
+  --aperture-face: #fcfdfe;
+  --aperture-accent: var(--color-accent-ink);
+  animation: dawn-stamp-in 360ms cubic-bezier(0.2, 0.9, 0.3, 1.15);
+}
+
+html[data-app-theme="night"] .app-stamp-star {
+  display: inline-block;
+  --star-face: #101821;
+  animation: night-stamp-in 360ms cubic-bezier(0.2, 0.9, 0.3, 1.15);
+}
+
+@keyframes dawn-stamp-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(1.3);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes night-stamp-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(1.3);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-stamp-aperture,
+  .app-stamp-star {
+    animation: none;
+  }
+}
+
+/* === 移动端收尺寸 === */
+@media (max-width: 639px) {
+  html[data-app-theme="dawn"] .app-exp-rose-drafting,
+  html[data-app-theme="night"] .app-exp-rose-observatory {
+    top: 10px;
+    left: 12px;
+    width: 30px;
+    height: 30px;
+  }
+
+  html[data-app-theme="dawn"] .app-exp-aperture,
+  html[data-app-theme="night"] .app-exp-star {
+    width: 44px;
+    height: 44px;
+  }
+
+  html[data-app-theme="dawn"] .app-exp-head,
+  html[data-app-theme="night"] .app-exp-head {
+    min-height: 90px;
+    padding-left: 42px;
+    padding-right: 64px;
+  }
+
+  html[data-app-theme="dawn"] .tool-sheet-rose-drafting,
+  html[data-app-theme="night"] .tool-sheet-rose-observatory {
+    top: 14px;
+    left: 14px;
+    width: 28px;
+    height: 28px;
+  }
+
+  html[data-app-theme="dawn"] .tool-chest-head,
+  html[data-app-theme="night"] .tool-chest-head {
+    min-height: 78px;
+    padding: 14px 68px 12px 50px;
+  }
+}
+
+/* === 第四批 · 学径空间画布跟随主题 === */
+/* 底=夜间深空原样；霞光换白昼图纸面板，庄园换铜版深棕 */
+.sky-frame {
+  border-color: #2a3550;
+  background: #070b16;
+}
+
+html[data-app-theme="dawn"] .sky-frame {
+  border-color: rgba(var(--dawn-hairline), 0.22);
+  background: #f3f2ec;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+html[data-app-theme="manor"] .sky-frame {
+  border-color: rgba(156, 135, 88, 0.5);
+  background: #0b0a0d;
+  box-shadow: inset 0 0 0 1px rgba(156, 135, 88, 0.12);
+}
+
+.sky-mark-label {
+  color: rgba(216, 180, 110, 0.75);
+}
+
+html[data-app-theme="dawn"] .sky-mark-label {
+  color: rgba(38, 49, 58, 0.6);
+}
+
+html[data-app-theme="manor"] .sky-mark-label {
+  color: rgba(186, 163, 112, 0.8);
+}
+
+/* 罗盘角标：白昼图纸上改墨线，庄园改紫铜 */
+html[data-app-theme="dawn"] .sky-rose-mark {
+  color: rgba(38, 49, 58, 0.52);
+}
+
+html[data-app-theme="manor"] .sky-rose-mark {
+  color: color-mix(in srgb, #b99b64 40%, #baa370);
+}
+
+.sky-missing {
+  color: rgba(201, 191, 168, 0.8);
+}
+
+.sky-missing-dot {
+  background: #d8b46e;
+}
+
+html[data-app-theme="dawn"] .sky-missing {
+  color: rgba(38, 49, 58, 0.6);
+}
+
+html[data-app-theme="dawn"] .sky-missing-dot {
+  background: #c2618f;
+}
+
+html[data-app-theme="manor"] .sky-missing {
+  color: rgba(241, 228, 194, 0.66);
+}
+
+html[data-app-theme="manor"] .sky-missing-dot {
+  background: #baa370;
+}
+
+.sky-empty-title {
+  color: #f4ecd9;
+}
+
+.sky-empty-sub {
+  color: #b9b09e;
+}
+
+.sky-empty-btn {
+  border-color: rgba(216, 180, 110, 0.5);
+  background: rgba(216, 180, 110, 0.1);
+  color: #f0dcb8;
+}
+
+.sky-empty-btn:hover {
+  background: rgba(216, 180, 110, 0.18);
+}
+
+html[data-app-theme="dawn"] .sky-empty-title {
+  color: #26313a;
+}
+
+html[data-app-theme="dawn"] .sky-empty-sub {
+  color: rgba(38, 49, 58, 0.62);
+}
+
+html[data-app-theme="dawn"] .sky-empty-btn {
+  border-color: rgba(166, 76, 122, 0.45);
+  background: rgba(194, 97, 143, 0.08);
+  color: #a64c7a;
+}
+
+html[data-app-theme="dawn"] .sky-empty-btn:hover {
+  background: rgba(194, 97, 143, 0.16);
+}
+
+html[data-app-theme="manor"] .sky-empty-title {
+  color: #f1e4c2;
+}
+
+html[data-app-theme="manor"] .sky-empty-sub {
+  color: rgba(241, 228, 194, 0.6);
+}
+
+html[data-app-theme="manor"] .sky-empty-btn {
+  border-color: rgba(186, 163, 112, 0.45);
+  background: rgba(186, 163, 112, 0.1);
+  color: #e0c99b;
+}
+
+html[data-app-theme="manor"] .sky-empty-btn:hover {
+  background: rgba(186, 163, 112, 0.18);
+}
+
+.sky-hint {
+  color: rgba(185, 176, 158, 0.7);
+}
+
+html[data-app-theme="dawn"] .sky-hint {
+  color: rgba(38, 49, 58, 0.5);
+}
+
+html[data-app-theme="manor"] .sky-hint {
+  color: rgba(186, 163, 112, 0.6);
+}
+
+/* === 第四批 · 灵动岛展开态收尾 === */
+/* 落痕 toast：庄园之外补齐两套语义绿 */
+html[data-app-theme="dawn"] .app-island-toast {
+  border-color: rgba(93, 154, 108, 0.45);
+  background: #f1f8f2;
+  color: #24402c;
+}
+
+html[data-app-theme="dawn"] .app-island-toast-check {
+  background: #5d9a6c;
+  color: #f4fbf5;
+}
+
+html[data-app-theme="night"] .app-island-toast {
+  border-color: rgba(154, 214, 168, 0.34);
+  background: #101a15;
+  color: #dcefe0;
+}
+
+html[data-app-theme="night"] .app-island-toast-check {
+  background: #7fc294;
+  color: #0d1a12;
+}
+
+/* 展开面板：霞光四角套准十字，夜间四角星刻，与主卡同一套材质语言 */
+html[data-app-theme="dawn"] .app-island-panel {
+  background-image:
+    linear-gradient(
+      rgba(var(--dawn-hairline), 0.4),
+      rgba(var(--dawn-hairline), 0.4)
+    ),
+    linear-gradient(
+      rgba(var(--dawn-hairline), 0.4),
+      rgba(var(--dawn-hairline), 0.4)
+    ),
+    linear-gradient(
+      rgba(var(--dawn-hairline), 0.4),
+      rgba(var(--dawn-hairline), 0.4)
+    ),
+    linear-gradient(
+      rgba(var(--dawn-hairline), 0.4),
+      rgba(var(--dawn-hairline), 0.4)
+    ),
+    linear-gradient(
+      rgba(var(--dawn-hairline), 0.4),
+      rgba(var(--dawn-hairline), 0.4)
+    ),
+    linear-gradient(
+      rgba(var(--dawn-hairline), 0.4),
+      rgba(var(--dawn-hairline), 0.4)
+    ),
+    linear-gradient(
+      rgba(var(--dawn-hairline), 0.4),
+      rgba(var(--dawn-hairline), 0.4)
+    ),
+    linear-gradient(
+      rgba(var(--dawn-hairline), 0.4),
+      rgba(var(--dawn-hairline), 0.4)
+    );
+  background-size:
+    11px 1px,
+    1px 11px,
+    11px 1px,
+    1px 11px,
+    11px 1px,
+    1px 11px,
+    11px 1px,
+    1px 11px;
+  background-position:
+    8px 8px,
+    8px 8px,
+    calc(100% - 8px) 8px,
+    calc(100% - 8px) 8px,
+    8px calc(100% - 8px),
+    8px calc(100% - 8px),
+    calc(100% - 8px) calc(100% - 8px),
+    calc(100% - 8px) calc(100% - 8px);
+  background-repeat: no-repeat;
+}
+
+html[data-app-theme="night"] .app-island-panel {
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(var(--night-light), 0.05),
+      transparent 22%
+    ),
+    conic-gradient(
+      from -20deg at 50% 50%,
+      rgba(var(--night-star), 0.6) 0 40deg,
+      transparent 0 70deg,
+      rgba(var(--night-star), 0.6) 0 110deg,
+      transparent 0 160deg,
+      rgba(var(--night-star), 0.6) 0 200deg,
+      transparent 0 250deg,
+      rgba(var(--night-star), 0.6) 0 290deg,
+      transparent 0
+    ),
+    conic-gradient(
+      from -20deg at 50% 50%,
+      rgba(var(--night-star), 0.6) 0 40deg,
+      transparent 0 70deg,
+      rgba(var(--night-star), 0.6) 0 110deg,
+      transparent 0 160deg,
+      rgba(var(--night-star), 0.6) 0 200deg,
+      transparent 0 250deg,
+      rgba(var(--night-star), 0.6) 0 290deg,
+      transparent 0
+    ),
+    conic-gradient(
+      from -20deg at 50% 50%,
+      rgba(var(--night-star), 0.6) 0 40deg,
+      transparent 0 70deg,
+      rgba(var(--night-star), 0.6) 0 110deg,
+      transparent 0 160deg,
+      rgba(var(--night-star), 0.6) 0 200deg,
+      transparent 0 250deg,
+      rgba(var(--night-star), 0.6) 0 290deg,
+      transparent 0
+    ),
+    conic-gradient(
+      from -20deg at 50% 50%,
+      rgba(var(--night-star), 0.6) 0 40deg,
+      transparent 0 70deg,
+      rgba(var(--night-star), 0.6) 0 110deg,
+      transparent 0 160deg,
+      rgba(var(--night-star), 0.6) 0 200deg,
+      transparent 0 250deg,
+      rgba(var(--night-star), 0.6) 0 290deg,
+      transparent 0
+    );
+  background-size:
+    auto,
+    11px 11px,
+    11px 11px,
+    11px 11px,
+    11px 11px;
+  background-position:
+    0 0,
+    8px 8px,
+    calc(100% - 8px) 8px,
+    8px calc(100% - 8px),
+    calc(100% - 8px) calc(100% - 8px);
+  background-repeat: no-repeat;
 }

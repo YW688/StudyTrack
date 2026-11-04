@@ -19,6 +19,8 @@ import {
 } from "../../types";
 import TierPips from "../../components/TierPips";
 import WaxSeal from "../../components/WaxSeal";
+import ApertureMark from "../../components/ApertureMark";
+import StarMark from "../../components/StarMark";
 import { currentWeekOf } from "../../parse/schedule";
 import {
   EXPERIENCE_KIND_META,
@@ -71,6 +73,7 @@ interface TodayPageProps {
   onDismissUnlockHint: () => void;
   onToggleAssignment: (item: Assignment) => Promise<void>;
   onAddNote: (text: string, tags?: string[]) => Promise<void>;
+  onCaptureSaved?: () => void;
   demoMode: boolean;
   onExitDemo: () => void;
   onOpenWindow: (
@@ -137,6 +140,7 @@ export default function TodayPage({
   onDismissUnlockHint,
   onToggleAssignment,
   onAddNote,
+  onCaptureSaved,
   demoMode,
   onExitDemo,
   onOpenWindow,
@@ -145,6 +149,8 @@ export default function TodayPage({
   const [saveError, setSaveError] = useState<string | null>(null);
   const [intelBusy, setIntelBusy] = useState<string | null>(null);
   const [intelError, setIntelError] = useState<string | null>(null);
+  const [intelIndex, setIntelIndex] = useState(0);
+  const [intelPaused, setIntelPaused] = useState(false);
   const [captureText, setCaptureText] = useState("");
   const [captureStatus, setCaptureStatus] = useState<
     "idle" | "saving" | "done" | "error"
@@ -183,7 +189,8 @@ export default function TodayPage({
     weekUnknown,
   });
   const echo = pickEcho(experienceItems, now);
-  const intel = pickRelevantCalendarItems(CALENDAR_ITEMS, profile, 2, now);
+  const intel = pickRelevantCalendarItems(CALENDAR_ITEMS, profile, 4, now);
+  const intelCount = intel.length;
   const prompts = buildCapturePrompts(weekUnknown ? [] : courses, pending);
   const readiness = computeReadiness(profile, experienceItems);
   const level = characterLevel(experienceItems);
@@ -195,6 +202,20 @@ export default function TodayPage({
     readyCount: level.ready,
     pendingCount: pending.length,
   });
+
+  useEffect(() => {
+    if (intelIndex >= intelCount) setIntelIndex(0);
+  }, [intelIndex, intelCount]);
+
+  useEffect(() => {
+    if (intelCount <= 1 || intelPaused) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(
+      () => setIntelIndex((index) => (index + 1) % intelCount),
+      6500,
+    );
+    return () => window.clearInterval(timer);
+  }, [intelCount, intelPaused]);
 
   const todayKey = studyDateKey(now);
   const todaySettlement = settleDay(ledger, todayKey);
@@ -249,6 +270,7 @@ export default function TodayPage({
       await onAddNote(value);
       setCaptureText("");
       setCaptureStatus("done");
+      onCaptureSaved?.();
     } catch {
       setCaptureStatus("error");
     }
@@ -299,15 +321,13 @@ export default function TodayPage({
               onClick={() => onOpenWindow("timetable")}
               className={BTN_SECONDARY}
             >
-              课表 ↗
-            </button>
+              课表            </button>
             <button
               type="button"
               onClick={() => onOpenWindow("assignments")}
               className={BTN_SECONDARY}
             >
-              作业 ↗
-            </button>
+              作业            </button>
           </div>
         </header>
 
@@ -359,8 +379,7 @@ export default function TodayPage({
                 onClick={() => onOpenWindow("experiences")}
                 className={BTN_SECONDARY}
               >
-                看动态 ↗
-              </button>
+                看动态              </button>
               <button
                 type="button"
                 onClick={onDismissUnlockHint}
@@ -411,10 +430,10 @@ export default function TodayPage({
                     className="app-text-link"
                   >
                     {!timetable
-                      ? "导入课表 ↗"
+                      ? "导入课表"
                       : weekUnknown
-                        ? "设开学日期 ↗"
-                        : "课表 ↗"}
+                        ? "设开学日期"
+                        : "课表"}
                   </button>
                 </div>
 
@@ -450,16 +469,22 @@ export default function TodayPage({
                   </p>
                 </div>
 
-                <div className="app-capture-bar mt-2">
+                <div
+                  className={`app-capture-bar mt-2${captureStatus === "done" ? " is-stamped" : ""}`}
+                >
                   <span aria-hidden="true" className="app-capture-dot" />
                   {captureStatus === "done" && (
-                    <WaxSeal
-                      units={4}
-                      total={4}
-                      ready
-                      size={16}
-                      className="app-seal-stamp"
-                    />
+                    <>
+                      <WaxSeal
+                        units={4}
+                        total={4}
+                        ready
+                        size={16}
+                        className="app-seal-stamp"
+                      />
+                      <ApertureMark size={15} className="app-stamp-aperture" />
+                      <StarMark size={15} className="app-stamp-star" />
+                    </>
                   )}
                   <label htmlFor="today-capture-input" className="sr-only">
                     今天做了什么
@@ -553,8 +578,7 @@ export default function TodayPage({
                     onClick={() => onOpenWindow("assignments")}
                     className="app-text-link mt-1"
                   >
-                    去添加作业 ↗
-                  </button>
+                    去添加作业                  </button>
                 </div>
               ) : pending.length === 0 ? (
                 <p className="mt-3 text-sm leading-6 text-ink-3">
@@ -605,6 +629,133 @@ export default function TodayPage({
           </div>
 
           <div className="min-w-0 space-y-4">
+            <section className="app-card p-4">
+              <div className="app-card-head">
+                <p className="app-card-label">情报</p>
+                <button
+                  type="button"
+                  onClick={() => onOpenWindow("calendar")}
+                  className="app-text-link"
+                >
+                  日历                </button>
+              </div>
+
+              {CALENDAR_ISSUE ? (
+                <p className="mt-3 text-[11px] leading-5 text-amber-ink">
+                  {CALENDAR_ISSUE}
+                </p>
+              ) : intel.length === 0 ? (
+                <p className="mt-3 text-[11px] leading-5 text-ink-3">
+                  近期没有已公布日期的情报
+                </p>
+              ) : (
+                <div
+                  role="region"
+                  aria-roledescription="轮播"
+                  aria-label="近期情报"
+                  className="mt-2"
+                  onMouseEnter={() => setIntelPaused(true)}
+                  onMouseLeave={() => setIntelPaused(false)}
+                  onFocus={() => setIntelPaused(true)}
+                  onBlur={() => setIntelPaused(false)}
+                >
+                  <div className="overflow-hidden">
+                    <div
+                      className="flex transition-transform duration-500 ease-out"
+                      style={{ transform: `translateX(-${intelIndex * 100}%)` }}
+                    >
+                      {intel.map((item, index) => {
+                        const saved = intelSaved(item);
+                        const active = index === intelIndex;
+                        return (
+                          <div
+                            key={item.id}
+                            inert={!active}
+                            aria-hidden={!active}
+                            aria-roledescription="幻灯片"
+                            aria-label={`第 ${index + 1} 条 共 ${intel.length} 条`}
+                            className="w-full shrink-0"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span
+                                className={[
+                                  "shrink-0 rounded-full px-2 py-0.5 font-mono text-[12px] leading-5",
+                                  CATEGORY_CHIP[item.category],
+                                ].join(" ")}
+                              >
+                                {CALENDAR_CATEGORY_LABELS[item.category]}
+                              </span>
+                              <span className="ml-auto shrink-0 font-mono text-micro text-ink-4">
+                                {calendarTimingLabel(item)}
+                              </span>
+                            </div>
+                            <p className="mt-1 text-[13px] leading-5 font-medium">
+                              {item.title}
+                            </p>
+                            <div className="mt-1 flex items-center justify-between gap-2">
+                              <span className="truncate text-micro text-ink-3">
+                                {[item.organizer, whyRelevant(item, profile)]
+                                  .filter(Boolean)
+                                  .join(" ")}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => void handleIntelNote(item)}
+                                disabled={saved || intelBusy === item.id}
+                                className="app-mini-chip shrink-0 disabled:opacity-45"
+                              >
+                                {saved
+                                  ? "已记下"
+                                  : intelBusy === item.id
+                                    ? "记录中…"
+                                    : "记下"}
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {intel.length > 1 && (
+                    <div className="mt-1 flex items-center justify-between gap-2">
+                      <div
+                        className="flex items-center gap-0.5"
+                        role="group"
+                        aria-label="切换情报"
+                      >
+                        {intel.map((item, index) => (
+                          <button
+                            key={item.id}
+                            type="button"
+                            onClick={() => setIntelIndex(index)}
+                            aria-label={`第 ${index + 1} 条：${item.title}`}
+                            aria-current={
+                              index === intelIndex ? "true" : undefined
+                            }
+                            className="flex min-h-11 w-8 items-center justify-center"
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={[
+                                "block rounded-full transition-all",
+                                index === intelIndex
+                                  ? "h-1.5 w-5 bg-accent"
+                                  : "h-1.5 w-1.5 bg-ink/20",
+                              ].join(" ")}
+                            />
+                          </button>
+                        ))}
+                      </div>
+                      <span className="font-mono text-micro tabular-nums text-ink-4">
+                        {intelIndex + 1} / {intel.length}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </section>
+
             <section className="app-card p-4">
               <div className="app-card-head">
                 <p className="app-card-label">节奏</p>
@@ -663,15 +814,13 @@ export default function TodayPage({
                   onClick={() => onOpenWindow("experiences")}
                   className="app-text-link shrink-0"
                 >
-                  征途 ↗
-                </button>
+                  征途                </button>
                 <button
                   type="button"
                   onClick={() => onOpenWindow("resume")}
                   className="app-text-link shrink-0"
                 >
-                  简历 ↗
-                </button>
+                  简历                </button>
               </div>
             </section>
 
@@ -683,8 +832,7 @@ export default function TodayPage({
                   onClick={() => onOpenWindow("experiences")}
                   className="app-text-link"
                 >
-                  经历库 ↗
-                </button>
+                  经历库                </button>
               </div>
 
               {!echo ? (
@@ -695,7 +843,7 @@ export default function TodayPage({
                 <div className="mt-3">
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                     <span
-                      className="rounded-full px-1.5 py-0.5 font-mono text-micro"
+                      className="rounded-full px-2 py-0.5 font-mono text-[12px] leading-5"
                       style={{
                         color: EXPERIENCE_KIND_META[echo.experience.kind].color,
                         backgroundColor:
@@ -744,82 +892,11 @@ export default function TodayPage({
                     onClick={() => onOpenWindow("experiences")}
                     className="app-text-link mt-2"
                   >
-                    看看原文 ↗
-                  </button>
+                    看看原文                  </button>
                 </div>
               )}
             </section>
 
-            <section className="app-card p-4">
-              <div className="app-card-head">
-                <p className="app-card-label">情报</p>
-                <button
-                  type="button"
-                  onClick={() => onOpenWindow("calendar")}
-                  className="app-text-link"
-                >
-                  日历 ↗
-                </button>
-              </div>
-
-              {CALENDAR_ISSUE ? (
-                <p className="mt-3 text-[11px] leading-5 text-amber-ink">
-                  {CALENDAR_ISSUE}
-                </p>
-              ) : intel.length === 0 ? (
-                <p className="mt-3 text-[11px] leading-5 text-ink-3">
-                  近期没有已公布日期的情报
-                </p>
-              ) : (
-                <ul className="mt-1">
-                  {intel.map((item) => {
-                    const saved = intelSaved(item);
-                    return (
-                      <li
-                        key={item.id}
-                        className="border-t border-rule/60 py-2 first:border-t-0"
-                      >
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={[
-                              "shrink-0 rounded-full px-1.5 py-0.5 font-mono text-micro",
-                              CATEGORY_CHIP[item.category],
-                            ].join(" ")}
-                          >
-                            {CALENDAR_CATEGORY_LABELS[item.category]}
-                          </span>
-                          <span className="ml-auto shrink-0 font-mono text-micro text-ink-4">
-                            {calendarTimingLabel(item)}
-                          </span>
-                        </div>
-                        <p className="mt-1 text-[13px] leading-5 font-medium">
-                          {item.title}
-                        </p>
-                        <div className="mt-1 flex items-center justify-between gap-2">
-                          <span className="truncate text-micro text-ink-3">
-                            {[item.organizer, whyRelevant(item, profile)]
-                              .filter(Boolean)
-                              .join(" ")}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => void handleIntelNote(item)}
-                            disabled={saved || intelBusy === item.id}
-                            className="app-mini-chip shrink-0 disabled:opacity-45"
-                          >
-                            {saved
-                              ? "已记下"
-                              : intelBusy === item.id
-                                ? "记录中…"
-                                : "记下"}
-                          </button>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </section>
           </div>
         </div>
 

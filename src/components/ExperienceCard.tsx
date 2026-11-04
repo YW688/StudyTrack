@@ -1,6 +1,11 @@
 import { useState } from "react";
 import type { Experience } from "../types";
+import ApertureMark from "./ApertureMark";
+import CompassRose from "./CompassRose";
+import StarMark from "./StarMark";
 import TierPips from "./TierPips";
+import WaxSeal from "./WaxSeal";
+import { DraftingRose, ObservatoryRose } from "./ThemeRose";
 import {
   EXPERIENCE_KIND_META,
   experienceKindLabel,
@@ -73,7 +78,37 @@ export default function ExperienceCard({
       ].join(" ")}
     >
       <div className="px-4 py-3.5 sm:px-5">
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+        <CompassRose className="app-exp-rose" />
+        <DraftingRose className="app-exp-rose-drafting" />
+        <ObservatoryRose className="app-exp-rose-observatory" />
+
+        <div className="app-exp-seal-corner">
+          <WaxSeal
+            units={completeness}
+            total={4}
+            ready={ready}
+            size={56}
+            className="app-exp-seal"
+          />
+          <ApertureMark size={52} className="app-exp-aperture" />
+          <StarMark size={52} className="app-exp-star" />
+          <span
+            className="app-exp-seal-label"
+            title={
+              ready
+                ? "四段式齐 有证据或量化 置信已确认"
+                : "补齐四段式 证据与确认 才算就绪"
+            }
+          >
+            <span>品质</span>
+            <span className="app-exp-seal-count">
+              {ready ? "4/4" : `${completeness}/4`}
+            </span>
+          </span>
+        </div>
+
+        <div className="app-exp-head">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
           <span
             className="app-kind-chip rounded-full px-2 py-0.5 font-mono text-micro tracking-[0.04em]"
             style={{
@@ -111,11 +146,28 @@ export default function ExperienceCard({
             {experience.org}
           </p>
         )}
+        </div>
+
+        <div className="app-exp-divider" aria-hidden="true">
+          <span className="app-exp-divider-line" />
+          <svg
+            className="app-exp-divider-mark"
+            viewBox="0 0 28 12"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.9"
+          >
+            <path d="M14 2.4 17.6 6 14 9.6 10.4 6Z" />
+            <circle cx="5" cy="6" r="0.9" fill="currentColor" stroke="none" />
+            <circle cx="23" cy="6" r="0.9" fill="currentColor" stroke="none" />
+          </svg>
+          <span className="app-exp-divider-line" />
+        </div>
 
         {!expanded && (
           <p
             className={[
-              "mt-2 text-xs leading-5",
+              "app-exp-summary mt-2 text-xs leading-5",
               summary ? "line-clamp-2 text-ink-3" : "text-ink-4",
             ].join(" ")}
           >
@@ -124,7 +176,7 @@ export default function ExperienceCard({
         )}
 
         {!expanded && skillPreview.length > 0 && (
-          <ul className="mt-2 flex flex-wrap gap-1.5">
+          <ul className="app-exp-skills mt-2 flex flex-wrap gap-1.5">
             {skillPreview.map((skill) => (
               <li
                 key={skill}
@@ -201,12 +253,9 @@ export default function ExperienceCard({
                             href={item.url}
                             target="_blank"
                             rel="noreferrer noopener"
-                            className="border-rule hover:bg-ink/[0.03] inline-flex min-h-8 items-center gap-1 rounded-md border px-2 text-micro text-ink-3"
+                            className="border-rule hover:bg-ink/[0.03] inline-flex min-h-8 items-center rounded-md border px-2 text-micro text-ink-3"
                           >
                             {item.label}
-                            <span aria-hidden="true" className="text-ink-4">
-                              ↗
-                            </span>
                           </a>
                         </li>
                       ) : (
@@ -268,7 +317,7 @@ export default function ExperienceCard({
           </div>
         )}
 
-        <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-rule pt-2">
+        <div className="app-exp-actions mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-rule pt-2">
           <button
             type="button"
             onClick={() => setExpanded((value) => !value)}
@@ -327,7 +376,7 @@ export default function ExperienceCard({
               删除
             </button>
           )}
-          <span className="ml-auto flex items-center gap-2">
+          <span className="app-exp-tier-inline ml-auto flex items-center gap-2">
             <TierPips
               units={completeness}
               total={4}

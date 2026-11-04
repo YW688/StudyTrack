@@ -118,7 +118,10 @@ export default function MatchDetail({
   }
 
   return (
-    <article className="border-rule overflow-hidden rounded-xl border bg-surface">
+    <article className="match-sheet border-rule relative overflow-hidden rounded-xl border bg-surface">
+      <p className="match-sheet-kicker" aria-hidden="true">
+        <span>征召令</span>
+      </p>
       <header className="border-rule border-b px-4 pt-4 pb-4 sm:px-5">
         {onBack && (
           <button

@@ -220,7 +220,7 @@ function TodayPanel() {
   return (
     <div className="grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
       <div className="flex min-w-0 flex-col gap-2.5">
-        <section className="demo-subpanel">
+        <section className="demo-subpanel demo-subpanel--parchment">
           <div className="flex items-baseline justify-between gap-2">
             <p className="demo-label">{segment}</p>
             <p className="demo-label">11 月 2 日 周一</p>
@@ -235,7 +235,7 @@ function TodayPanel() {
             <span>
               <span className="lp-faint font-mono">3-4 节</span> 信号与系统
             </span>
-            <span className="demo-link">课表 ↗</span>
+            <span className="demo-link">课表</span>
           </div>
           <p className="mt-1 text-[11px] leading-5 text-[color:var(--lp-accent)]">
             教师资格面试 截止 11 月 9 日 顺手记进今日
@@ -340,15 +340,15 @@ function TodayPanel() {
                 <span className="lp-accent-fill block h-full w-[72%] rounded-full" />
               </div>
             </div>
-            <span className="demo-link shrink-0">征途 ↗</span>
-            <span className="demo-link shrink-0">简历 ↗</span>
+            <span className="demo-link shrink-0">征途</span>
+            <span className="demo-link shrink-0">简历</span>
           </div>
         </section>
 
         <section className="demo-subpanel">
           <div className="flex items-baseline justify-between gap-2">
             <p className="demo-label">回声</p>
-            <span className="demo-link">经历库 ↗</span>
+            <span className="demo-link">经历库</span>
           </div>
           <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
             <span className="demo-tag">竞赛</span>
@@ -377,7 +377,7 @@ function TodayPanel() {
         <section className="demo-subpanel">
           <div className="flex items-baseline justify-between gap-2">
             <p className="demo-label">情报</p>
-            <span className="demo-link">日历 ↗</span>
+            <span className="demo-link">日历</span>
           </div>
           <ul className="mt-1">
             {INTEL.map((item) => (
@@ -495,7 +495,7 @@ function LedgerPanel() {
           <span className="demo-meta ml-auto">6 条 4 条简历就绪</span>
         </div>
 
-        <article className="demo-subpanel">
+        <article className="demo-subpanel demo-subpanel--parchment">
           <div className="flex items-baseline justify-between gap-2">
             <p className="demo-meta font-mono">记于 10 月 18 日 20:14</p>
             <span className="demo-meta flex shrink-0 items-center gap-1.5">
@@ -841,7 +841,7 @@ function ToolboxPanel() {
     <div>
       <div className="flex items-baseline justify-between gap-2">
         <p className="demo-label">工具箱</p>
-        <span className="demo-link">先看日历 →</span>
+        <span className="demo-link">先看日历</span>
       </div>
       <div className="mt-2 grid grid-cols-2 gap-2.5">
         {TOOLS.map((tool) => (
@@ -853,9 +853,6 @@ function ToolboxPanel() {
             <div className="flex items-center justify-between gap-2">
               <span className="demo-label text-[color:var(--lp-ink-soft)]">
                 {tool.no}
-              </span>
-              <span aria-hidden="true" className="lp-faint text-[11px]">
-                →
               </span>
             </div>
             <p className="mt-2 font-serif text-[17px] leading-none">
