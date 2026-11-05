@@ -344,7 +344,7 @@ export default function ExperiencesPage({
                 >
                   <span aria-hidden="true" className="exp-drawer-pull" />
                   <div className="min-w-0 flex-1">
-                    <p className="line-clamp-2 text-sm leading-6 text-ink-2">
+                    <p className="note-hand line-clamp-2 text-sm leading-6 text-ink-2">
                       {note.text}
                     </p>
                     <p className="mt-1 font-mono text-micro tabular-nums text-ink-4">

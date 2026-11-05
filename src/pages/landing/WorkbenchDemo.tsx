@@ -483,7 +483,7 @@ function LedgerPanel() {
           </div>
           {DEMO.inbox.map((note) => (
             <div key={note.text} className="demo-inbox-row">
-              <p className="demo-inbox-text lp-soft text-[11.5px] leading-5">
+              <p className="note-hand demo-inbox-text lp-soft text-[11.5px] leading-5">
                 {note.text}
               </p>
               <p className="lp-faint shrink-0 font-mono text-[9.5px]">

@@ -549,7 +549,7 @@ export default function TodayPage({
                       <span className="w-9 shrink-0 font-mono text-micro tabular-nums text-ink-4">
                         {dayjs(note.createdAt).format("HH:mm")}
                       </span>
-                      <span className="line-clamp-2 min-w-0 flex-1 text-[11px] leading-5 text-ink-3">
+                      <span className="note-hand line-clamp-2 min-w-0 flex-1 text-[11px] leading-5 text-ink-3">
                         {note.text}
                       </span>
                     </li>
