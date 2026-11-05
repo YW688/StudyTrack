@@ -7658,11 +7658,12 @@ button.app-mini-chip:hover {
   position: relative;
   display: block;
   min-width: 0;
+  --float-box-h: 46px;
 }
 
 .float-control {
   width: 100%;
-  min-height: 46px;
+  min-height: var(--float-box-h);
   padding: 0 12px;
   border: 1px solid var(--color-rule);
   border-radius: 10px;
@@ -7688,7 +7689,7 @@ button.app-mini-chip:hover {
 .float-label {
   position: absolute;
   left: 13px;
-  top: 50%;
+  top: calc(var(--float-box-h) / 2);
   transform: translateY(-50%);
   max-width: calc(100% - 26px);
   overflow: hidden;
