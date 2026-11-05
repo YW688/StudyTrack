@@ -93,7 +93,7 @@ export default function DataBackup({
     try {
       await onClear();
       setConfirmingClear(false);
-      setMessage({ tone: "ok", text: "已清除本机全部数据" });
+      setMessage({ tone: "ok", text: "已清除本机全部数据与模型 Key" });
     } catch {
       setMessage({ tone: "error", text: "清除失败 请检查浏览器存储权限" });
     } finally {

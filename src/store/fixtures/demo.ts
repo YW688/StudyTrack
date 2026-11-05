@@ -12,6 +12,7 @@ import { createSampleTimetable } from "./timetable";
 import { createSampleAssignments } from "./assignments";
 import { createSampleExperiences } from "./experiences";
 import { createEmptyResume } from "../resume";
+import { resumeReadiness } from "../../lib/experience";
 import { createLedgerEvent } from "../ledger";
 import { createNote } from "../notes";
 
@@ -53,8 +54,9 @@ export function createDemoSeed(): DemoSeed {
     updatedAt: nowIso,
   };
 
+  // 铁律 7：示例档案里的战绩全部就绪 所以草稿默认收全部 粘进来的 JD 才能一步对上
   const selectedExperienceIds = experiences.experiences
-    .slice(0, 2)
+    .filter((experience) => resumeReadiness(experience).ready)
     .map((experience) => experience.id);
   const resume: ResumeData = {
     ...createEmptyResume(),

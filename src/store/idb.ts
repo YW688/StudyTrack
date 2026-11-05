@@ -9,6 +9,7 @@ import { LEDGER_KEY } from "./ledger";
 import { NOTES_KEY } from "./notes";
 import { AGENT_KEY } from "./agent";
 import { AVATAR_KEY } from "./avatar";
+import { CUSTOM_JOBS_KEY } from "./customJobs";
 
 export const TIMETABLE_KEY = "studytrack:v1:timetable";
 
@@ -78,5 +79,6 @@ export async function clearLocalData(): Promise<void> {
     del(NOTES_KEY),
     del(AGENT_KEY),
     del(AVATAR_KEY),
+    del(CUSTOM_JOBS_KEY),
   ]);
 }

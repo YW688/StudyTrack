@@ -485,37 +485,39 @@ export default function ExperiencesPage({
                       <div
                         key={cell.term.key}
                         className={[
-                          "exp-axis-cell rounded-lg border px-3 py-2.5",
+                          "exp-axis-cell flex min-h-16 flex-col justify-between gap-2 rounded-lg border px-3 py-2.5",
                           "sm:min-w-[88px] sm:flex-1",
                           empty
                             ? "border-rule border-dashed bg-paper"
                             : "border-rule bg-paper",
                         ].join(" ")}
                       >
-                        <p className="font-mono text-micro tracking-[0.04em] text-ink-3">
-                          {cell.term.label}
-                        </p>
-                        <p className="mt-1 flex items-baseline gap-1">
-                          <span
-                            className={[
-                              "font-serif text-xl leading-none tabular-nums",
-                              empty ? "text-ink-4" : "text-ink",
-                            ].join(" ")}
-                          >
-                            {cell.count}
+                        <p className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-2">
+                          <span className="shrink-0 whitespace-nowrap font-mono text-micro tracking-[0.04em] text-ink-3">
+                            {cell.term.label}
                           </span>
-                          <span className="text-micro text-ink-4">条</span>
+                          <span className="flex items-baseline gap-1">
+                            <span
+                              className={[
+                                "font-serif text-xl leading-none tabular-nums",
+                                empty ? "text-ink-4" : "text-ink",
+                              ].join(" ")}
+                            >
+                              {cell.count}
+                            </span>
+                            <span className="text-micro text-ink-4">条</span>
+                          </span>
                         </p>
                         {empty ? (
                           <button
                             type="button"
                             onClick={() => openCreate(termStartMonth(cell.term))}
-                            className="text-accent-ink -ml-2 mt-0.5 inline-flex min-h-11 min-w-11 items-center px-2 text-micro underline underline-offset-2"
+                            className="text-accent-ink -ml-2 inline-flex min-h-11 min-w-11 items-end px-2 pb-0.5 text-micro underline underline-offset-2"
                           >
                             补记
                           </button>
                         ) : (
-                          <p className="mt-1 font-mono text-micro text-ink-4">
+                          <p className="font-mono text-micro text-ink-4">
                             有记录
                           </p>
                         )}

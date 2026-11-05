@@ -1,6 +1,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import ArchiveCard from "./ArchiveCard";
 import DataBackup from "./DataBackup";
+import ModelSettings from "./ModelSettings";
 import type { GreenMatrix } from "../lib/ledger";
 import type { Goal } from "../types";
 
@@ -87,6 +88,7 @@ export default function TopbarIsland({
     const onPointerDown = (event: PointerEvent) => {
       const target = event.target as Element | null;
       if (target?.closest?.("[data-island-trigger]")) return;
+      if (target?.closest?.('[role="dialog"][aria-modal="true"]')) return;
       if (!rootRef.current?.contains(target as Node)) {
         onOpenChange(false);
       }
@@ -237,6 +239,8 @@ export default function TopbarIsland({
               </span>
             </button>
           </div>
+
+          <ModelSettings />
 
           <details className="app-island-backup">
             <summary>

@@ -28,6 +28,7 @@ import type {
   Experience,
   ExperienceData,
   Grade,
+  JobPosting,
   LedgerEvent,
   Note,
   Profile,
@@ -84,6 +85,8 @@ import {
 import { createNote, loadNotes, saveNotes } from "./store/notes";
 import { loadAgentMessages, saveAgentMessages } from "./store/agent";
 import { deleteAvatar, loadAvatar, saveAvatar } from "./store/avatar";
+import { addCustomJob, loadCustomJobs } from "./store/customJobs";
+import { JOB_POSTINGS } from "./search";
 import {
   applyBackup,
   collectBackup,
@@ -107,8 +110,10 @@ import {
 import { backupFileName, downloadBackupFile } from "./lib/backup";
 import { newId } from "./lib/id";
 import { GUIDE_OPPORTUNITIES_KEY } from "./lib/guide";
+import { clearAiConfig } from "./ai/config";
 import type {
   AgentExperienceDraft,
+  AgentJobDraft,
   AgentProfileDraft,
 } from "./ai/tasks/agent";
 
@@ -223,6 +228,7 @@ export default function App() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [agentMessages, setAgentMessages] = useState<AgentMessage[]>([]);
   const [avatar, setAvatar] = useState<string | null>(null);
+  const [customJobs, setCustomJobs] = useState<JobPosting[]>([]);
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState<ThemeId>(readStoredTheme);
   const [cursorOn, setCursorOn] = useState(readStoredCursor);
@@ -276,6 +282,7 @@ export default function App() {
       loadNotes(),
       loadAgentMessages(),
       loadAvatar(),
+      loadCustomJobs(),
     ]).then(
       ([
         storedTimetable,
@@ -287,6 +294,7 @@ export default function App() {
         storedNotes,
         storedAgentMessages,
         storedAvatar,
+        storedCustomJobs,
       ]) => {
         if (!alive || loadedRef.current) return;
         loadedRef.current = true;
@@ -299,6 +307,7 @@ export default function App() {
         setNotes(storedNotes);
         setAgentMessages(storedAgentMessages);
         setAvatar(storedAvatar);
+        setCustomJobs(storedCustomJobs);
         const hasStoredData =
           storedTimetable !== null ||
           storedAssignments !== null ||
@@ -573,12 +582,13 @@ export default function App() {
       id: newId("experience"),
       kind: draft.kind,
       title: draft.title.trim().slice(0, 120),
+      org: draft.org.trim().slice(0, 80) || undefined,
       problem: draft.problem.trim().slice(0, 2000),
       method: draft.method.trim().slice(0, 2000),
       contribution: draft.contribution.trim().slice(0, 2000),
       result: draft.result.trim().slice(0, 2000),
-      metrics: [],
-      evidence: [],
+      metrics: draft.metrics.slice(0, 6),
+      evidence: draft.evidence.slice(0, 6),
       skills: draft.skills,
       tags: ["记录官"],
       confidence: draft.confidence,
@@ -607,6 +617,18 @@ export default function App() {
     await saveLedger(nextLedger);
     setExperiences(nextExperiences);
     setLedger(nextLedger);
+    const nextResume = readyDraftSelection(
+      experiences?.experiences ?? [],
+      nextExperiences.experiences,
+    );
+    if (nextResume) {
+      await saveResume(nextResume);
+      setResume(nextResume);
+    }
+  }
+
+  async function handleAgentSaveJob(draft: AgentJobDraft) {
+    setCustomJobs(await addCustomJob(draft.job));
   }
 
   async function handleGuideComplete(values: GuideValues) {
@@ -780,6 +802,10 @@ export default function App() {
     setNotes(nextNotes);
   }
 
+  async function handleAddCustomJob(job: JobPosting): Promise<void> {
+    setCustomJobs(await addCustomJob(job));
+  }
+
   async function handleExport() {
     const backup = await collectBackup();
     downloadBackupFile(backup, backupFileName());
@@ -813,6 +839,7 @@ export default function App() {
       setNotes(snapshot.notes);
       setAgentMessages(snapshot.agentMessages);
       setAvatar(snapshot.avatar);
+      setCustomJobs(snapshot.customJobs);
       writeDemoMode(false);
       setDemoMode(false);
       try {
@@ -851,6 +878,7 @@ export default function App() {
     await resumeWriteRef.current.catch(() => undefined);
     await agentWriteRef.current.catch(() => undefined);
     await clearLocalData();
+    clearAiConfig();
     setTimetable(null);
     setAssignments(null);
     setExperiences(null);
@@ -860,6 +888,7 @@ export default function App() {
     setNotes([]);
     setAgentMessages([]);
     setAvatar(null);
+    setCustomJobs([]);
     writeDemoMode(false);
     setDemoMode(false);
     try {
@@ -1027,6 +1056,7 @@ export default function App() {
                 ledger={ledger}
                 notes={notes}
                 resume={resume}
+                jobs={[...customJobs, ...JOB_POSTINGS]}
                 messages={agentMessages}
                 raised={route === "resume"}
                 dockMode={dockMode}
@@ -1034,8 +1064,14 @@ export default function App() {
                 onMessagesChange={handleAgentMessages}
                 onSaveProfile={handleAgentSaveProfile}
                 onSaveExperience={handleAgentSaveExperience}
+                onSaveJob={handleAgentSaveJob}
                 onAddNote={handleAddNote}
                 onNavigate={(id) => navigate(id)}
+                onOpenWindow={openWindow}
+                theme={theme}
+                cursorOn={cursorOn}
+                onThemeChange={changeTheme}
+                onCursorChange={setCursorOn}
               />
             </Suspense>
           )
@@ -1090,9 +1126,11 @@ export default function App() {
             experiences={experiences}
             resume={resume}
             goal={profile?.goal ?? null}
+            customJobs={customJobs}
             onNavigateResume={() => navigate("resume")}
             onNavigateExperiences={() => navigate("experiences")}
             onUseSample={() => handleUseSample("opportunities")}
+            onAddCustomJob={handleAddCustomJob}
           />
         ) : route === "toolbox" ? (
           <ToolboxPage
@@ -1221,8 +1259,10 @@ export default function App() {
               experiences={experiences}
               resume={resume}
               goal={profile?.goal ?? null}
+              customJobs={customJobs}
               onNavigateResume={() => openWindow("resume")}
               onNavigateExperiences={() => openWindow("experiences")}
+              onAddCustomJob={handleAddCustomJob}
               onUseSample={async () => {
                 await seedDemoData();
               }}

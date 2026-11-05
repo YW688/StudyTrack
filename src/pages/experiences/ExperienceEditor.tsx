@@ -18,6 +18,7 @@ import {
   normalizeMonth,
   splitLabels,
 } from "../../lib/experience";
+import { FloatField } from "../../components/FloatField";
 
 export interface ExperienceFormValue {
   kind: ExperienceKind;
@@ -44,36 +45,16 @@ interface ExperienceEditorProps {
   onSave: (value: ExperienceFormValue) => Promise<void>;
 }
 
-const FIELD =
-  "border-rule focus-visible:border-accent-ink focus-visible:ring-2 focus-visible:ring-accent/45 h-11 w-full rounded-md border bg-surface px-2.5 text-sm outline-none";
-const TEXTAREA =
-  "border-rule focus-visible:border-accent-ink focus-visible:ring-2 focus-visible:ring-accent/45 min-h-24 w-full resize-y rounded-md border bg-surface px-2.5 py-2 text-sm leading-6 outline-none";
 const BTN_PRIMARY =
   "bg-ink text-paper inline-flex min-h-11 items-center justify-center rounded-lg px-5 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-40";
 const BTN_SECONDARY =
   "border-rule hover:bg-ink/[0.03] inline-flex min-h-11 items-center justify-center rounded-lg border px-4 text-sm";
 
 const PARTS = [
-  {
-    key: "problem",
-    label: "问题",
-    placeholder: "当时要解决什么问题 例如 选课高峰期系统卡顿 人工登记容易超选",
-  },
-  {
-    key: "method",
-    label: "方法",
-    placeholder: "你用了什么方法 技术或流程 例如 重新设计 E-R 模型 用事务处理选课",
-  },
-  {
-    key: "contribution",
-    label: "我的贡献",
-    placeholder: "你具体做了什么 避免只写「参与」 写清楚自己负责的部分",
-  },
-  {
-    key: "result",
-    label: "结果",
-    placeholder: "结果如何 有数字就写数字 没有就写可验证的结果 不猜数字",
-  },
+  { key: "problem", label: "问题" },
+  { key: "method", label: "方法" },
+  { key: "contribution", label: "我的贡献" },
+  { key: "result", label: "结果" },
 ] as const;
 
 export default function ExperienceEditor({
@@ -300,97 +281,54 @@ export default function ExperienceEditor({
 
                 {kind === "other" && (
                   <div className="mt-2">
-                    <label
-                      htmlFor="experience-kind-label"
-                      className="mb-1.5 block text-xs text-ink-3"
-                    >
-                      自定义类型
-                    </label>
-                    <input
+                    <FloatField
                       id="experience-kind-label"
+                      label="自定义类型"
                       value={kindLabel}
-                      onChange={(event) => setKindLabel(event.target.value)}
+                      onChange={setKindLabel}
                       maxLength={20}
-                      placeholder="例如：军训、社团、交换学习"
-                      className={FIELD}
+                      hint="留空显示「其他」"
                     />
-                    <p className="mt-1 text-micro leading-4 text-ink-4">
-                      留空显示「其他」
-                    </p>
                   </div>
                 )}
               </div>
 
-              <div>
-                <label
-                  htmlFor="experience-title"
-                  className="mb-1.5 block text-xs text-ink-3"
-                >
-                  标题 <span className="text-amber-ink">*</span>
-                </label>
-                <input
-                  id="experience-title"
-                  ref={titleRef}
-                  value={title}
-                  onChange={(event) => setTitle(event.target.value)}
-                  maxLength={120}
-                  required
-                  placeholder="例如：数据库课程设计：校园选课系统"
-                  className={FIELD}
-                />
-              </div>
+              <FloatField
+                id="experience-title"
+                label="标题"
+                value={title}
+                onChange={setTitle}
+                maxLength={120}
+                required
+                inputRef={(node) => {
+                  titleRef.current = node;
+                }}
+              />
 
-              <div>
-                <label
-                  htmlFor="experience-org"
-                  className="mb-1.5 block text-xs text-ink-3"
-                >
-                  组织 / 课程 / 赛事
-                </label>
-                <input
-                  id="experience-org"
-                  value={org}
-                  onChange={(event) => setOrg(event.target.value)}
-                  maxLength={80}
-                  placeholder="例如：《数据库原理》课程 计算机学院"
-                  className={FIELD}
-                />
-              </div>
+              <FloatField
+                id="experience-org"
+                label="组织 课程 赛事"
+                value={org}
+                onChange={setOrg}
+                maxLength={80}
+              />
 
               <div className="grid gap-3 sm:grid-cols-2">
-                <div>
-                  <label
-                    htmlFor="experience-start"
-                    className="mb-1.5 block text-xs text-ink-3"
-                  >
-                    开始月份
-                  </label>
-                  <input
-                    id="experience-start"
-                    type="month"
-                    value={start}
-                    onChange={(event) => setStart(event.target.value)}
-                    className={FIELD}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="experience-end"
-                    className="mb-1.5 block text-xs text-ink-3"
-                  >
-                    结束月份
-                  </label>
-                  <input
-                    id="experience-end"
-                    type="month"
-                    value={end}
-                    onChange={(event) => setEnd(event.target.value)}
-                    className={FIELD}
-                  />
-                  <p className="mt-1 text-micro leading-4 text-ink-4">
-                    留空表示进行中
-                  </p>
-                </div>
+                <FloatField
+                  id="experience-start"
+                  label="开始月份"
+                  type="month"
+                  value={start}
+                  onChange={setStart}
+                />
+                <FloatField
+                  id="experience-end"
+                  label="结束月份"
+                  type="month"
+                  value={end}
+                  onChange={setEnd}
+                  hint="留空表示进行中"
+                />
               </div>
             </div>
           </section>
@@ -402,25 +340,16 @@ export default function ExperienceEditor({
             </p>
             <div className="mt-3 space-y-3">
               {PARTS.map((part) => (
-                <div key={part.key}>
-                  <label
-                    htmlFor={`experience-${part.key}`}
-                    className="mb-1.5 block text-xs text-ink-3"
-                  >
-                    {part.label}
-                  </label>
-                  <textarea
-                    id={`experience-${part.key}`}
-                    value={parts[part.key]}
-                    onChange={(event) =>
-                      updatePart(part.key, event.target.value)
-                    }
-                    maxLength={2000}
-                    rows={3}
-                    placeholder={part.placeholder}
-                    className={TEXTAREA}
-                  />
-                </div>
+                <FloatField
+                  key={part.key}
+                  id={`experience-${part.key}`}
+                  label={part.label}
+                  value={parts[part.key]}
+                  onChange={(value) => updatePart(part.key, value)}
+                  multiline
+                  rows={3}
+                  maxLength={2000}
+                />
               ))}
             </div>
           </section>
@@ -442,25 +371,17 @@ export default function ExperienceEditor({
                     key={index}
                     className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_44px] gap-1.5"
                   >
-                    <input
+                    <FloatField
+                      label="名称"
                       value={metric.label}
-                      onChange={(event) =>
-                        updateMetric(index, { label: event.target.value })
-                      }
+                      onChange={(value) => updateMetric(index, { label: value })}
                       maxLength={40}
-                      aria-label={`第 ${index + 1} 条量化数据名称`}
-                      placeholder="名称，如 首屏时间"
-                      className={FIELD}
                     />
-                    <input
+                    <FloatField
+                      label="数值"
                       value={metric.value}
-                      onChange={(event) =>
-                        updateMetric(index, { value: event.target.value })
-                      }
+                      onChange={(value) => updateMetric(index, { value })}
                       maxLength={80}
-                      aria-label={`第 ${index + 1} 条量化数据数值`}
-                      placeholder="数值，如 5.2s → 1.8s"
-                      className={FIELD}
                     />
                     <button
                       type="button"
@@ -500,27 +421,19 @@ export default function ExperienceEditor({
                     key={index}
                     className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_44px] gap-1.5"
                   >
-                    <input
+                    <FloatField
+                      label="名称"
                       value={item.label}
-                      onChange={(event) =>
-                        updateEvidence(index, { label: event.target.value })
-                      }
+                      onChange={(value) => updateEvidence(index, { label: value })}
                       maxLength={60}
-                      aria-label={`第 ${index + 1} 条证据名称`}
-                      placeholder="名称，如 课程设计报告"
-                      className={FIELD}
                     />
-                    <input
+                    <FloatField
+                      label="链接"
                       value={item.url ?? ""}
-                      onChange={(event) =>
-                        updateEvidence(index, {
-                          url: event.target.value || undefined,
-                        })
+                      onChange={(value) =>
+                        updateEvidence(index, { url: value || undefined })
                       }
                       maxLength={500}
-                      aria-label={`第 ${index + 1} 条证据链接`}
-                      placeholder="https://…（可空）"
-                      className={FIELD}
                     />
                     <button
                       type="button"
@@ -550,42 +463,20 @@ export default function ExperienceEditor({
             </div>
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="experience-skills"
-                  className="mb-1.5 block text-xs text-ink-3"
-                >
-                  技能标签
-                </label>
-                <input
-                  id="experience-skills"
-                  value={skillsText}
-                  onChange={(event) => setSkillsText(event.target.value)}
-                  placeholder="Python，MySQL，Figma"
-                  className={FIELD}
-                />
-                <p className="mt-1 text-micro leading-4 text-ink-4">
-                  用逗号分隔
-                </p>
-              </div>
-              <div>
-                <label
-                  htmlFor="experience-tags"
-                  className="mb-1.5 block text-xs text-ink-3"
-                >
-                  关键词标签
-                </label>
-                <input
-                  id="experience-tags"
-                  value={tagsText}
-                  onChange={(event) => setTagsText(event.target.value)}
-                  placeholder="课程设计，团队协作"
-                  className={FIELD}
-                />
-                <p className="mt-1 text-micro leading-4 text-ink-4">
-                  用于时间线筛选
-                </p>
-              </div>
+              <FloatField
+                id="experience-skills"
+                label="技能标签"
+                value={skillsText}
+                onChange={setSkillsText}
+                hint="用逗号分隔"
+              />
+              <FloatField
+                id="experience-tags"
+                label="关键词标签"
+                value={tagsText}
+                onChange={setTagsText}
+                hint="用于时间线筛选"
+              />
             </div>
           </section>
         </form>

@@ -18,7 +18,7 @@
 3. **无账号、无登录、无支付、无服务端数据库**：数据只存 `IndexedDB`（`idb-keyval`），刷新/重开不丢。
 4. **零爬虫（含构建期来源核验例外）**：禁止请求学习通、BOSS 直聘、招聘网站、校招官网的后台接口；禁止模拟登录、保存 Cookie。机会数据只来自：人工整理岗位库 JSON、渠道入口库、用户粘贴的 JD。
    - **唯一例外**：`scripts/verify-sources.mjs` 可在构建期对白名单官方公开页面做限速来源核验。必须遵守 robots.txt；robots 未明确允许的只用 HEAD/Range 做可达性检查，不抓正文；robots 禁止或取不到的直接跳过。只保留 HTTP 状态、最终 URL、页面标题、与条目日期相关的短片段和内容哈希，写入 `data/source-checks.json`；运行时仍不联网。招聘平台、学习通、BOSS 直聘和校招官网后台接口仍不抓取。
-5. **模型 Key 不进前端**：调用统一走薄代理（`/api/proxy`，线上阿里云 FC），Key 只在代理环境变量。
+5. **模型 Key 由使用者自备（BYOK）**：开源版在顶栏灵动岛「模型接入」（`src/components/ModelSettings.tsx` + `src/ai/config.ts`）填自己的 API-KEY，浏览器直连 OpenAI 兼容端点。Key 只写 `localStorage` 的 `studytrack:ai-config`，**不进 IndexedDB、不进导出备份 JSON、不进模型输入、不写日志**，「清除本机数据」一并删除。构建期配了 `VITE_AI_PROXY_URL` 时仍可选走薄代理（`/api/proxy`，线上阿里云 FC），Key 只在代理环境变量。**任何人不得把服务商 Key 提交进仓库或打进 `dist/`**；传输优先级固定为 本机 Key → 构建期代理 → 本地兜底。
 6. **PDF 用浏览器打印**：`@page A4` + `window.print()`，禁止服务端无头浏览器。
 7. **检索在本地**：岗位检索用 `minisearch`（BM25）前端跑，不引入向量库、不调 embedding 接口。
 8. **依赖白名单**：`react react-dom vite typescript tailwindcss pdfjs-dist xlsx idb-keyval zod dayjs minisearch`（MCP 只用 `@modelcontextprotocol/sdk`）。新增其他依赖必须先说明理由。
@@ -28,16 +28,16 @@
 
 ```
 src/pages/        today · experiences(征途) · opportunities(征召) · toolbox · space(学径空间) · calendar · timetable · assignments · resume · portfolio · about · landing · guide
-src/components/   TimetableGrid ParseConfirm AssignmentItem ExperienceCard Timeline ResumeSheet MatchMatrix PrintSheet TodayBrief CaptureBox LedgerHeatmap AgentPanel CalendarView StarrySky CompassRose
+src/components/   TimetableGrid ParseConfirm AssignmentItem ExperienceCard Timeline ResumeSheet MatchMatrix PrintSheet TodayBrief CaptureBox LedgerHeatmap AgentPanel CalendarView StarrySky CompassRose FloatField ModelSettings
 src/lib/          today.ts · ledger.ts · level.ts · sky.ts · experience.ts · resume.ts · calendar.ts · ddl.ts · theme.ts
 src/parse/        xlsx.ts · heuristics.ts · schedule.ts（周次展开 / 冲突检测）
-src/ai/           rules.ts · client.ts · schema.ts · tasks/{timetable,assignment,experience,resume,match,agent}.ts
+src/ai/           rules.ts · client.ts · config.ts · useAiConfig.ts · schema.ts · tasks/{timetable,assignment,experience,resume,match,agent}.ts
 src/search/       bm25.ts · index.ts
 src/store/        idb.ts · profile.ts · ledger.ts · notes.ts · agent.ts · fixtures/
 src/styles/       print.css
 mcp/server.ts     stdio MCP Server
 data/             jobs.json · channels.json · calendar.json
-api/proxy/        薄代理
+api/proxy/        薄代理（可选：只在构建期配 VITE_AI_PROXY_URL 时启用，Key 留在代理环境变量）
 ```
 
 **分层铁律**：`pages` 不直接调模型；`ai` 不碰 DOM；`parse` 与 `search` 是纯函数、可单测；`store` 是唯一读写 IndexedDB 的地方。
@@ -54,18 +54,18 @@ api/proxy/        薄代理
 
 ## 四、AI 调用规范
 
-- 统一入口 `ai/client.ts`：OpenAI 兼容 → 代理 → 百炼（文本 `qwen-plus`，图片 `qwen-vl-max`）。
-- 45s 超时；网络/5xx 重试 1 次；4xx 不重试；返回必须 JSON 且过 zod；校验失败重试 1 次，仍失败降级示例并在 UI 标注。
+- 统一入口 `ai/client.ts`：传输优先级 **本机 Key 直连 → 构建期代理 → 本地兜底**（`activeTransport()` / `isAiMockMode()`）。BYOK 走 OpenAI 兼容 `/chat/completions`，预设百炼（文本 `qwen-plus`、图片 `qwen-vl-max`）、DeepSeek、Moonshot，允许自定义 base URL（https，本地 http 只认 localhost）；端点不认 `response_format` 时自动退回普通对话再解析。
+- 45s 超时；网络/5xx 重试 1 次；4xx 不重试；`401/403` 说「Key 被拒」，`404` 说「端点或模型名不对」，`429` 说「限速或额度用尽」；返回必须 JSON 且过 zod；校验失败重试 1 次，仍失败降级示例并在 UI 标注。
 - 共享硬规则（`ai/rules.ts`）：只使用用户材料中明确出现的信息；不得编造课程/奖项/名次/数字/日期/公司/岗位要求；DDL 只读不猜、读不到填 `null`；严格 JSON + schema；不确定填空或 `null`。
 - 开发期一律 `MOCK=1`（fixtures 返回）；同输入 hash 缓存；单次输入截断 12k 字符。
-- 记录官（Agent）只做建档/写账/查账/解读/记忆，不做开放域聊天；任何写入必须先给草稿、用户确认后落库；命中必须带来源。
+- 记录官（Agent）只做建档/写账/查账/解读/记忆，外加接收整段岗位 JD（本机解析后存本机岗位库），不做开放域聊天；任何写入必须先给草稿、用户确认后落库；命中必须带来源。接了大模型时模型只负责判断输入属于哪一类、不改写内容，判不了就落回本机规则。
 
 ## 五、合规红线
 
 1. 不登录学习通、不调其接口；只处理用户**主动上传的截图**或**粘贴的文本**。
 2. 不爬 BOSS 直聘/招聘网站/校招官网；不模拟登录、不存 Cookie；机会页只展示渠道入口 + 人工整理岗位库 + 用户粘贴 JD。六家公司（大疆/华为/特斯拉/字节/腾讯/阿里）只做官方入口 + 人工岗位卡，不抓取。构建期来源核验只检查官方入口可达性，不等于抓取岗位内容。
-3. 不收集姓名、学号、身份证、手机号；数据只在本机浏览器。
-4. About 页必须可见：数据存哪、发给模型的是什么、如何一键清除。
+3. 不收集姓名、学号、身份证、手机号；数据只在本机浏览器。服务商 API-KEY 属使用者自备凭证，只写本机 `localStorage`，不得写入 IndexedDB、不得进导出备份、不得发给学径侧、不得打日志。
+4. About 页必须可见：数据存哪、发给模型的是什么、Key 存在哪、如何一键清除（「清除本机数据」连同 Key 一起删）。
 5. 文案不承诺"保过 / 必得 offer / 内推包过"。
 
 ## 六、交互与视觉
@@ -96,7 +96,7 @@ api/proxy/        薄代理
 ## 八、发布前自检
 
 - [ ] `vite build` 通过，产物纯静态
-- [ ] 无 Key / 断网时，示例模式仍能走完「建档 → 今日 → 留痕 → 征途 → 征召 → 出征」
+- [ ] 未填 Key / 断网时，示例模式仍能走完「建档 → 今日 → 留痕 → 征途 → 征召 → 出征」
 - [ ] 未建档时五面导航置灰并标「完成建档后开启」、深链拦回建档页；建档完成后五面一步可切
 - [ ] IndexedDB 刷新后数据仍在；「清除本机数据」可用；导出/导入覆盖全部数据
 - [ ] 单双周切换正确，同一门课不重复渲染
@@ -104,10 +104,12 @@ api/proxy/        薄代理
 - [ ] 打印预览 A4 一页，按钮与导航隐藏
 - [ ] MCP Server 至少能被 AI 助手成功调用一次
 - [ ] 已在 Sites 发布、权限「任何人都可访问」、手机 + 隐身窗口各验证一次
-- [ ] 无前端 Key、无个人信息、无第三方素材、无运行时爬虫；构建期来源核验遵守白名单与 robots，且不抓招聘平台内容
+- [ ] 仓库与 `dist/` 产物内无任何服务商 Key（用户自备 Key 只活在其浏览器 localStorage，导出 JSON 里也不得有）、无个人信息、无第三方素材、无运行时爬虫；构建期来源核验遵守白名单与 robots，且不抓招聘平台内容
+- [ ] 「模型接入」填 Key → 测试连通能出结果；删除 Key 或「清除本机数据」后 AI 立刻回到本机原文兜底且不报错
 
 ## 九、反模式（看到就停下）
 
+- 把服务商 Key 写进 `.env` 提交、打进前端常量或塞进导出备份 → 一票否决，删掉；Key 只能是使用者在本机「模型接入」里填的那一份。
 - 用 `localStorage` 存课表/经历等大对象 → 用 IndexedDB。
 - 把"单双周"当字符串存下来 → 必须展开成 `weeks[]`。
 - 解析失败就空白页或无限 loading → 先给兜底态。

@@ -55,9 +55,11 @@ interface OpportunitiesPageProps {
   experiences: ExperienceData | null;
   resume: ResumeData;
   goal: Goal | null;
+  customJobs: JobPosting[];
   onNavigateResume: () => void;
   onNavigateExperiences: () => void;
   onUseSample: () => Promise<void>;
+  onAddCustomJob: (job: JobPosting) => Promise<void>;
 }
 
 const EMPTY_EXPERIENCES: Experience[] = [];
@@ -91,11 +93,13 @@ export default function OpportunitiesPage({
   experiences,
   resume,
   goal,
+  customJobs,
   onNavigateResume,
   onNavigateExperiences,
   onUseSample,
+  onAddCustomJob,
 }: OpportunitiesPageProps) {
-  const [customJob, setCustomJob] = useState<JobPosting | null>(null);
+  const [fallbackJob, setFallbackJob] = useState<JobPosting | null>(null);
   const [query, setQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<"all" | JobType>("all");
   const [cityFilter, setCityFilter] = useState("all");
@@ -116,10 +120,14 @@ export default function OpportunitiesPage({
   }, [notice]);
 
   const items = experiences?.experiences ?? EMPTY_EXPERIENCES;
-  const allJobs = useMemo(
-    () => (customJob ? [customJob, ...JOB_POSTINGS] : JOB_POSTINGS),
-    [customJob],
-  );
+  const allJobs = useMemo(() => {
+    const local =
+      fallbackJob && !customJobs.some((job) => job.id === fallbackJob.id)
+        ? [fallbackJob, ...customJobs]
+        : customJobs;
+    return local.length > 0 ? [...local, ...JOB_POSTINGS] : JOB_POSTINGS;
+  }, [customJobs, fallbackJob]);
+  const localJobCount = allJobs.length - JOB_POSTINGS.length;
   const context = useMemo(
     () => buildMatchContext(resume, items, allJobs),
     [resume, items, allJobs],
@@ -369,8 +377,15 @@ export default function OpportunitiesPage({
     }
   }
 
-  function handleJdCreated(job: JobPosting, warnings: string[]) {
-    setCustomJob(job);
+  async function handleJdCreated(job: JobPosting, warnings: string[]) {
+    let stored = true;
+    try {
+      await onAddCustomJob(job);
+      setFallbackJob(null);
+    } catch {
+      stored = false;
+      setFallbackJob(job);
+    }
     setSelectedId(job.id);
     setQuery("");
     setTypeFilter("all");
@@ -379,9 +394,11 @@ export default function OpportunitiesPage({
     setPasteOpen(false);
     setView("detail");
     setNotice(
-      `已解析「${job.title}」，匹配结果已更新。${
-        warnings.length > 0 ? warnings.join(" ") : ""
-      }`.trim(),
+      stored
+        ? `已存入本机岗位库 「${job.title}」 匹配结果已更新${
+            warnings.length > 0 ? ` ${warnings.join(" ")}` : ""
+          }`
+        : `本机存储写入失败 「${job.title}」只在这次会话里可用 检查浏览器存储权限后重新粘贴`,
     );
     window.setTimeout(() => {
       document
@@ -412,6 +429,7 @@ export default function OpportunitiesPage({
             </div>
             <p className="mt-2 text-xs leading-5 text-ink-3">
               {CHANNELS.length} 个官方入口 {JOB_POSTINGS.length} 个岗位方向
+              {localJobCount > 0 ? ` 本机岗位库 ${localJobCount} 张` : ""}
             </p>
             <p className="mt-1 font-mono text-micro leading-5 text-ink-4">
               来源核验：官方入口 {channelOk}/{CHANNELS.length} 可达 演示卡来源{" "}
@@ -773,6 +791,9 @@ export default function OpportunitiesPage({
           <div className="border-rule flex flex-wrap items-center justify-between gap-2 border-t px-3 py-2">
             <p className="max-w-2xl text-micro leading-4 text-ink-4">
               {JOB_LIBRARY_NOTE}
+              {localJobCount > 0
+                ? ` 本机岗位库 ${localJobCount} 张 来自你粘贴的 JD`
+                : ""}
             </p>
             <div className="flex items-center gap-3">
               <span className="font-mono text-micro tabular-nums text-ink-3">
@@ -941,7 +962,9 @@ export default function OpportunitiesPage({
                       <span className="flex min-w-0 items-center gap-1.5">
                         <span className="min-w-0 truncate font-mono text-micro text-ink-4">
                           {job.custom
-                            ? "粘贴 JD 仅当前页面"
+                            ? job.id === fallbackJob?.id
+                              ? "只在这次会话里有效"
+                              : "本机岗位库 你粘贴的 JD"
                             : `来源：${job.sourceName}`}
                         </span>
                         {!job.custom && (
@@ -1030,6 +1053,7 @@ export default function OpportunitiesPage({
                 job={selectedJob}
                 match={selectedMatch}
                 experiences={items}
+                sessionOnly={selectedJob.id === fallbackJob?.id}
                 onNavigateExperiences={onNavigateExperiences}
                 onNavigateResume={onNavigateResume}
                 onBack={backToList}

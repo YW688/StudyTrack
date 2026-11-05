@@ -605,23 +605,27 @@ function LedgerPanel() {
               <div
                 key={term.label}
                 className={[
-                  "rounded-lg border px-2 py-1.5",
+                  "flex min-h-12 flex-col justify-between gap-1.5 rounded-lg border px-2 py-1.5",
                   term.count === 0
                     ? "lp-hairline border-dashed bg-[color:var(--lp-surface)]"
                     : "lp-hairline",
                 ].join(" ")}
               >
-                <p className="lp-faint font-mono text-[9px]">{term.label}</p>
-                <p className="mt-0.5 flex items-baseline gap-1">
-                  <span
-                    className={[
-                      "font-serif text-[15px] leading-none tabular-nums",
-                      term.count === 0 ? "lp-faint" : "",
-                    ].join(" ")}
-                  >
-                    {term.count}
+                <p className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-1.5">
+                  <span className="lp-faint shrink-0 whitespace-nowrap font-mono text-[9px]">
+                    {term.label}
                   </span>
-                  <span className="lp-faint text-[9px]">条</span>
+                  <span className="flex items-baseline gap-1">
+                    <span
+                      className={[
+                        "font-serif text-[15px] leading-none tabular-nums",
+                        term.count === 0 ? "lp-faint" : "",
+                      ].join(" ")}
+                    >
+                      {term.count}
+                    </span>
+                    <span className="lp-faint text-[9px]">条</span>
+                  </span>
                 </p>
                 {term.count === 0 ? (
                   <span className="lp-accent text-[9.5px] underline underline-offset-2">

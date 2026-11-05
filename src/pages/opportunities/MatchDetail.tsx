@@ -30,6 +30,7 @@ interface MatchDetailProps {
   job: JobPosting;
   match: JobMatch;
   experiences: Experience[];
+  sessionOnly?: boolean;
   onNavigateExperiences: () => void;
   onNavigateResume: () => void;
   onBack?: () => void;
@@ -71,6 +72,7 @@ export default function MatchDetail({
   job,
   match,
   experiences,
+  sessionOnly,
   onNavigateExperiences,
   onNavigateResume,
   onBack,
@@ -210,7 +212,9 @@ export default function MatchDetail({
 
         {job.custom ? (
           <p className="mt-2 text-micro leading-5 text-ink-4">
-            粘贴的 JD 只在当前页面有效
+            {sessionOnly
+              ? "本机存储写入失败 这条 JD 只在这次会话里有效"
+              : "粘贴的 JD 存在本机岗位库 刷新不丢"}
           </p>
         ) : (
           <div className="border-rule mt-3 border-t pt-2.5">

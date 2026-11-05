@@ -302,13 +302,13 @@ function splitSentences(value: string): string[] {
     .filter(Boolean);
 }
 
-interface EvidenceField {
+export interface EvidenceField {
   key: "result" | "contribution" | "method" | "problem" | "metrics";
   text: string;
   sentences: string[];
 }
 
-interface EvidenceUnit {
+export interface EvidenceUnit {
   experience: Experience;
   inResume: boolean;
   skillNames: string[];
@@ -318,7 +318,7 @@ interface EvidenceUnit {
   bullets: ResumeBullet[];
 }
 
-function buildUnit(
+export function buildUnit(
   experience: Experience,
   inResume: boolean,
   cache?: ResumeBulletCache,
@@ -1030,6 +1030,13 @@ export function qualifyJob(
   return { tier, readyHits, blockers };
 }
 
+/** 粘贴 JD 时公司、岗位名、城市都是选填，留空落到这几个占位值；记录官与去重键都按它判断「用户没填」 */
+export const PASTED_JD_PLACEHOLDER = {
+  company: "自定义 JD",
+  title: "粘贴的岗位",
+  city: "未填写",
+} as const;
+
 export interface PastedJdInput {
   raw: string;
   title: string;
@@ -1188,9 +1195,9 @@ export function parsePastedJd(input: PastedJdInput): ParsedJdResult {
 
   const job: JobPosting = {
     id: `custom-${Date.now()}`,
-    company: input.company.trim() || "自定义 JD",
-    title: title || "粘贴的岗位",
-    city: input.city.trim() || "未填写",
+    company: input.company.trim() || PASTED_JD_PLACEHOLDER.company,
+    title: title || PASTED_JD_PLACEHOLDER.title,
+    city: input.city.trim() || PASTED_JD_PLACEHOLDER.city,
     type: input.type,
     cohort: "粘贴 JD",
     family,

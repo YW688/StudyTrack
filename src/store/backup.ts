@@ -4,6 +4,7 @@ import type {
   AgentMessage,
   AssignmentData,
   ExperienceData,
+  JobPosting,
   LedgerEvent,
   Note,
   Profile,
@@ -69,6 +70,12 @@ import {
   saveAvatar,
   avatarSchema,
 } from "./avatar";
+import {
+  CUSTOM_JOBS_KEY,
+  loadCustomJobs,
+  saveCustomJobs,
+  customJobSchema,
+} from "./customJobs";
 
 export const BACKUP_APP = "studytrack";
 export const BACKUP_VERSION = 1;
@@ -87,6 +94,7 @@ const backupSchema = z.object({
   notes: z.array(noteSchema).optional(),
   agentMessages: z.array(agentMessageSchema).optional(),
   avatar: avatarSchema.nullable().optional(),
+  customJobs: z.array(customJobSchema).optional(),
 });
 
 export type BackupFile = z.infer<typeof backupSchema>;
@@ -102,6 +110,7 @@ export interface BackupSnapshot {
   notes: Note[];
   agentMessages: AgentMessage[];
   avatar: string | null;
+  customJobs: JobPosting[];
 }
 
 export async function collectBackup(): Promise<BackupFile> {
@@ -116,6 +125,7 @@ export async function collectBackup(): Promise<BackupFile> {
     notes,
     agentMessages,
     avatar,
+    customJobs,
   ] = await Promise.all([
     loadProfile(),
     loadTimetable(),
@@ -127,6 +137,7 @@ export async function collectBackup(): Promise<BackupFile> {
     loadNotes(),
     loadAgentMessages(),
     loadAvatar(),
+    loadCustomJobs(),
   ]);
 
   return {
@@ -143,6 +154,7 @@ export async function collectBackup(): Promise<BackupFile> {
     notes,
     agentMessages,
     avatar,
+    customJobs,
   };
 }
 
@@ -197,6 +209,9 @@ export async function applyBackup(
       ? saveAgentMessages(backup.agentMessages)
       : del(AGENT_KEY),
     backup.avatar ? saveAvatar(backup.avatar) : del(AVATAR_KEY),
+    backup.customJobs
+      ? saveCustomJobs(backup.customJobs)
+      : del(CUSTOM_JOBS_KEY),
   ]);
 
   return {
@@ -210,5 +225,6 @@ export async function applyBackup(
     notes: backup.notes ?? [],
     agentMessages: backup.agentMessages ?? [],
     avatar: backup.avatar ?? null,
+    customJobs: backup.customJobs ?? [],
   };
 }

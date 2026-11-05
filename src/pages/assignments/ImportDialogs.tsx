@@ -238,7 +238,7 @@ export function ScreenshotDialog({
   const [message, setMessage] = useState<string | null>(
     configured
       ? null
-      : "本机还没配置视觉解析代理 先用下面的示例数据 或改用粘贴 手动录入",
+      : "本机还没接入视觉模型 先用下面的示例数据 或改用粘贴 手动录入",
   );
   const [preview, setPreview] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
