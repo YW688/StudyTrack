@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
@@ -25,6 +26,13 @@ const MODULE_PREVIEWS: Record<FaceId, ReactNode> = {
   toolbox: <ToolboxPreview />,
   space: <SpacePreview />,
 };
+
+const HERO_DWELL = 3600;
+const HERO_TRAVEL = 480;
+const heroReducedMotion = () =>
+  typeof window !== "undefined" &&
+  typeof window.matchMedia === "function" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 interface Stage {
   year: string;
@@ -139,7 +147,91 @@ export default function LandingPage({
   const [state, setState] = useState<StartState>("idle");
   const [pending, setPending] = useState<"fresh" | "demo" | null>(null);
   const [face, setFace] = useState<FaceId>("today");
-  const activeFace = DEMO_FACES.find((item) => item.id === face) ?? DEMO_FACES[0];
+  const [playing, setPlaying] = useState(() => !heroReducedMotion());
+  const [cycle, setCycle] = useState(0);
+  const [pulse, setPulse] = useState(0);
+  const [cursorFace, setCursorFace] = useState<FaceId>("today");
+  const [stageInView, setStageInView] = useState(true);
+  const [tabHidden, setTabHidden] = useState(false);
+  const [demoCursor, setDemoCursor] = useState<{ x: number; y: number } | null>(
+    null,
+  );
+  const stageRef = useRef<HTMLDivElement>(null);
+  const faceRowRef = useRef<HTMLDivElement>(null);
+  const faceRefs = useRef<Partial<Record<FaceId, HTMLButtonElement | null>>>({});
+
+  const faceIndex = Math.max(
+    0,
+    DEMO_FACES.findIndex((item) => item.id === face),
+  );
+  const activeFace = DEMO_FACES[faceIndex] ?? DEMO_FACES[0];
+  const demoLive = playing && stageInView && !tabHidden && !heroReducedMotion();
+
+  useEffect(() => {
+    const node = stageRef.current;
+    if (!node || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      (entries) => setStageInView(entries[0]?.isIntersecting ?? true),
+      { threshold: 0.15 },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const onVisibility = () => setTabHidden(document.hidden);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
+
+  useEffect(() => {
+    if (!demoLive) return;
+    const next = DEMO_FACES[(faceIndex + 1) % DEMO_FACES.length].id;
+    let clickTimer: number | undefined;
+    const dwellTimer = window.setTimeout(() => {
+      setCursorFace(next);
+      clickTimer = window.setTimeout(() => {
+        setFace(next);
+        setCycle((value) => value + 1);
+        setPulse((value) => value + 1);
+      }, HERO_TRAVEL);
+    }, HERO_DWELL);
+    return () => {
+      window.clearTimeout(dwellTimer);
+      if (clickTimer !== undefined) window.clearTimeout(clickTimer);
+    };
+  }, [demoLive, faceIndex]);
+
+  useLayoutEffect(() => {
+    if (!demoLive) {
+      setDemoCursor(null);
+      return;
+    }
+    const measure = () => {
+      const row = faceRowRef.current;
+      const button = faceRefs.current[cursorFace];
+      if (!row || !button) return;
+      const rowRect = row.getBoundingClientRect();
+      const buttonRect = button.getBoundingClientRect();
+      setDemoCursor({
+        x: buttonRect.left - rowRect.left + buttonRect.width * 0.56,
+        y: buttonRect.top - rowRect.top + buttonRect.height * 0.34,
+      });
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [cursorFace, demoLive]);
+
+  function toggleDemo() {
+    if (playing) {
+      setPlaying(false);
+      return;
+    }
+    setCursorFace(face);
+    setCycle((value) => value + 1);
+    setPlaying(true);
+  }
 
   async function handleStart(mode: "fresh" | "demo") {
     setPending(mode);
@@ -156,21 +248,8 @@ export default function LandingPage({
 
   function openFace(next: FaceId) {
     setFace(next);
-    const windowEl = document.getElementById("demo-window");
-    if (!windowEl) return;
-    const reduce =
-      typeof window.matchMedia === "function" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const fits = windowEl.getBoundingClientRect().height <= window.innerHeight - 96;
-    windowEl.scrollIntoView({
-      behavior: reduce ? "auto" : "smooth",
-      block: fits ? "center" : "start",
-    });
-    window.requestAnimationFrame(() => {
-      document
-        .getElementById(`demo-tab-${next}`)
-        ?.focus({ preventScroll: true });
-    });
+    setCursorFace(next);
+    setPlaying(false);
   }
 
   return (
@@ -186,7 +265,7 @@ export default function LandingPage({
         <section className="landing-hero flex min-h-dvh flex-col overflow-hidden px-4 sm:px-8">
           <div aria-hidden="true" className="landing-noise" />
 
-          <header className="landing-glass-nav relative z-20 mx-auto mt-4 grid w-full max-w-[1240px] grid-cols-[auto_1fr_auto] items-center gap-4 rounded-full px-3 py-2 sm:mt-5 sm:px-5 lg:gap-10 lg:px-7 lg:py-2.5">
+          <header className="landing-glass-nav relative z-20 mx-auto mt-4 grid w-full max-w-[1120px] grid-cols-[auto_1fr_auto] items-center gap-4 rounded-full px-3 py-2 sm:mt-5 sm:px-5 lg:gap-10 lg:px-7 lg:py-2.5">
             <div className="flex shrink-0 items-center gap-3 sm:gap-3.5">
               <BrandMark
                 size={32}
@@ -248,8 +327,8 @@ export default function LandingPage({
             </div>
           </header>
 
-          <div className="relative z-10 mx-auto flex w-full max-w-[1240px] flex-1 flex-col">
-            <div className="flex flex-1 flex-col items-center justify-center pt-6 pb-5 text-center sm:pt-8">
+          <div className="relative z-10 mx-auto flex w-full max-w-[1120px] flex-1 flex-col min-[1180px]:grid min-[1180px]:grid-cols-[minmax(0,1fr)_minmax(0,660px)] min-[1180px]:items-center min-[1180px]:gap-8">
+            <div className="flex flex-1 flex-col items-center justify-center pt-6 pb-5 text-center sm:pt-8 min-[1180px]:flex-none min-[1180px]:items-start min-[1180px]:pt-0 min-[1180px]:pb-0 min-[1180px]:text-left">
               <span className="landing-chip landing-enter">
                 给本科生的学习与经历工作台
               </span>
@@ -271,7 +350,7 @@ export default function LandingPage({
                 四年后它是一份可验证的履历
               </p>
 
-              <div className="landing-enter mt-6 flex flex-wrap items-center justify-center gap-2 [animation-delay:160ms]">
+              <div className="landing-enter mt-6 flex flex-wrap items-center justify-center gap-2 [animation-delay:160ms] min-[1180px]:justify-start">
                 <StartButton
                   state={state}
                   pending={pending}
@@ -290,7 +369,7 @@ export default function LandingPage({
                 />
               </div>
 
-              <div className="landing-enter mt-3 flex flex-wrap items-center justify-center gap-2 [animation-delay:200ms]">
+              <div className="landing-enter mt-3 flex flex-wrap items-center justify-center gap-2 [animation-delay:200ms] min-[1180px]:justify-start">
                 <span className="landing-chip">无需注册</span>
                 <span className="landing-chip">数据只存本机</span>
                 <span className="landing-chip">记录官随叫随到</span>
@@ -306,7 +385,7 @@ export default function LandingPage({
               </p>
             </div>
 
-            <div className="hero-stage">
+            <div className="hero-stage" ref={stageRef}>
               <div aria-hidden="true" className="hero-stage-glow" />
 
               <div aria-hidden="true" className="hero-float hero-float--a">
@@ -332,39 +411,95 @@ export default function LandingPage({
 
               <div className="hero-workbench">
                 <div className="hero-workbench-bar">
-                  <span>
+                  <span className="hero-workbench-date">
                     学径 {DEMO.weekLabel} {DEMO.dayLabel}
                   </span>
-                  <span>{activeFace.name} 示例</span>
+                  <span className="hero-demo-caption">
+                    <span
+                      aria-hidden="true"
+                      className={`hero-demo-live ${demoLive ? "is-live" : ""}`}
+                    />
+                    <span className="hero-demo-caption-text">
+                      {String(faceIndex + 1).padStart(2, "0")}/05{" "}
+                      {activeFace.hint}
+                    </span>
+                  </span>
+                </div>
+                <div className="hero-demo-track" aria-hidden="true">
+                  <span
+                    key={`${face}-${cycle}`}
+                    className="hero-demo-track-fill"
+                    style={{
+                      animationDuration: `${HERO_DWELL}ms`,
+                      animationPlayState: demoLive ? "running" : "paused",
+                    }}
+                  />
                 </div>
                 <div
                   className="hero-workbench-body"
                   data-ui
                   aria-hidden="true"
                 >
-                  {MODULE_PREVIEWS[face]}
+                  <div key={face} className="hero-demo-panel">
+                    {MODULE_PREVIEWS[face]}
+                  </div>
+                </div>
+
+                <div
+                  className="hero-faces"
+                  ref={faceRowRef}
+                  aria-label="五个面的示例预览"
+                >
+                  {DEMO_FACES.map((module) => (
+                    <button
+                      key={module.id}
+                      type="button"
+                      ref={(node) => {
+                        faceRefs.current[module.id] = node;
+                      }}
+                      className={`hero-face ${module.id === face ? "is-active" : ""}`}
+                      onClick={() => openFace(module.id)}
+                      aria-label={`查看${module.name}示例`}
+                    >
+                      <span aria-hidden="true" className="hero-face-char">
+                        {module.char}
+                      </span>
+                      <span>{module.name}</span>
+                    </button>
+                  ))}
+                  {demoCursor && pulse > 0 && (
+                    <span
+                      key={`tap-${pulse}`}
+                      aria-hidden="true"
+                      className="hero-demo-ripple"
+                      style={{ left: demoCursor.x, top: demoCursor.y }}
+                    />
+                  )}
+                  {demoCursor && (
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 16 16"
+                      className="hero-demo-pointer"
+                      style={{ left: demoCursor.x, top: demoCursor.y }}
+                    >
+                      <path d="M1.4 1.1 14.2 8.3l-5.6 1.1-2.5 5z" />
+                    </svg>
+                  )}
                 </div>
               </div>
 
-              <div className="hero-faces" aria-label="五个面的示例预览">
-                {DEMO_FACES.map((module) => (
-                  <button
-                    key={module.id}
-                    type="button"
-                    className={`hero-face ${module.id === face ? "is-active" : ""}`}
-                    onClick={() => openFace(module.id)}
-                    aria-label={`查看${module.name}示例`}
-                  >
-                    <span aria-hidden="true" className="hero-face-char">
-                      {module.char}
-                    </span>
-                    <span>{module.name}</span>
-                  </button>
-                ))}
+              <div className="hero-stage-foot">
+                <p className="hero-stage-note">
+                  五个面并列 点开任意一面看工作台预览
+                </p>
+                <button
+                  type="button"
+                  className="hero-demo-toggle"
+                  onClick={toggleDemo}
+                >
+                  {playing ? "暂停演示" : "继续演示"}
+                </button>
               </div>
-              <p className="lp-faint mt-3 text-center font-mono text-[10px] tracking-[0.14em]">
-                五个面并列 点开任意一面看工作台预览
-              </p>
             </div>
           </div>
         </section>
@@ -375,7 +510,7 @@ export default function LandingPage({
           id="demo"
           className="landing-band scroll-mt-6 px-4 py-20 sm:px-8 lg:py-24"
         >
-          <div className="mx-auto w-full max-w-[1240px]">
+          <div className="mx-auto w-full max-w-[1120px]">
             <Reveal>
               <div className="landing-section-head">
                 <p className="landing-eyebrow">工作台 五个面并列</p>
