@@ -233,7 +233,7 @@ function draftProfile(input: Json): Json {
     confidence: "low",
     confidenceReason: "建档草稿 需在页面走完 4 步确认后才写入本机存档",
     source: "本地规则建档（记录官 MCP）",
-    note: "建档草稿 需在页面走完 4 步后才会开启四个面",
+    note: "建档草稿 需在页面走完 4 步后才会开启五个面",
     feedback:
       missing.length === 0
         ? "这 4 项会生成等级与就绪度 并作为征召资格判定依据"

@@ -109,6 +109,99 @@ html[data-app-theme="manor"] {
   --manor-hairline: 194, 168, 112;
 }
 
+/* ---------- 主题光标 ---------- */
+/* 三套各自母题 不跨主题复用：
+   霞光 = 裁纸折面箭头 / 四角套准十字 / 窗光底墨线
+   夜间 = 直边仪器臂带星蓝内光与黄铜铆钉 / 星盘准线 / 黄铜两端刻度
+   庄园 = 圆角羊皮纸箭头带暗金内线与蜡点 / 火漆蜡封 / 蘸水笔尖
+   开关关闭时自定义属性不落地 全部 cursor 回落系统指针 */
+
+html[data-app-theme="dawn"]:not([data-app-cursor="off"]) {
+  --cur-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M4 2 6.2 11.6 4.4 21.4 9 17.8 11.6 24.6 15.2 23 12.6 16.6 18.8 15.4Z' fill='%23EAF6F8'/%3E%3Cpath d='M4 2 18.8 15.4 12.6 16.6 10.4 10.8Z' fill='%23BFEFF3'/%3E%3Cpath d='M4 2 10.4 10.8' fill='none' stroke='%2326313A' stroke-width='.8' opacity='.5'/%3E%3Cpath d='M4 2 6.2 11.6 4.4 21.4 9 17.8 11.6 24.6 15.2 23 12.6 16.6 18.8 15.4Z' fill='none' stroke='%2326313A' stroke-width='1.5' stroke-linejoin='miter'/%3E%3C/svg%3E")
+      4 2,
+    auto;
+  --cur-pointer: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M2.4 2.4h4.4M2.4 2.4v4.4M21.6 2.4h-4.4M21.6 2.4v4.4M2.4 21.6h4.4M2.4 21.6v-4.4M21.6 21.6h-4.4M21.6 21.6v-4.4' fill='none' stroke='%2326313A' stroke-width='1.4' stroke-linecap='round'/%3E%3Ccircle cx='12' cy='12' r='3.6' fill='%23FCFDFE' stroke='%2326313A' stroke-width='1.4'/%3E%3Ccircle cx='12' cy='12' r='1.5' fill='%23C96F9F'/%3E%3C/svg%3E")
+      12 12,
+    pointer;
+  --cur-text: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='26' viewBox='0 0 14 26'%3E%3Crect x='4.6' y='2' width='4.8' height='22' fill='%23BFEFF3' opacity='.6'/%3E%3Cpath d='M7 3v20' fill='none' stroke='%2326313A' stroke-width='1.7'/%3E%3Cpath d='M3 3.4h8M3 22.6h8' fill='none' stroke='%2326313A' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E")
+      7 13,
+    text;
+}
+
+html[data-app-theme="night"]:not([data-app-cursor="off"]) {
+  --cur-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M4 2 4 21.6 8.6 17.6 11.2 24.6 14.8 23 12.2 16.4 18.4 15.2Z' fill='%230A0F15' stroke='%238EA9D9' stroke-width='1.6' stroke-linejoin='miter'/%3E%3Cpath d='M5.9 7.6 5.9 18.8' fill='none' stroke='%23C9A45E' stroke-width='1' opacity='.9'/%3E%3Ccircle cx='8.4' cy='15.2' r='1.5' fill='%23C9A45E'/%3E%3C/svg%3E")
+      4 2,
+    auto;
+  --cur-pointer: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='12' rx='9' ry='5.6' fill='none' stroke='%238EA9D9' stroke-width='1.2' opacity='.85'/%3E%3Cpath d='M12 1.6v4M12 18.4v4M1.6 12h4M18.4 12h4' fill='none' stroke='%23C9A45E' stroke-width='1.7' stroke-linecap='round'/%3E%3Ccircle cx='12' cy='12' r='2.8' fill='%23E295BE' stroke='%230D131A' stroke-width='.8'/%3E%3C/svg%3E")
+      12 12,
+    pointer;
+  --cur-text: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='26' viewBox='0 0 14 26'%3E%3Crect x='4.6' y='2' width='4.8' height='22' fill='%238EA9D9' opacity='.18'/%3E%3Cpath d='M7 3v20' fill='none' stroke='%23E8EDF3' stroke-width='1.7'/%3E%3Cpath d='M3 3.4h8M3 22.6h8' fill='none' stroke='%23C9A45E' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E")
+      7 13,
+    text;
+}
+
+html[data-app-theme="manor"]:not([data-app-cursor="off"]) {
+  --cur-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M4 2 4 21.8 9.2 17.6 12 25 16 23 13 16.6 20 15.2Z' fill='%23F6E8D2' stroke='%23241811' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cpath d='M6.4 6.6 6.4 18.6 10.2 15.6 12 20.4' fill='none' stroke='%23BAA370' stroke-width='1' opacity='.9'/%3E%3Ccircle cx='8.6' cy='14' r='1.7' fill='%238F2B24' stroke='%235F1A15' stroke-width='.8'/%3E%3C/svg%3E")
+      4 2,
+    auto;
+  --cur-pointer: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.4c2.9-.4 5.6 1.1 7.3 3.5 1.8 2.4 2.1 5.6.7 8.5-1.4 2.8-4.2 5-7.4 5.6-3.2.6-6.3-.7-8.2-3.2C2.4 14.3 2 11 3.3 8.1 4.6 5.2 8.4 2.8 12 2.4Z' fill='%238F2B24' stroke='%235F1A15' stroke-width='1.5'/%3E%3Ccircle cx='12' cy='12' r='5' fill='none' stroke='%235F1A15' stroke-width='1.1' opacity='.8'/%3E%3Cpath d='M12 8.2 15 9.9v3.6L12 15.2 9 13.5V9.9Z' fill='%23F1E4C2' opacity='.82'/%3E%3Cellipse cx='8.6' cy='7.6' rx='2' ry='1.4' fill='%23F29D89' opacity='.3' transform='rotate(-30 8.6 7.6)'/%3E%3C/svg%3E")
+      12 12,
+    pointer;
+  --cur-text: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='28' viewBox='0 0 16 28'%3E%3Cpath d='M8 26.4 2.8 13.6c-1-2.4-.6-5 1-7L8 2l4.2 4.6c1.6 2 2 4.6 1 7Z' fill='%23F6E8D2' stroke='%23241811' stroke-width='1.6' stroke-linejoin='round'/%3E%3Cpath d='M8 24V11' fill='none' stroke='%23241811' stroke-width='1.2'/%3E%3Ccircle cx='8' cy='11' r='2' fill='%23F6E8D2' stroke='%23241811' stroke-width='1.2'/%3E%3Cpath d='M3.4 7.6h9.2' fill='none' stroke='%23BAA370' stroke-width='1.3'/%3E%3C/svg%3E")
+      8 26,
+    text;
+}
+
+/* 只作用于交互容器 打印页与简历 A4 保持系统指针 */
+html:not([data-app-cursor="off"]) :is(.app-shell, .landing-theme) {
+  cursor: var(--cur-arrow, auto);
+}
+
+html:not([data-app-cursor="off"])
+  :is(.app-shell, .landing-theme)
+  :is(
+    input[type="text"],
+    input[type="search"],
+    input[type="email"],
+    input[type="url"],
+    input[type="tel"],
+    input[type="number"],
+    input[type="password"],
+    input:not([type]),
+    textarea,
+    [contenteditable="true"],
+    [contenteditable=""],
+    [contenteditable="plaintext-only"]
+  ) {
+  cursor: var(--cur-text, text);
+}
+
+html:not([data-app-cursor="off"])
+  :is(
+    a[href],
+    button,
+    summary,
+    select,
+    label,
+    input[type="checkbox"],
+    input[type="radio"],
+    input[type="range"],
+    input[type="file"],
+    input[type="submit"],
+    input[type="button"],
+    [role="button"],
+    [role="tab"],
+    [role="switch"],
+    [role="checkbox"],
+    [role="radio"],
+    [role="menuitem"],
+    [role="option"],
+    [role="combobox"],
+    [role="slider"]
+  ):not(:disabled, [disabled], [aria-disabled="true"], .is-locked) {
+  cursor: var(--cur-pointer, pointer);
+}
+
 /* 页面底：月光下的冷铁石墙，暖木只留在家具与羊皮纸上 */
 html[data-app-theme="manor"] .app-shell {
   background:
@@ -1430,40 +1523,6 @@ html[data-app-theme="night"] .opp-stats {
   box-shadow: 0 16px 32px -30px #000;
 }
 
-/* ---------- Theme switch: 水波扩散 / 内收 ---------- */
-
-::view-transition-group(root),
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-
-html[data-theme-flow="out"]::view-transition-new(root) {
-  z-index: 2;
-}
-
-html[data-theme-flow="out"]::view-transition-old(root) {
-  z-index: 1;
-}
-
-html[data-theme-flow="in"]::view-transition-old(root) {
-  z-index: 2;
-}
-
-html[data-theme-flow="in"]::view-transition-new(root) {
-  z-index: 1;
-}
-
-/* 软边圆形蒙版 放大时边界像水面一样推出去 缩小则从外缘收拢 */
-html[data-theme-flow="out"]::view-transition-new(root),
-html[data-theme-flow="in"]::view-transition-old(root) {
-  mask-image: radial-gradient(circle at 50% 50%, #000 0 62%, transparent 72%);
-  mask-repeat: no-repeat;
-  mask-position: 50% 50%;
-  mask-size: 400% 400%;
-}
-
 @layer base {
   html {
     -webkit-font-smoothing: antialiased;
@@ -1790,16 +1849,30 @@ html[data-theme-flow="in"]::view-transition-old(root) {
   display: grid;
   flex: 1;
   min-height: 0;
-  grid-template-columns: 32px repeat(5, minmax(0, 1fr));
-  grid-template-rows: 18px repeat(4, minmax(0, 1fr));
-  gap: 4px;
+  grid-template-columns: 18px repeat(7, minmax(0, 1fr));
+  grid-template-rows: 20px repeat(var(--shot-rows, 8), minmax(0, 1fr));
+  gap: 2px;
 }
 
 .shot-day {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: clamp(8.5px, 1.9cqw, 11px);
+  gap: 1px;
+  font-size: clamp(8px, 1.7cqw, 10.5px);
+  color: var(--lp-ink-soft);
+}
+
+.shot-day .shot-name {
+  line-height: 1.2;
+}
+
+.shot-day .shot-date {
+  font-size: clamp(6.5px, 1.25cqw, 8px);
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  color: var(--lp-ink-faint);
 }
 
 .shot-day.is-today {
@@ -1808,13 +1881,21 @@ html[data-theme-flow="in"]::view-transition-old(root) {
   box-shadow: inset 0 -2px 0 var(--lp-accent);
 }
 
+.shot-day.is-today .shot-date {
+  color: var(--lp-accent);
+}
+
 .shot-lane {
-  border-radius: 4px;
+  border-radius: 3px;
   background: color-mix(in srgb, var(--lp-ink), transparent 96%);
 }
 
 .shot-lane.is-today {
   background: color-mix(in srgb, var(--lp-accent), transparent 93%);
+}
+
+.shot-quiet {
+  background-color: color-mix(in srgb, var(--lp-ink), transparent 97.5%);
 }
 
 .shot-period {
@@ -1832,25 +1913,35 @@ html[data-theme-flow="in"]::view-transition-old(root) {
   z-index: 1;
   min-height: 0;
   overflow: hidden;
-  padding: 4px 5px;
+  padding: 3px 4px;
   border: 1px solid var(--lp-line-soft);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 .shot-room {
   color: color-mix(in srgb, var(--lp-ink), transparent 18%);
 }
 
-.shot-biweekly {
+.shot-weeks {
   position: absolute;
-  top: 2px;
-  right: 2px;
-  padding: 0 3px;
-  border-radius: 2px;
-  background: color-mix(in srgb, var(--lp-ink), transparent 88%);
-  color: var(--lp-ink-soft);
-  font-size: clamp(6.5px, 1.3cqw, 8px);
-  line-height: 11px;
+  right: 4px;
+  bottom: 2px;
+  color: color-mix(in srgb, var(--lp-ink), transparent 42%);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.shot-pip {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border: 1px solid var(--lp-line);
+  transform: rotate(45deg);
+}
+
+.shot-pip.is-on {
+  border-color: color-mix(in srgb, var(--lp-accent), var(--lp-ink) 20%);
+  background-color: var(--lp-accent);
 }
 
 .shot-match {
@@ -1883,6 +1974,14 @@ html[data-theme-flow="in"]::view-transition-old(root) {
 
 @container (max-width: 399px) {
   .shot-hide-narrow {
+    display: none;
+  }
+
+  .shot-week {
+    grid-template-columns: 18px repeat(5, minmax(0, 1fr));
+  }
+
+  .shot-week .shot-quiet {
     display: none;
   }
 
@@ -2072,7 +2171,7 @@ html[data-theme-flow="in"]::view-transition-old(root) {
   color: var(--lp-ink);
   font-family: inherit;
   text-align: left;
-  cursor: pointer;
+  cursor: var(--cur-pointer, pointer);
   transition:
     transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1),
     box-shadow 320ms ease,
@@ -2430,9 +2529,30 @@ html[data-theme-flow="in"]::view-transition-old(root) {
   color: var(--lp-ink-faint);
 }
 
+/* 今日情报轮播的页码点 与真实今日页同一形态 */
+.demo-intel-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--lp-ink), transparent 82%);
+}
+
+.demo-intel-dot.is-on {
+  background: var(--lp-accent);
+}
+
+/* 演示台面：五面共用一个高度，切面时窗口不再上下跳，长内容在台面内滚 */
 .demo-content {
-  flex: 1;
+  flex: none;
+  height: clamp(440px, 62vh, 560px);
+  overflow-y: auto;
   padding: clamp(16px, 2.2vw, 24px);
+  scrollbar-width: thin;
+}
+
+/* 面板把台面剩余高度吃掉：卡与星图随之拉长，不留空白 */
+.demo-panel {
+  min-height: 100%;
 }
 
 .demo-fade {
@@ -2447,10 +2567,52 @@ html[data-theme-flow="in"]::view-transition-old(root) {
 }
 
 .demo-subpanel {
-  padding: 12px 13px;
+  padding: 10px 12px;
   border: 1px solid var(--lp-line-soft);
   border-radius: 12px;
   background: color-mix(in srgb, var(--lp-surface), var(--tint) 42%);
+}
+
+/* 右侧辅卡列：桌面竖排，窄屏换成横滑的一条，一屏只吃一张卡的高度 */
+.demo-aux {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 类型筛选条：桌面换行，窄屏横滑 */
+.demo-chip-row {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.demo-chip-row > * {
+  flex: 0 0 auto;
+}
+
+/* 碎片收件箱一行：桌面收成一行，窄屏让文字换行 */
+.demo-inbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.demo-inbox-text {
+  min-width: 0;
+  flex: 1;
+}
+
+@media (min-width: 901px) {
+  .demo-inbox-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .demo-square {
@@ -2553,14 +2715,97 @@ html[data-theme-flow="in"]::view-transition-old(root) {
   box-shadow: inset 2px 0 0 var(--lp-accent);
 }
 
-.demo-tile {
+/* 工具册：与工具箱页同形 一叠抽屉而不是色块卡 */
+.demo-sheet-stack {
   display: flex;
-  min-height: 132px;
+  flex: 1;
+  min-height: 0;
   flex-direction: column;
-  padding: 13px;
-  border: 1px solid color-mix(in srgb, var(--tone), var(--lp-ink) 10%);
-  border-radius: 13px;
-  background: color-mix(in srgb, var(--tone), var(--tint) 56%);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.demo-sheet {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--lp-line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--lp-surface), transparent 18%);
+}
+
+.demo-sheet-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 13px;
+  border-bottom: 1px solid var(--lp-line-soft);
+}
+
+.demo-tool {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 13px;
+}
+
+.demo-tool + .demo-tool {
+  border-top: 1px solid var(--lp-line-soft);
+}
+
+.demo-tool-no {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--lp-accent);
+}
+
+.demo-tool-title {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.demo-tool-side {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.demo-tool-pull {
+  width: 26px;
+  height: 7px;
+  border: 1px solid var(--lp-line);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--lp-ink), transparent 90%);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--lp-surface), transparent 12%);
+}
+
+/* 抽屉拉手按主题给五金：霞光橡皮条 夜间黄铜 与工具箱页同源 */
+.landing-theme[data-theme="dawn"] .demo-tool-pull {
+  border-color: rgba(168, 83, 122, 0.4);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(109, 43, 69, 0.5) 0 1.2px, transparent 1.6px),
+    linear-gradient(180deg, #f6d2df 0%, #e295b3 54%, #b96b88 100%);
+  box-shadow:
+    0 2px 4px -1px rgba(38, 54, 68, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.landing-theme[data-theme="night"] .demo-tool-pull {
+  border-color: rgba(196, 164, 101, 0.55);
+  border-radius: 3px;
+  background:
+    radial-gradient(circle at 50% 50%, #f0e0b4 0 1.4px, rgba(120, 92, 40, 0.9) 1.6px 2.4px, transparent 2.6px),
+    linear-gradient(180deg, #e6cf9a 0%, #c9a45e 42%, #8a6c33 100%);
+  box-shadow:
+    0 2px 4px -2px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 244, 214, 0.55);
 }
 
 @keyframes demo-panel-in {
@@ -2572,6 +2817,230 @@ html[data-theme-flow="in"]::view-transition-old(root) {
     opacity: 1;
     transform: none;
   }
+}
+
+/* ---------- 落地页 · 学径空间示例：夜空 + 星点 + 流星 ---------- */
+
+.demo-sky {
+  position: relative;
+  display: flex;
+  min-height: 238px;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 14px 14px 0;
+  border: 1px solid color-mix(in srgb, #0c1420 55%, var(--lp-line));
+  border-radius: 14px;
+  background:
+    radial-gradient(78% 58% at 76% 6%, rgba(84, 112, 158, 0.4), transparent 68%),
+    radial-gradient(64% 52% at 12% 88%, rgba(52, 74, 108, 0.34), transparent 70%),
+    linear-gradient(168deg, #121e2c 0%, #0b1420 54%, #070c14 100%);
+}
+
+.landing-theme[data-theme="night"] .demo-sky {
+  background:
+    radial-gradient(78% 58% at 76% 6%, rgba(96, 128, 176, 0.36), transparent 68%),
+    radial-gradient(64% 52% at 12% 88%, rgba(58, 84, 122, 0.3), transparent 70%),
+    linear-gradient(168deg, #101a26 0%, #0a1119 54%, #060a10 100%);
+}
+
+.landing-theme[data-theme="manor"] .demo-sky {
+  border-color: rgba(194, 168, 112, 0.34);
+  background:
+    radial-gradient(78% 58% at 76% 6%, rgba(148, 112, 58, 0.3), transparent 68%),
+    radial-gradient(64% 52% at 12% 88%, rgba(92, 66, 34, 0.26), transparent 70%),
+    linear-gradient(168deg, #171310 0%, #0e0b09 54%, #080605 100%);
+}
+
+/* 首屏小窗里的星图：跟着容器收缩，圆角与间距都收一档 */
+.demo-sky--mini {
+  min-height: 0;
+  padding: 10px;
+  border-radius: 11px;
+}
+
+.demo-sky--mini .demo-sky-rose {
+  top: 8px;
+  left: 8px;
+  width: 16px;
+  height: 16px;
+}
+
+.demo-sky--mini .demo-sky-meteor {
+  width: 44px;
+}
+
+/* 银河带：一条斜穿的淡光，和真实星图一样只做底纹 */
+.demo-sky::before {
+  content: "";
+  position: absolute;
+  top: -18%;
+  left: -14%;
+  width: 138%;
+  height: 58%;
+  border-radius: 50%;
+  background: radial-gradient(
+    58% 46% at 50% 50%,
+    rgba(226, 236, 255, 0.16),
+    rgba(196, 212, 244, 0.05) 58%,
+    transparent 76%
+  );
+  transform: rotate(-14deg);
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+.landing-theme[data-theme="manor"] .demo-sky::before {
+  background: radial-gradient(
+    58% 46% at 50% 50%,
+    rgba(240, 222, 178, 0.13),
+    rgba(212, 186, 130, 0.04) 58%,
+    transparent 76%
+  );
+}
+
+.demo-sky::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 14% 26%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 38% 62%, rgba(255, 255, 255, 0.34), transparent),
+    radial-gradient(1px 1px at 62% 18%, rgba(255, 255, 255, 0.42), transparent),
+    radial-gradient(1px 1px at 82% 48%, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 26% 82%, rgba(255, 255, 255, 0.26), transparent),
+    radial-gradient(1px 1px at 70% 76%, rgba(255, 255, 255, 0.32), transparent),
+    radial-gradient(1px 1px at 92% 88%, rgba(255, 255, 255, 0.22), transparent),
+    radial-gradient(1px 1px at 48% 34%, rgba(255, 255, 255, 0.24), transparent);
+  pointer-events: none;
+}
+
+.demo-sky-star {
+  position: absolute;
+  z-index: 1;
+  width: var(--r, 6px);
+  height: var(--r, 6px);
+  border-radius: 999px;
+  background: var(--c, #dfe8f5);
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.14),
+    0 0 9px 2px color-mix(in srgb, var(--c, #dfe8f5) 42%, transparent);
+}
+
+.demo-sky-star.is-today {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.5),
+    0 0 0 4px color-mix(in srgb, var(--c, #dfe8f5) 26%, transparent),
+    0 0 14px 4px color-mix(in srgb, var(--c, #dfe8f5) 55%, transparent);
+}
+
+/* 左上角罗盘：只留一圈刻度，对应真实星图的方位标记 */
+.demo-sky-rose {
+  position: absolute;
+  top: 11px;
+  left: 11px;
+  z-index: 1;
+  width: 22px;
+  height: 22px;
+  border: 1px solid rgba(226, 234, 248, 0.34);
+  border-radius: 999px;
+  background:
+    conic-gradient(
+      from 0deg,
+      rgba(226, 234, 248, 0.42) 0deg 3deg,
+      transparent 3deg 90deg,
+      rgba(226, 234, 248, 0.26) 90deg 93deg,
+      transparent 93deg 180deg,
+      rgba(226, 234, 248, 0.26) 180deg 183deg,
+      transparent 183deg 270deg,
+      rgba(226, 234, 248, 0.26) 270deg 273deg,
+      transparent 273deg 360deg
+    );
+}
+
+.demo-sky-meteor {
+  position: absolute;
+  z-index: 1;
+  width: 68px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(226, 236, 255, 0.22) 42%,
+    rgba(255, 255, 255, 0.82)
+  );
+  transform: rotate(21deg);
+  transform-origin: right center;
+}
+
+/* 星座轮播层的第一张：与真实星图同一份 CONSTELLATIONS 几何 */
+.demo-sky-lines {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.demo-sky-lines line {
+  stroke: rgba(210, 226, 250, 0.3);
+  stroke-width: 1;
+}
+
+.landing-theme[data-theme="manor"] .demo-sky-lines line {
+  stroke: rgba(214, 190, 140, 0.32);
+}
+
+.demo-sky-node {
+  position: absolute;
+  z-index: 0;
+  width: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(232, 240, 255, 0.66);
+  transform: translate(-50%, -50%);
+}
+
+.landing-theme[data-theme="manor"] .demo-sky-node {
+  background: rgba(241, 228, 194, 0.7);
+}
+
+.demo-sky-name {
+  position: absolute;
+  bottom: 10px;
+  left: 13px;
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: rgba(224, 232, 246, 0.56);
+}
+
+.landing-theme[data-theme="manor"] .demo-sky-name {
+  color: rgba(236, 220, 186, 0.58);
+}
+
+.demo-sky-today {
+  position: absolute;
+  z-index: 1;
+  padding-left: 7px;
+  transform: translate(0, -50%);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  color: rgba(241, 228, 194, 0.9);
+}
+
+.landing-theme[data-theme="dawn"] .demo-sky-today,
+.landing-theme[data-theme="night"] .demo-sky-today {
+  color: rgba(240, 214, 228, 0.92);
+}
+
+.demo-sky-recent {
+  border-radius: 9px;
+}
+
+.demo-sky-recent.is-on {
+  background: color-mix(in srgb, var(--lp-accent) 13%, transparent);
 }
 
 @media (max-width: 1023px) {
@@ -2631,6 +3100,41 @@ html[data-theme-flow="in"]::view-transition-old(root) {
   .demo-titlebar-title {
     text-align: left;
   }
+
+  /* 窄屏同样恒定：台面收到更小的固定高度，超出部分在台面内滚 */
+  .demo-content {
+    height: min(620px, 74vh);
+  }
+
+  /* 辅卡横滑一条：保留每张卡的宽度，只占一屏高度 */
+  .demo-aux {
+    flex-direction: row;
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+    padding-bottom: 2px;
+  }
+
+  .demo-aux > * {
+    flex: 0 0 88%;
+    scroll-snap-align: start;
+  }
+
+  .demo-chip-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  /* 抽屉行放不下时次要信息另起一行，与工具箱页窄屏同一处理 */
+  .demo-tool {
+    flex-wrap: wrap;
+  }
+
+  .demo-tool-side {
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 @media (max-width: 639px) {
@@ -2683,7 +3187,7 @@ html[data-theme-flow="in"]::view-transition-old(root) {
   justify-content: space-between;
   gap: 16px;
   padding: 14px 2px;
-  cursor: pointer;
+  cursor: var(--cur-pointer, pointer);
   list-style: none;
   font-size: 14px;
   line-height: 1.6;
@@ -3598,6 +4102,18 @@ html[data-theme-flow="in"]::view-transition-old(root) {
   outline-offset: 2px;
 }
 
+.hero-face.is-active {
+  border-color: color-mix(in srgb, var(--lp-accent), transparent 52%);
+  background: color-mix(in srgb, var(--lp-accent), transparent 86%);
+  color: var(--lp-ink);
+}
+
+.hero-face.is-active .hero-face-char {
+  border-color: color-mix(in srgb, var(--lp-accent), transparent 34%);
+  background: color-mix(in srgb, var(--lp-accent), transparent 78%);
+  color: var(--lp-accent);
+}
+
 .hero-face-char {
   display: inline-flex;
   height: 28px;
@@ -3734,8 +4250,9 @@ html[data-theme-flow="in"]::view-transition-old(root) {
   backdrop-filter: blur(14px);
 }
 
-.demo-tile {
-  background: color-mix(in srgb, var(--tone), transparent 55%);
+.demo-sheet {
+  border-color: rgba(var(--wash-rgb), 0.45);
+  background: rgba(var(--wash-rgb), 0.2);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
 }
@@ -4094,7 +4611,7 @@ button.app-mini-chip:hover {
   font-size: 11px;
   color: var(--color-ink-2);
   text-decoration: none;
-  cursor: pointer;
+  cursor: var(--cur-pointer, pointer);
   transition:
     color 160ms ease,
     background-color 160ms ease,
@@ -4203,7 +4720,7 @@ button.app-mini-chip:hover {
   color: var(--color-ink);
   text-align: center;
   text-align-last: center;
-  cursor: pointer;
+  cursor: var(--cur-pointer, pointer);
   transition: background-color 140ms ease;
 }
 
@@ -4333,7 +4850,7 @@ button.app-mini-chip:hover {
   border: 1.5px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
   background: rgba(var(--wash-rgb), 0.6);
   accent-color: var(--color-accent);
-  cursor: pointer;
+  cursor: var(--cur-pointer, pointer);
 }
 
 .checkin {
@@ -4851,7 +5368,7 @@ button.app-mini-chip:hover {
 .app-mobile-data summary {
   display: flex;
   min-height: 42px;
-  cursor: pointer;
+  cursor: var(--cur-pointer, pointer);
   list-style: none;
   align-items: center;
   justify-content: space-between;
@@ -5946,6 +6463,73 @@ button.app-mini-chip:hover {
   }
 }
 
+.app-island-cursor {
+  display: flex;
+  min-height: 44px;
+  margin-top: 8px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid color-mix(in srgb, var(--color-rule) 70%, transparent);
+  padding-top: 4px;
+}
+
+.app-island-cursor-label {
+  font-size: 11px;
+  color: var(--color-ink-3);
+}
+
+.app-island-cursor-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  background: none;
+  padding: 0 2px;
+  font: inherit;
+  font-size: 11px;
+  color: var(--color-ink-3);
+}
+
+.app-island-cursor-switch[data-on="on"] {
+  color: var(--color-accent-ink);
+}
+
+.app-island-cursor-track {
+  position: relative;
+  display: block;
+  width: 34px;
+  height: 18px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-rule) 45%, transparent);
+  transition: background-color 160ms ease;
+}
+
+.app-island-cursor-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: currentColor;
+  transition: transform 160ms ease;
+}
+
+.app-island-cursor-switch[data-on="on"] .app-island-cursor-track {
+  background: color-mix(in srgb, var(--color-accent) 26%, transparent);
+}
+
+.app-island-cursor-switch[data-on="on"] .app-island-cursor-knob {
+  transform: translateX(16px);
+}
+
+.app-island-cursor-state {
+  min-width: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
 .app-island-backup {
   margin-top: 8px;
   border-top: 1px solid color-mix(in srgb, var(--color-rule) 70%, transparent);
@@ -5957,7 +6541,7 @@ button.app-mini-chip:hover {
   min-height: 34px;
   align-items: center;
   justify-content: space-between;
-  cursor: pointer;
+  cursor: var(--cur-pointer, pointer);
   list-style: none;
   font-size: 11px;
   color: var(--color-ink-3);
@@ -6019,7 +6603,7 @@ button.app-mini-chip:hover {
   display: grid;
   width: 18px;
   height: 18px;
-  cursor: pointer;
+  cursor: var(--cur-pointer, pointer);
   place-items: center;
   border: 1px solid color-mix(in srgb, var(--color-rule) 80%, var(--tint));
   border-radius: 9999px;
@@ -6083,7 +6667,7 @@ button.app-mini-chip:hover {
 
 .app-archive-portrait-note button:disabled {
   opacity: 0.55;
-  cursor: default;
+  cursor: var(--cur-arrow, default);
 }
 
 /* 生成头像：年级字标 + 等级进度环，颜色跟随目标方向 */
@@ -6331,7 +6915,7 @@ button.app-mini-chip:hover {
   font-size: 10px;
   letter-spacing: 0.08em;
   color: var(--color-ink-3);
-  cursor: pointer;
+  cursor: var(--cur-pointer, pointer);
 }
 
 .tl-tool:hover {
@@ -6614,7 +7198,7 @@ button.app-mini-chip:hover {
   font-family: inherit;
   font-size: 10px;
   color: var(--color-ink-4);
-  cursor: pointer;
+  cursor: var(--cur-pointer, pointer);
 }
 
 .tl-action:hover {
@@ -6625,7 +7209,7 @@ button.app-mini-chip:hover {
 
 .tl-action:disabled {
   opacity: 0.5;
-  cursor: default;
+  cursor: var(--cur-arrow, default);
 }
 
 .tl-action.is-danger {
@@ -7239,6 +7823,18 @@ html[data-app-theme="night"] input[type="checkbox"] {
   color: #241811;
 }
 
+.landing-theme[data-theme="manor"] .hero-face.is-active {
+  border-color: rgba(217, 184, 120, 0.72);
+  background: #2a2018;
+  color: #f1e4c2;
+}
+
+.landing-theme[data-theme="manor"] .hero-face.is-active .hero-face-char {
+  border-color: #d9b878;
+  background: #d9b878;
+  color: #241811;
+}
+
 .landing-theme[data-theme="manor"] .demo-window {
   border-color: rgba(186, 163, 112, 0.55);
   background: #14100c;
@@ -7335,11 +7931,32 @@ html[data-app-theme="night"] input[type="checkbox"] {
   background: rgba(241, 228, 194, 0.05);
 }
 
-.landing-theme[data-theme="manor"] .demo-tile {
+.landing-theme[data-theme="manor"] .demo-sheet {
   border-color: rgba(156, 135, 88, 0.38);
   background: #12100e;
+  box-shadow: inset 0 1px 0 rgba(241, 228, 194, 0.04);
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
+}
+
+.landing-theme[data-theme="manor"] .demo-sheet-head {
+  border-bottom-color: rgba(156, 135, 88, 0.28);
+}
+
+.landing-theme[data-theme="manor"] .demo-tool + .demo-tool {
+  border-top-color: rgba(156, 135, 88, 0.26);
+}
+
+.landing-theme[data-theme="manor"] .demo-tool-no {
+  color: #b9a06a;
+}
+
+.landing-theme[data-theme="manor"] .demo-tool-pull {
+  border-color: rgba(186, 163, 112, 0.5);
+  background: linear-gradient(180deg, #d9ba84, #a9824c 56%, #7b5a31);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 250, 235, 0.75);
 }
 
 .landing-theme[data-theme="manor"] .demo-job.is-on {
@@ -9839,4 +10456,2235 @@ html[data-app-theme="night"] .app-island-panel {
     8px calc(100% - 8px),
     calc(100% - 8px) calc(100% - 8px);
   background-repeat: no-repeat;
+}
+
+/* ================================================================== */
+/* ---------- 第五批 · 对照庄园的体积化迁移 ---------- */
+/* 庄园分区靠「容器抬起 + 内格凹陷 + 五金件」，不靠横线 */
+/* 霞光 = 教室文具：投影幕布 / 牛皮纸盒 / 纸格 / 橡皮 / 拉链 / 胶带标签 */
+/* 夜间 = 桌面仪器：星座画图板 / 眼镜盒 / 天鹅绒凹槽 / 黄铜合页搭扣 / 镜布拉带 */
+/* ================================================================== */
+
+html[data-app-theme="dawn"] {
+  --dawn-kraft: #ece0c9;
+  --dawn-kraft-2: #f7f1e3;
+  --dawn-kraft-ink: #6a5433;
+  --dawn-kraft-edge: 176, 142, 96;
+  --dawn-recess: rgba(38, 54, 68, 0.16);
+  --dawn-crease-hi: rgba(255, 255, 255, 0.92);
+  --dawn-crease-lo: rgba(38, 54, 68, 0.12);
+  --dawn-eraser: #e9a4bb;
+  --dawn-eraser-mid: #cf7a9c;
+  --dawn-eraser-deep: #a8537a;
+}
+
+html[data-app-theme="night"] {
+  --night-shell: #131e29;
+  --night-velvet: #070d13;
+  --night-brass: #c9a45e;
+  --night-brass-hi: #f0ddb4;
+  --night-brass-lo: #7a6130;
+  --night-rim: rgba(232, 237, 243, 0.07);
+  --night-silk: #86a2cd;
+}
+
+/* === 今日主卡：霞光投影幕布 / 夜间星座画图板 === */
+
+/* 幕布：织纹经纬 + 上亮下沉的受光，四角套准十字留在原位 */
+html[data-app-theme="dawn"] .app-card-brief {
+  border-color: rgba(var(--dawn-hairline), 0.2);
+  background-color: #fbfcfc;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(240, 246, 248, 0.5) 40%,
+      rgba(205, 219, 228, 0.62) 100%
+    ),
+    radial-gradient(
+      120% 90% at 8% -18%,
+      rgba(var(--dawn-cyan), 0.24),
+      transparent 64%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(var(--dawn-hairline), 0.11) 0 1px,
+      rgba(255, 255, 255, 0.62) 1px 4px
+    ),
+    repeating-linear-gradient(
+      180deg,
+      rgba(var(--dawn-hairline), 0.08) 0 1px,
+      rgba(255, 255, 255, 0.5) 1px 4px
+    ),
+    linear-gradient(rgba(var(--dawn-hairline), 0.46), rgba(var(--dawn-hairline), 0.46)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.46), rgba(var(--dawn-hairline), 0.46)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.46), rgba(var(--dawn-hairline), 0.46)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.46), rgba(var(--dawn-hairline), 0.46)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.46), rgba(var(--dawn-hairline), 0.46)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.46), rgba(var(--dawn-hairline), 0.46)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.46), rgba(var(--dawn-hairline), 0.46)),
+    linear-gradient(rgba(var(--dawn-hairline), 0.46), rgba(var(--dawn-hairline), 0.46));
+  background-size:
+    auto,
+    auto,
+    auto,
+    auto,
+    13px 1px,
+    1px 13px,
+    13px 1px,
+    1px 13px,
+    13px 1px,
+    1px 13px,
+    13px 1px,
+    1px 13px;
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    0 0,
+    10px 10px,
+    10px 10px,
+    calc(100% - 10px) 10px,
+    calc(100% - 10px) 10px,
+    10px calc(100% - 10px),
+    10px calc(100% - 10px),
+    calc(100% - 10px) calc(100% - 10px),
+    calc(100% - 10px) calc(100% - 10px);
+  background-repeat: no-repeat, no-repeat, repeat, repeat, no-repeat, no-repeat,
+    no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.6),
+    inset 0 -26px 34px -26px rgba(38, 54, 68, 0.3),
+    0 28px 48px -32px rgba(38, 54, 68, 0.42);
+}
+
+/* 幕布上下换成卷轴杆：圆管受光 + 两端端盖，替掉原来的方压条 */
+html[data-app-theme="dawn"] .app-card-brief::before,
+html[data-app-theme="dawn"] .app-card-brief::after {
+  left: -14px;
+  right: -14px;
+  height: 13px;
+  border: 0;
+  border-radius: 7px;
+  background-image:
+    radial-gradient(
+      circle at 7px 50%,
+      #ffffff 0 2.1px,
+      rgba(var(--dawn-hairline), 0.44) 2.3px 3.5px,
+      rgba(var(--dawn-hairline), 0.14) 3.7px 5px,
+      transparent 5.2px
+    ),
+    radial-gradient(
+      circle at calc(100% - 7px) 50%,
+      #ffffff 0 2.1px,
+      rgba(var(--dawn-hairline), 0.44) 2.3px 3.5px,
+      rgba(var(--dawn-hairline), 0.14) 3.7px 5px,
+      transparent 5.2px
+    ),
+    linear-gradient(
+      180deg,
+      #d8e3e9 0%,
+      #ffffff 26%,
+      #eff5f7 48%,
+      #c6d4dc 80%,
+      #e8eff2 100%
+    );
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  box-shadow:
+    0 8px 14px -8px rgba(38, 54, 68, 0.55),
+    inset 0 -1px 0 rgba(38, 54, 68, 0.2);
+}
+
+html[data-app-theme="dawn"] .app-card-brief::before {
+  top: -7px;
+}
+
+html[data-app-theme="dawn"] .app-card-brief::after {
+  bottom: -7px;
+}
+
+/* 图板：罗盘纹样保留，底下加一层蚀刻方格，卡面压出阳极氧化板的厚度 */
+html[data-app-theme="night"] .app-card-brief {
+  border-color: rgba(var(--night-brass), 0.3);
+  background-color: #131d27;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(var(--night-star), 0.055) 0 1px,
+      transparent 1px 24px
+    ),
+    repeating-linear-gradient(
+      180deg,
+      rgba(var(--night-star), 0.055) 0 1px,
+      transparent 1px 24px
+    ),
+    radial-gradient(
+      120% 90% at 8% -16%,
+      rgba(var(--night-star), 0.16),
+      transparent 62%
+    ),
+    linear-gradient(180deg, rgba(var(--night-light), 0.07), transparent 24%),
+    linear-gradient(
+      90deg,
+      transparent 0 calc(50% - 0.9px),
+      rgba(var(--night-star), 0.13) calc(50% - 0.9px) calc(50% + 0.9px),
+      transparent calc(50% + 0.9px) 0
+    ),
+    linear-gradient(
+      180deg,
+      transparent 0 calc(50% - 0.9px),
+      rgba(var(--night-star), 0.13) calc(50% - 0.9px) calc(50% + 0.9px),
+      transparent calc(50% + 0.9px) 0
+    ),
+    linear-gradient(
+      45deg,
+      transparent 0 calc(50% - 0.7px),
+      rgba(var(--night-star), 0.07) calc(50% - 0.7px) calc(50% + 0.7px),
+      transparent calc(50% + 0.7px) 0
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 0 calc(50% - 0.7px),
+      rgba(var(--night-star), 0.07) calc(50% - 0.7px) calc(50% + 0.7px),
+      transparent calc(50% + 0.7px) 0
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 0 138px,
+      rgba(var(--night-star), 0.12) 138px 139px,
+      transparent 139px
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 0 86px,
+      rgba(var(--night-star), 0.08) 86px 87px,
+      transparent 87px
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(var(--night-star), 0.16) 0 1.6px,
+      transparent 2.4px
+    ),
+    conic-gradient(
+      from -20deg at 50% 50%,
+      rgba(var(--night-star), 0.72) 0 40deg,
+      transparent 0 70deg,
+      rgba(var(--night-star), 0.72) 0 110deg,
+      transparent 0 160deg,
+      rgba(var(--night-star), 0.72) 0 200deg,
+      transparent 0 250deg,
+      rgba(var(--night-star), 0.72) 0 290deg,
+      transparent 0
+    ),
+    conic-gradient(
+      from -20deg at 50% 50%,
+      rgba(var(--night-star), 0.72) 0 40deg,
+      transparent 0 70deg,
+      rgba(var(--night-star), 0.72) 0 110deg,
+      transparent 0 160deg,
+      rgba(var(--night-star), 0.72) 0 200deg,
+      transparent 0 250deg,
+      rgba(var(--night-star), 0.72) 0 290deg,
+      transparent 0
+    ),
+    conic-gradient(
+      from -20deg at 50% 50%,
+      rgba(var(--night-star), 0.72) 0 40deg,
+      transparent 0 70deg,
+      rgba(var(--night-star), 0.72) 0 110deg,
+      transparent 0 160deg,
+      rgba(var(--night-star), 0.72) 0 200deg,
+      transparent 0 250deg,
+      rgba(var(--night-star), 0.72) 0 290deg,
+      transparent 0
+    ),
+    conic-gradient(
+      from -20deg at 50% 50%,
+      rgba(var(--night-star), 0.72) 0 40deg,
+      transparent 0 70deg,
+      rgba(var(--night-star), 0.72) 0 110deg,
+      transparent 0 160deg,
+      rgba(var(--night-star), 0.72) 0 200deg,
+      transparent 0 250deg,
+      rgba(var(--night-star), 0.72) 0 290deg,
+      transparent 0
+    );
+  background-size:
+    24px 24px,
+    24px 24px,
+    auto,
+    auto,
+    276px 276px,
+    276px 276px,
+    122px 122px,
+    122px 122px,
+    300px 300px,
+    300px 300px,
+    300px 300px,
+    12px 12px,
+    12px 12px,
+    12px 12px,
+    12px 12px;
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    0 0,
+    50% 50%,
+    50% 50%,
+    50% 50%,
+    50% 50%,
+    50% 50%,
+    50% 50%,
+    50% 50%,
+    9px 9px,
+    calc(100% - 9px) 9px,
+    9px calc(100% - 9px),
+    calc(100% - 9px) calc(100% - 9px);
+  background-repeat: repeat, repeat, no-repeat, no-repeat, no-repeat, no-repeat,
+    no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
+    no-repeat, no-repeat;
+  box-shadow:
+    inset 0 1px 0 rgba(var(--night-light), 0.1),
+    inset 0 0 0 1px rgba(var(--night-star), 0.14),
+    inset 0 -26px 34px -30px rgba(0, 0, 0, 0.8),
+    0 28px 52px -34px rgba(0, 0, 0, 0.95);
+}
+
+/* 图板上下压一条黄铜合页：关节逐段错开，两端收销钉 */
+html[data-app-theme="night"] .app-card-brief::before,
+html[data-app-theme="night"] .app-card-brief::after {
+  left: -12px;
+  right: -12px;
+  height: 12px;
+  border: 0;
+  border-radius: 6px;
+  background-image:
+    radial-gradient(
+      circle at 8px 50%,
+      var(--night-brass-hi) 0 1.9px,
+      var(--night-brass-lo) 2.1px 3.2px,
+      transparent 3.4px
+    ),
+    radial-gradient(
+      circle at calc(100% - 8px) 50%,
+      var(--night-brass-hi) 0 1.9px,
+      var(--night-brass-lo) 2.1px 3.2px,
+      transparent 3.4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(240, 221, 180, 0.42) 0 1px,
+      rgba(240, 221, 180, 0) 1px 24px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      #3a4a60 0 20px,
+      #16202b 20px 24px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(232, 237, 243, 0.24) 0 12%,
+      rgba(232, 237, 243, 0.04) 40%,
+      rgba(0, 0, 0, 0.55) 84%,
+      rgba(232, 237, 243, 0.1) 100%
+    );
+  background-size:
+    auto,
+    auto,
+    24px 2px,
+    auto,
+    auto;
+  background-position:
+    0 0,
+    100% 0,
+    0 50%,
+    0 0,
+    0 0;
+  background-repeat: no-repeat, no-repeat, repeat-x, repeat, no-repeat;
+  box-shadow:
+    0 9px 16px -10px rgba(0, 0, 0, 0.95),
+    inset 0 0 0 1px rgba(201, 164, 94, 0.42);
+}
+
+html[data-app-theme="night"] .app-card-brief::before {
+  top: -6px;
+}
+
+html[data-app-theme="night"] .app-card-brief::after {
+  bottom: -6px;
+}
+
+/* === 征途 · 收件箱：霞光牛皮纸盒 / 夜间眼镜盒 === */
+
+html[data-app-theme="dawn"] .exp-inbox,
+html[data-app-theme="night"] .exp-inbox {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+/* 牛皮纸盒：盒壁就是格与格之间露出的那一线纸色，不画分隔线 */
+html[data-app-theme="dawn"] .exp-inbox {
+  border-color: rgba(var(--dawn-kraft-edge), 0.5);
+  background-color: var(--dawn-kraft);
+  background-image:
+    repeating-linear-gradient(
+      96deg,
+      rgba(var(--dawn-kraft-edge), 0.09) 0 1px,
+      rgba(var(--dawn-kraft-edge), 0) 1px 7px
+    ),
+    linear-gradient(180deg, #f6efdf 0%, #ece0c9 52%, #ddceb1 100%);
+  box-shadow:
+    inset 0 1px 0 var(--dawn-crease-hi),
+    inset 0 -2px 0 rgba(var(--dawn-kraft-edge), 0.4),
+    0 22px 40px -30px rgba(38, 54, 68, 0.55);
+}
+
+/* 盒口是一条翻边：翻边把影子投进盒里，靠阴影分区而不是画线 */
+html[data-app-theme="dawn"] .exp-inbox-head {
+  border-bottom: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0));
+  box-shadow:
+    inset 0 1px 0 var(--dawn-crease-hi),
+    0 3px 6px -3px rgba(38, 54, 68, 0.4);
+}
+
+html[data-app-theme="dawn"] .exp-inbox h2 {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #3c3122;
+}
+
+html[data-app-theme="dawn"] .exp-inbox-head > p {
+  color: var(--dawn-kraft-ink);
+}
+
+/* 计数是贴在盒口的一枚胶带标签 */
+html[data-app-theme="dawn"] .exp-inbox-count {
+  border: 0;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #f4c6d7, #e79cbd);
+  padding: 1px 8px;
+  color: #6d2b45;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 2px 4px -2px rgba(38, 54, 68, 0.5);
+}
+
+/* 格 = 压在盒底的白纸凹槽 */
+html[data-app-theme="dawn"] .exp-drawer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  padding: 14px;
+}
+
+html[data-app-theme="dawn"] .exp-drawer-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 0;
+  border-radius: 8px;
+  padding: 12px 14px;
+  background: #fcfdfe;
+  box-shadow:
+    inset 0 3px 7px var(--dawn-recess),
+    inset 0 -1px 0 var(--dawn-crease-hi),
+    inset 0 0 0 1px rgba(var(--dawn-kraft-edge), 0.32);
+}
+
+html[data-app-theme="dawn"] .exp-drawer-cell > div:first-of-type {
+  padding-right: 30px;
+}
+
+html[data-app-theme="dawn"] .exp-drawer-cell p:first-child {
+  color: var(--color-ink);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+html[data-app-theme="dawn"] .exp-drawer-cell p + p {
+  color: var(--color-ink-4);
+}
+
+html[data-app-theme="dawn"] .exp-drawer-cell > div:last-of-type {
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+html[data-app-theme="dawn"] .exp-drawer-cell > div:last-of-type > button:not(.exp-inbox-archive) {
+  color: var(--dawn-eraser-deep);
+}
+
+/* 拉带 = 贴在槽口的一截和纸胶带 */
+html[data-app-theme="dawn"] .exp-drawer-pull {
+  display: block;
+  width: 26px;
+  height: 9px;
+  border-radius: 2px;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.4) 0 2px,
+      rgba(255, 255, 255, 0) 2px 5px
+    ),
+    linear-gradient(180deg, #f3cede, #e295b3 58%, #c9748f);
+  box-shadow:
+    0 2px 4px -1px rgba(38, 54, 68, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+html[data-app-theme="dawn"] .exp-drawer-cell > .exp-drawer-pull {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+html[data-app-theme="dawn"] .exp-drawer-empty {
+  position: relative;
+  margin: 14px;
+  border-radius: 8px;
+  padding: 20px 16px;
+  text-align: center;
+  background: #fcfdfe;
+  box-shadow:
+    inset 0 3px 7px var(--dawn-recess),
+    inset 0 -1px 0 var(--dawn-crease-hi),
+    inset 0 0 0 1px rgba(var(--dawn-kraft-edge), 0.32);
+}
+
+html[data-app-theme="dawn"] .exp-drawer-empty .exp-drawer-pull {
+  margin: 0 auto 12px;
+  width: 46px;
+}
+
+html[data-app-theme="dawn"] .exp-drawer-empty p {
+  color: var(--color-ink-4);
+}
+
+/* 归档按钮 = 一块橡皮：斜受光 + 纸面微粒 + 压下去的暗底 */
+html[data-app-theme="dawn"] .exp-inbox-archive {
+  min-height: 32px;
+  border: 1px solid rgba(168, 83, 122, 0.45);
+  border-radius: 5px;
+  background-color: var(--dawn-eraser);
+  background-image:
+    radial-gradient(circle at 3px 4px, rgba(255, 255, 255, 0.5) 0 0.7px, transparent 1px),
+    radial-gradient(circle at 17px 9px, rgba(255, 255, 255, 0.38) 0 0.7px, transparent 1px),
+    radial-gradient(circle at 31px 5px, rgba(255, 255, 255, 0.32) 0 0.7px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 46%),
+    linear-gradient(180deg, #f0b6c9 0%, #dd8fab 62%, #c06e8f 100%);
+  color: #5d2138;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    inset 0 -3px 6px -4px rgba(93, 33, 56, 0.6),
+    0 6px 12px -9px rgba(38, 54, 68, 0.7);
+}
+
+html[data-app-theme="dawn"] .exp-inbox-archive:hover {
+  background-image:
+    radial-gradient(circle at 3px 4px, rgba(255, 255, 255, 0.5) 0 0.7px, transparent 1px),
+    radial-gradient(circle at 17px 9px, rgba(255, 255, 255, 0.38) 0 0.7px, transparent 1px),
+    radial-gradient(circle at 31px 5px, rgba(255, 255, 255, 0.32) 0 0.7px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 46%),
+    linear-gradient(180deg, #f4c2d3 0%, #e59cb6 62%, #c97898 100%);
+  color: #4d1a2e;
+}
+
+/* 眼镜盒：外壳哑光 + 口沿一道黄铜亮边，内里是天鹅绒 */
+html[data-app-theme="night"] .exp-inbox {
+  border-color: rgba(var(--night-brass), 0.34);
+  background-color: var(--night-shell);
+  background-image:
+    linear-gradient(180deg, rgba(var(--night-light), 0.07), transparent 26%),
+    linear-gradient(180deg, #18232f 0%, #101922 54%, #0a121a 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(var(--night-light), 0.09),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.55),
+    0 26px 46px -32px rgba(0, 0, 0, 0.95);
+}
+
+/* 盒盖是一条丝绒翻盖：盖沿把影子投进盒里，靠阴影分区而不是画线 */
+html[data-app-theme="night"] .exp-inbox-head {
+  border-bottom: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(var(--night-light), 0.09),
+    transparent 94%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(var(--night-light), 0.07),
+    0 5px 10px -5px rgba(0, 0, 0, 0.92);
+}
+
+html[data-app-theme="night"] .exp-inbox h2 {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #e9dfc8;
+}
+
+html[data-app-theme="night"] .exp-inbox-head > p {
+  color: #8ea0b6;
+}
+
+html[data-app-theme="night"] .exp-inbox-count {
+  border: 1px solid rgba(var(--night-brass), 0.42);
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #2a3646, #16202b);
+  color: var(--night-brass-hi);
+  box-shadow:
+    inset 0 1px 0 rgba(240, 221, 180, 0.24),
+    0 3px 7px -4px #000;
+}
+
+html[data-app-theme="night"] .exp-drawer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  padding: 14px;
+}
+
+/* 格 = 绒布里压出来的凹槽：上缘吃光、底部沉黑 */
+html[data-app-theme="night"] .exp-drawer-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 0;
+  border-radius: 9px;
+  padding: 12px 14px;
+  background-color: var(--night-velvet);
+  background-image:
+    repeating-linear-gradient(
+      92deg,
+      rgba(var(--night-star), 0.035) 0 1px,
+      transparent 1px 5px
+    ),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1));
+  box-shadow:
+    inset 0 4px 10px rgba(0, 0, 0, 0.8),
+    inset 0 -1px 0 rgba(var(--night-light), 0.06),
+    inset 0 0 0 1px rgba(var(--night-star), 0.12);
+}
+
+html[data-app-theme="night"] .exp-drawer-cell > div:first-of-type {
+  padding-right: 30px;
+}
+
+html[data-app-theme="night"] .exp-drawer-cell p:first-child {
+  color: #dfe8f2;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+html[data-app-theme="night"] .exp-drawer-cell p + p {
+  color: #8698ae;
+}
+
+html[data-app-theme="night"] .exp-drawer-cell > div:last-of-type {
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+html[data-app-theme="night"] .exp-drawer-cell > div:last-of-type > button:not(.exp-inbox-archive) {
+  color: #b9c8dd;
+}
+
+/* 拉带 = 一截镜布缎环，中间透出盒底 */
+html[data-app-theme="night"] .exp-drawer-pull {
+  display: block;
+  width: 24px;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #a9c1e8 0%, #7f9ac4 44%, #465d80 100%);
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(232, 237, 243, 0.55),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+}
+
+html[data-app-theme="night"] .exp-drawer-cell > .exp-drawer-pull {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+html[data-app-theme="night"] .exp-drawer-empty {
+  position: relative;
+  margin: 14px;
+  border-radius: 9px;
+  padding: 20px 16px;
+  text-align: center;
+  background-color: var(--night-velvet);
+  background-image:
+    repeating-linear-gradient(
+      92deg,
+      rgba(var(--night-star), 0.035) 0 1px,
+      transparent 1px 5px
+    ),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1));
+  box-shadow:
+    inset 0 4px 10px rgba(0, 0, 0, 0.8),
+    inset 0 -1px 0 rgba(var(--night-light), 0.06),
+    inset 0 0 0 1px rgba(var(--night-star), 0.12);
+}
+
+html[data-app-theme="night"] .exp-drawer-empty .exp-drawer-pull {
+  margin: 0 auto 12px;
+  width: 44px;
+}
+
+html[data-app-theme="night"] .exp-drawer-empty p {
+  color: #8698ae;
+}
+
+/* 归档按钮 = 盒盖上的黄铜按扣 */
+html[data-app-theme="night"] .exp-inbox-archive {
+  min-height: 32px;
+  border: 1px solid rgba(var(--night-brass), 0.5);
+  border-radius: 6px;
+  background-color: #1a2431;
+  background-image:
+    radial-gradient(circle at 50% 0%, rgba(240, 221, 180, 0.3), transparent 62%),
+    linear-gradient(180deg, #2b3747 0%, #18222e 60%, #0e161e 100%);
+  color: #f0e6d2;
+  box-shadow:
+    inset 0 1px 0 rgba(240, 221, 180, 0.26),
+    inset 0 -4px 8px -6px rgba(0, 0, 0, 0.9),
+    0 6px 12px -8px #000;
+}
+
+html[data-app-theme="night"] .exp-inbox-archive:hover {
+  border-color: rgba(240, 221, 180, 0.72);
+  background-image:
+    radial-gradient(circle at 50% 0%, rgba(240, 221, 180, 0.42), transparent 62%),
+    linear-gradient(180deg, #34425a 0%, #1c2836 60%, #111b25 100%);
+}
+
+/* === 征途 · 学期轴与信函叠 === */
+
+/* 学期轴：霞光压一条尺规槽，夜间压一条刻度轨，都靠阴影分区 */
+html[data-app-theme="dawn"] .exp-axis {
+  border: 0;
+  border-radius: 12px;
+  background-color: var(--dawn-kraft);
+  background-image: linear-gradient(180deg, #f5eedf, #e6d9c0);
+  box-shadow:
+    inset 0 2px 6px var(--dawn-recess),
+    inset 0 -1px 0 var(--dawn-crease-hi),
+    0 16px 30px -28px rgba(38, 54, 68, 0.5);
+  overflow: visible;
+}
+
+html[data-app-theme="night"] .exp-axis {
+  border: 0;
+  border-radius: 12px;
+  background-color: #0c141c;
+  background-image: linear-gradient(
+    180deg,
+    rgba(var(--night-light), 0.05),
+    rgba(0, 0, 0, 0.4)
+  );
+  box-shadow:
+    inset 0 3px 8px rgba(0, 0, 0, 0.75),
+    inset 0 0 0 1px rgba(var(--night-star), 0.12);
+  overflow: visible;
+}
+
+html[data-app-theme="dawn"] .exp-axis > header,
+html[data-app-theme="night"] .exp-axis > header {
+  border-bottom-color: transparent;
+  padding-top: 10px;
+  padding-bottom: 4px;
+}
+
+html[data-app-theme="dawn"] .exp-axis h2,
+html[data-app-theme="night"] .exp-axis h2 {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+html[data-app-theme="dawn"] .exp-axis h2 {
+  color: #3c3122;
+}
+
+html[data-app-theme="night"] .exp-axis h2 {
+  color: #e9dfc8;
+}
+
+html[data-app-theme="dawn"] .exp-axis > div,
+html[data-app-theme="night"] .exp-axis > div {
+  padding-top: 4px;
+  padding-bottom: 12px;
+}
+
+/* 学期格 = 槽里的小格子，靠凹陷分栏，不画竖线 */
+html[data-app-theme="dawn"] .exp-axis-cell {
+  border: 0;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.62);
+  padding: 2px 14px;
+  box-shadow:
+    inset 0 2px 4px rgba(38, 54, 68, 0.14),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.8);
+}
+
+html[data-app-theme="night"] .exp-axis-cell {
+  border: 0;
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.42);
+  padding: 2px 14px;
+  box-shadow:
+    inset 0 3px 6px rgba(0, 0, 0, 0.7),
+    inset 0 -1px 0 rgba(var(--night-light), 0.05);
+}
+
+/* 全部经历：霞光一道纸折边，夜间一道黄铜轨 */
+html[data-app-theme="dawn"] .exp-list {
+  margin-top: 20px;
+  border-top: 1px solid var(--dawn-crease-hi);
+  padding-top: 15px;
+  box-shadow: 0 -1px 0 rgba(38, 54, 68, 0.1);
+}
+
+html[data-app-theme="night"] .exp-list {
+  margin-top: 20px;
+  border-top: 1px solid rgba(var(--night-brass), 0.34);
+  padding-top: 15px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+}
+
+html[data-app-theme="dawn"] .exp-list-title,
+html[data-app-theme="night"] .exp-list-title {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* 战绩压薄到与庄园同一档，一屏能看见下一条标题 */
+html[data-app-theme="dawn"] .app-feed > li + li,
+html[data-app-theme="night"] .app-feed > li + li {
+  margin-top: 6px;
+}
+
+html[data-app-theme="dawn"] .app-feed-meta,
+html[data-app-theme="night"] .app-feed-meta {
+  margin-bottom: 2px;
+}
+
+html[data-app-theme="dawn"] .app-feed-ready.is-ready,
+html[data-app-theme="night"] .app-feed-ready.is-ready {
+  display: none;
+}
+
+html[data-app-theme="dawn"] .app-exp,
+html[data-app-theme="night"] .app-exp {
+  position: relative;
+  border-radius: 10px;
+}
+
+/* 左侧装订脊：霞光是胶装纸叠，夜间是黄铜压条 */
+html[data-app-theme="dawn"] .app-exp::before,
+html[data-app-theme="night"] .app-exp::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 0;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  pointer-events: none;
+}
+
+html[data-app-theme="dawn"] .app-exp::before {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--dawn-kraft-edge), 0.55),
+    rgba(255, 255, 255, 0.8)
+  );
+}
+
+html[data-app-theme="night"] .app-exp::before {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--night-brass), 0.5),
+    rgba(var(--night-brass), 0.06)
+  );
+}
+
+html[data-app-theme="dawn"] .app-exp > div,
+html[data-app-theme="night"] .app-exp > div {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+html[data-app-theme="dawn"] .app-exp-rose-drafting,
+html[data-app-theme="night"] .app-exp-rose-observatory {
+  top: 9px;
+  left: 12px;
+  width: 26px;
+  height: 26px;
+}
+
+html[data-app-theme="dawn"] .app-exp-seal-corner,
+html[data-app-theme="night"] .app-exp-seal-corner {
+  top: 7px;
+  right: 10px;
+  gap: 0;
+}
+
+html[data-app-theme="dawn"] .app-exp-aperture,
+html[data-app-theme="night"] .app-exp-star {
+  width: 40px;
+  height: 40px;
+}
+
+html[data-app-theme="dawn"] .app-exp-seal-label,
+html[data-app-theme="night"] .app-exp-seal-label {
+  flex-direction: row;
+  gap: 3px;
+  align-items: baseline;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+}
+
+html[data-app-theme="dawn"] .app-exp-seal-count,
+html[data-app-theme="night"] .app-exp-seal-count {
+  font-size: 11px;
+}
+
+html[data-app-theme="dawn"] .app-exp-head,
+html[data-app-theme="night"] .app-exp-head {
+  min-height: 56px;
+  padding-left: 40px;
+  padding-right: 58px;
+}
+
+html[data-app-theme="dawn"] .app-exp-head h3,
+html[data-app-theme="night"] .app-exp-head h3 {
+  margin-top: 3px;
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+
+html[data-app-theme="dawn"] .app-exp-head p,
+html[data-app-theme="night"] .app-exp-head p {
+  margin-top: 0;
+  font-size: 10.5px;
+  line-height: 1.6;
+}
+
+html[data-app-theme="dawn"] .app-exp-divider,
+html[data-app-theme="night"] .app-exp-divider {
+  margin: 0 0 4px;
+}
+
+html[data-app-theme="dawn"] .app-exp-summary,
+html[data-app-theme="night"] .app-exp-summary {
+  margin-top: 3px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+html[data-app-theme="dawn"] .app-exp-skills,
+html[data-app-theme="night"] .app-exp-skills {
+  margin-top: 4px;
+  gap: 4px;
+}
+
+html[data-app-theme="dawn"] .app-exp-skills li,
+html[data-app-theme="night"] .app-exp-skills li {
+  padding: 0 6px;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+/* 操作条不压横线：改成一道折边——上暗下亮，纸面自己隆出边界 */
+html[data-app-theme="dawn"] .app-exp-actions {
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 0;
+  box-shadow:
+    0 -1px 0 rgba(38, 54, 68, 0.1),
+    inset 0 1px 0 var(--dawn-crease-hi);
+}
+
+html[data-app-theme="night"] .app-exp-actions {
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 0;
+  box-shadow:
+    0 -1px 0 rgba(0, 0, 0, 0.62),
+    inset 0 1px 0 rgba(var(--night-light), 0.05);
+}
+
+html[data-app-theme="dawn"] .app-exp-actions button,
+html[data-app-theme="night"] .app-exp-actions button {
+  min-height: 26px;
+  padding: 0 10px;
+  font-size: 10.5px;
+}
+
+@media (max-width: 639px) {
+  html[data-app-theme="dawn"] .app-exp-rose-drafting,
+  html[data-app-theme="night"] .app-exp-rose-observatory {
+    top: 9px;
+    left: 12px;
+    width: 24px;
+    height: 24px;
+  }
+
+  html[data-app-theme="dawn"] .app-exp-aperture,
+  html[data-app-theme="night"] .app-exp-star {
+    width: 38px;
+    height: 38px;
+  }
+
+  html[data-app-theme="dawn"] .app-exp-head,
+  html[data-app-theme="night"] .app-exp-head {
+    min-height: 54px;
+    padding-left: 38px;
+    padding-right: 54px;
+  }
+
+  html[data-app-theme="dawn"] .app-exp-actions,
+  html[data-app-theme="night"] .app-exp-actions {
+    margin-top: 4px;
+    padding-top: 3px;
+  }
+
+  html[data-app-theme="dawn"] .app-exp-actions button,
+  html[data-app-theme="night"] .app-exp-actions button {
+    min-height: 44px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    padding: 0 12px 0 0;
+    box-shadow: none;
+  }
+
+  html[data-app-theme="dawn"] .app-exp-actions button:hover,
+  html[data-app-theme="night"] .app-exp-actions button:hover {
+    background: transparent;
+    text-decoration: underline;
+  }
+
+  html[data-app-theme="dawn"] .exp-inbox-archive,
+  html[data-app-theme="night"] .exp-inbox-archive {
+    min-height: 44px;
+  }
+}
+
+/* === 征召 · 四格托盘 / 档案袋 / 岗位索引 / 征召令 === */
+
+/* 霞光：四格纸盒，格与格之间露出的就是盒壁 */
+html[data-app-theme="dawn"] .opp-stats {
+  border-color: rgba(var(--dawn-kraft-edge), 0.5);
+  border-radius: 12px;
+  background-color: var(--dawn-kraft);
+  background-image: linear-gradient(180deg, #f4ecd9, #e3d5b8);
+  box-shadow:
+    inset 0 1px 0 var(--dawn-crease-hi),
+    inset 0 -1px 0 rgba(var(--dawn-kraft-edge), 0.45),
+    0 18px 34px -30px rgba(38, 54, 68, 0.5);
+}
+
+html[data-app-theme="dawn"] .opp-stats > div {
+  background: #fcfdfe;
+  padding: 14px 16px;
+  box-shadow:
+    inset 0 3px 6px var(--dawn-recess),
+    inset 0 -1px 0 var(--dawn-crease-hi);
+}
+
+html[data-app-theme="dawn"] .opp-stats p:first-child {
+  color: var(--dawn-kraft-ink);
+}
+
+html[data-app-theme="dawn"] .opp-stats p:nth-child(2) {
+  font-family: var(--font-serif);
+  font-size: 30px;
+  line-height: 1;
+  color: var(--color-ink);
+}
+
+html[data-app-theme="dawn"] .opp-stats p:nth-child(3) {
+  color: var(--color-ink-4);
+}
+
+/* 夜间：四枚镜片槽，槽沿吃一圈星蓝反光 */
+html[data-app-theme="night"] .opp-stats {
+  border-color: rgba(var(--night-brass), 0.3);
+  border-radius: 12px;
+  background-color: #0a1017;
+  background-image: linear-gradient(180deg, #1a2431, #0d151d);
+  box-shadow:
+    inset 0 1px 0 rgba(var(--night-light), 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.6),
+    0 20px 38px -32px rgba(0, 0, 0, 0.95);
+}
+
+html[data-app-theme="night"] .opp-stats > div {
+  background: #080e14;
+  padding: 14px 16px;
+  box-shadow:
+    inset 0 4px 9px rgba(0, 0, 0, 0.85),
+    inset 0 -1px 0 rgba(var(--night-light), 0.05),
+    inset 0 0 0 1px rgba(var(--night-star), 0.1);
+}
+
+html[data-app-theme="night"] .opp-stats p:first-child {
+  color: #8ea0b6;
+}
+
+html[data-app-theme="night"] .opp-stats p:nth-child(2) {
+  font-family: var(--font-serif);
+  font-size: 30px;
+  line-height: 1;
+  color: #eef3f8;
+}
+
+html[data-app-theme="night"] .opp-stats p:nth-child(3) {
+  color: #8698ae;
+}
+
+/* 匹配依据：霞光一只档案袋（袋口撕线 + 胶带把手），夜间一只镜盒（黄铜搭扣） */
+html[data-app-theme="dawn"] .opp-basis {
+  position: relative;
+  border-color: rgba(var(--dawn-kraft-edge), 0.5);
+  border-radius: 12px;
+  background-color: var(--dawn-kraft-2);
+  background-image:
+    repeating-linear-gradient(
+      96deg,
+      rgba(var(--dawn-kraft-edge), 0.07) 0 1px,
+      rgba(var(--dawn-kraft-edge), 0) 1px 7px
+    ),
+    linear-gradient(180deg, #faf5ea, #e9dcc3);
+  box-shadow:
+    inset 0 1px 0 var(--dawn-crease-hi),
+    0 18px 32px -28px rgba(38, 54, 68, 0.5);
+}
+
+html[data-app-theme="dawn"] .opp-basis > div,
+html[data-app-theme="dawn"] .opp-basis > p {
+  border-color: rgba(var(--dawn-kraft-edge), 0.34);
+}
+
+html[data-app-theme="dawn"] .opp-basis > div:first-child {
+  background: rgba(255, 255, 255, 0.66);
+  border-bottom: 1px solid var(--dawn-crease-hi);
+  box-shadow:
+    inset 0 2px 5px var(--dawn-recess),
+    0 -1px 0 rgba(38, 54, 68, 0.1);
+}
+
+html[data-app-theme="dawn"] .opp-basis > div:first-child::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 26px;
+  height: 9px;
+  border-radius: 2px;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.4) 0 2px,
+      rgba(255, 255, 255, 0) 2px 5px
+    ),
+    linear-gradient(180deg, #f3cede, #e295b3 58%, #c9748f);
+  box-shadow:
+    0 2px 4px -1px rgba(38, 54, 68, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+html[data-app-theme="dawn"] .opp-basis > div:first-child > div:first-child {
+  flex: 1;
+}
+
+html[data-app-theme="dawn"] .opp-basis > div:first-child p:first-child {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: #3c3122;
+}
+
+html[data-app-theme="dawn"] .opp-basis > div:first-child span {
+  border: 0;
+  border-radius: 3px;
+  background: rgba(var(--dawn-rose), 0.28);
+  padding: 1px 7px;
+  color: #6d2b45;
+}
+
+html[data-app-theme="dawn"] .opp-basis dl {
+  background: rgba(var(--dawn-kraft-edge), 0.3);
+}
+
+html[data-app-theme="dawn"] .opp-basis dl > div {
+  background: #fcfdfe;
+  box-shadow: inset 0 2px 5px var(--dawn-recess);
+}
+
+html[data-app-theme="night"] .opp-basis {
+  position: relative;
+  border-color: rgba(var(--night-brass), 0.3);
+  border-radius: 12px;
+  background-color: var(--night-shell);
+  background-image: linear-gradient(180deg, #18232f, #0c141c);
+  box-shadow:
+    inset 0 1px 0 rgba(var(--night-light), 0.08),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 22px 40px -32px rgba(0, 0, 0, 0.95);
+}
+
+html[data-app-theme="night"] .opp-basis > div,
+html[data-app-theme="night"] .opp-basis > p {
+  border-color: rgba(var(--night-star), 0.16);
+}
+
+html[data-app-theme="night"] .opp-basis > div:first-child {
+  background: rgba(0, 0, 0, 0.34);
+  border-bottom: 1px solid rgba(var(--night-brass), 0.3);
+  box-shadow:
+    inset 0 3px 7px rgba(0, 0, 0, 0.6),
+    0 1px 0 rgba(var(--night-light), 0.04);
+}
+
+/* 搭扣：一小段黄铜扣 + 中心铆钉 */
+html[data-app-theme="night"] .opp-basis > div:first-child::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 24px;
+  height: 10px;
+  border: 1px solid rgba(var(--night-brass), 0.55);
+  border-radius: 3px;
+  background:
+    radial-gradient(
+        circle at 50% 50%,
+        var(--night-brass-hi) 0 1.6px,
+        var(--night-brass-lo) 1.8px 2.8px,
+        transparent 3px
+      )
+      center no-repeat,
+    linear-gradient(180deg, #35445c, #1a2532 62%, #0e161f);
+  box-shadow:
+    inset 0 1px 0 rgba(240, 221, 180, 0.3),
+    0 3px 6px -3px #000;
+}
+
+html[data-app-theme="night"] .opp-basis > div:first-child > div:first-child {
+  flex: 1;
+}
+
+html[data-app-theme="night"] .opp-basis > div:first-child p:first-child {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: #e9dfc8;
+}
+
+html[data-app-theme="night"] .opp-basis > div:first-child span {
+  border: 1px solid rgba(var(--night-brass), 0.4);
+  border-radius: 9999px;
+  background: rgba(var(--night-brass), 0.12);
+  color: var(--night-brass-hi);
+}
+
+html[data-app-theme="night"] .opp-basis dl {
+  background: rgba(var(--night-star), 0.16);
+}
+
+html[data-app-theme="night"] .opp-basis dl > div {
+  background: #0a1017;
+  box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.75);
+}
+
+/* 筛选：拆掉卡框，霞光压一条文具槽，夜间压一条呢布轨 */
+html[data-app-theme="dawn"] .opp-filters {
+  border: 0;
+  border-radius: 12px;
+  background-color: var(--dawn-kraft);
+  background-image: linear-gradient(180deg, #f3ebda, #e2d4b7);
+  box-shadow:
+    inset 0 3px 8px var(--dawn-recess),
+    inset 0 -1px 0 var(--dawn-crease-hi);
+  overflow: visible;
+}
+
+html[data-app-theme="night"] .opp-filters {
+  border: 0;
+  border-radius: 12px;
+  background-color: #0a1017;
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), #131e29);
+  box-shadow:
+    inset 0 4px 10px rgba(0, 0, 0, 0.8),
+    inset 0 -1px 0 rgba(var(--night-light), 0.05),
+    inset 0 0 0 1px rgba(var(--night-star), 0.1);
+  overflow: visible;
+}
+
+html[data-app-theme="dawn"] .opp-filters input#job-search,
+html[data-app-theme="dawn"] .opp-filters .ctl-field,
+html[data-app-theme="night"] .opp-filters input#job-search,
+html[data-app-theme="night"] .opp-filters .ctl-field {
+  border-color: rgba(var(--dawn-kraft-edge), 0.4);
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow:
+    inset 0 2px 4px var(--dawn-recess),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.8);
+}
+
+html[data-app-theme="night"] .opp-filters input#job-search,
+html[data-app-theme="night"] .opp-filters .ctl-field {
+  border-color: rgba(var(--night-star), 0.2);
+  background: rgba(0, 0, 0, 0.45);
+  box-shadow:
+    inset 0 3px 6px rgba(0, 0, 0, 0.75),
+    inset 0 -1px 0 rgba(var(--night-light), 0.04);
+}
+
+/* 推荐结果：霞光一叠活页卡（左缘三孔），夜间一叠星表页 */
+html[data-app-theme="dawn"] .opp-jobs,
+html[data-app-theme="night"] .opp-jobs {
+  border-top: 0;
+  padding-top: 4px;
+}
+
+html[data-app-theme="dawn"] .opp-jobs-title {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #3c3122;
+}
+
+html[data-app-theme="night"] .opp-jobs-title {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #e9dfc8;
+}
+
+html[data-app-theme="dawn"] .opp-jobs ul,
+html[data-app-theme="night"] .opp-jobs ul {
+  border-top: 0;
+}
+
+html[data-app-theme="dawn"] .job-row,
+html[data-app-theme="dawn"] .job-row:hover,
+html[data-app-theme="night"] .job-row,
+html[data-app-theme="night"] .job-row:hover {
+  position: relative;
+  border: 0 !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+html[data-app-theme="dawn"] .opp-jobs ul > li + li {
+  margin-top: 8px;
+}
+
+html[data-app-theme="dawn"] .job-row,
+html[data-app-theme="dawn"] .job-row:hover {
+  background: #fcfdfe !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--dawn-hairline), 0.14),
+    inset 0 1px 0 #fff,
+    0 12px 22px -18px rgba(38, 54, 68, 0.55) !important;
+}
+
+/* 活页孔：左缘三枚冲孔，压住内容左边距 */
+html[data-app-theme="dawn"] .job-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 4px;
+  width: 6px;
+  background:
+    radial-gradient(circle at 50% 22%, rgba(38, 54, 68, 0.22) 0 2.4px, transparent 2.8px) no-repeat,
+    radial-gradient(circle at 50% 50%, rgba(38, 54, 68, 0.22) 0 2.4px, transparent 2.8px) no-repeat,
+    radial-gradient(circle at 50% 78%, rgba(38, 54, 68, 0.22) 0 2.4px, transparent 2.8px) no-repeat;
+  pointer-events: none;
+}
+
+html[data-app-theme="dawn"] .job-row:hover {
+  background: #ffffff !important;
+}
+
+/* 选中 = 一道荧光笔，压在标题行左侧 */
+html[data-app-theme="dawn"] .job-row.is-selected {
+  background: #fdf6f9 !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--dawn-rose), 0.5),
+    inset 4px 0 0 var(--dawn-eraser-deep),
+    0 12px 22px -18px rgba(38, 54, 68, 0.55) !important;
+}
+
+html[data-app-theme="dawn"] .job-row .job-score {
+  color: var(--dawn-eraser-deep);
+  font-size: 18px;
+}
+
+html[data-app-theme="dawn"] .job-row.is-selected .job-score {
+  color: #8e3f60;
+}
+
+html[data-app-theme="night"] .opp-jobs ul > li + li {
+  margin-top: 8px;
+}
+
+html[data-app-theme="night"] .job-row,
+html[data-app-theme="night"] .job-row:hover {
+  background-color: #101922 !important;
+  background-image:
+    repeating-linear-gradient(
+      92deg,
+      rgba(var(--night-star), 0.03) 0 1px,
+      transparent 1px 5px
+    ),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.05));
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--night-star), 0.14),
+    inset 0 3px 7px rgba(0, 0, 0, 0.65),
+    inset 0 -1px 0 rgba(var(--night-light), 0.04) !important;
+}
+
+html[data-app-theme="night"] .job-row.is-selected {
+  background-color: #14202c !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--night-brass), 0.42),
+    inset 4px 0 0 var(--night-brass),
+    inset 0 3px 7px rgba(0, 0, 0, 0.65),
+    0 0 20px -12px rgba(201, 164, 94, 0.6) !important;
+}
+
+html[data-app-theme="night"] .job-row .job-score {
+  color: var(--night-brass);
+  font-size: 18px;
+}
+
+html[data-app-theme="night"] .job-row.is-selected .job-score {
+  color: var(--night-brass-hi);
+}
+
+/* 资格页签：霞光一截胶带，夜间一枚黄铜刻度片 */
+html[data-app-theme="dawn"] .qual-tab {
+  min-height: 38px;
+  color: var(--color-ink-4);
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+}
+
+html[data-app-theme="dawn"] .qual-tab:hover {
+  color: var(--color-ink);
+}
+
+html[data-app-theme="dawn"] .qual-tab[aria-pressed="true"] {
+  color: #6d2b45;
+}
+
+html[data-app-theme="dawn"] .qual-tab[aria-pressed="true"]::after {
+  left: 0;
+  right: 0;
+  bottom: 2px;
+  height: 8px;
+  border-radius: 2px;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.45) 0 2px,
+      rgba(255, 255, 255, 0) 2px 5px
+    ),
+    linear-gradient(180deg, rgba(243, 206, 222, 0.95), rgba(226, 149, 179, 0.85));
+  opacity: 1;
+}
+
+html[data-app-theme="night"] .qual-tab {
+  min-height: 38px;
+  color: #7f92a8;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+}
+
+html[data-app-theme="night"] .qual-tab:hover {
+  color: #dfe8f2;
+}
+
+html[data-app-theme="night"] .qual-tab[aria-pressed="true"] {
+  color: var(--night-brass-hi);
+}
+
+html[data-app-theme="night"] .qual-tab[aria-pressed="true"]::after {
+  left: 2px;
+  right: 2px;
+  bottom: 3px;
+  height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(201, 164, 94, 0),
+    rgba(240, 221, 180, 0.95),
+    rgba(201, 164, 94, 0)
+  );
+  box-shadow: 0 0 8px -2px rgba(201, 164, 94, 0.8);
+  opacity: 1;
+}
+
+/* 征召令：霞光是幕布上的讲义（胶带页眉 + 铅笔题头），夜间是观测记录板 */
+html[data-app-theme="dawn"] .match-sheet-kicker,
+html[data-app-theme="night"] .match-sheet-kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 14px 20px 0;
+  font-family: var(--font-serif);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+}
+
+html[data-app-theme="dawn"] .match-sheet-kicker::before,
+html[data-app-theme="dawn"] .match-sheet-kicker::after,
+html[data-app-theme="night"] .match-sheet-kicker::before,
+html[data-app-theme="night"] .match-sheet-kicker::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+}
+
+html[data-app-theme="dawn"] .match-sheet-kicker {
+  color: var(--dawn-kraft-ink);
+}
+
+html[data-app-theme="dawn"] .match-sheet-kicker::before,
+html[data-app-theme="dawn"] .match-sheet-kicker::after {
+  background: linear-gradient(
+    180deg,
+    rgba(var(--dawn-kraft-edge), 0.7),
+    rgba(255, 255, 255, 0.8)
+  );
+}
+
+html[data-app-theme="night"] .match-sheet-kicker {
+  color: #a9bacd;
+}
+
+html[data-app-theme="night"] .match-sheet-kicker::before,
+html[data-app-theme="night"] .match-sheet-kicker::after {
+  background: linear-gradient(
+    180deg,
+    rgba(var(--night-brass), 0.6),
+    rgba(var(--night-star), 0.12)
+  );
+}
+
+html[data-app-theme="dawn"] .match-sheet > header,
+html[data-app-theme="night"] .match-sheet > header {
+  padding-top: 10px;
+}
+
+html[data-app-theme="dawn"] .match-sheet h3,
+html[data-app-theme="night"] .match-sheet h3 {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  letter-spacing: 0.02em;
+}
+
+html[data-app-theme="dawn"] .match-sheet h3 {
+  color: #33404a;
+}
+
+html[data-app-theme="night"] .match-sheet h3 {
+  color: #dfe8f2;
+}
+
+html[data-app-theme="dawn"] .match-sheet blockquote {
+  color: var(--color-ink-3);
+}
+
+html[data-app-theme="night"] .match-sheet blockquote {
+  color: #b6c8e4;
+}
+
+html[data-app-theme="dawn"] .match-sheet > footer {
+  background: rgba(var(--dawn-kraft-edge), 0.14);
+  box-shadow: inset 0 2px 5px var(--dawn-recess);
+}
+
+html[data-app-theme="night"] .match-sheet > footer {
+  background: rgba(0, 0, 0, 0.45);
+  box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.7);
+}
+
+/* === 工具箱 · 霞光笔盒 / 夜间仪器箱 === */
+
+html[data-app-theme="dawn"] .tool-chest::before,
+html[data-app-theme="night"] .tool-chest::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+/* 内衬折边：一亮一暗两条，读起来是纸盒的翻边而不是一根线 */
+html[data-app-theme="dawn"] .tool-chest::before {
+  box-shadow:
+    inset 0 0 0 1px var(--dawn-crease-hi),
+    inset 0 0 0 2px rgba(38, 54, 68, 0.09),
+    inset 0 2px 6px rgba(38, 54, 68, 0.08);
+}
+
+html[data-app-theme="night"] .tool-chest::before {
+  border: 1px solid rgba(var(--night-brass), 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(var(--night-light), 0.05),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.5);
+}
+
+html[data-app-theme="dawn"] .tool-chest-head {
+  border-bottom: 1px solid var(--dawn-crease-hi);
+  box-shadow: 0 1px 0 rgba(38, 54, 68, 0.1);
+}
+
+html[data-app-theme="night"] .tool-chest-head {
+  border-bottom: 1px solid rgba(var(--night-brass), 0.28);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+}
+
+html[data-app-theme="dawn"] .tool-chest-head h2,
+html[data-app-theme="night"] .tool-chest-head h2 {
+  font-family: var(--font-serif);
+  font-size: 21px;
+}
+
+html[data-app-theme="dawn"] .tool-chest-head h2 {
+  color: #2c3740;
+}
+
+html[data-app-theme="night"] .tool-chest-head h2 {
+  color: #eef3f8;
+}
+
+html[data-app-theme="dawn"] .tool-chest-head > p {
+  color: var(--color-ink-3);
+}
+
+html[data-app-theme="night"] .tool-chest-head > p {
+  color: #9fb0c6;
+}
+
+/* 抽屉行：分隔靠「缝」不靠线——霞光是笔盒的压边，夜间是箱体的沉影 */
+html[data-app-theme="dawn"] .tool-drawer,
+html[data-app-theme="night"] .tool-drawer {
+  position: relative;
+  padding: 17px 20px;
+  transition: background-color 160ms ease;
+}
+
+html[data-app-theme="dawn"] .tool-drawer-stack > .tool-drawer + .tool-drawer,
+html[data-app-theme="night"] .tool-drawer-stack > .tool-drawer + .tool-drawer {
+  border-top: 0;
+}
+
+html[data-app-theme="dawn"] .tool-drawer + .tool-drawer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 14px;
+  right: 14px;
+  height: 2px;
+  background: linear-gradient(
+    180deg,
+    rgba(38, 54, 68, 0.14),
+    var(--dawn-crease-hi)
+  );
+  pointer-events: none;
+}
+
+html[data-app-theme="night"] .tool-drawer + .tool-drawer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 14px;
+  right: 14px;
+  height: 3px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.65),
+    rgba(var(--night-light), 0.05)
+  );
+  pointer-events: none;
+}
+
+html[data-app-theme="dawn"] .tool-drawer:hover {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+html[data-app-theme="night"] .tool-drawer:hover {
+  background: rgba(var(--night-star), 0.06);
+}
+
+html[data-app-theme="dawn"] .tool-drawer-no {
+  align-self: flex-start;
+  margin-top: 5px;
+  color: var(--dawn-eraser-deep);
+  font-size: 13px;
+}
+
+html[data-app-theme="night"] .tool-drawer-no {
+  align-self: flex-start;
+  margin-top: 5px;
+  color: var(--night-brass);
+  font-size: 13px;
+}
+
+html[data-app-theme="dawn"] .tool-drawer-title {
+  color: var(--color-ink);
+  font-size: 21px;
+  letter-spacing: 0.01em;
+}
+
+html[data-app-theme="night"] .tool-drawer-title {
+  color: #eef3f8;
+  font-size: 21px;
+  letter-spacing: 0.01em;
+}
+
+html[data-app-theme="dawn"] .tool-drawer-side > span:first-child {
+  color: var(--color-ink-3);
+}
+
+html[data-app-theme="night"] .tool-drawer-side > span:first-child {
+  color: #9fb0c6;
+}
+
+/* 拉手：霞光是拉链头，后面拖一排链齿 */
+html[data-app-theme="dawn"] .tool-drawer-pull {
+  display: inline-block;
+  position: relative;
+  width: 34px;
+  height: 8px;
+  border: 1px solid rgba(168, 83, 122, 0.4);
+  border-radius: 4px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(109, 43, 69, 0.5) 0 1.2px, transparent 1.6px),
+    linear-gradient(180deg, #f6d2df 0%, #e295b3 54%, #b96b88 100%);
+  box-shadow:
+    0 2px 4px -1px rgba(38, 54, 68, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+html[data-app-theme="dawn"] .tool-drawer-pull::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  right: 100%;
+  width: 46px;
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(201, 111, 159, 0.75) 0 2px,
+    rgba(201, 111, 159, 0) 2px 5px
+  );
+  opacity: 0.7;
+}
+
+/* 搭扣：夜间是仪器箱上的黄铜扣 */
+html[data-app-theme="night"] .tool-drawer-pull {
+  display: inline-block;
+  width: 30px;
+  height: 10px;
+  border: 1px solid rgba(var(--night-brass), 0.6);
+  border-radius: 3px;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      var(--night-brass-hi) 0 1.5px,
+      var(--night-brass-lo) 1.7px 2.6px,
+      transparent 2.9px
+    ),
+    linear-gradient(180deg, #e6cf9a 0%, #c9a45e 42%, #8a6c33 100%);
+  box-shadow:
+    0 3px 6px -2px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(255, 240, 210, 0.7);
+}
+
+html[data-app-theme="dawn"] .tool-backup {
+  border-color: rgba(var(--dawn-kraft-edge), 0.45);
+  background-color: var(--dawn-kraft-2);
+  background-image: linear-gradient(180deg, #faf5ea, #ece1c9);
+  box-shadow:
+    inset 0 1px 0 var(--dawn-crease-hi),
+    0 16px 30px -28px rgba(38, 54, 68, 0.5);
+}
+
+html[data-app-theme="night"] .tool-backup {
+  border-color: rgba(var(--night-star), 0.16);
+  background: #101922;
+  box-shadow:
+    inset 0 3px 8px rgba(0, 0, 0, 0.7),
+    inset 0 -1px 0 rgba(var(--night-light), 0.04);
+}
+
+html[data-app-theme="dawn"] .tool-backup p,
+html[data-app-theme="night"] .tool-backup p {
+  color: var(--color-ink-3);
+}
+
+html[data-app-theme="dawn"] .tool-backup p:first-child,
+html[data-app-theme="night"] .tool-backup p:first-child {
+  font-family: var(--font-serif);
+  font-size: 13px;
+}
+
+html[data-app-theme="dawn"] .tool-backup p:first-child {
+  color: #3c3122;
+}
+
+html[data-app-theme="night"] .tool-backup p:first-child {
+  color: #e9dfc8;
+}
+
+/* === 控件 · 橡皮与黄铜铭牌 === */
+
+/* 次级按钮：霞光一枚便签纸片，夜间一颗呢布压钮 */
+html[data-app-theme="dawn"] .app-pill {
+  border: 1px solid rgba(var(--dawn-hairline), 0.2);
+  border-radius: 6px;
+  background: linear-gradient(180deg, #ffffff, #f2f6f8);
+  color: var(--color-ink-2);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 8px 16px -14px rgba(38, 54, 68, 0.6);
+}
+
+html[data-app-theme="dawn"] .app-pill:hover {
+  border-color: rgba(var(--dawn-hairline), 0.34);
+  background: #fff;
+  color: var(--color-ink);
+}
+
+html[data-app-theme="night"] .app-pill {
+  border: 1px solid rgba(var(--night-star), 0.22);
+  border-radius: 6px;
+  background: linear-gradient(180deg, #1a2532, #0f171f);
+  color: #cddaea;
+  box-shadow:
+    inset 0 1px 0 rgba(var(--night-light), 0.07),
+    inset 0 -3px 6px -4px rgba(0, 0, 0, 0.9);
+}
+
+html[data-app-theme="night"] .app-pill:hover {
+  border-color: rgba(var(--night-star), 0.42);
+  background: linear-gradient(180deg, #22303f, #131d27);
+  color: #eef3f8;
+}
+
+/* 选项牌：霞光是一块橡皮（受光斜面 + 橡胶颗粒），选中就压下去 */
+html[data-app-theme="dawn"] .manor-chip {
+  position: relative;
+  border: 1px solid rgba(168, 83, 122, 0.38) !important;
+  border-radius: 6px !important;
+  background-color: #efb3c6 !important;
+  background-image:
+    radial-gradient(circle at 7px 6px, rgba(255, 255, 255, 0.55) 0 0.8px, transparent 1.2px),
+    radial-gradient(circle at 26px 11px, rgba(255, 255, 255, 0.42) 0 0.8px, transparent 1.2px),
+    radial-gradient(circle at 44px 5px, rgba(255, 255, 255, 0.4) 0 0.8px, transparent 1.2px),
+    radial-gradient(circle at 61px 13px, rgba(255, 255, 255, 0.34) 0 0.8px, transparent 1.2px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0) 44%),
+    linear-gradient(180deg, #f6cad8 0%, #e6a0b8 58%, #c97f9c 100%) !important;
+  color: #5d2138 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.78),
+    inset 0 -4px 8px -5px rgba(93, 33, 56, 0.55),
+    0 10px 18px -14px rgba(38, 54, 68, 0.7) !important;
+  text-shadow: none;
+}
+
+html[data-app-theme="dawn"] .manor-chip:hover {
+  border-color: rgba(168, 83, 122, 0.58) !important;
+  background-image:
+    radial-gradient(circle at 7px 6px, rgba(255, 255, 255, 0.6) 0 0.8px, transparent 1.2px),
+    radial-gradient(circle at 26px 11px, rgba(255, 255, 255, 0.46) 0 0.8px, transparent 1.2px),
+    radial-gradient(circle at 44px 5px, rgba(255, 255, 255, 0.44) 0 0.8px, transparent 1.2px),
+    radial-gradient(circle at 61px 13px, rgba(255, 255, 255, 0.38) 0 0.8px, transparent 1.2px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0) 44%),
+    linear-gradient(180deg, #fbd8e3 0%, #edaec1 58%, #d189a5 100%) !important;
+  color: #4d1a2e !important;
+}
+
+html[data-app-theme="dawn"] .manor-chip[aria-pressed="true"] {
+  border-color: rgba(142, 63, 96, 0.72) !important;
+  background-color: #dd8fab !important;
+  background-image:
+    linear-gradient(180deg, rgba(93, 33, 56, 0.22), rgba(93, 33, 56, 0) 40%),
+    linear-gradient(180deg, #eab2c6 0%, #d8909f 58%, #b96b88 100%) !important;
+  color: #3f1424 !important;
+  box-shadow:
+    inset 0 2px 6px rgba(63, 20, 36, 0.45),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.4),
+    0 4px 10px -10px rgba(38, 54, 68, 0.6) !important;
+}
+
+html[data-app-theme="dawn"] .manor-chip > span {
+  color: inherit;
+  opacity: 0.82;
+}
+
+/* 选项牌：夜间是星蓝珐琅 + 黄铜边，四角一颗黄铜铆钉 */
+html[data-app-theme="night"] .manor-chip {
+  position: relative;
+  border: 1px solid rgba(var(--night-brass), 0.34) !important;
+  border-radius: 6px !important;
+  background-color: #14202c !important;
+  background-image:
+    radial-gradient(circle at 5px 5px, var(--night-brass-hi) 0 1px, var(--night-brass-lo) 1.2px 1.9px, transparent 2.2px),
+    radial-gradient(circle at calc(100% - 5px) 5px, var(--night-brass-hi) 0 1px, var(--night-brass-lo) 1.2px 1.9px, transparent 2.2px),
+    radial-gradient(circle at 5px calc(100% - 5px), var(--night-brass-hi) 0 1px, var(--night-brass-lo) 1.2px 1.9px, transparent 2.2px),
+    radial-gradient(circle at calc(100% - 5px) calc(100% - 5px), var(--night-brass-hi) 0 1px, var(--night-brass-lo) 1.2px 1.9px, transparent 2.2px),
+    linear-gradient(180deg, rgba(var(--night-star), 0.2), transparent 46%),
+    linear-gradient(180deg, #1d2a3a 0%, #101a25 100%) !important;
+  color: #cddaea !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(var(--night-light), 0.08),
+    0 12px 22px -18px rgba(0, 0, 0, 0.95) !important;
+  text-shadow: none;
+}
+
+html[data-app-theme="night"] .manor-chip:hover {
+  border-color: rgba(240, 221, 180, 0.5) !important;
+  background-image:
+    radial-gradient(circle at 5px 5px, var(--night-brass-hi) 0 1px, var(--night-brass-lo) 1.2px 1.9px, transparent 2.2px),
+    radial-gradient(circle at calc(100% - 5px) 5px, var(--night-brass-hi) 0 1px, var(--night-brass-lo) 1.2px 1.9px, transparent 2.2px),
+    radial-gradient(circle at 5px calc(100% - 5px), var(--night-brass-hi) 0 1px, var(--night-brass-lo) 1.2px 1.9px, transparent 2.2px),
+    radial-gradient(circle at calc(100% - 5px) calc(100% - 5px), var(--night-brass-hi) 0 1px, var(--night-brass-lo) 1.2px 1.9px, transparent 2.2px),
+    linear-gradient(180deg, rgba(var(--night-star), 0.28), transparent 46%),
+    linear-gradient(180deg, #26364a 0%, #14202e 100%) !important;
+  color: #eef3f8 !important;
+}
+
+html[data-app-theme="night"] .manor-chip[aria-pressed="true"] {
+  border-color: rgba(240, 221, 180, 0.66) !important;
+  background-color: #1b2836 !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(201, 164, 94, 0.4),
+    inset 0 1px 0 rgba(240, 221, 180, 0.22),
+    inset 0 -8px 14px -12px rgba(0, 0, 0, 0.95),
+    0 0 18px -10px rgba(201, 164, 94, 0.55) !important;
+  color: var(--night-brass-hi) !important;
+}
+
+html[data-app-theme="night"] .manor-chip > span {
+  color: inherit;
+  opacity: 0.8;
+}
+
+/* 主操作：霞光一枚实心橡皮条，夜间一颗黄铜钮 */
+html[data-app-theme="dawn"] .manor-primary {
+  border: 1px solid rgba(142, 63, 96, 0.5);
+  border-radius: 6px;
+  background-color: var(--dawn-eraser-mid);
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 46%),
+    linear-gradient(180deg, #d98aa6 0%, #c16e8c 58%, #a04f6f 100%);
+  color: #fdf3f7;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -4px 8px -5px rgba(63, 20, 36, 0.6),
+    0 10px 18px -14px rgba(38, 54, 68, 0.7);
+}
+
+html[data-app-theme="dawn"] .manor-primary:hover {
+  border-color: rgba(142, 63, 96, 0.72);
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0) 46%),
+    linear-gradient(180deg, #e29ab4 0%, #ca7898 58%, #ab5778 100%);
+}
+
+html[data-app-theme="night"] .manor-primary {
+  border: 1px solid rgba(var(--night-brass), 0.6);
+  border-radius: 6px;
+  background-color: #21304a;
+  background-image:
+    radial-gradient(circle at 50% 0%, rgba(240, 221, 180, 0.34), transparent 60%),
+    linear-gradient(180deg, #2c3d58 0%, #182534 62%, #0e1620 100%);
+  color: var(--night-brass-hi);
+  box-shadow:
+    inset 0 1px 0 rgba(240, 221, 180, 0.28),
+    inset 0 -5px 10px -7px rgba(0, 0, 0, 0.95),
+    0 10px 20px -14px rgba(0, 0, 0, 0.95);
+}
+
+html[data-app-theme="night"] .manor-primary:hover {
+  border-color: rgba(240, 221, 180, 0.82);
+  filter: brightness(1.12);
+}
+
+/* 分段控件：霞光一条笔盒槽，夜间一条黄铜导轨槽 */
+html[data-app-theme="dawn"] .ctl-group {
+  border-color: rgba(var(--dawn-kraft-edge), 0.45);
+  border-radius: 12px;
+  background-color: var(--dawn-kraft);
+  background-image: linear-gradient(180deg, #f3ebda, #e0d2b5);
+  box-shadow:
+    inset 0 2px 5px var(--dawn-recess),
+    inset 0 -1px 0 var(--dawn-crease-hi);
+}
+
+html[data-app-theme="dawn"] .ctl-seg {
+  color: var(--dawn-kraft-ink);
+}
+
+html[data-app-theme="dawn"] .ctl-seg:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--color-ink);
+}
+
+html[data-app-theme="dawn"] .ctl-seg[aria-pressed="true"] {
+  background: linear-gradient(180deg, #f0b9cb 0%, #d8909f 62%, #b96b88 100%);
+  color: #4d1a2e;
+  font-weight: 600;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -3px 6px -4px rgba(63, 20, 36, 0.6),
+    0 4px 8px -6px rgba(38, 54, 68, 0.7);
+}
+
+html[data-app-theme="night"] .ctl-group {
+  border-color: rgba(var(--night-brass), 0.28);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #0a1118, #141e29);
+  box-shadow:
+    inset 0 3px 7px rgba(0, 0, 0, 0.8),
+    inset 0 -1px 0 rgba(var(--night-light), 0.04);
+}
+
+html[data-app-theme="night"] .ctl-seg {
+  color: #8ea0b6;
+}
+
+html[data-app-theme="night"] .ctl-seg:hover:not(:disabled) {
+  background: rgba(var(--night-star), 0.1);
+  color: #dfe8f2;
+}
+
+html[data-app-theme="night"] .ctl-seg[aria-pressed="true"] {
+  background: linear-gradient(180deg, #e6cf9a 0%, #c9a45e 46%, #8a6c33 100%);
+  color: #1a140a;
+  font-weight: 600;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 244, 218, 0.8),
+    inset 0 -4px 8px -6px rgba(0, 0, 0, 0.6),
+    0 0 14px -8px rgba(201, 164, 94, 0.8);
+}
+
+/* 羊皮纸位上的小操作：两套各自收进自己的材质 */
+html[data-app-theme="dawn"] .app-archive-portrait-note button {
+  border: 1px solid rgba(168, 83, 122, 0.45);
+  border-radius: 5px;
+  background: linear-gradient(180deg, #f2b9cb, #d8909f 62%, #b96b88);
+  padding: 2px 9px;
+  color: #4d1a2e;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 4px 8px -6px rgba(38, 54, 68, 0.7);
+}
+
+html[data-app-theme="dawn"] .app-archive-portrait-note button:hover {
+  border-color: rgba(142, 63, 96, 0.72);
+  background: linear-gradient(180deg, #f8c8d6, #e29cb6 62%, #c47893);
+}
+
+html[data-app-theme="night"] .app-archive-portrait-note button {
+  border: 1px solid rgba(var(--night-brass), 0.55);
+  border-radius: 5px;
+  background: linear-gradient(180deg, #2b3a52, #16212e);
+  padding: 2px 9px;
+  color: var(--night-brass-hi);
+  box-shadow:
+    inset 0 1px 0 rgba(240, 221, 180, 0.24),
+    0 4px 9px -6px #000;
+}
+
+html[data-app-theme="night"] .app-archive-portrait-note button:hover {
+  border-color: rgba(240, 221, 180, 0.8);
+  background: linear-gradient(180deg, #354762, #1c2836);
+}
+
+/* 留痕落印后收起圆点，避免和徽记并排出现两个点 */
+html[data-app-theme="dawn"] .app-capture-bar.is-stamped .app-capture-dot,
+html[data-app-theme="night"] .app-capture-bar.is-stamped .app-capture-dot {
+  display: none;
+}
+
+/* === 学径空间 · 面板与内衬 === */
+
+html[data-app-theme="dawn"] .sky-panel {
+  border-color: rgba(var(--dawn-hairline), 0.16);
+  background-color: rgba(252, 253, 254, 0.92);
+  background-image: none;
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 20px 38px -32px rgba(38, 54, 68, 0.5);
+}
+
+html[data-app-theme="night"] .sky-panel {
+  border-color: rgba(var(--night-star), 0.18);
+  background: linear-gradient(180deg, #141e29, #0e161e);
+  box-shadow:
+    inset 0 1px 0 rgba(var(--night-light), 0.05),
+    0 22px 44px -36px rgba(0, 0, 0, 0.95);
+}
+
+/* 详情卡内衬：霞光走纸盒翻边，夜间走黄铜细线 */
+html[data-app-theme="night"] .sky-detail-sheet::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(var(--night-brass), 0.2);
+  border-radius: 9px;
+  pointer-events: none;
+}
+
+html[data-app-theme="dawn"] .sky-detail-sheet::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 9px;
+  box-shadow:
+    inset 0 0 0 1px var(--dawn-crease-hi),
+    inset 0 0 0 2px rgba(38, 54, 68, 0.08);
+  pointer-events: none;
+}
+
+html[data-app-theme="dawn"] .sky-today-chip {
+  border: 0;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #f4c6d7, #e295b3);
+  color: #6d2b45;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+html[data-app-theme="night"] .sky-today-chip {
+  border-color: rgba(var(--night-brass), 0.42);
+  background: rgba(var(--night-brass), 0.12);
+  color: var(--night-brass-hi);
+}
+
+html[data-app-theme="dawn"] .sky-detail-scroll::-webkit-scrollbar-thumb {
+  background: rgba(var(--dawn-kraft-edge), 0.55);
+}
+
+html[data-app-theme="night"] .sky-detail-scroll::-webkit-scrollbar-thumb {
+  background: rgba(var(--night-brass), 0.4);
+}
+
+/* === 桌面底：顶栏 侧栏 灵动岛 收进各自的材质 === */
+
+/* 霞光：桌面是浅色板，栏体抬起、下缘拖一道投影 */
+html[data-app-theme="dawn"] .app-topbar {
+  border-color: rgba(var(--dawn-hairline), 0.16);
+  background: linear-gradient(180deg, #ffffff, #f1f5f7);
+  box-shadow:
+    0 20px 38px -34px rgba(38, 54, 68, 0.55),
+    inset 0 -1px 0 rgba(38, 54, 68, 0.1),
+    inset 0 1px 0 #fff;
+}
+
+html[data-app-theme="dawn"] .app-sidebar {
+  border-color: rgba(var(--dawn-hairline), 0.14);
+  background-color: #fbfcfd;
+  background-image:
+    radial-gradient(rgba(var(--dawn-hairline), 0.05) 0.7px, transparent 1px) 0 0 /
+      18px 18px repeat,
+    linear-gradient(180deg, #ffffff, #f4f7f9);
+  box-shadow:
+    0 24px 50px -44px rgba(38, 54, 68, 0.45),
+    inset -1px 0 0 rgba(38, 54, 68, 0.08),
+    inset 0 1px 0 #fff;
+}
+
+html[data-app-theme="dawn"] .app-island {
+  border-color: rgba(var(--dawn-hairline), 0.2);
+  background: linear-gradient(180deg, #ffffff, #eef4f6);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 10px 20px -14px rgba(38, 54, 68, 0.6);
+}
+
+html[data-app-theme="dawn"] .app-island:hover {
+  background: #fff;
+}
+
+html[data-app-theme="dawn"] .app-island-panel {
+  border-color: rgba(var(--dawn-hairline), 0.2);
+  background-color: #fcfdfe;
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 0 0 3px rgba(255, 255, 255, 0.6),
+    0 30px 60px -30px rgba(38, 54, 68, 0.5);
+}
+
+/* 夜间：桌面是哑光呢布，栏体沉下去、上缘吃一颗星 */
+html[data-app-theme="night"] .app-topbar {
+  border-color: rgba(var(--night-star), 0.22);
+  background: linear-gradient(180deg, #18222e, #0d151d);
+  box-shadow:
+    0 18px 36px -30px #000,
+    inset 0 -1px 0 rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(var(--night-light), 0.06);
+}
+
+html[data-app-theme="night"] .app-sidebar {
+  border-color: rgba(var(--night-star), 0.18);
+  background-color: #0e161e;
+  background-image:
+    linear-gradient(rgba(var(--night-star), 0.035) 1px, transparent 1px) 0 0 /
+      32px 32px repeat,
+    linear-gradient(90deg, rgba(var(--night-star), 0.035) 1px, transparent 1px) 0
+      0 / 32px 32px repeat,
+    linear-gradient(180deg, #151f2a, #0b1219) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(var(--night-light), 0.05),
+    inset -1px 0 0 rgba(0, 0, 0, 0.6),
+    0 24px 48px -42px #000;
+}
+
+html[data-app-theme="night"] .app-island {
+  border-color: rgba(var(--night-brass), 0.3);
+  background: linear-gradient(180deg, #1b2632, #0f171f);
+  box-shadow:
+    inset 0 1px 0 rgba(var(--night-light), 0.08),
+    0 10px 22px -16px #000;
+}
+
+html[data-app-theme="night"] .app-island:hover {
+  background: linear-gradient(180deg, #22303f, #131d27);
+}
+
+html[data-app-theme="night"] .app-island-panel {
+  border-color: rgba(var(--night-brass), 0.3);
+  background: linear-gradient(180deg, #16202b, #0c141b);
+  box-shadow:
+    inset 0 1px 0 rgba(var(--night-light), 0.06),
+    inset 0 0 0 1px rgba(var(--night-star), 0.1),
+    0 30px 62px -30px #000;
 }

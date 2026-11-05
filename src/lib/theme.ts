@@ -1,19 +1,8 @@
-import { flushSync } from "react-dom";
-
 export type ThemeId = "dawn" | "night" | "manor";
 
 export const THEME_KEY = "studytrack:landing-theme";
 
-interface ThemeViewTransition {
-  ready: Promise<void>;
-  finished: Promise<void>;
-}
-
-type StartViewTransition = (
-  callback: () => void | Promise<void>,
-) => ThemeViewTransition;
-
-let themeSwitchId = 0;
+export const CURSOR_KEY = "studytrack:cursor-theme";
 
 export const THEMES = [
   {
@@ -35,6 +24,25 @@ export const THEMES = [
 
 export function isThemeId(value: unknown): value is ThemeId {
   return THEMES.some((item) => item.id === value);
+}
+
+/** 主题光标默认开启 关闭后 cursor 回落系统指针 */
+export function readStoredCursor(): boolean {
+  try {
+    return localStorage.getItem(CURSOR_KEY) !== "off";
+  } catch {
+    return true;
+  }
+}
+
+export function applyCursor(on: boolean): void {
+  if (on) document.documentElement.removeAttribute("data-app-cursor");
+  else document.documentElement.dataset.appCursor = "off";
+  try {
+    localStorage.setItem(CURSOR_KEY, on ? "on" : "off");
+  } catch {
+    /* 光标偏好只是锦上添花 存不了也不影响使用 */
+  }
 }
 
 export function readStoredTheme(): ThemeId {
@@ -61,76 +69,4 @@ export function applyTheme(theme: ThemeId): void {
   } catch {
     /* 主题偏好只是锦上添花 存不了也不影响使用 */
   }
-}
-
-/**
- * 换色用一张软边圆形蒙版接新旧两帧：
- * 去霞光是中心一点向外推开如水波，去夜间与庄园是边界从外缘收向中心。
- */
-export function switchTheme(theme: ThemeId, commit: () => void): void {
-  const root = document.documentElement;
-  const doc = document as Document & {
-    startViewTransition?: StartViewTransition;
-  };
-  const reduceMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
-  let applied = false;
-  const applyNow = () => {
-    if (applied) return;
-    applied = true;
-    flushSync(commit);
-  };
-
-  if (
-    !doc.startViewTransition ||
-    reduceMotion ||
-    document.visibilityState !== "visible"
-  ) {
-    applyNow();
-    return;
-  }
-
-  const dark = theme !== "dawn";
-  const dot = "0% 0%";
-  const spread = "175% 175%";
-
-  root.dataset.themeFlow = dark ? "in" : "out";
-
-  const switchId = ++themeSwitchId;
-
-  // 兜底先挂上 过渡没起来也要把配色切过去
-  window.setTimeout(applyNow, 160);
-  window.setTimeout(() => {
-    if (switchId === themeSwitchId) root.removeAttribute("data-theme-flow");
-  }, 1400);
-
-  let transition: ThemeViewTransition;
-  try {
-    transition = doc.startViewTransition(applyNow);
-  } catch {
-    root.removeAttribute("data-theme-flow");
-    applyNow();
-    return;
-  }
-
-  transition.ready
-    .then(() => {
-      root.animate(
-        { maskSize: dark ? [spread, dot] : [dot, spread] },
-        {
-          duration: dark ? 560 : 620,
-          easing: dark
-            ? "cubic-bezier(0.55, 0, 0.3, 1)"
-            : "cubic-bezier(0.16, 1, 0.3, 1)",
-          pseudoElement: dark
-            ? "::view-transition-old(root)"
-            : "::view-transition-new(root)",
-          fill: "both",
-        },
-      );
-    })
-    .catch(() => {
-      /* 过渡被跳过时直接呈现最终配色 */
-    });
 }

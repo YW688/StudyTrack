@@ -93,6 +93,8 @@ interface AppShellProps {
   routeKey: string;
   theme: ThemeId;
   onThemeChange: (theme: ThemeId) => void;
+  cursorOn: boolean;
+  onCursorChange: () => void;
   hasData: boolean;
   locked: boolean;
   counts: Record<NavId, number>;
@@ -130,6 +132,8 @@ export default function AppShell({
   routeKey,
   theme,
   onThemeChange,
+  cursorOn,
+  onCursorChange,
   hasData,
   locked,
   counts,
@@ -261,6 +265,13 @@ export default function AppShell({
       meta: `下一套：${upcomingTheme.name}`,
       group: "设置",
       run: () => onThemeChange(nextTheme(theme)),
+    },
+    {
+      id: "cursor",
+      label: cursorOn ? "关闭主题光标" : "开启主题光标",
+      meta: cursorOn ? "恢复系统指针" : "跟随当前配色",
+      group: "设置",
+      run: onCursorChange,
     },
     {
       id: "export",
@@ -473,6 +484,8 @@ export default function AppShell({
               onOpenAgent={onOpenAgent}
               themeName={currentTheme.name}
               onNextTheme={() => onThemeChange(nextTheme(theme))}
+              cursorOn={cursorOn}
+              onCursorChange={onCursorChange}
               hasData={hasData}
               onExport={onExport}
               onImport={onImport}

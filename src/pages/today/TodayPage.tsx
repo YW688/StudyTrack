@@ -367,7 +367,7 @@ export default function TodayPage({
           >
             <div>
               <p className="font-mono text-micro tracking-[0.16em] text-accent-ink">
-                建档完成 四个面已开启
+                建档完成 五个面已开启
               </p>
               <p className="mt-1 text-xs leading-5 text-ink-3">
                 第一条战绩已记进征途

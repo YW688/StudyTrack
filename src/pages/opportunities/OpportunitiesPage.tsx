@@ -665,7 +665,7 @@ export default function OpportunitiesPage({
                 type="text"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="检索岗位、公司、城市或技能，如 React / 数据 / 杭州"
+                placeholder="检索岗位 公司 城市 技能 如 React 数据 杭州"
                 className="border-rule focus-visible:border-accent-ink focus:ring-2 focus:ring-accent/45 min-h-11 w-full rounded-lg border bg-surface pr-11 pl-9 text-xs text-ink outline-none transition-colors placeholder:text-ink-4"
               />
               {query && (

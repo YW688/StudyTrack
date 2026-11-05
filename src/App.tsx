@@ -97,7 +97,13 @@ import {
   CALENDAR_UPDATED_AT,
 } from "./store/calendar";
 import { resumeHasContent } from "./lib/resume";
-import { applyTheme, readStoredTheme, switchTheme, type ThemeId } from "./lib/theme";
+import {
+  applyCursor,
+  applyTheme,
+  readStoredCursor,
+  readStoredTheme,
+  type ThemeId,
+} from "./lib/theme";
 import { backupFileName, downloadBackupFile } from "./lib/backup";
 import { newId } from "./lib/id";
 import { GUIDE_OPPORTUNITIES_KEY } from "./lib/guide";
@@ -219,6 +225,7 @@ export default function App() {
   const [avatar, setAvatar] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState<ThemeId>(readStoredTheme);
+  const [cursorOn, setCursorOn] = useState(readStoredCursor);
   const [demoMode, setDemoMode] = useState(readDemoMode);
   const [dockMode, setDockMode] = useState<DockMode>(readDockMode);
   const [openWindows, setOpenWindows] = useState<PageWindowId[]>([]);
@@ -237,6 +244,10 @@ export default function App() {
     applyTheme(theme);
   }, [theme]);
 
+  useEffect(() => {
+    applyCursor(cursorOn);
+  }, [cursorOn]);
+
   useEffect(
     () => () => {
       if (toastTimerRef.current) {
@@ -248,8 +259,10 @@ export default function App() {
 
   const changeTheme = (next: ThemeId) => {
     if (next === theme) return;
-    switchTheme(next, () => setTheme(next));
+    setTheme(next);
   };
+
+  const toggleCursor = () => setCursorOn((value) => !value);
 
   useEffect(() => {
     let alive = true;
@@ -953,6 +966,13 @@ export default function App() {
         locked={locked}
         theme={theme}
         onThemeChange={changeTheme}
+        cursorOn={cursorOn}
+        onCursorChange={() => {
+          toggleCursor();
+          showToast(
+            cursorOn ? "已关闭主题光标" : "已开启主题光标 跟随当前配色",
+          );
+        }}
         hasData={
           timetable !== null ||
           assignments !== null ||

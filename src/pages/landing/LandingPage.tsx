@@ -2,6 +2,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type CSSProperties,
   type ReactNode,
 } from "react";
 import {
@@ -12,6 +13,7 @@ import {
 } from "./Showcases";
 import WorkbenchDemo, { DEMO_FACES, type FaceId } from "./WorkbenchDemo";
 import BrandMark from "../../components/BrandMark";
+import { DEMO, FEATURED_EXPERIENCE, TOOL_ROWS } from "./demoData";
 import { THEMES, nextTheme, type ThemeId } from "../../lib/theme";
 
 type StartState = "idle" | "loading" | "error";
@@ -21,12 +23,8 @@ const MODULE_PREVIEWS: Record<FaceId, ReactNode> = {
   ledger: <ExperiencePreview />,
   bounty: <MatchPreview />,
   toolbox: <ToolboxPreview />,
+  space: <SpacePreview />,
 };
-
-const FAN = DEMO_FACES.map((face) => ({
-  ...face,
-  preview: MODULE_PREVIEWS[face.id],
-}));
 
 interface Stage {
   year: string;
@@ -65,7 +63,7 @@ const STAGES: Stage[] = [
   {
     year: "大四",
     title: "找对机会",
-    hint: "按经历检索岗位 命中与缺口一目了然",
+    hint: "按经历检索岗位 命中与待补都指回原文",
     label: "征召 岗位匹配",
     tone: "tone-1",
     preview: <MatchShowcase />,
@@ -137,6 +135,7 @@ export default function LandingPage({
   const [state, setState] = useState<StartState>("idle");
   const [pending, setPending] = useState<"fresh" | "demo" | null>(null);
   const [face, setFace] = useState<FaceId>("today");
+  const activeFace = DEMO_FACES.find((item) => item.id === face) ?? DEMO_FACES[0];
 
   async function handleStart(mode: "fresh" | "demo") {
     setPending(mode);
@@ -308,51 +307,59 @@ export default function LandingPage({
 
               <div aria-hidden="true" className="hero-float hero-float--a">
                 <span className="hero-float-label">今日</span>
-                <strong className="hero-float-value">3</strong>
+                <strong className="hero-float-value">{DEMO.pendingCount}</strong>
                 <span className="hero-float-unit">件待办</span>
               </div>
               <div aria-hidden="true" className="hero-float hero-float--b">
                 <span className="hero-float-label">征途</span>
-                <strong className="hero-float-value">6</strong>
+                <strong className="hero-float-value">
+                  {DEMO.totalExperiences}
+                </strong>
                 <span className="hero-float-unit">条战绩</span>
               </div>
               <div aria-hidden="true" className="hero-float hero-float--c">
                 <span className="hero-float-label">本周</span>
                 <strong className="hero-float-value">
-                  5<span className="text-[12px]">/7</span>
+                  {DEMO.weekGreen.thisWeek}
+                  <span className="text-[12px]">/{DEMO.weekGreen.elapsed}</span>
                 </strong>
                 <span className="hero-float-unit">绿格</span>
               </div>
 
               <div className="hero-workbench">
                 <div className="hero-workbench-bar">
-                  <span>学径 第 8 周 周一</span>
-                  <span>示例数据</span>
+                  <span>
+                    学径 {DEMO.weekLabel} {DEMO.dayLabel}
+                  </span>
+                  <span>{activeFace.name} 示例</span>
                 </div>
                 <div
                   className="hero-workbench-body"
                   data-ui
                   aria-hidden="true"
                 >
-                  <TodayPreview />
+                  {MODULE_PREVIEWS[face]}
                 </div>
               </div>
 
-              <div className="hero-faces" aria-label="四个面的示例预览">
-                {FAN.map((module) => (
+              <div className="hero-faces" aria-label="五个面的示例预览">
+                {DEMO_FACES.map((module) => (
                   <button
                     key={module.id}
                     type="button"
-                    className="hero-face"
+                    className={`hero-face ${module.id === face ? "is-active" : ""}`}
                     onClick={() => openFace(module.id)}
                     aria-label={`查看${module.name}示例`}
                   >
+                    <span aria-hidden="true" className="hero-face-char">
+                      {module.char}
+                    </span>
                     <span>{module.name}</span>
                   </button>
                 ))}
               </div>
               <p className="lp-faint mt-3 text-center font-mono text-[10px] tracking-[0.14em]">
-                四个面并列 点开任意一面看工作台预览
+                五个面并列 点开任意一面看工作台预览
               </p>
             </div>
           </div>
@@ -367,9 +374,9 @@ export default function LandingPage({
           <div className="mx-auto w-full max-w-[1240px]">
             <Reveal>
               <div className="landing-section-head">
-                <p className="landing-eyebrow">工作台 四个面并列</p>
+                <p className="landing-eyebrow">工作台 五个面并列</p>
                 <h2 className="mx-auto mt-3 max-w-[40rem] font-serif text-[clamp(2rem,4.4vw,3.25rem)] leading-[1.16] tracking-[0.01em]">
-                  四个面，一张工作台
+                  五个面，一张工作台
                 </h2>
                 <p className="lp-soft mx-auto mt-4 max-w-[32rem] text-[14px] leading-7">
                   点开任意一面 示例数据只在预览里 不会写进你的档案
@@ -399,7 +406,7 @@ export default function LandingPage({
               <WorkbenchDemo active={face} onChange={setFace} />
               <div className="mt-4 flex flex-col items-center gap-2 sm:flex-row sm:justify-center">
                 <p className="lp-faint font-mono text-[10.5px] tracking-[0.06em]">
-                  示例数据 四个面共享同一份档案
+                  示例数据 五个面共享同一份档案
                 </p>
                 <a
                   href="#path"
@@ -446,7 +453,7 @@ export default function LandingPage({
                           </span>
                         </span>
                         <span className="lp-faint text-[10px] tracking-[0.08em]">
-                          0{index + 1} · 示例数据
+                          示例数据
                         </span>
                       </div>
                       <div className="stage-canvas" aria-hidden="true">
@@ -777,122 +784,310 @@ function StartButton({
 }
 
 function TodayPreview() {
+  const [firstTask] = DEMO.pendingRows;
+  const sessions = DEMO.todaySessions.slice(0, 3);
+
   return (
     <div className="flex h-full flex-col">
       <div className="flex items-baseline justify-between gap-2">
-        <span className="lp-faint text-[9px] tracking-[0.08em]">第 8 周</span>
+        <span className="lp-faint text-[9px] tracking-[0.08em]">
+          {DEMO.briefing}
+        </span>
         <span className="lp-fill lp-soft rounded-full px-1.5 py-0.5 text-[8px]">
-          3 项待办
+          {DEMO.pendingCount} 项待办
         </span>
       </div>
-      <div className="mt-2 space-y-1.5">
-        {["3-4 节 教学楼A 2-109", "5-6 节 教学楼A 2-109"].map((meta) => (
-          <div
-            key={meta}
-            className="lp-fill lp-hairline-soft rounded-lg border px-2 py-1.5"
-          >
-            <p className="text-[10px] leading-4 font-medium">智能机器人</p>
-            <p className="lp-faint text-[8px] leading-3">{meta}</p>
-          </div>
-        ))}
-      </div>
-      <div className="lp-hairline mt-auto border-t pt-1.5">
-        <p className="lp-faint text-[8px]">最近截止</p>
-        <p className="lp-soft mt-0.5 flex items-baseline justify-between gap-2 text-[9px]">
-          <span className="truncate">外部中断指示灯</span>
-          <span className="lp-alert shrink-0 text-[8px]">11 月 2 日</span>
+
+      <p className="mt-2 truncate text-[11px] leading-4 font-medium">
+        {DEMO.judgment.line}
+      </p>
+      {DEMO.judgment.detail && (
+        <p className="lp-soft mt-0.5 truncate text-[8.5px] leading-3">
+          {DEMO.judgment.detail}
         </p>
+      )}
+
+      <div className="mt-2 space-y-1.5">
+        {sessions.length > 0 ? (
+          sessions.map((item) => (
+            <div
+              key={`${item.name}-${item.periods}`}
+              className="lp-fill lp-hairline-soft rounded-lg border px-2 py-1.5"
+            >
+              <p className="text-[10px] leading-4 font-medium">{item.name}</p>
+              <p className="lp-faint truncate text-[8px] leading-3">
+                {item.periods} {item.location}
+              </p>
+            </div>
+          ))
+        ) : (
+          <p className="lp-faint text-[9px] leading-4">
+            {DEMO.weekLabel} 今天没有课
+          </p>
+        )}
       </div>
+
+      {firstTask && (
+        <div className="lp-hairline mt-auto border-t pt-1.5">
+          <p className="lp-faint flex items-baseline justify-between gap-2 text-[8px]">
+            <span>先做这件</span>
+            <span className={firstTask.tierText ? "lp-alert" : ""}>
+              {firstTask.tierText || firstTask.kindLabel}
+            </span>
+          </p>
+          <p className="lp-soft mt-0.5 flex items-baseline justify-between gap-2 text-[9px]">
+            <span className="truncate">{firstTask.title}</span>
+            <span className="lp-faint shrink-0 text-[8px]">
+              {firstTask.dueLabel || "未填截止"}
+            </span>
+          </p>
+        </div>
+      )}
     </div>
   );
 }
 
 function ExperiencePreview() {
+  const record = FEATURED_EXPERIENCE;
+  if (!record) {
+    return (
+      <div className="flex h-full items-center">
+        <p className="lp-faint text-[10px]">还没有战绩 先到征途记一条</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-full flex-col">
-      <p className="text-[10px] leading-4 font-medium">数学建模竞赛 校赛</p>
-      <p className="lp-faint mt-0.5 text-[8px]">教务处 2026 年 9 月</p>
-      <div className="mt-2 grid grid-cols-4 gap-1">
-        {["问题", "方法", "贡献", "结果"].map((label) => (
-          <span
-            key={label}
-            className="lp-fill lp-soft rounded-[5px] py-1 text-center text-[8px]"
-          >
-            {label}
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <p className="lp-faint text-[8px] leading-3">
+            {record.kindLabel} {record.range}
+          </p>
+          <p className="mt-0.5 truncate text-[11px] leading-4 font-medium">
+            {record.title}
+          </p>
+          {record.org && (
+            <p className="lp-faint mt-0.5 truncate text-[8px] leading-3">
+              {record.org}
+            </p>
+          )}
+        </div>
+        <div className="flex shrink-0 flex-col items-end gap-1">
+          <span aria-hidden="true" className="flex items-center gap-1">
+            {[0, 1, 2, 3].map((index) => (
+              <span
+                key={index}
+                className={`shot-pip ${index < record.stars ? "is-on" : ""}`}
+              />
+            ))}
           </span>
+          <span className="lp-faint text-[8px]">{record.tierText}</span>
+        </div>
+      </div>
+
+      <div className="mt-2 grid flex-1 grid-cols-2 gap-1.5">
+        {record.parts.map((part) => (
+          <div
+            key={part.label}
+            className="lp-fill lp-hairline-soft min-w-0 rounded-md border px-1.5 py-1"
+          >
+            <p className="lp-faint text-[7.5px] leading-3">{part.label}</p>
+            <p className="lp-soft mt-0.5 truncate text-[8.5px] leading-3">
+              {part.text.trim() || "未填"}
+            </p>
+          </div>
         ))}
       </div>
-      <p className="lp-soft mt-2 text-[8px] leading-3">
-        <span className="block">22 页论文 3 人队</span>
-        <span className="block">校赛二等奖</span>
-      </p>
-      <p className="lp-faint mt-auto text-[8px]">四条证据 可回看</p>
+
+      <div className="lp-hairline mt-2 flex items-baseline justify-between gap-2 border-t pt-1.5">
+        <span className="lp-faint min-w-0 truncate text-[8px]">
+          证据 {record.evidence.length} 条{" "}
+          {record.metrics.length > 0
+            ? `量化 ${record.metrics.length} 项`
+            : "原文未提供量化数据"}
+        </span>
+        <span
+          className={`shrink-0 text-[8px] ${record.ready ? "lp-soft" : "lp-alert"}`}
+        >
+          {record.ready
+            ? "简历就绪"
+            : `差 ${record.missing.slice(0, 2).join(" ")}`}
+        </span>
+      </div>
     </div>
   );
 }
-
-const TOOL_ROWS = [
-  { label: "课表", meta: "单双周 周视图", tone: "tone-2" },
-  { label: "作业", meta: "DDL 完成状态", tone: "tone-3" },
-  { label: "简历", meta: "勾选经历 A4", tone: "tone-5" },
-  { label: "日历", meta: "竞赛 考试 校内", tone: "tone-1" },
-];
 
 function ToolboxPreview() {
   return (
     <div className="flex h-full flex-col">
       <div className="flex items-baseline justify-between">
-        <span className="lp-faint text-[9px] tracking-[0.08em]">四件工具</span>
+        <span className="lp-faint text-[9px] tracking-[0.08em]">
+          {TOOL_ROWS.length} 件工具
+        </span>
         <span className="lp-faint text-[8px]">需要时打开</span>
       </div>
-      <ul className="mt-2 space-y-1">
+      <ul className="mt-2 grid flex-1 grid-rows-4 gap-1.5">
         {TOOL_ROWS.map((tool) => (
           <li
-            key={tool.label}
-            className="lp-fill lp-hairline-soft flex items-center gap-1.5 rounded-md border px-1.5 py-1"
+            key={tool.no}
+            className="lp-fill lp-hairline-soft flex items-center gap-1.5 rounded-md border px-1.5"
           >
             <span
               aria-hidden="true"
-              className={`h-2.5 w-2.5 shrink-0 rounded-[3px] ${tool.tone}`}
+              className="h-2.5 w-2.5 shrink-0 rounded-[3px]"
+              style={{ backgroundColor: tool.tone }}
             />
             <span className="text-[9px] leading-3 font-medium">
               {tool.label}
             </span>
-            <span className="lp-faint ml-auto truncate text-[7px] leading-3">
-              {tool.meta}
+            <span className="lp-faint ml-auto min-w-0 truncate text-[7px] leading-3">
+              {tool.hint}
             </span>
           </li>
         ))}
       </ul>
-      <p className="lp-hairline lp-faint mt-auto border-t pt-1.5 text-[8px]">
-        日历只写官方已公布日期
+      <p className="lp-hairline lp-faint mt-2 border-t pt-1.5 text-[8px]">
+        数据只在本机 换设备前先导出
       </p>
     </div>
   );
 }
 
 function MatchPreview() {
+  const job = DEMO.jobs[0];
+  if (!job) {
+    return (
+      <div className="flex h-full items-center">
+        <p className="lp-faint text-[10px]">岗位库为空 到征召粘贴一份 JD</p>
+      </div>
+    );
+  }
+
+  const [hit] = job.hits;
+  const [gap] = job.gaps;
+
   return (
     <div className="flex h-full flex-col">
-      <p className="text-[10px] leading-4 font-medium">数据分析实习生</p>
-      <p className="lp-faint mt-0.5 text-[8px]">杭州 2027 届 示例岗位</p>
+      <p className="lp-faint font-mono text-[8px] tracking-[0.08em]">
+        {job.company} {job.cohort}
+      </p>
+      <p className="mt-0.5 truncate text-[11px] leading-4 font-medium">
+        {job.title}
+      </p>
+      <p className="lp-faint mt-0.5 truncate text-[8px] leading-3">
+        {job.typeLabel} {job.city} {job.gradeFit} {job.qual}
+      </p>
+
       <div className="mt-2 flex items-center gap-2">
-        <span className="font-serif text-[20px] leading-none">86</span>
+        <span className="font-serif text-[20px] leading-none tabular-nums">
+          {job.score}
+        </span>
         <span className="lp-fill h-1 flex-1 overflow-hidden rounded-full">
-          <span className="lp-accent-fill block h-full w-[86%] rounded-full" />
+          <span
+            className="lp-accent-fill block h-full rounded-full"
+            style={{ width: `${job.score}%` }}
+          />
+        </span>
+        <span className="lp-faint shrink-0 text-[8px]">{job.tierLabel}</span>
+      </div>
+
+      <div className="lp-soft mt-2 space-y-1 text-[8px] leading-3">
+        {hit && (
+          <p className="flex gap-2">
+            <span className="lp-faint shrink-0">命中</span>
+            <span className="min-w-0 truncate">
+              {hit.requirement} 「{hit.quote}」
+            </span>
+          </p>
+        )}
+        {gap && (
+          <p className="flex gap-2">
+            <span className="lp-alert shrink-0">待补</span>
+            <span className="min-w-0 truncate">
+              {gap.requirement} {gap.advice}
+            </span>
+          </p>
+        )}
+      </div>
+
+      <p className="lp-hairline lp-faint mt-auto border-t pt-1.5 text-[8px]">
+        按 {DEMO.readyForMatchCount} 条简历就绪的战绩判定 命中指回原文
+      </p>
+    </div>
+  );
+}
+
+function SpacePreview() {
+  const space = DEMO.space;
+
+  return (
+    <div className="flex h-full flex-col">
+      <div className="flex items-baseline justify-between gap-2">
+        <span className="lp-faint text-[9px] tracking-[0.08em]">留痕星图</span>
+        <span className="lp-fill lp-soft rounded-full px-1.5 py-0.5 text-[8px]">
+          {space.todayLit ? "今天已点亮" : "今天还没点亮"}
         </span>
       </div>
-      <div className="lp-soft mt-2 space-y-1 text-[8px] leading-3">
-        <p className="flex justify-between gap-2">
-          <span className="lp-faint">命中</span>
-          <span className="text-right">Python 数学建模</span>
-        </p>
-        <p className="flex justify-between gap-2">
-          <span className="lp-faint">缺口</span>
-          <span className="text-right">SQL 窗口函数</span>
-        </p>
+
+      <div className="demo-sky demo-sky--mini mt-2 flex-1">
+        <svg className="demo-sky-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+          {space.constellation.lines.map(([from, to], index) => {
+            const a = space.constellation.points[from];
+            const b = space.constellation.points[to];
+            return (
+              <line
+                key={index}
+                x1={a.x * 100}
+                y1={a.y * 100}
+                x2={b.x * 100}
+                y2={b.y * 100}
+                vectorEffect="non-scaling-stroke"
+              />
+            );
+          })}
+        </svg>
+        <span className="demo-sky-rose" />
+        {space.points.map((point) => (
+          <span
+            key={point.key}
+            className={`demo-sky-star ${point.isToday ? "is-today" : ""}`}
+            style={
+              {
+                left: `${point.x}%`,
+                top: `${point.y}%`,
+                "--c": point.color,
+                "--r": `${3.4 + Math.min(point.count, 3) * 0.9}px`,
+              } as CSSProperties
+            }
+          />
+        ))}
+        {space.meteorCount > 0 && (
+          <span className="demo-sky-meteor" style={{ left: "54%", top: "18%" }} />
+        )}
+        <p className="demo-sky-name">{space.constellation.name}</p>
       </div>
-      <p className="lp-faint mt-auto text-[8px]">每条命中指回原文</p>
+
+      <ul className="mt-2 space-y-0.5">
+        {space.recent.slice(0, 2).map((star, index) => (
+          <li
+            key={star.key}
+            className={`demo-sky-recent flex items-baseline justify-between gap-2 px-1.5 text-[8px] ${
+              index === 0 ? "is-on" : ""
+            }`}
+          >
+            <span className="lp-soft truncate font-mono">
+              {star.label} {star.isToday ? "今天" : ""}
+            </span>
+            <span className="lp-faint shrink-0 tabular-nums">{star.count} 条</span>
+          </li>
+        ))}
+      </ul>
+
+      <p className="lp-hairline lp-faint mt-auto border-t pt-1.5 text-[8px]">
+        点亮 {space.litCount} 天 留痕 {space.totalEvents} 条 每天只点亮一次
+      </p>
     </div>
   );
 }

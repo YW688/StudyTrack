@@ -165,7 +165,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
           <div className="page-head-main">
             <h1 className="page-title">建档</h1>
             <p className="page-sub">
-              第 {step + 1} / {STEPS.length} 步 填完这四步 四个面同时开启
+              第 {step + 1} / {STEPS.length} 步 填完这四步 五个面同时开启
             </p>
           </div>
         </header>
@@ -358,7 +358,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
                   {roles.length > 0
                     ? `已选 ${roles.length} / 6 ${roles.join(" ")}`
                     : goal === "intern"
-                      ? "还没选 至少 1 个才能开启四个面"
+                      ? "还没选 至少 1 个才能开启五个面"
                       : "可留空 之后在档案里补"}
                 </p>
               </div>
@@ -487,7 +487,7 @@ export default function GuidePage({ onComplete, onUseDemo }: GuidePageProps) {
                 {saving
                   ? "正在开启…"
                   : isLastStep
-                    ? "完成建档，开启四个面"
+                    ? "完成建档，开启五个面"
                     : "下一步"}
               </button>
             </div>

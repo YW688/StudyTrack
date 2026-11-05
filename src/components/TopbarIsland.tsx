@@ -38,6 +38,8 @@ interface TopbarIslandProps {
   onOpenAgent: () => void;
   themeName: string;
   onNextTheme: () => void;
+  cursorOn: boolean;
+  onCursorChange: () => void;
   hasData: boolean;
   onExport: () => Promise<void>;
   onImport: (text: string) => Promise<{ ok: boolean; message: string }>;
@@ -71,6 +73,8 @@ export default function TopbarIsland({
   onOpenAgent,
   themeName,
   onNextTheme,
+  cursorOn,
+  onCursorChange,
   hasData,
   onExport,
   onImport,
@@ -211,6 +215,26 @@ export default function TopbarIsland({
             )}
             <button type="button" onClick={onNextTheme}>
               配色 {themeName}
+            </button>
+          </div>
+
+          <div className="app-island-cursor">
+            <span className="app-island-cursor-label">主题光标</span>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={cursorOn}
+              aria-label={`主题光标 ${cursorOn ? "已开启" : "已关闭"}`}
+              className="app-island-cursor-switch"
+              data-on={cursorOn ? "on" : "off"}
+              onClick={onCursorChange}
+            >
+              <span aria-hidden="true" className="app-island-cursor-track">
+                <span className="app-island-cursor-knob" />
+              </span>
+              <span className="app-island-cursor-state">
+                {cursorOn ? "开" : "关"}
+              </span>
             </button>
           </div>
 
