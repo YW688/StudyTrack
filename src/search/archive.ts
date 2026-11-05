@@ -47,6 +47,10 @@ export interface ArchiveHit {
   confidence: Confidence;
   field: ArchiveFieldKey;
   quote: string;
+  /** false = 词只在标题、技能或单位对上 四段原文里没有这句话 不拿整段冒充引用 */
+  exact: boolean;
+  /** 非精确命中时，词实际出现在哪里，例如「标题 单位」 */
+  matchedIn: string;
   score: number;
 }
 
@@ -97,9 +101,11 @@ export function createArchiveIndex(
     storeFields: [
       "id",
       "title",
+      "org",
       "kind",
       "kindLabel",
       "confidence",
+      "skills",
       "fields",
     ],
     tokenize,
@@ -126,7 +132,7 @@ export function createArchiveIndex(
 function bestSentence(
   fields: EvidenceField[],
   terms: string[],
-): { field: ArchiveFieldKey; quote: string } {
+): { field: ArchiveFieldKey; quote: string; exact: boolean } | null {
   let best: { field: ArchiveFieldKey; quote: string; hits: number } | null =
     null;
 
@@ -146,17 +152,31 @@ function bestSentence(
     }
   }
 
-  if (best) return { field: best.field, quote: best.quote };
+  if (best) return { field: best.field, quote: best.quote, exact: true };
 
-  const fallback = FIELD_ORDER.map((key) => ({
+  // 原文里对不上词，只指出该去哪一段看，不把无关句子包装成出处
+  const pointer = FIELD_ORDER.map((key) => ({
     key,
     field: fields.find((item) => item.key === key),
   })).find((item) => Boolean(item.field?.text));
 
-  return {
-    field: fallback?.key ?? "result",
-    quote: limitQuote(fallback?.field?.text ?? ""),
-  };
+  return pointer && pointer.field
+    ? { field: pointer.key, quote: "", exact: false }
+    : null;
+}
+
+function matchedIn(doc: ArchiveDoc, terms: string[]): string {
+  const places: string[] = [];
+  if (terms.some((term) => (doc.title ?? "").toLowerCase().includes(term))) {
+    places.push("标题");
+  }
+  if (terms.some((term) => (doc.skills ?? "").toLowerCase().includes(term))) {
+    places.push("技能");
+  }
+  if (terms.some((term) => (doc.org ?? "").toLowerCase().includes(term))) {
+    places.push("单位");
+  }
+  return places.join(" ") || "标题";
 }
 
 export function searchArchive(
@@ -173,19 +193,23 @@ export function searchArchive(
   return index
     .search(trimmed)
     .slice(0, Math.max(1, limit))
-    .map((result) => {
+    .flatMap((result) => {
       const doc = result as unknown as ArchiveDoc;
       const quote = bestSentence(doc.fields ?? [], terms);
-      return {
-        experienceId: String(doc.id),
-        title: doc.title,
-        kind: doc.kind,
-        kindLabel: doc.kindLabel,
-        confidence: doc.confidence,
-        field: quote.field,
-        quote: quote.quote,
-        score: result.score,
-      };
-    })
-    .filter((hit) => hit.quote.length > 0);
+      if (!quote) return [];
+      return [
+        {
+          experienceId: String(doc.id),
+          title: doc.title,
+          kind: doc.kind,
+          kindLabel: doc.kindLabel,
+          confidence: doc.confidence,
+          field: quote.field,
+          quote: quote.quote,
+          exact: quote.exact,
+          matchedIn: quote.exact ? "" : matchedIn(doc, terms),
+          score: result.score,
+        },
+      ];
+    });
 }

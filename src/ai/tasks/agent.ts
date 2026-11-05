@@ -1050,12 +1050,13 @@ function archiveReply(text: string, context: AgentContext): AgentReply {
     };
   }
 
-  const lines = hits.map(
-    (hit) =>
-      `- ${hit.title}（${ARCHIVE_FIELD_LABELS[hit.field]}）「${hit.quote}」${
-        hit.confidence === "low" ? " 低置信 确认后才进简历" : ""
-      }`,
-  );
+  const lines = hits.map((hit) => {
+    const low = hit.confidence === "low" ? " 低置信 确认后才进简历" : "";
+    return hit.exact
+      ? `- ${hit.title}（${ARCHIVE_FIELD_LABELS[hit.field]}）「${hit.quote}」${low}`
+      : `- ${hit.title} 词只在「${hit.matchedIn}」对上 原文没这句 见「${ARCHIVE_FIELD_LABELS[hit.field]}」段${low}`;
+  });
+  const quoted = hits.filter((hit) => hit.exact).length;
   return {
     text: `从 ${context.experiences.length} 条战绩里找到 ${hits.length} 条与「${query}」相关\n${lines.join(
       "\n",
@@ -1063,7 +1064,11 @@ function archiveReply(text: string, context: AgentContext): AgentReply {
       noteLines.length > 0
         ? `\n收件箱里还有 ${noteLines.length} 条相关碎片 去征途可以转成战绩`
         : ""
-    }\n引用的是你写下的原文 要改去征途页`,
+    }\n${
+      quoted > 0
+        ? "引用的是你写下的原文 要改去征途页"
+        : "这几条四段原文里没对上词 只指了段落位置 没当成引用"
+    }`,
     navigate: "experiences",
   };
 }

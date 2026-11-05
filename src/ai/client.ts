@@ -5,6 +5,7 @@ import {
   ASSIGNMENT_OCR_SYSTEM_PROMPT,
 } from "./rules";
 import { byokConfig, chatCompletionsUrl, type AiConfig } from "./config";
+import { clampInput } from "./inputLimit";
 
 const PROXY_URL = (
   (import.meta.env.VITE_AI_PROXY_URL as string | undefined) ?? ""
@@ -457,6 +458,52 @@ export interface TextTaskRequest {
   model?: string;
 }
 
+/** 规则文档口径：单次输入截断 12k 字符 */
+const CACHE_LIMIT = 48;
+
+const textJsonCache = new Map<string, unknown>();
+
+function serialized(value: unknown): string {
+  try {
+    return JSON.stringify(value) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+/** Key 不进缓存键 只取端点与模型名：换服务商或换模型都要绕开旧结果 */
+function cacheKey(request: TextTaskRequest, input: unknown): string {
+  const config = byokConfig();
+  return serialized({
+    transport: activeTransport(),
+    baseUrl: config?.baseUrl ?? "",
+    model: request.model ?? config?.textModel.trim() ?? "qwen-plus",
+    task: request.task,
+    system: request.system,
+    input,
+  });
+}
+
+export async function requestTextJson(
+  request: TextTaskRequest,
+): Promise<unknown> {
+  const input = clampInput(request.input);
+  const key = cacheKey(request, input);
+  const cached = textJsonCache.get(key);
+  if (cached !== undefined) return cached;
+
+  const result = await runTextJson({ ...request, input });
+  if (result !== undefined) {
+    textJsonCache.set(key, result);
+    while (textJsonCache.size > CACHE_LIMIT) {
+      const oldest = textJsonCache.keys().next().value;
+      if (oldest === undefined) break;
+      textJsonCache.delete(oldest);
+    }
+  }
+  return result;
+}
+
 function toTextTaskError(error: unknown): TextTaskError {
   if (error instanceof TextTaskError) return error;
   const wrapped = new TextTaskError(
@@ -469,9 +516,7 @@ function toTextTaskError(error: unknown): TextTaskError {
   return wrapped;
 }
 
-export async function requestTextJson(
-  request: TextTaskRequest,
-): Promise<unknown> {
+async function runTextJson(request: TextTaskRequest): Promise<unknown> {
   const transport = activeTransport();
 
   if (transport === "byok") {
