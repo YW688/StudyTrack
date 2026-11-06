@@ -1,6 +1,6 @@
 # StudyTrack · 开工说明（Start Here）
 
-> 「学径 StudyTrack」参赛项目。本项目**从零开始**，旧仓库 `旧仓库` 一行代码、一张素材都不复用。
+> 「学径 StudyTrack」参赛项目。本项目**从零开始**，不复用任何既有项目的代码、文档与素材。
 > 产品规格：`docs/spec-v0.1.md`（当前）→ `docs/plan.md`（历史基线）；工程硬约束：`.qoder/rules/00-core.md`。
 
 ## 目录（✅ 已有 / ⬜ 待建）

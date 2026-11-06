@@ -12,3 +12,8 @@ dist-ssr
 .dump.cjs
 docs/fixtures/
 vibe_images/
+
+# Qoder 技能与主题审查的本机工作件
+.taste-skill/
+__pycache__/
+*.pyc
