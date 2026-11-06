@@ -3,6 +3,12 @@
 > 「学径 StudyTrack」参赛项目。本项目**从零开始**，不复用任何既有项目的代码、文档与素材。
 > 产品规格：`docs/spec-v0.1.md`（当前）→ `docs/plan.md`（历史基线）；工程硬约束：`.qoder/rules/00-core.md`。
 
+## 当前状态
+
+W0–W4 已全部完成，五个面（今日 征途 征召 工具箱 学径空间）与记录官均已落地，`vite build` 通过。
+在线体验：<https://studytrack-wjeu32t1uvp.qoder.zone> 纯静态，无需账号，数据只写本机 IndexedDB。
+下方第二至第四节是 W0 开工时的原始指引与验收清单，**仅作流程留档**，不代表当前进度。
+
 ## 目录（✅ 已有 / ⬜ 待建）
 
 ```
@@ -15,12 +21,14 @@ E:\StudyTrack\                     ← Qoder 直接打开这一层
 │  ├─ spec-v0.1.md      ✅  当前产品规格（四个面 + 记录官）
 │  ├─ plan.md           ✅  历史基线（v4，部分已被 spec 取代）
 │  └─ system-prompt-archive.md ✅  系统提示词原文，仅留档
-├─ src\                 ⬜  W0 建空项目后出现
-├─ data\                ⬜  W3 岗位库/渠道库
-├─ mcp\server.ts        ⬜  W3 MCP Server
-├─ api\proxy\           ⬜  W2 薄代理
-├─ package.json / vite.config.ts / index.html   ⬜  W0
-├─ LICENSE (MIT)        ⬜  W0
+├─ src\                 ✅  pages components lib parse ai search store styles assets
+├─ data\                ✅  岗位库 渠道库 日历 与构建期来源核验结果
+├─ mcp\server.ts        ✅  本地 MCP Server
+├─ scripts\             ✅  课表解析自测 与构建期来源核验
+├─ public\brand\        ✅  图标与品牌 SVG
+├─ api\proxy\           ⬜  可选薄代理，未启用（BYOK 本机直连已够用）
+├─ package.json / vite.config.ts / index.html   ✅  W0
+├─ LICENSE (MIT)        ✅  W0
 ├─ README.md            ✅  本文件
 └─ STUDYTRACK_2026_PLAN.md / QODER_SYSTEM_PROMPT.md  ✅ 占位，勿编辑
 ```
@@ -38,7 +46,7 @@ E:\StudyTrack\                     ← Qoder 直接打开这一层
    | `20-print.md` | Specific Files | `src/styles/**, src/components/PrintSheet*, src/components/ResumeSheet*` |
 3. 确认 `.qoder/rules` **不要**写进 `.gitignore`（规则要随仓库开源）。
 
-## 二、第一条对话（W0：只验证平台，不写功能）
+## 二、第一条对话（W0：只验证平台，不写功能）｜留档
 
 把下面整段直接发给 Qoder：
 
@@ -59,14 +67,14 @@ E:\StudyTrack\                     ← Qoder 直接打开这一层
 发布到 Qoder Sites 后，把访问权限改为「任何人都可访问」，并把公网链接发我。
 ```
 
-## 三、发布后必须做的验收（G0）
+## 三、发布后必须做的验收（G0）｜留档
 
 - [ ] 公网链接在**隐身窗口**能打开（不需要登录）
 - [ ] 手机流量下能打开，无横向滚动
 - [ ] 截图存档（作品帖素材）
 - [ ] 记录发布用时，评估后续迭代节奏
 
-## 四、W0 清单（10/31–11/02）
+## 四、W0 清单（10/31–11/02）｜留档
 
 - [ ] 天池报名 + 实名认证（所有队员）
 - [ ] 阿里云大学生认证（截止前必须完成，否则取消获奖资格）
