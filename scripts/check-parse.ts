@@ -45,7 +45,7 @@ function toBuffer(workbook: XLSX.WorkBook): ArrayBuffer {
 function buildTwoColumn(): ArrayBuffer {
   const rows = [
     ["课程名称", "上课时间"],
-    ["高等数学", "周一 3-4节, 1-16周 教学楼AA101"],
+    ["高等数学", "周一 3-4节, 1-16周 教学楼A101"],
     ["线性代数", "周三 5-6节, 2-16周(双)"],
     ["大学英语", "周五 1-2节, 1-15周(单)"],
   ];
