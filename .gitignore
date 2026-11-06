@@ -7,3 +7,7 @@ dist-ssr
 !.vscode/extensions.json
 .idea
 *.log
+
+# 本机调试脚本与真实教务导出件：只留本机，不进仓库
+.dump.cjs
+docs/fixtures/
