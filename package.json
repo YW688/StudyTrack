@@ -3,6 +3,13 @@
   "private": true,
   "version": "0.1.0",
   "description": "学径 StudyTrack — 面向本科生的学习与经历聚合工作台",
+  "license": "MIT",
+  "author": "MIAOZAI",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YW688/StudyTrack.git"
+  },
+  "homepage": "https://studytrack-wjeu32t1uvp.qoder.zone",
   "type": "module",
   "scripts": {
     "dev": "vite",
