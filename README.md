@@ -9,6 +9,18 @@ W0–W4 已全部完成，五个面（今日 征途 征召 工具箱 学径空�
 在线体验：<https://studytrack-wjeu32t1uvp.qoder.zone> 纯静态，无需账号，数据只写本机 IndexedDB。
 下方第二至第四节是 W0 开工时的原始指引与验收清单，**仅作流程留档**，不代表当前进度。
 
+## 产品预览
+
+全部为示例数据下的真实截图，无摆拍。
+
+| 落地页 | 今日 霞光 | 征途 霞光 | 征召 霞光 | 今日 夜间 |
+|---|---|---|---|---|
+| ![落地页](docs/images/01-landing.png) | ![今日 霞光](docs/images/02-today-dawn.png) | ![征途 霞光](docs/images/03-experiences-dawn.png) | ![征召 霞光](docs/images/05-opportunities-dawn.png) | ![今日 夜间](docs/images/07-today-night.png) |
+
+| 今日 庄园 | 简历 纸面 | 学径空间 夜间 | 存档卡 庄园 | 征途 庄园 |
+|---|---|---|---|---|
+| ![今日 庄园](docs/images/08-today-manor.png) | ![简历 纸面](docs/images/10-resume-paper.png) | ![学径空间 夜间](docs/images/11-space-night.png) | ![存档卡 庄园](docs/images/12-archive-manor.png) | ![征途 庄园](docs/images/13-experiences-manor.png) |
+
 ## 目录（✅ 已有 / ⬜ 待建）
 
 ```

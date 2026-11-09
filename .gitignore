@@ -17,3 +17,6 @@ vibe_images/
 .taste-skill/
 __pycache__/
 *.pyc
+
+# Qoder 技能数据（第三方内容，只留本机，不进仓库）
+.agents/
